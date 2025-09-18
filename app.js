@@ -1,0 +1,602 @@
+async function loadJSON(path){
+  try{
+    const resp = await fetch(path);
+    if(!resp.ok) throw new Error('Fetch failed');
+    return await resp.json();
+  }catch(e){
+    console.error('Error loading',path,e);
+    return null;
+  }
+}
+function createEl(tag,cls,txt){
+  const el = document.createElement(tag);
+  if(cls) el.className = cls;
+  if(txt !== undefined) el.textContent = txt;
+  return el;
+}
+
+async function main(){
+  const names = await loadJSON('names.json');
+  const teams = await loadJSON('teams.json');
+  if(!names || !teams){
+    document.body.prepend(createEl('div','small','Failed to load data. Ensure `names.json` and `teams.json` are next to `index.html`.'))
+    return;
+  }
+
+  const keyByDisplay = {};
+  for(const k of Object.keys(names)) keyByDisplay[names[k]] = k;
+
+  const charactersDiv = document.getElementById('characters');
+  const displayNames = Object.values(names).sort((a,b)=>a.localeCompare(b,'ru'));
+  const selected = new Set();
+
+  const defaultAutoSelect = [
+    'Aino','Amber','Barbara','Collei','Kachina','Lynette',
+    'MC (Anemo)','MC (Geo)','MC (Electro)','MC (Dendro)','MC (Hydro)','MC (Pyro)',
+    'Noelle','Xiangling'
+  ];
+  try{
+    const saved = JSON.parse(localStorage.getItem('ownedSelection')||'[]');
+    for(const n of (saved.length? saved : defaultAutoSelect)) selected.add(n);
+  }catch{ for(const n of defaultAutoSelect) selected.add(n); }
+
+  for(const disp of displayNames){
+    const btn = createEl('button','char');
+    btn.type = 'button';
+    const key = keyByDisplay[disp];
+    const img = createAvatarImg(disp,'avatar', key);
+    if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
+    const lbl = createEl('div',null,disp);
+    btn.appendChild(lbl);
+    if(selected.has(disp)) btn.classList.add('selected');
+    btn.addEventListener('click',()=>{
+      if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
+      persistSelection();
+      renderActiveView();
+    });
+    charactersDiv.appendChild(btn);
+  }
+
+  const modeEl = document.getElementById('mode');
+  const maxShowEl = document.getElementById('maxShow');
+  try{
+    const savedMode = localStorage.getItem('settingMode'); if(savedMode) modeEl.value = savedMode;
+    const savedMax = localStorage.getItem('settingMaxShow'); if(savedMax) maxShowEl.value = savedMax;
+  }catch{}
+  modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
+  maxShowEl.addEventListener('change', ()=> { localStorage.setItem('settingMaxShow', maxShowEl.value); renderActiveView(); });
+  document.getElementById('clear').addEventListener('click',()=>{
+    selected.clear();
+    document.querySelectorAll('.char.selected').forEach(el=>el.classList.remove('selected'));
+    persistSelection();
+    renderActiveView();
+  });
+  function persistSelection(){
+    try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
+  }
+
+  const navLinks = Array.from(document.querySelectorAll('.nav-link'));
+  function setActiveLink(hash){
+    navLinks.forEach(a=>{
+      if(a.getAttribute('href') === hash) a.classList.add('active'); else a.classList.remove('active');
+    });
+  }
+  function getOwned(){ return new Set([...selected]); }
+
+  function renderRecommendations(){
+    const owned = getOwned();
+    const mode = parseInt(modeEl.value||'1',10);
+    const maxShow = parseInt(maxShowEl.value||'3',10);
+    const suggestions = computeSuggestions(teams, owned, mode, maxShow);
+    const content = document.getElementById('view-content');
+    content.innerHTML = '';
+    const wrap = createEl('div');
+    const title = createEl('h2',null,'Who to obtain');
+    wrap.appendChild(title);
+    const list = createEl('div'); list.id = 'suggestions';
+    wrap.appendChild(list);
+    content.appendChild(wrap);
+    renderSuggestions(suggestions, keyByDisplay, maxShow);
+  }
+
+  function renderTeamSuggestions(){
+    const owned = getOwned();
+    const content = document.getElementById('view-content');
+    content.innerHTML = '';
+    const wrap = createEl('div');
+    wrap.appendChild(createEl('h2',null,'Team Suggestions'));
+
+    const state = { firstTeam: null, secondTeam: null };
+    const firstSummary = createEl('div');
+    const secondSummary = createEl('div');
+    wrap.appendChild(firstSummary);
+    wrap.appendChild(secondSummary);
+
+    const cols = createEl('div','two-col');
+    const col1 = createEl('div');
+    const col2 = createEl('div');
+    cols.appendChild(col1); cols.appendChild(col2);
+    wrap.appendChild(cols);
+
+    const roster1 = createEl('div','tier-members');
+    const list1 = createEl('div');
+    col1.appendChild(createEl('div','picker-title','First team – pick character'));
+    col1.appendChild(roster1);
+    col1.appendChild(list1);
+
+    const roster2 = createEl('div','tier-members');
+    const list2 = createEl('div');
+    col2.appendChild(createEl('div','picker-title','Second team – pick character'));
+    col2.appendChild(roster2);
+    col2.appendChild(list2);
+
+    function renderRosters(){
+      const first = state.firstTeam?.members || state.firstTeam || [];
+      const second = state.secondTeam?.members || state.secondTeam || [];
+      const used = new Set([...first, ...second]);
+      renderRosterColumn(roster1, name=> !used.has(name), (name)=> showListFor(name, list1, 'first'));
+      renderRosterColumn(roster2, name=> !used.has(name), (name)=> showListFor(name, list2, 'second'));
+    }
+
+    function renderRosterColumn(container, enabledPredicate, onPick){
+      container.innerHTML = '';
+      for(const name of owned){
+        const chip = createEl('div','tier-member');
+        if(!enabledPredicate(name)) chip.classList.add('disabled');
+        const key = keyByDisplay[name];
+        const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
+        chip.appendChild(createEl('div','pill',name));
+        if(enabledPredicate(name)) chip.addEventListener('click',()=> onPick(name));
+        container.appendChild(chip);
+      }
+    }
+
+    function showListFor(chosen, listContainer, which){
+      listContainer.innerHTML = '';
+      const otherMembers = which==='first' ? (state.secondTeam?.members || state.secondTeam || [])
+                                           : (state.firstTeam?.members || state.firstTeam || []);
+      const used = new Set(otherMembers);
+      const filteredOwned = new Set([...owned].filter(n=> !used.has(n)));
+      const candidates = [];
+      for(const s of teams){
+        const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
+        if(!members.includes(chosen)) continue;
+        if(members.some(m=> used.has(m))) continue;
+        const others = members.filter(m=>m!==chosen);
+        let missing=0; for(const o of others){ if(!filteredOwned.has(o)) missing++; }
+        if(missing===0){ candidates.push({members, dps:s.DPS||0}); }
+      }
+      candidates.sort((a,b)=> b.dps - a.dps);
+      if(candidates.length===0){ listContainer.appendChild(createEl('div','small','No teams available.')); return; }
+      listContainer.appendChild(createEl('h3',null,`Best teams for ${chosen}`));
+      listContainer.appendChild(createEl('div','small muted',`Showing ${Math.min(10,candidates.length)} of ${candidates.length} by DPS`));
+      const top = candidates.slice(0, 10);
+      for(const team of top){
+        const row = createEl('div','team-row clickable');
+        const members = createEl('div','members');
+        for(const m of team.members){
+          const mk = keyByDisplay[m];
+          const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
+          members.appendChild(createEl('div','member-pill',m));
+        }
+        row.appendChild(members);
+        row.appendChild(createEl('div','team-dps', `${Math.round(team.dps||0)}`));
+        row.addEventListener('click',()=>{
+          const sel = {members: team.members, dps: team.dps||0};
+          if(which==='first') state.firstTeam = sel; else state.secondTeam = sel;
+          renderFirstSummary();
+          renderSecondSummary();
+          list1.innerHTML=''; list2.innerHTML='';
+          renderRosters();
+        });
+        listContainer.appendChild(row);
+      }
+    }
+
+    function getTeamDps(members){
+      if(!Array.isArray(members) || members.length!==4) return 0;
+      const target = members.map(normalizeName).slice().sort().join('|');
+      let best = 0;
+      for(const s of teams){
+        const ms = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName).sort().join('|');
+        if(ms===target){ best = Math.max(best, s.DPS||0); }
+      }
+      return best;
+    }
+
+    function renderFirstSummary(){
+      firstSummary.innerHTML = '';
+      if(!state.firstTeam) return;
+      const card = createEl('div','summary-card');
+      const head = createEl('div','summary-head');
+      head.appendChild(createEl('h3',null,'First team selected'));
+      const clearBtn = createEl('button','small-btn','Clear');
+      clearBtn.addEventListener('click',()=>{ state.firstTeam=null; renderFirstSummary(); renderRosters(); });
+      head.appendChild(clearBtn);
+      card.appendChild(head);
+      const row = createEl('div','team-row');
+      const members = createEl('div','members');
+      const arr = state.firstTeam?.members || state.firstTeam;
+      for(const m of arr){
+        const mk = keyByDisplay[m];
+        const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
+        members.appendChild(createEl('div','member-pill',m));
+      }
+      row.appendChild(members);
+      const dpsVal = (typeof state.firstTeam==='object' && state.firstTeam && 'dps' in state.firstTeam)
+        ? (state.firstTeam.dps||0) : getTeamDps(arr);
+      row.appendChild(createEl('div','team-dps', `${Math.round(dpsVal)}`));
+      card.appendChild(row);
+      firstSummary.appendChild(card);
+    }
+
+    function renderSecondSummary(){
+      secondSummary.innerHTML = '';
+      if(!state.secondTeam) return;
+      const card = createEl('div','summary-card');
+      const head = createEl('div','summary-head');
+      head.appendChild(createEl('h3',null,'Second team selected'));
+      const clearBtn = createEl('button','small-btn','Clear');
+      clearBtn.addEventListener('click',()=>{ state.secondTeam=null; renderSecondSummary(); renderRosters(); });
+      head.appendChild(clearBtn);
+      card.appendChild(head);
+      const row = createEl('div','team-row');
+      const members = createEl('div','members');
+      const arr = state.secondTeam?.members || state.secondTeam;
+      for(const m of arr){
+        const mk = keyByDisplay[m];
+        const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
+        members.appendChild(createEl('div','member-pill',m));
+      }
+      row.appendChild(members);
+      const dpsVal = (typeof state.secondTeam==='object' && state.secondTeam && 'dps' in state.secondTeam)
+        ? (state.secondTeam.dps||0) : getTeamDps(arr);
+      row.appendChild(createEl('div','team-dps', `${Math.round(dpsVal)}`));
+      card.appendChild(row);
+      secondSummary.appendChild(card);
+    }
+
+    renderFirstSummary();
+    renderSecondSummary();
+    renderRosters();
+    content.appendChild(wrap);
+  }
+
+  function renderTier(){
+    const owned = getOwned();
+    const maxShow = parseInt(maxShowEl.value||'3',10);
+    const mode = parseInt(modeEl.value||'1',10);
+    const tierData = buildTierlist(names, teams, owned, maxShow, mode);
+    const content = document.getElementById('view-content');
+    content.innerHTML = '';
+    const wrap = createEl('div');
+    const title = createEl('h2',null,'Tier List');
+    wrap.appendChild(title);
+    const area = createEl('div'); area.id = 'tierlist'; area.className = 'tier-grid';
+    wrap.appendChild(area);
+    content.appendChild(wrap);
+    renderTierlist(tierData, keyByDisplay, maxShow);
+  }
+
+  function renderActiveView(){
+    const hash = location.hash || '#recommendations';
+    const viewTitle = document.getElementById('view-title');
+    setActiveLink(hash);
+    if(hash === '#tierlist'){
+      viewTitle.textContent = 'Tier List';
+      renderTier();
+    } else if(hash === '#team-suggestions'){
+      viewTitle.textContent = 'Team Suggestions';
+      renderTeamSuggestions();
+    } else {
+      viewTitle.textContent = 'Recommendations';
+      renderRecommendations();
+    }
+  }
+
+  window.addEventListener('hashchange', renderActiveView);
+  if(!location.hash) location.hash = '#recommendations';
+  renderActiveView();
+
+  const updatesBtn = document.getElementById('open-updates');
+  const updatesModal = document.getElementById('updates-modal');
+  const updatesClose = document.getElementById('close-updates');
+  const updatesContent = document.getElementById('updates-content');
+  async function openUpdates(){
+    updatesModal.hidden = false;
+    try{
+      const resp = await fetch('Updates.md');
+      const text = await resp.text();
+      updatesContent.innerHTML = renderMarkdownBasic(text);
+    }catch(e){
+      updatesContent.textContent = 'Failed to load updates.';
+    }
+  }
+  function closeUpdates(){ updatesModal.hidden = true; }
+  updatesBtn?.addEventListener('click', openUpdates);
+  updatesClose?.addEventListener('click', closeUpdates);
+  updatesModal?.querySelector('.modal-backdrop')?.addEventListener('click', closeUpdates);
+}
+
+function normalizeName(name){
+  return String(name).trim();
+}
+
+function computeSuggestions(teams, ownedDisplaySet, mode, maxShow=3){
+  const byMissingSet = new Map();
+  for(const s of teams){
+    const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
+    const missing = [];
+    for(const m of members){
+      if(!ownedDisplaySet.has(m)) missing.push(m);
+    }
+    if(missing.length > 0 && missing.length <= mode){
+      const sortedMissing = missing.slice().sort();
+      const key = sortedMissing.join('||');
+      const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
+      list.teams.push({members, dps: s.DPS || 0});
+      byMissingSet.set(key, list);
+    }
+  }
+
+  const results = [];
+  for(const [key, obj] of byMissingSet.entries()){
+  const list = obj.teams.slice().sort((a,b)=>b.dps - a.dps);
+  const top3 = list.slice(0,3);
+  const dpsVals = top3.map(x=>x.dps).sort((a,b)=>a-b);
+    let median = 0;
+    if(dpsVals.length>0){
+      const mid = Math.floor(dpsVals.length/2);
+      median = (dpsVals.length%2===1) ? dpsVals[mid] : (dpsVals[mid-1]+dpsVals[mid])/2;
+    }
+    results.push({
+      missing: obj.missing,
+      count: obj.teams.length,
+      median,
+      topteams: list.slice(0, Math.max(1, Math.min(maxShow || 3, list.length)))
+    });
+  }
+
+  results.sort((a,b)=>{ if(b.median!==a.median) return b.median - a.median; return b.count - a.count; });
+  return results;
+}
+
+function renderSuggestions(list, keyByDisplay, maxShow){
+  const container = document.getElementById('suggestions');
+  container.innerHTML = '';
+  if(list.length === 0){
+    container.appendChild(createEl('div','small','No recommendations: either too few characters are selected or no teams fit the current rules.'));
+    return;
+  }
+  for(const item of list){
+    const card = createEl('div','squad clickable');
+    const left = createEl('div','left');
+    const group = createEl('div','missing-group');
+    for(const missingName of item.missing){
+      const key = keyByDisplay[missingName];
+      const img = createAvatarImg(missingName,'avatar-sm', key);
+      if(img) group.appendChild(img);
+      group.appendChild(createEl('div','pill',missingName));
+    }
+    left.appendChild(group);
+    left.appendChild(createEl('div','small',`${item.count} team(s) match this set`));
+
+    const right = createEl('div','right');
+    const medianBadge = createEl('div','dps-badge', `Median DPS: ${Math.round(item.median||0)}`);
+    right.appendChild(medianBadge);
+
+    if(item.topteams && item.topteams.length){
+      const best = item.topteams[0];
+      const preview = createEl('div','team-row preview');
+      const members = createEl('div','members');
+      for(const m of best.members){
+        const mk = keyByDisplay[m];
+        const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
+        const pill = createEl('div','member-pill', m);
+        if(item.missing.includes(m)) pill.classList.add('missing'); else pill.classList.add('owned');
+        members.appendChild(pill);
+      }
+      preview.appendChild(members);
+      const dpsEl = createEl('div','team-dps', `${Math.round(best.dps||0)}`);
+      preview.appendChild(dpsEl);
+      right.appendChild(preview);
+    }
+
+    card.appendChild(left);
+    card.appendChild(right);
+    card.addEventListener('click',()=> togglePanel(card, item, keyByDisplay, maxShow));
+    container.appendChild(card);
+  }
+}
+
+function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1){
+  const results = [];
+  const allDisplayNames = Object.values(names);
+  for(const disp of allDisplayNames){
+    if(ownedDisplaySet && ownedDisplaySet.has(disp)){
+      continue;
+    }
+    const candidates = [];
+    for(const s of teams){
+      const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
+      if(members.includes(disp)){
+        const others = members.filter(m=>m!==disp);
+        let ownedCount = 0; for(const o of others) if(ownedDisplaySet.has(o)) ownedCount++;
+        const missingOthers = others.length - ownedCount;
+        const totalMissing = 1 + missingOthers;
+        if(totalMissing <= mode && ownedCount>0){
+          candidates.push({members, dps: s.DPS||0, ownedCount});
+        }
+      }
+    }
+    if(candidates.length===0){ continue; }
+  candidates.sort((a,b)=> b.dps - a.dps);
+  const best = candidates[0];
+  const showteams = candidates.slice(0, Math.max(1, Math.min(maxShow, candidates.length)));
+    results.push({name:disp, score: best.dps || 0, teams: showteams});
+  }
+  const vals = results.map(r=>r.score);
+  const mean = vals.length? (vals.reduce((s,v)=>s+v,0)/vals.length) : 0;
+  const sd = vals.length? Math.sqrt(vals.reduce((s,v)=>s+(v-mean)*(v-mean),0)/vals.length) : 0;
+  results.sort((a,b)=>b.score - a.score);
+  const N = results.length;
+  const tiers = ['ss','s','A','B','C','D'];
+  const k = tiers.length;
+  // -2.5,-1.5,-0.5,0.5,1.5,2.5
+  const centers = [];
+  const start = -(k/2) + 0.5;
+  for(let i=0;i<k;i++) centers.push(start + i);
+  const pdf = x => Math.exp(-0.5*x*x)/Math.sqrt(2*Math.PI);
+  let weights = centers.map(c=>pdf(c));
+  const edgeBoost = 0.06;
+  if(weights.length>0){ weights[0] += edgeBoost; weights[weights.length-1] += edgeBoost; }
+  const sumW = weights.reduce((s,w)=>s+w,0) || 1;
+  weights = weights.map(w=>w/sumW);
+  let counts = weights.map(w=>Math.floor(w * N));
+  let assigned = counts.reduce((s,c)=>s+c,0);
+  const fracs = weights.map((w,i)=>({i, frac: (w*N) - Math.floor(w*N)}));
+  fracs.sort((a,b)=>b.frac - a.frac);
+  let rem = N - assigned;
+  let idx = 0;
+  while(rem>0 && idx<fracs.length){ counts[fracs[idx].i]++; rem--; idx++; }
+  for(let j=0; rem>0; j=(j+1)%k){ counts[j]++; rem--; }
+  const tiered = [];
+  let pos = 0;
+  for(let t=0;t<k;t++){
+    const cnt = counts[t];
+    for(let j=0;j<cnt && pos<N;j++,pos++){
+      const r = results[pos];
+      tiered.push({name: r.name, score: r.score, teams: r.teams, tier: tiers[t]});
+    }
+  }
+  for(; pos<N; pos++){ const r = results[pos]; tiered.push({name: r.name, score: r.score, teams: r.teams, tier: tiers[k-1]}); }
+  return tiered;
+}
+
+function erf(x){
+  const sign = x<0?-1:1; x = Math.abs(x);
+  const a1=  0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
+  const t = 1/(1+p*x);
+  const y = 1 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t*Math.exp(-x*x);
+  return sign*y;
+}
+
+function renderTierlist(tierData, keyByDisplay, maxShow){
+  const container = document.getElementById('tierlist');
+  container.innerHTML = '';
+  const tiersOrder = ['ss','s','A','B','C','D'];
+  const grouped = {};
+  for(const t of tiersOrder) grouped[t]=[];
+  for(const item of tierData) grouped[item.tier].push(item);
+
+  const table = createEl('table','tier-table');
+  const anyMembers = tierData && tierData.length>0;
+  if(!anyMembers){
+    container.appendChild(createEl('div','small','Tier list is empty: no characters have teams that include any of your selected characters.'));
+    return;
+  }
+  for(const t of tiersOrder){
+    const row = document.createElement('tr'); row.className = 'tier-row';
+  const labelTd = document.createElement('td'); labelTd.className = 'tier-label';
+  const badge = createEl('img','tier-badge'); badge.src = `tiers/${t}.png`;
+  labelTd.appendChild(badge);
+    row.appendChild(labelTd);
+
+    const membersTd = document.createElement('td'); membersTd.className = 'tier-members';
+    for(const member of grouped[t]){
+      const key = keyByDisplay[member.name];
+      const chip = createEl('div','tier-member');
+      const avatar = createAvatarImg(member.name,'avatar', key);
+      if(avatar) chip.appendChild(avatar);
+      chip.appendChild(createEl('div','pill',member.name));
+      chip.addEventListener('click', ()=> togglePanel(chip, {missing:[member.name], topteams:member.teams}, keyByDisplay));
+      membersTd.appendChild(chip);
+    }
+    row.appendChild(membersTd);
+    table.appendChild(row);
+  }
+  container.appendChild(table);
+}
+function togglePanel(card, item, keyByDisplay){
+  const next = card.nextElementSibling;
+  if(next && next.classList && next.classList.contains('panel')){
+    next.remove();
+    return;
+  }
+  const panel = createEl('div','panel');
+  const title = createEl('div','small',`Best teams for: ${item.missing.join(', ')}`);
+  panel.appendChild(title);
+  if(!item.topteams || item.topteams.length===0){
+    panel.appendChild(createEl('div','small','No top teams found.'));
+  } else {
+    for(const team of item.topteams){
+      const row = createEl('div','team-row');
+      const members = createEl('div','members');
+      for(const m of team.members){
+        const memberKey = findKeyForDisplay(m, keyByDisplay);
+        const img = createAvatarImg(m,'member-avatar', memberKey);
+        if(img) members.appendChild(img);
+        const pill = createEl('div','member-pill',m);
+        if(item.missing && item.missing.includes(m)) pill.classList.add('missing'); else pill.classList.add('owned');
+        members.appendChild(pill);
+      }
+      row.appendChild(members);
+      const dpsEl = createEl('div','team-dps', `${Math.round(team.dps||0)}`);
+      row.appendChild(dpsEl);
+      panel.appendChild(row);
+    }
+  }
+  card.insertAdjacentElement('afterend', panel);
+}
+
+function findKeyForDisplay(displayName, keyByDisplay){
+  return keyByDisplay ? keyByDisplay[displayName] : null;
+}
+
+function sanitizeFileName(name){
+  return name.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9_\-]/g,'') + '.png';
+}
+
+function createAvatarImg(displayName, cls, key){
+  const fileCandidates = [];
+  if(key){
+    fileCandidates.push(key.toLowerCase() + '.png');
+  }
+  fileCandidates.push(sanitizeFileName(displayName));
+  fileCandidates.push(displayName.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9_\-]/g,'') + '.png');
+
+  for(const candidate of fileCandidates){
+    const path = `characters/${candidate}`;
+    const img = new Image();
+    img.src = path;
+    img.className = cls;
+    img.onerror = ()=>{ img.style.display = 'none'; };
+    return img;
+  }
+  return null;
+}
+
+window.addEventListener('DOMContentLoaded',main);
+
+function renderMarkdownBasic(md){
+  const lines = md.split(/\r?\n/);
+  const out = [];
+  let inList = false;
+  for(const line of lines){
+    if(/^\s*[-*]\s+/.test(line)){
+      if(!inList){ out.push('<ul>'); inList = true; }
+      const item = line.replace(/^\s*[-*]\s+/, '');
+      out.push(`<li>${escapeHtml(item)}</li>`);
+      continue;
+    } else if(inList){ out.push('</ul>'); inList = false; }
+    const h = line.match(/^(#+)\s+(.*)$/);
+    if(h){ const level = Math.min(h[1].length,3); out.push(`<h${level}>${escapeHtml(h[2])}</h${level}>`); continue; }
+    if(line.trim().length===0){ out.push('<br/>'); continue; }
+    out.push(`<p>${escapeHtml(line)}</p>`);
+  }
+  if(inList) out.push('</ul>');
+  return out.join('\n');
+}
+function escapeHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
