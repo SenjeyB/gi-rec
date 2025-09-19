@@ -1,3 +1,7 @@
+## 1.1.0
+- New UI for team suggestions mode
+- Added support for 3 teams to build
+
 ## 1.0.1
 - UI adjustments
 
