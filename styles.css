@@ -37,9 +37,10 @@ body{background:linear-gradient(180deg,#071129 0%,#071322 80%);color:#e6eef8;mar
 .side-nav .nav-link{display:block;width:100%;text-align:left}
 
 .maincol{min-height:60vh}
-.view-header{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin:8px 0 12px}
+.view-header{display:none}
 .view-content{background:var(--glass);border:1px solid var(--line);border-radius:8px;padding:12px}
 .muted{color:var(--muted)}
+.view-hint-inline{display:flex;justify-content:flex-end;margin-bottom:6px}
 
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .picker-title{font-weight:600;margin:6px 0}

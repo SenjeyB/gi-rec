@@ -90,9 +90,8 @@ async function main(){
     const suggestions = computeSuggestions(teams, owned, mode, maxShow);
     const content = document.getElementById('view-content');
     content.innerHTML = '';
+    content.appendChild(createInlineHint());
     const wrap = createEl('div');
-    const title = createEl('h2',null,'Who to obtain');
-    wrap.appendChild(title);
     const list = createEl('div'); list.id = 'suggestions';
     wrap.appendChild(list);
     content.appendChild(wrap);
@@ -103,8 +102,8 @@ async function main(){
     const owned = getOwned();
     const content = document.getElementById('view-content');
     content.innerHTML = '';
+    content.appendChild(createInlineHint());
     const wrap = createEl('div');
-    wrap.appendChild(createEl('h2',null,'Team Suggestions'));
 
     const state = { firstTeam: null, secondTeam: null };
     const firstSummary = createEl('div');
@@ -269,9 +268,8 @@ async function main(){
     const tierData = buildTierlist(names, teams, owned, maxShow, mode);
     const content = document.getElementById('view-content');
     content.innerHTML = '';
+    content.appendChild(createInlineHint());
     const wrap = createEl('div');
-    const title = createEl('h2',null,'Tier List');
-    wrap.appendChild(title);
     const area = createEl('div'); area.id = 'tierlist'; area.className = 'tier-grid';
     wrap.appendChild(area);
     content.appendChild(wrap);
@@ -280,16 +278,12 @@ async function main(){
 
   function renderActiveView(){
     const hash = location.hash || '#recommendations';
-    const viewTitle = document.getElementById('view-title');
     setActiveLink(hash);
     if(hash === '#tierlist'){
-      viewTitle.textContent = 'Tier List';
       renderTier();
     } else if(hash === '#team-suggestions'){
-      viewTitle.textContent = 'Team Suggestions';
       renderTeamSuggestions();
     } else {
-      viewTitle.textContent = 'Recommendations';
       renderRecommendations();
     }
   }
@@ -577,6 +571,16 @@ function createAvatarImg(displayName, cls, key){
 }
 
 window.addEventListener('DOMContentLoaded',main);
+
+function createInlineHint(){
+  const hintWrap = document.createElement('div');
+  hintWrap.className = 'view-hint-inline';
+  const hint = document.createElement('div');
+  hint.className = 'small muted';
+  hint.textContent = 'The list updates when you change selection or settings';
+  hintWrap.appendChild(hint);
+  return hintWrap;
+}
 
 function renderMarkdownBasic(md){
   const lines = md.split(/\r?\n/);
