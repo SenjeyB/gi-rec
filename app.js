@@ -142,15 +142,31 @@ async function main(){
       const used = new Set();
       for(const s of state.selections){ if(s?.members){ for(const m of s.members) used.add(m); } }
       if(state.selections[idx]?.members){ for(const m of state.selections[idx].members) used.delete(m); }
+      const filteredOwned = new Set([...owned].filter(n=> !used.has(n)));
       roster.innerHTML = '';
       list.innerHTML = '';
+
+      function canAnchor(name){
+        if(used.has(name)) return false;
+        for(const s of teams){
+          const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
+          if(!members.includes(name)) continue;
+          if(members.some(m=> used.has(m))) continue;
+          const others = members.filter(m=> m!==name);
+          let ok = true;
+          for(const o of others){ if(!filteredOwned.has(o)){ ok=false; break; } }
+          if(ok) return true;
+        }
+        return false;
+      }
       for(const name of owned){
         const chip = createEl('div','tier-member');
-        if(used.has(name)) chip.classList.add('disabled');
+        const eligible = canAnchor(name);
+        if(!eligible) chip.classList.add('disabled');
         const key = keyByDisplay[name];
         const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
         chip.appendChild(createEl('div','pill',name));
-        if(!used.has(name)) chip.addEventListener('click',()=> showPickerList(idx, name));
+        if(eligible) chip.addEventListener('click',()=> showPickerList(idx, name));
         roster.appendChild(chip);
       }
       function showPickerList(slotIndex, chosen){
