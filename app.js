@@ -59,15 +59,12 @@ async function main(){
 
   const modeEl = document.getElementById('mode');
   const maxShowEl = document.getElementById('maxShow');
-  const teamsCountEl = document.getElementById('teamsCount');
   try{
     const savedMode = localStorage.getItem('settingMode'); if(savedMode) modeEl.value = savedMode;
     const savedMax = localStorage.getItem('settingMaxShow'); if(savedMax) maxShowEl.value = savedMax;
-    const savedTeams = localStorage.getItem('settingTeamsCount'); if(savedTeams) teamsCountEl.value = savedTeams;
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
   maxShowEl.addEventListener('change', ()=> { localStorage.setItem('settingMaxShow', maxShowEl.value); renderActiveView(); });
-  teamsCountEl.addEventListener('change', ()=> { localStorage.setItem('settingTeamsCount', teamsCountEl.value); renderActiveView(); });
   document.getElementById('clear').addEventListener('click',()=>{
     selected.clear();
     document.querySelectorAll('.char.selected').forEach(el=>el.classList.remove('selected'));
@@ -108,7 +105,7 @@ async function main(){
     content.appendChild(createInlineHint());
     const wrap = createEl('div');
 
-    const targetTeams = Math.max(2, Math.min(3, parseInt(teamsCountEl.value||'2',10)));
+  const targetTeams = 3;
     const state = { selections: Array(targetTeams).fill(null) };
 
     const summaryBlocks = state.selections.map(()=> createEl('div'));
@@ -117,13 +114,24 @@ async function main(){
     const grid = createEl('div','two-col');
     wrap.appendChild(grid);
 
-    const pickButtonsRow = createEl('div','tier-members');
+  const pickButtonsRow = createEl('div','tier-members pick-row');
+    const pickButtons = [];
     for(let i=0;i<targetTeams;i++){
-      const btn = createEl('button','small-btn', `Pick team #${i+1}`);
+      const btn = createEl('button','small-btn big-btn', `Pick team #${i+1}`);
       btn.addEventListener('click', ()=> openTeamPicker(i));
+      pickButtons.push(btn);
       pickButtonsRow.appendChild(btn);
     }
   grid.appendChild(pickButtonsRow);
+
+    function updatePickRowVisibility(){
+      const anyVisible = pickButtons.some(b => b && b.style.display !== 'none');
+      if(!anyVisible){
+        if(pickButtonsRow.parentElement){ pickButtonsRow.parentElement.removeChild(pickButtonsRow); }
+      } else if(!pickButtonsRow.parentElement){
+        grid.appendChild(pickButtonsRow);
+      }
+    }
 
     function openTeamPicker(idx){
       const modal = document.getElementById('team-picker-modal');
@@ -180,6 +188,8 @@ async function main(){
           row.addEventListener('click',()=>{
             state.selections[slotIndex] = {members: team.members, dps: team.dps||0};
             renderSummaries();
+            if(pickButtons[slotIndex]) pickButtons[slotIndex].style.display = 'none';
+            updatePickRowVisibility();
             closeTeamPicker();
           });
           list.appendChild(row);
@@ -202,8 +212,8 @@ async function main(){
         const card = createEl('div','summary-card');
         const head = createEl('div','summary-head');
         head.appendChild(createEl('h3',null,`Team #${i+1} selected`));
-        const clearBtn = createEl('button','small-btn','Clear');
-        clearBtn.addEventListener('click',()=>{ state.selections[i]=null; renderSummaries(); });
+        const clearBtn = createEl('button','small-btn big-btn','Clear');
+        clearBtn.addEventListener('click',()=>{ state.selections[i]=null; renderSummaries(); if(pickButtons[i]) pickButtons[i].style.display=''; updatePickRowVisibility(); });
         head.appendChild(clearBtn);
         card.appendChild(head);
         const row = createEl('div','team-row');

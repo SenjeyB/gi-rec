@@ -51,6 +51,7 @@ body{background:linear-gradient(180deg,#071129 0%,#071322 80%);color:#e6eef8;mar
 .summary-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
 .small-btn{padding:4px 8px;background:#1f2937;color:#e6eef8;border:1px solid var(--line);border-radius:6px;cursor:pointer}
 .small-btn:hover{opacity:0.95}
+.big-btn{padding:8px 12px;font-size:14px;border-radius:8px}
 
 #characters{display:flex;flex-wrap:wrap;gap:8px;max-height:420px;overflow:auto;padding:6px}
 .char{padding:6px 10px;border-radius:6px;background:rgba(255,255,255,0.03);cursor:pointer;border:1px solid transparent;display:flex;align-items:center;gap:8px}
@@ -73,7 +74,7 @@ button:hover{opacity:0.95}
 .member-pill.owned{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.35)}
 
 .panel{background:rgba(255,255,255,0.02);padding:8px;margin-top:8px;border-radius:8px}
-.team-row{display:flex;gap:10px;align-items:center;padding:6px;border-radius:6px;background:transparent}
+.team-row{display:flex;gap:10px;align-items:center;padding:6px;border-radius:6px;background:transparent;margin-bottom:8px}
 .team-row.clickable{cursor:pointer;border:1px solid var(--line);background:rgba(255,255,255,0.02)}
 .team-row.clickable:hover{background:rgba(255,255,255,0.06)}
 .team-row.selected{outline:2px solid var(--accent); background:rgba(96,165,250,0.08)}
@@ -90,6 +91,7 @@ button:hover{opacity:0.95}
 .tier-row td{vertical-align:middle;padding:8px;border-bottom:1px solid rgba(255,255,255,0.03)}
 .tier-label{width:160px;display:flex;align-items:center;gap:8px}
 .tier-members{display:flex;gap:8px;flex-wrap:wrap}
+.pick-row{align-items:center;flex-wrap:nowrap;justify-content:flex-start;width:fit-content;max-width:100%}
 .tier-member{display:flex;align-items:center;gap:6px;padding:6px;background:rgba(255,255,255,0.02);border-radius:6px;cursor:pointer}
 .tier-badge{width:36px;height:36px;flex-shrink:0}
 .tier-member img.avatar{width:28px;height:28px;border-radius:6px;object-fit:cover}
@@ -106,12 +108,14 @@ button:hover{opacity:0.95}
 .modal[hidden]{display:none}
 .modal{position:fixed;inset:0;z-index:50}
 .modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(2px)}
-.modal-dialog{position:relative;margin:10vh auto 0;max-width:720px;background:#0b1220;border:1px solid var(--line);border-radius:10px;padding:12px 12px}
+.modal-dialog{position:relative;margin:4vh auto 0;width:min(96vw,1440px);max-width:1440px;background:#0b1220;border:1px solid var(--line);border-radius:10px;padding:16px}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .modal-title{font-weight:700}
-.modal-body{max-height:60vh;overflow:auto;background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:8px;padding:10px}
+.modal-body{max-height:80vh;overflow:auto;background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:8px;padding:14px}
 .close-btn{background:#1f2937;color:#e6eef8;border:0;border-radius:6px;padding:6px 8px;cursor:pointer}
 .close-btn:hover{opacity:0.95}
 
-.team-picker-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:12px}
-.picker-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:48vh;overflow:auto;padding:4px}
+.team-picker-layout{display:grid;grid-template-columns:minmax(520px, 1fr) 650px;gap:16px}
+.picker-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:66vh;overflow:auto;padding:8px}
+.team-picker-layout > div:first-child{min-width:0}
+.team-picker-layout > div:last-child{min-width:0;overflow:hidden}
