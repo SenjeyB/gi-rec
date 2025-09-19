@@ -56,6 +56,11 @@
           </select>
           <label for="maxShow" class="side-label">Squads to show on expand:</label>
           <input id="maxShow" class="side-input" type="number" min="1" max="10" value="3" />
+          <label for="teamsCount" class="side-label">Teams to build:</label>
+          <select id="teamsCount" class="side-input">
+            <option value="2">2 teams</option>
+            <option value="3">3 teams</option>
+          </select>
           <div class="side-note small">Changes apply automatically.</div>
         </div>
   </div>
@@ -106,6 +111,29 @@
         <button id="close-updates" class="close-btn" type="button" aria-label="Close">✕</button>
       </div>
       <div id="updates-content" class="modal-body small"></div>
+    </div>
+  </div>
+
+  <div id="team-picker-modal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div id="team-picker-title" class="modal-title">Pick team</div>
+        <button id="team-picker-close" class="close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="small muted" style="margin-bottom:8px">Pick an owned character to anchor the team, then choose one of the suggested full teams.</div>
+        <div class="team-picker-layout">
+          <div>
+            <div class="picker-title">Your characters</div>
+            <div id="team-picker-roster" class="picker-grid" aria-live="polite"></div>
+          </div>
+          <div>
+            <div class="picker-title">Suggested teams</div>
+            <div id="team-picker-list"></div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </body>

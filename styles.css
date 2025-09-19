@@ -112,3 +112,6 @@ button:hover{opacity:0.95}
 .modal-body{max-height:60vh;overflow:auto;background:rgba(255,255,255,0.02);border:1px solid var(--line);border-radius:8px;padding:10px}
 .close-btn{background:#1f2937;color:#e6eef8;border:0;border-radius:6px;padding:6px 8px;cursor:pointer}
 .close-btn:hover{opacity:0.95}
+
+.team-picker-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:12px}
+.picker-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:48vh;overflow:auto;padding:4px}

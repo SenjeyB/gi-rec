@@ -59,12 +59,15 @@ async function main(){
 
   const modeEl = document.getElementById('mode');
   const maxShowEl = document.getElementById('maxShow');
+  const teamsCountEl = document.getElementById('teamsCount');
   try{
     const savedMode = localStorage.getItem('settingMode'); if(savedMode) modeEl.value = savedMode;
     const savedMax = localStorage.getItem('settingMaxShow'); if(savedMax) maxShowEl.value = savedMax;
+    const savedTeams = localStorage.getItem('settingTeamsCount'); if(savedTeams) teamsCountEl.value = savedTeams;
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
   maxShowEl.addEventListener('change', ()=> { localStorage.setItem('settingMaxShow', maxShowEl.value); renderActiveView(); });
+  teamsCountEl.addEventListener('change', ()=> { localStorage.setItem('settingTeamsCount', teamsCountEl.value); renderActiveView(); });
   document.getElementById('clear').addEventListener('click',()=>{
     selected.clear();
     document.querySelectorAll('.char.selected').forEach(el=>el.classList.remove('selected'));
@@ -105,159 +108,123 @@ async function main(){
     content.appendChild(createInlineHint());
     const wrap = createEl('div');
 
-    const state = { firstTeam: null, secondTeam: null };
-    const firstSummary = createEl('div');
-    const secondSummary = createEl('div');
-    wrap.appendChild(firstSummary);
-    wrap.appendChild(secondSummary);
+    const targetTeams = Math.max(2, Math.min(3, parseInt(teamsCountEl.value||'2',10)));
+    const state = { selections: Array(targetTeams).fill(null) };
 
-    const cols = createEl('div','two-col');
-    const col1 = createEl('div');
-    const col2 = createEl('div');
-    cols.appendChild(col1); cols.appendChild(col2);
-    wrap.appendChild(cols);
+    const summaryBlocks = state.selections.map(()=> createEl('div'));
+    summaryBlocks.forEach(b=> wrap.appendChild(b));
 
-    const roster1 = createEl('div','tier-members');
-    const list1 = createEl('div');
-    col1.appendChild(createEl('div','picker-title','First team – pick character'));
-    col1.appendChild(roster1);
-    col1.appendChild(list1);
+    const grid = createEl('div','two-col');
+    wrap.appendChild(grid);
 
-    const roster2 = createEl('div','tier-members');
-    const list2 = createEl('div');
-    col2.appendChild(createEl('div','picker-title','Second team – pick character'));
-    col2.appendChild(roster2);
-    col2.appendChild(list2);
-
-    function renderRosters(){
-      const first = state.firstTeam?.members || state.firstTeam || [];
-      const second = state.secondTeam?.members || state.secondTeam || [];
-      const used = new Set([...first, ...second]);
-      renderRosterColumn(roster1, name=> !used.has(name), (name)=> showListFor(name, list1, 'first'));
-      renderRosterColumn(roster2, name=> !used.has(name), (name)=> showListFor(name, list2, 'second'));
+    const pickButtonsRow = createEl('div','tier-members');
+    for(let i=0;i<targetTeams;i++){
+      const btn = createEl('button','small-btn', `Pick team #${i+1}`);
+      btn.addEventListener('click', ()=> openTeamPicker(i));
+      pickButtonsRow.appendChild(btn);
     }
+  grid.appendChild(pickButtonsRow);
 
-    function renderRosterColumn(container, enabledPredicate, onPick){
-      container.innerHTML = '';
+    function openTeamPicker(idx){
+      const modal = document.getElementById('team-picker-modal');
+      const roster = document.getElementById('team-picker-roster');
+      const list = document.getElementById('team-picker-list');
+      const title = document.getElementById('team-picker-title');
+      title.textContent = `Pick team #${idx+1}`;
+      const used = new Set();
+      for(const s of state.selections){ if(s?.members){ for(const m of s.members) used.add(m); } }
+      if(state.selections[idx]?.members){ for(const m of state.selections[idx].members) used.delete(m); }
+      roster.innerHTML = '';
+      list.innerHTML = '';
       for(const name of owned){
         const chip = createEl('div','tier-member');
-        if(!enabledPredicate(name)) chip.classList.add('disabled');
+        if(used.has(name)) chip.classList.add('disabled');
         const key = keyByDisplay[name];
         const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
         chip.appendChild(createEl('div','pill',name));
-        if(enabledPredicate(name)) chip.addEventListener('click',()=> onPick(name));
-        container.appendChild(chip);
+        if(!used.has(name)) chip.addEventListener('click',()=> showPickerList(idx, name));
+        roster.appendChild(chip);
       }
+      function showPickerList(slotIndex, chosen){
+        list.innerHTML = '';
+        const othersUsed = new Set();
+        for(let j=0;j<state.selections.length;j++){
+          if(j===slotIndex) continue;
+          const sel = state.selections[j];
+          if(sel?.members){ for(const m of sel.members) othersUsed.add(m); }
+        }
+        const filteredOwned = new Set([...owned].filter(n=> !othersUsed.has(n)));
+        const candidates = [];
+        for(const s of teams){
+          const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
+          if(!members.includes(chosen)) continue;
+          if(members.some(m=> othersUsed.has(m))) continue;
+          const others = members.filter(m=>m!==chosen);
+          let missing=0; for(const o of others){ if(!filteredOwned.has(o)) missing++; }
+          if(missing===0){ candidates.push({members, dps:s.DPS||0}); }
+        }
+        candidates.sort((a,b)=> b.dps - a.dps);
+        if(candidates.length===0){ list.appendChild(createEl('div','small','No teams available.')); return; }
+        list.appendChild(createEl('div','small muted',`Showing ${Math.min(10,candidates.length)} of ${candidates.length} by DPS`));
+        const top = candidates.slice(0, 10);
+        for(const team of top){
+          const row = createEl('div','team-row clickable');
+          const members = createEl('div','members');
+          for(const m of team.members){
+            const mk = keyByDisplay[m];
+            const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
+            members.appendChild(createEl('div','member-pill',m));
+          }
+          row.appendChild(members);
+          row.appendChild(createEl('div','team-dps', `${Math.round(team.dps||0)}`));
+          row.addEventListener('click',()=>{
+            state.selections[slotIndex] = {members: team.members, dps: team.dps||0};
+            renderSummaries();
+            closeTeamPicker();
+          });
+          list.appendChild(row);
+        }
+      }
+      modal.hidden = false;
     }
 
-    function showListFor(chosen, listContainer, which){
-      listContainer.innerHTML = '';
-      const otherMembers = which==='first' ? (state.secondTeam?.members || state.secondTeam || [])
-                                           : (state.firstTeam?.members || state.firstTeam || []);
-      const used = new Set(otherMembers);
-      const filteredOwned = new Set([...owned].filter(n=> !used.has(n)));
-      const candidates = [];
-      for(const s of teams){
-        const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
-        if(!members.includes(chosen)) continue;
-        if(members.some(m=> used.has(m))) continue;
-        const others = members.filter(m=>m!==chosen);
-        let missing=0; for(const o of others){ if(!filteredOwned.has(o)) missing++; }
-        if(missing===0){ candidates.push({members, dps:s.DPS||0}); }
-      }
-      candidates.sort((a,b)=> b.dps - a.dps);
-      if(candidates.length===0){ listContainer.appendChild(createEl('div','small','No teams available.')); return; }
-      listContainer.appendChild(createEl('h3',null,`Best teams for ${chosen}`));
-      listContainer.appendChild(createEl('div','small muted',`Showing ${Math.min(10,candidates.length)} of ${candidates.length} by DPS`));
-      const top = candidates.slice(0, 10);
-      for(const team of top){
-        const row = createEl('div','team-row clickable');
+    function closeTeamPicker(){
+      const modal = document.getElementById('team-picker-modal');
+      modal.hidden = true;
+    }
+
+    function renderSummaries(){
+      for(let i=0;i<summaryBlocks.length;i++){
+        const host = summaryBlocks[i];
+        host.innerHTML = '';
+        const sel = state.selections[i];
+        if(!sel) continue;
+        const card = createEl('div','summary-card');
+        const head = createEl('div','summary-head');
+        head.appendChild(createEl('h3',null,`Team #${i+1} selected`));
+        const clearBtn = createEl('button','small-btn','Clear');
+        clearBtn.addEventListener('click',()=>{ state.selections[i]=null; renderSummaries(); });
+        head.appendChild(clearBtn);
+        card.appendChild(head);
+        const row = createEl('div','team-row');
         const members = createEl('div','members');
-        for(const m of team.members){
+        for(const m of sel.members){
           const mk = keyByDisplay[m];
           const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
           members.appendChild(createEl('div','member-pill',m));
         }
         row.appendChild(members);
-        row.appendChild(createEl('div','team-dps', `${Math.round(team.dps||0)}`));
-        row.addEventListener('click',()=>{
-          const sel = {members: team.members, dps: team.dps||0};
-          if(which==='first') state.firstTeam = sel; else state.secondTeam = sel;
-          renderFirstSummary();
-          renderSecondSummary();
-          list1.innerHTML=''; list2.innerHTML='';
-          renderRosters();
-        });
-        listContainer.appendChild(row);
+        row.appendChild(createEl('div','team-dps', `${Math.round(sel.dps||0)}`));
+        card.appendChild(row);
+        host.appendChild(card);
       }
     }
 
-    function getTeamDps(members){
-      if(!Array.isArray(members) || members.length!==4) return 0;
-      const target = members.map(normalizeName).slice().sort().join('|');
-      let best = 0;
-      for(const s of teams){
-        const ms = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName).sort().join('|');
-        if(ms===target){ best = Math.max(best, s.DPS||0); }
-      }
-      return best;
-    }
+    const pickerModal = document.getElementById('team-picker-modal');
+    pickerModal?.querySelector('.modal-backdrop')?.addEventListener('click', ()=>{ pickerModal.hidden = true; });
+    document.getElementById('team-picker-close')?.addEventListener('click', ()=>{ pickerModal.hidden = true; });
 
-    function renderFirstSummary(){
-      firstSummary.innerHTML = '';
-      if(!state.firstTeam) return;
-      const card = createEl('div','summary-card');
-      const head = createEl('div','summary-head');
-      head.appendChild(createEl('h3',null,'First team selected'));
-      const clearBtn = createEl('button','small-btn','Clear');
-      clearBtn.addEventListener('click',()=>{ state.firstTeam=null; renderFirstSummary(); renderRosters(); });
-      head.appendChild(clearBtn);
-      card.appendChild(head);
-      const row = createEl('div','team-row');
-      const members = createEl('div','members');
-      const arr = state.firstTeam?.members || state.firstTeam;
-      for(const m of arr){
-        const mk = keyByDisplay[m];
-        const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
-        members.appendChild(createEl('div','member-pill',m));
-      }
-      row.appendChild(members);
-      const dpsVal = (typeof state.firstTeam==='object' && state.firstTeam && 'dps' in state.firstTeam)
-        ? (state.firstTeam.dps||0) : getTeamDps(arr);
-      row.appendChild(createEl('div','team-dps', `${Math.round(dpsVal)}`));
-      card.appendChild(row);
-      firstSummary.appendChild(card);
-    }
-
-    function renderSecondSummary(){
-      secondSummary.innerHTML = '';
-      if(!state.secondTeam) return;
-      const card = createEl('div','summary-card');
-      const head = createEl('div','summary-head');
-      head.appendChild(createEl('h3',null,'Second team selected'));
-      const clearBtn = createEl('button','small-btn','Clear');
-      clearBtn.addEventListener('click',()=>{ state.secondTeam=null; renderSecondSummary(); renderRosters(); });
-      head.appendChild(clearBtn);
-      card.appendChild(head);
-      const row = createEl('div','team-row');
-      const members = createEl('div','members');
-      const arr = state.secondTeam?.members || state.secondTeam;
-      for(const m of arr){
-        const mk = keyByDisplay[m];
-        const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
-        members.appendChild(createEl('div','member-pill',m));
-      }
-      row.appendChild(members);
-      const dpsVal = (typeof state.secondTeam==='object' && state.secondTeam && 'dps' in state.secondTeam)
-        ? (state.secondTeam.dps||0) : getTeamDps(arr);
-      row.appendChild(createEl('div','team-dps', `${Math.round(dpsVal)}`));
-      card.appendChild(row);
-      secondSummary.appendChild(card);
-    }
-
-    renderFirstSummary();
-    renderSecondSummary();
-    renderRosters();
+    renderSummaries();
     content.appendChild(wrap);
   }
 
