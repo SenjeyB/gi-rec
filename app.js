@@ -24,10 +24,14 @@ async function main(){
   }
 
   const keyByDisplay = {};
-  for(const k of Object.keys(names)) keyByDisplay[names[k]] = k;
+  for(const k of Object.keys(names)){
+    const entry = names[k];
+    const disp = (entry && typeof entry === 'object') ? entry.name : entry;
+    keyByDisplay[disp] = k;
+  }
 
   const charactersDiv = document.getElementById('characters');
-  const displayNames = Object.values(names).sort((a,b)=>a.localeCompare(b,'ru'));
+  const displayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v).sort((a,b)=>a.localeCompare(b,'ru'));
   const selected = new Set();
 
   const defaultAutoSelect = [
@@ -398,7 +402,7 @@ function renderSuggestions(list, keyByDisplay, maxShow){
 
 function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1){
   const results = [];
-  const allDisplayNames = Object.values(names);
+  const allDisplayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v);
   for(const disp of allDisplayNames){
     if(ownedDisplaySet && ownedDisplaySet.has(disp)){
       continue;
