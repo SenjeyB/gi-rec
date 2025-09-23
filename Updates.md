@@ -1,3 +1,6 @@
+## 1.1.2
+- New teams added
+
 ## 1.1.1
 - New teams added
 - Varesa teams added
