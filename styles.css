@@ -8,6 +8,7 @@ body{background:linear-gradient(180deg,#071129 0%,#071322 80%);color:#e6eef8;mar
 
 .app-header{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(7,17,41,0.85);backdrop-filter:blur(8px);z-index:10}
 .brand{display:flex;align-items:center;gap:12px}
+.logo-img{width:32px;height:32px;border-radius:8px;display:block}
 .logo-circle{width:32px;height:32px;border-radius:50%;background:var(--accent);color:#041322;display:flex;align-items:center;justify-content:center;font-weight:800}
 .titles{display:flex;flex-direction:column;line-height:1}
 .app-title{font-size:16px;font-weight:700}
