@@ -1,3 +1,7 @@
+## 1.2.0
+- Temporary logo added
+- Character filters added
+
 ## 1.1.2
 - New teams added
 
