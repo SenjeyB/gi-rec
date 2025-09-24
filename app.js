@@ -31,6 +31,8 @@ async function main(){
   }
 
   const charactersDiv = document.getElementById('characters');
+  const ownedFiltersHost = document.getElementById('owned-filters');
+  const mainFiltersHost = document.getElementById('main-filters');
   const displayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v).sort((a,b)=>a.localeCompare(b,'ru'));
   const selected = new Set();
 
@@ -44,22 +46,124 @@ async function main(){
     for(const n of (saved.length? saved : defaultAutoSelect)) selected.add(n);
   }catch{ for(const n of defaultAutoSelect) selected.add(n); }
 
-  for(const disp of displayNames){
-    const btn = createEl('button','char');
-    btn.type = 'button';
-    const key = keyByDisplay[disp];
-    const img = createAvatarImg(disp,'avatar', key);
-    if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
-    const lbl = createEl('div',null,disp);
-    btn.appendChild(lbl);
-    if(selected.has(disp)) btn.classList.add('selected');
-    btn.addEventListener('click',()=>{
-      if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
-      persistSelection();
-      renderActiveView();
-    });
-    charactersDiv.appendChild(btn);
+  const byWeapon = new Map();
+  const byElement = new Map();
+  for(const [k, v] of Object.entries(names)){
+    const disp = (v && typeof v==='object')? v.name : v;
+    const weapon = (v && v.weapon) ? String(v.weapon).toLowerCase() : null;
+    const element = (v && v.element) ? String(v.element).toLowerCase() : null;
+    if(weapon){ if(!byWeapon.has(weapon)) byWeapon.set(weapon, new Set()); byWeapon.get(weapon).add(disp); }
+    if(element){ if(!byElement.has(element)) byElement.set(element, new Set()); byElement.get(element).add(disp); }
   }
+
+  const filterState = {
+    owned: { weapons: new Set(), elements: new Set() },
+    main: { weapons: new Set(), elements: new Set() },
+    picker: { weapons: new Set(), elements: new Set() }
+  };
+
+  function renderFilters(host, scope){
+    if(!host) return;
+    host.innerHTML = '';
+    const mkChip = (group, key, label, iconSrc) => {
+      const chip = createEl('div','filter-chip');
+      const icon = new Image(); icon.src = iconSrc; icon.alt = key; icon.className = 'icon';
+      chip.appendChild(icon);
+      chip.appendChild(createEl('span',null,label));
+      const set = filterState[scope][group];
+      function sync(){ if(set.has(key)) chip.classList.add('selected'); else chip.classList.remove('selected'); }
+      chip.addEventListener('click', ()=>{ if(set.has(key)) set.delete(key); else set.add(key); sync(); onFiltersChanged(scope); });
+      sync();
+      return chip;
+    };
+    const elOrder = ['anemo','cryo','dendro','electro','geo','hydro','pyro'];
+    for(const e of elOrder){
+      if(byElement.has(e)){
+        const label = e[0].toUpperCase()+e.slice(1);
+        const chip = mkChip('elements', e, label, `filters/Element_${e[0].toUpperCase()+e.slice(1)}.png`);
+        host.appendChild(chip);
+      }
+    }
+    if(scope === 'main'){
+      const br = document.createElement('span');
+      br.className = 'filter-break';
+      host.appendChild(br);
+    }
+    const wOrder = ['sword','polearm','bow','claymore','catalyst'];
+    for(const w of wOrder){
+      if(byWeapon.has(w)){
+        const label = w[0].toUpperCase()+w.slice(1);
+        const chip = mkChip('weapons', w, label, `filters/Class-${w}.png`);
+        host.appendChild(chip);
+      }
+    }
+  }
+
+  function filterActive(scope){
+    const s = filterState[scope];
+    if(!s) return false;
+    return (s.elements.size>0) || (s.weapons.size>0);
+  }
+
+  function onFiltersChanged(scope){
+    if(scope === 'owned'){
+      renderOwnedCharacters();
+      return;
+    }
+    if(scope === 'main'){
+      const hash = location.hash || '#recommendations';
+      if(hash === '#tierlist') renderTier();
+      else if(hash === '#recommendations') renderRecommendations();
+      return;
+    }
+    if(scope === 'picker'){
+      const modal = document.getElementById('team-picker-modal');
+      if(modal && !modal.hidden && typeof window.__pickerRefresh === 'function'){
+        try{ window.__pickerRefresh(); }catch{}
+      }
+    }
+  }
+
+  function makeFilterPredicate(scope){
+    const sets = filterState[scope];
+    const els = sets.elements; const ws = sets.weapons;
+    const elActive = els.size>0; const wActive = ws.size>0;
+    if(!elActive && !wActive) return ()=>true;
+    return (disp)=>{
+      const key = keyByDisplay[disp];
+      const entry = names[key];
+      const e = (entry && entry.element)? String(entry.element).toLowerCase():'';
+      const w = (entry && entry.weapon)? String(entry.weapon).toLowerCase():'';
+      const okEl = !elActive || els.has(e);
+      const okW = !wActive || ws.has(w);
+      return okEl && okW;
+    };
+  }
+
+  function renderOwnedCharacters(){
+    charactersDiv.innerHTML = '';
+    const pred = makeFilterPredicate('owned');
+    for(const disp of displayNames){
+      const btn = createEl('button','char');
+      btn.type = 'button';
+      const key = keyByDisplay[disp];
+      const img = createAvatarImg(disp,'avatar', key);
+      if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
+      const lbl = createEl('div',null,disp);
+      btn.appendChild(lbl);
+      if(selected.has(disp)) btn.classList.add('selected');
+      if(!pred(disp)) btn.classList.add('dimmed');
+      btn.addEventListener('click',()=>{
+        if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
+        persistSelection();
+        renderActiveView();
+      });
+      charactersDiv.appendChild(btn);
+    }
+  }
+
+  renderFilters(ownedFiltersHost, 'owned');
+  renderOwnedCharacters();
 
   const modeEl = document.getElementById('mode');
   const maxShowEl = document.getElementById('maxShow');
@@ -91,7 +195,21 @@ async function main(){
     const owned = getOwned();
     const mode = parseInt(modeEl.value||'1',10);
     const maxShow = parseInt(maxShowEl.value||'3',10);
-    const suggestions = computeSuggestions(teams, owned, mode, maxShow);
+    const pred = makeFilterPredicate('main');
+    const active = filterActive('main');
+    const base = computeSuggestions(teams, owned, mode, maxShow);
+    const suggestions = active
+      ? base.map(item => {
+          const missingAllMatch = item.missing.every(pred);
+          if(!missingAllMatch) return null;
+          const filteredTop = (item.topteams||[]).filter(t => {
+            const missingInTeam = t.members.filter(m => !owned.has(m));
+            return missingInTeam.every(pred);
+          });
+          if(filteredTop.length === 0) return null;
+          return { ...item, topteams: filteredTop };
+        }).filter(Boolean)
+      : base;
     const content = document.getElementById('view-content');
     content.innerHTML = '';
     content.appendChild(createInlineHint());
@@ -140,39 +258,52 @@ async function main(){
     function openTeamPicker(idx){
       const modal = document.getElementById('team-picker-modal');
       const roster = document.getElementById('team-picker-roster');
+      const filterHost = document.getElementById('team-picker-filters');
       const list = document.getElementById('team-picker-list');
       const title = document.getElementById('team-picker-title');
       title.textContent = `Pick team #${idx+1}`;
-      const used = new Set();
-      for(const s of state.selections){ if(s?.members){ for(const m of s.members) used.add(m); } }
-      if(state.selections[idx]?.members){ for(const m of state.selections[idx].members) used.delete(m); }
-      const filteredOwned = new Set([...owned].filter(n=> !used.has(n)));
+      function computeUsed(){
+        const u = new Set();
+        for(const s of state.selections){ if(s?.members){ for(const m of s.members) u.add(m); } }
+        if(state.selections[idx]?.members){ for(const m of state.selections[idx].members) u.delete(m); }
+        return u;
+      }
+      function refreshRoster(){
+        const used = computeUsed();
+        const filteredOwned = new Set([...owned].filter(n=> !used.has(n)));
+        roster.innerHTML = '';
+        const predPicker = makeFilterPredicate('picker');
+        for(const name of owned){
+          const chip = createEl('div','tier-member');
+          const eligible = (function(){
+            if(used.has(name)) return false;
+            for(const s of teams){
+              const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
+              if(!members.includes(name)) continue;
+              if(members.some(m=> used.has(m))) continue;
+              const others = members.filter(m=> m!==name);
+              let ok = true;
+              for(const o of others){ if(!filteredOwned.has(o)){ ok=false; break; } }
+              if(ok) return true;
+            }
+            return false;
+          })();
+          if(!eligible) chip.classList.add('disabled');
+          if(!predPicker(name)) chip.classList.add('dimmed');
+          const key = keyByDisplay[name];
+          const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
+          chip.appendChild(createEl('div','pill',name));
+          if(eligible) chip.addEventListener('click',()=> showPickerList(idx, name));
+          roster.appendChild(chip);
+        }
+      }
       roster.innerHTML = '';
       list.innerHTML = '';
 
-      function canAnchor(name){
-        if(used.has(name)) return false;
-        for(const s of teams){
-          const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
-          if(!members.includes(name)) continue;
-          if(members.some(m=> used.has(m))) continue;
-          const others = members.filter(m=> m!==name);
-          let ok = true;
-          for(const o of others){ if(!filteredOwned.has(o)){ ok=false; break; } }
-          if(ok) return true;
-        }
-        return false;
-      }
-      for(const name of owned){
-        const chip = createEl('div','tier-member');
-        const eligible = canAnchor(name);
-        if(!eligible) chip.classList.add('disabled');
-        const key = keyByDisplay[name];
-        const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
-        chip.appendChild(createEl('div','pill',name));
-        if(eligible) chip.addEventListener('click',()=> showPickerList(idx, name));
-        roster.appendChild(chip);
-      }
+      renderFilters(filterHost, 'picker');
+      window.__pickerRefresh = refreshRoster;
+
+      refreshRoster();
       function showPickerList(slotIndex, chosen){
         list.innerHTML = '';
         const othersUsed = new Set();
@@ -262,7 +393,8 @@ async function main(){
     const owned = getOwned();
     const maxShow = parseInt(maxShowEl.value||'3',10);
     const mode = parseInt(modeEl.value||'1',10);
-    const tierData = buildTierlist(names, teams, owned, maxShow, mode);
+    const pred = makeFilterPredicate('main');
+    const tierData = buildTierlist(names, teams, owned, maxShow, mode).filter(item=> pred(item.name));
     const content = document.getElementById('view-content');
     content.innerHTML = '';
     content.appendChild(createInlineHint());
@@ -277,10 +409,13 @@ async function main(){
     const hash = location.hash || '#recommendations';
     setActiveLink(hash);
     if(hash === '#tierlist'){
+      renderFilters(mainFiltersHost, 'main');
       renderTier();
     } else if(hash === '#team-suggestions'){
+      if(mainFiltersHost) mainFiltersHost.innerHTML = '';
       renderTeamSuggestions();
     } else {
+      renderFilters(mainFiltersHost, 'main');
       renderRecommendations();
     }
   }

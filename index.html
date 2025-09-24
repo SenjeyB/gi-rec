@@ -65,6 +65,7 @@
 
       <div class="side-card">
         <h2 class="side-title">Your characters</h2>
+        <div id="owned-filters" class="filter-bar" aria-label="Filter owned characters"></div>
         <div id="characters" class="characters-grid" aria-live="polite"></div>
         <div class="side-actions">
           <button id="clear" type="button">Clear selection</button>
@@ -92,6 +93,7 @@
           <h1 id="view-title">Recommendations</h1>
           <div id="view-hint" class="small muted">The list updates when you change selection or settings</div>
         </div>
+        <div id="main-filters" class="filter-bar" aria-label="Filter current view"></div>
         <div id="view-content" class="view-content">
         </div>
       </section>
@@ -124,6 +126,7 @@
         <div class="team-picker-layout">
           <div>
             <div class="picker-title">Your characters</div>
+            <div id="team-picker-filters" class="filter-bar compact" aria-label="Filter team picker roster"></div>
             <div id="team-picker-roster" class="picker-grid" aria-live="polite"></div>
           </div>
           <div>

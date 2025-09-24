@@ -34,6 +34,16 @@ body{background:linear-gradient(180deg,#071129 0%,#071322 80%);color:#e6eef8;mar
 .side-actions{display:flex;gap:8px;margin-top:10px}
 .characters-grid{display:flex;flex-wrap:wrap;gap:8px;max-height:460px;overflow:auto;padding:4px}
 
+/* Filters */
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.filter-bar.compact{gap:6px;margin:6px 0}
+.filter-chip{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,0.03);color:#e6eef8;cursor:pointer;user-select:none}
+.filter-chip:hover{background:rgba(255,255,255,0.06)}
+.filter-chip.selected{background:#1f2937;border-color:rgba(255,255,255,0.18)}
+.filter-chip .icon{width:18px;height:18px;display:inline-block;flex-shrink:0}
+.dimmed{opacity:0.35;filter:grayscale(0.4)}
+.filter-break{flex-basis:100%;height:0}
+
 .side-nav{display:flex;flex-direction:column;gap:8px}
 .side-nav .nav-link{display:block;width:100%;text-align:left}
 
