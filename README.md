@@ -7,4 +7,5 @@ Genshin Impact Recomendations service.
 - Mainly uses teams calculated with KQMs
 
 Current link: https://senjeyb.github.io/gi-rec/
+
 Hosted by Github Pages
