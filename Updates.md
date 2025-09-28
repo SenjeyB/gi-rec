@@ -1,3 +1,7 @@
+## 1.3.0
+- Import characters from GOOD
+- New teams added
+
 ## 1.2.0
 - Temporary logo added
 - Character filters added
