@@ -21,6 +21,13 @@
     "DPS": 136000
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Furina",
+    "character_3": "Citlali",
+    "character_4": "Escoffier",
+    "DPS": 134000
+  },
+  {
     "character_1": "Gaming",
     "character_2": "Rosaria",
     "character_3": "Sucrose",
@@ -40,13 +47,6 @@
     "character_3": "Shenhe",
     "character_4": "Escoffier",
     "DPS": 127500
-  },
-  {
-    "character_1": "Skirk",
-    "character_2": "Furina",
-    "character_3": "Citlali",
-    "character_4": "Escoffier",
-    "DPS": 125000
   },
   {
     "character_1": "Skirk",
@@ -168,6 +168,13 @@
     "DPS": 111000
   },
   {
+    "character_1": "Mavuika",
+    "character_2": "Citlali",
+    "character_3": "Kamisato Ayaka",
+    "character_4": "Bennett",
+    "DPS": 110000
+  },
+  {
     "character_1": "Skirk",
     "character_2": "Yelan",
     "character_3": "Shenhe",
@@ -250,6 +257,13 @@
     "character_3": "Xilonen",
     "character_4": "Xingqiu",
     "DPS": 105000
+  },
+  {
+    "character_1": "Skirk",
+    "character_2": "Furina",
+    "character_3": "Kamisato Ayaka",
+    "character_4": "Escoffier",
+    "DPS": 104233
   },
   {
     "character_1": "Arlecchino",
@@ -378,13 +392,6 @@
     "DPS": 98900
   },
   {
-    "character_1": "Skirk",
-    "character_2": "Kamisato Ayaka",
-    "character_3": "Furina",
-    "character_4": "Escoffier",
-    "DPS": 98850
-  },
-  {
     "character_1": "Mavuika",
     "character_2": "Citlali",
     "character_3": "Xilonen",
@@ -460,6 +467,13 @@
     "character_3": "Albedo",
     "character_4": "Bennett",
     "DPS": 96400
+  },
+  {
+    "character_1": "Skirk",
+    "character_2": "Furina",
+    "character_3": "Shenhe",
+    "character_4": "Sigewinne",
+    "DPS": 96000
   },
   {
     "character_1": "Kinich",
@@ -649,6 +663,13 @@
     "character_3": "Mavuika",
     "character_4": "Xilonen",
     "DPS": 92300
+  },
+  {
+    "character_1": "Skirk",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Mika",
+    "DPS": 92200
   },
   {
     "character_1": "Mavuika",
@@ -978,6 +999,13 @@
     "character_3": "Yelan",
     "character_4": "Escoffier",
     "DPS": 87900
+  },
+  {
+    "character_1": "Mualani",
+    "character_2": "Sucrose",
+    "character_3": "Xilonen",
+    "character_4": "MC (Pyro)",
+    "DPS": 87875
   },
   {
     "character_1": "Arlecchino",
@@ -1848,6 +1876,13 @@
     "DPS": 81100
   },
   {
+    "character_1": "Chasca",
+    "character_2": "Furina",
+    "character_3": "Skirk",
+    "character_4": "Mavuika",
+    "DPS": 81100
+  },
+  {
     "character_1": "Lyney",
     "character_2": "Furina",
     "character_3": "Sangonomiya Kokomi",
@@ -1960,13 +1995,6 @@
     "DPS": 80500
   },
   {
-    "character_1": "Chasca",
-    "character_2": "Furina",
-    "character_3": "Skirk",
-    "character_4": "Mavuika",
-    "DPS": 80500
-  },
-  {
     "character_1": "Lyney",
     "character_2": "Furina",
     "character_3": "Diona",
@@ -2021,13 +2049,6 @@
     "character_3": "Yelan",
     "character_4": "Xilonen",
     "DPS": 80200
-  },
-  {
-    "character_1": "Nahida",
-    "character_2": "Xingqiu",
-    "character_3": "Yelan",
-    "character_4": "Raiden Shogun",
-    "DPS": 80120
   },
   {
     "character_1": "Neuvillette",
@@ -2737,6 +2758,13 @@
     "DPS": 76333
   },
   {
+    "character_1": "Varesa",
+    "character_2": "Ororon",
+    "character_3": "Xianyun",
+    "character_4": "Xilonen",
+    "DPS": 76300
+  },
+  {
     "character_1": "Sangonomiya Kokomi",
     "character_2": "Nilou",
     "character_3": "Nahida",
@@ -2926,13 +2954,6 @@
     "DPS": 75500
   },
   {
-    "character_1": "Varesa",
-    "character_2": "Ororon",
-    "character_3": "Xianyun",
-    "character_4": "Xilonen",
-    "DPS": 75400
-  },
-  {
     "character_1": "Diluc",
     "character_2": "Chongyun",
     "character_3": "Nahida",
@@ -2945,6 +2966,13 @@
     "character_3": "Fischl",
     "character_4": "Xilonen",
     "DPS": 75400
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Xingqiu",
+    "character_3": "Yelan",
+    "character_4": "Raiden Shogun",
+    "DPS": 75350
   },
   {
     "character_1": "Mavuika",
@@ -3477,13 +3505,6 @@
     "character_3": "Yelan",
     "character_4": "Fischl",
     "DPS": 73700
-  },
-  {
-    "character_1": "Alhaitham",
-    "character_2": "Nahida",
-    "character_3": "Xingqiu",
-    "character_4": "Kuki Shinobu",
-    "DPS": 73650
   },
   {
     "character_1": "Neuvillette",
@@ -5201,13 +5222,6 @@
     "DPS": 68600
   },
   {
-    "character_1": "Nahida",
-    "character_2": "Yae Miko",
-    "character_3": "Furina",
-    "character_4": "Xianyun",
-    "DPS": 68600
-  },
-  {
     "character_1": "Kaedehara Kazuha",
     "character_2": "Yae Miko",
     "character_3": "Fischl",
@@ -5380,13 +5394,6 @@
     "character_2": "Ororon",
     "character_3": "Yelan",
     "character_4": "Kuki Shinobu",
-    "DPS": 68000
-  },
-  {
-    "character_1": "Hu Tao",
-    "character_2": "Fischl",
-    "character_3": "Xingqiu",
-    "character_4": "Bennett",
     "DPS": 68000
   },
   {
@@ -5755,24 +5762,10 @@
   },
   {
     "character_1": "Nahida",
-    "character_2": "Xingqiu",
-    "character_3": "Raiden Shogun",
-    "character_4": "Eula",
-    "DPS": 67300
-  },
-  {
-    "character_1": "Nahida",
     "character_2": "Yelan",
     "character_3": "Raiden Shogun",
     "character_4": "Baizhu",
     "DPS": 67300
-  },
-  {
-    "character_1": "Hu Tao",
-    "character_2": "Yelan",
-    "character_3": "Xingqiu",
-    "character_4": "Kaedehara Kazuha",
-    "DPS": 67200
   },
   {
     "character_1": "Sethos",
@@ -5969,13 +5962,6 @@
     "character_3": "Zhongli",
     "character_4": "Xingqiu",
     "DPS": 66850
-  },
-  {
-    "character_1": "Bennett",
-    "character_2": "Xiangling",
-    "character_3": "Xingqiu",
-    "character_4": "Fischl",
-    "DPS": 66800
   },
   {
     "character_1": "Nahida",
@@ -6188,6 +6174,13 @@
     "DPS": 66350
   },
   {
+    "character_1": "Alhaitham",
+    "character_2": "Nahida",
+    "character_3": "Xingqiu",
+    "character_4": "Kuki Shinobu",
+    "DPS": 66333
+  },
+  {
     "character_1": "Chongyun",
     "character_2": "Furina",
     "character_3": "Shenhe",
@@ -6290,13 +6283,6 @@
     "character_2": "Citlali",
     "character_3": "Ororon",
     "character_4": "Chevreuse",
-    "DPS": 66200
-  },
-  {
-    "character_1": "Xingqiu",
-    "character_2": "Lisa",
-    "character_3": "Bennett",
-    "character_4": "Xiangling",
     "DPS": 66200
   },
   {
@@ -6808,13 +6794,6 @@
     "character_2": "Furina",
     "character_3": "Rosaria",
     "character_4": "Xilonen",
-    "DPS": 65200
-  },
-  {
-    "character_1": "Kaedehara Kazuha",
-    "character_2": "Keqing",
-    "character_3": "Fischl",
-    "character_4": "Nahida",
     "DPS": 65200
   },
   {
@@ -7742,13 +7721,6 @@
     "DPS": 63500
   },
   {
-    "character_1": "Fischl",
-    "character_2": "Nahida",
-    "character_3": "Beidou",
-    "character_4": "Alhaitham",
-    "DPS": 63500
-  },
-  {
     "character_1": "Neuvillette",
     "character_2": "Zhongli",
     "character_3": "Lynette",
@@ -8547,13 +8519,6 @@
     "DPS": 62450
   },
   {
-    "character_1": "Xiangling",
-    "character_2": "Fischl",
-    "character_3": "Yelan",
-    "character_4": "Bennett",
-    "DPS": 62400
-  },
-  {
     "character_1": "Bennett",
     "character_2": "Xiangling",
     "character_3": "Furina",
@@ -8713,6 +8678,13 @@
     "character_3": "Faruzan",
     "character_4": "Yelan",
     "DPS": 62150
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Yelan",
+    "character_3": "Xingqiu",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 62100
   },
   {
     "character_1": "Neuvillette",
@@ -9310,13 +9282,6 @@
     "DPS": 61400
   },
   {
-    "character_1": "Bennett",
-    "character_2": "Sucrose",
-    "character_3": "Xingqiu",
-    "character_4": "Xiangling",
-    "DPS": 61400
-  },
-  {
     "character_1": "Clorinde",
     "character_2": "Kujou Sara",
     "character_3": "Chevreuse",
@@ -9329,6 +9294,13 @@
     "character_3": "Mona",
     "character_4": "Alhaitham",
     "DPS": 61400
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Xiangling",
+    "character_3": "Xingqiu",
+    "character_4": "Fischl",
+    "DPS": 61300
   },
   {
     "character_1": "Navia",
@@ -9849,11 +9821,11 @@
     "DPS": 60600
   },
   {
-    "character_1": "Bennett",
-    "character_2": "Xiangling",
-    "character_3": "Yelan",
-    "character_4": "Xingqiu",
-    "DPS": 60550
+    "character_1": "Nahida",
+    "character_2": "Yae Miko",
+    "character_3": "Furina",
+    "character_4": "Xianyun",
+    "DPS": 60500
   },
   {
     "character_1": "Navia",
@@ -9881,13 +9853,6 @@
     "character_2": "Kaedehara Kazuha",
     "character_3": "Mona",
     "character_4": "Shenhe",
-    "DPS": 60500
-  },
-  {
-    "character_1": "Yoimiya",
-    "character_2": "Raiden Shogun",
-    "character_3": "Chevreuse",
-    "character_4": "Bennett",
     "DPS": 60500
   },
   {
@@ -9931,13 +9896,6 @@
     "character_3": "Fischl",
     "character_4": "Sucrose",
     "DPS": 60500
-  },
-  {
-    "character_1": "Navia",
-    "character_2": "Zhongli",
-    "character_3": "Bennett",
-    "character_4": "Xiangling",
-    "DPS": 60400
   },
   {
     "character_1": "Cyno",
@@ -10078,13 +10036,6 @@
     "character_3": "Chiori",
     "character_4": "Zhongli",
     "DPS": 60300
-  },
-  {
-    "character_1": "Raiden Shogun",
-    "character_2": "Chevreuse",
-    "character_3": "Yae Miko",
-    "character_4": "Bennett",
-    "DPS": 60267
   },
   {
     "character_1": "Hu Tao",
@@ -10409,13 +10360,6 @@
     "DPS": 59900
   },
   {
-    "character_1": "Razor",
-    "character_2": "Nahida",
-    "character_3": "Xingqiu",
-    "character_4": "Bennett",
-    "DPS": 59850
-  },
-  {
     "character_1": "MC (Pyro)",
     "character_2": "Chevreuse",
     "character_3": "Fischl",
@@ -10624,6 +10568,13 @@
     "character_3": "Bennett",
     "character_4": "",
     "DPS": 59550
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Xingqiu",
+    "character_3": "Raiden Shogun",
+    "character_4": "Eula",
+    "DPS": 59500
   },
   {
     "character_1": "Yoimiya",
@@ -10962,6 +10913,13 @@
     "DPS": 59200
   },
   {
+    "character_1": "Xiangling",
+    "character_2": "Fischl",
+    "character_3": "Yelan",
+    "character_4": "Bennett",
+    "DPS": 59167
+  },
+  {
     "character_1": "Jean",
     "character_2": "Furina",
     "character_3": "Yelan",
@@ -10974,6 +10932,13 @@
     "character_3": "Escoffier",
     "character_4": "Charlotte",
     "DPS": 59150
+  },
+  {
+    "character_1": "Xingqiu",
+    "character_2": "Lisa",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 59100
   },
   {
     "character_1": "Xiangling",
@@ -11109,6 +11074,13 @@
     "DPS": 59000
   },
   {
+    "character_1": "Hu Tao",
+    "character_2": "Fischl",
+    "character_3": "Xingqiu",
+    "character_4": "Bennett",
+    "DPS": 58950
+  },
+  {
     "character_1": "Kamisato Ayaka",
     "character_2": "Charlotte",
     "character_3": "Kaedehara Kazuha",
@@ -11239,13 +11211,6 @@
     "character_2": "Xilonen",
     "character_3": "Furina",
     "character_4": "Xianyun",
-    "DPS": 58800
-  },
-  {
-    "character_1": "Yoimiya",
-    "character_2": "Furina",
-    "character_3": "Kaedehara Kazuha",
-    "character_4": "Bennett",
     "DPS": 58800
   },
   {
@@ -11606,6 +11571,13 @@
     "DPS": 58400
   },
   {
+    "character_1": "Raiden Shogun",
+    "character_2": "Chevreuse",
+    "character_3": "Yae Miko",
+    "character_4": "Bennett",
+    "DPS": 58350
+  },
+  {
     "character_1": "Hu Tao",
     "character_2": "Xingqiu",
     "character_3": "Fischl",
@@ -11697,13 +11669,6 @@
     "DPS": 58200
   },
   {
-    "character_1": "Yumemizuki Mizuki",
-    "character_2": "Furina",
-    "character_3": "Ororon",
-    "character_4": "Mavuika",
-    "DPS": 58200
-  },
-  {
     "character_1": "Beidou",
     "character_2": "Chevreuse",
     "character_3": "Fischl",
@@ -11750,13 +11715,6 @@
     "character_2": "Furina",
     "character_3": "Ganyu",
     "character_4": "Kaedehara Kazuha",
-    "DPS": 58200
-  },
-  {
-    "character_1": "Xianyun",
-    "character_2": "Furina",
-    "character_3": "Beidou",
-    "character_4": "Fischl",
     "DPS": 58200
   },
   {
@@ -11961,6 +11919,13 @@
     "character_3": "Xiangling",
     "character_4": "Chevreuse",
     "DPS": 57950
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Xiangling",
+    "character_3": "Yelan",
+    "character_4": "Xingqiu",
+    "DPS": 57900
   },
   {
     "character_1": "Sucrose",
@@ -12173,13 +12138,6 @@
     "DPS": 57667
   },
   {
-    "character_1": "Yoimiya",
-    "character_2": "Raiden Shogun",
-    "character_3": "Fischl",
-    "character_4": "Chevreuse",
-    "DPS": 57600
-  },
-  {
     "character_1": "Gaming",
     "character_2": "Xianyun",
     "character_3": "Bennett",
@@ -12376,6 +12334,20 @@
     "DPS": 57450
   },
   {
+    "character_1": "Navia",
+    "character_2": "Zhongli",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 57433
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Nahida",
+    "character_3": "Beidou",
+    "character_4": "Alhaitham",
+    "DPS": 57400
+  },
+  {
     "character_1": "Yoimiya",
     "character_2": "Furina",
     "character_3": "Xiangling",
@@ -12530,20 +12502,6 @@
     "DPS": 57250
   },
   {
-    "character_1": "Neuvillette",
-    "character_2": "Yae Miko",
-    "character_3": "Kaedehara Kazuha",
-    "character_4": "Zhongli",
-    "DPS": 57200
-  },
-  {
-    "character_1": "Xiao",
-    "character_2": "Faruzan",
-    "character_3": "Zhongli",
-    "character_4": "Bennett",
-    "DPS": 57200
-  },
-  {
     "character_1": "Lisa",
     "character_2": "Xingqiu",
     "character_3": "Yaoyao",
@@ -12619,6 +12577,20 @@
     "character_3": "Albedo",
     "character_4": "Zhongli",
     "DPS": 57200
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Keqing",
+    "character_3": "Fischl",
+    "character_4": "Nahida",
+    "DPS": 57150
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Xingqiu",
+    "character_4": "Bennett",
+    "DPS": 57133
   },
   {
     "character_1": "Wriothesley",
@@ -12710,13 +12682,6 @@
     "character_3": "Furina",
     "character_4": "Yelan",
     "DPS": 57050
-  },
-  {
-    "character_1": "Kamisato Ayato",
-    "character_2": "Nahida",
-    "character_3": "Fischl",
-    "character_4": "Kuki Shinobu",
-    "DPS": 57000
   },
   {
     "character_1": "Raiden Shogun",
@@ -12922,13 +12887,6 @@
     "DPS": 56800
   },
   {
-    "character_1": "Chasca",
-    "character_2": "Layla",
-    "character_3": "Xiangling",
-    "character_4": "Bennett",
-    "DPS": 56800
-  },
-  {
     "character_1": "Neuvillette",
     "character_2": "Beidou",
     "character_3": "Fischl",
@@ -13055,13 +13013,6 @@
     "DPS": 56600
   },
   {
-    "character_1": "Yanfei",
-    "character_2": "Nahida",
-    "character_3": "Fischl",
-    "character_4": "Xingqiu",
-    "DPS": 56600
-  },
-  {
     "character_1": "Cyno",
     "character_2": "Chevreuse",
     "character_3": "Mavuika",
@@ -13147,13 +13098,6 @@
   },
   {
     "character_1": "Raiden Shogun",
-    "character_2": "Kaedehara Kazuha",
-    "character_3": "Baizhu",
-    "character_4": "Fischl",
-    "DPS": 56500
-  },
-  {
-    "character_1": "Raiden Shogun",
     "character_2": "Yelan",
     "character_3": "Fischl",
     "character_4": "Bennett",
@@ -13185,13 +13129,6 @@
     "character_2": "Yae Miko",
     "character_3": "Fischl",
     "character_4": "Xianyun",
-    "DPS": 56500
-  },
-  {
-    "character_1": "Emilie",
-    "character_2": "Fischl",
-    "character_3": "Bennett",
-    "character_4": "",
     "DPS": 56500
   },
   {
@@ -13286,13 +13223,6 @@
     "DPS": 56400
   },
   {
-    "character_1": "Neuvillette",
-    "character_2": "Shenhe",
-    "character_3": "Kaedehara Kazuha",
-    "character_4": "Zhongli",
-    "DPS": 56350
-  },
-  {
     "character_1": "Lynette",
     "character_2": "Yae Miko",
     "character_3": "Fischl",
@@ -13354,6 +13284,13 @@
     "character_3": "Fischl",
     "character_4": "Xilonen",
     "DPS": 56300
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Sucrose",
+    "character_3": "Xingqiu",
+    "character_4": "Xiangling",
+    "DPS": 56250
   },
   {
     "character_1": "Razor",
@@ -13601,6 +13538,13 @@
     "DPS": 55933
   },
   {
+    "character_1": "Xiao",
+    "character_2": "Faruzan",
+    "character_3": "Zhongli",
+    "character_4": "Bennett",
+    "DPS": 55925
+  },
+  {
     "character_1": "Faruzan",
     "character_2": "Kirara",
     "character_3": "Fischl",
@@ -13720,13 +13664,6 @@
     "DPS": 55800
   },
   {
-    "character_1": "Kamisato Ayato",
-    "character_2": "Furina",
-    "character_3": "Xilonen",
-    "character_4": "Lan Yan",
-    "DPS": 55800
-  },
-  {
     "character_1": "Kamisato Ayaka",
     "character_2": "Layla",
     "character_3": "Kaedehara Kazuha",
@@ -13802,6 +13739,20 @@
     "character_3": "Chiori",
     "character_4": "Xilonen",
     "DPS": 55800
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Raiden Shogun",
+    "character_3": "Fischl",
+    "character_4": "Chevreuse",
+    "DPS": 55767
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Furina",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 55750
   },
   {
     "character_1": "Keqing",
@@ -13972,13 +13923,6 @@
     "DPS": 55600
   },
   {
-    "character_1": "Tighnari",
-    "character_2": "Nahida",
-    "character_3": "Fischl",
-    "character_4": "Kuki Shinobu",
-    "DPS": 55600
-  },
-  {
     "character_1": "Nahida",
     "character_2": "Raiden Shogun",
     "character_3": "Kujou Sara",
@@ -14019,13 +13963,6 @@
     "character_3": "Furina",
     "character_4": "Xianyun",
     "DPS": 55550
-  },
-  {
-    "character_1": "Neuvillette",
-    "character_2": "Xiangling",
-    "character_3": "Kaedehara Kazuha",
-    "character_4": "Kirara",
-    "DPS": 55500
   },
   {
     "character_1": "Wriothesley",
@@ -14091,6 +14028,20 @@
     "DPS": 55500
   },
   {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Kuki Shinobu",
+    "DPS": 55467
+  },
+  {
+    "character_1": "Yumemizuki Mizuki",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Mavuika",
+    "DPS": 55450
+  },
+  {
     "character_1": "Yumemizuki Mizuki",
     "character_2": "Yae Miko",
     "character_3": "Nahida",
@@ -14151,13 +14102,6 @@
     "character_2": "Furina",
     "character_3": "Fischl",
     "character_4": "Baizhu",
-    "DPS": 55400
-  },
-  {
-    "character_1": "Yoimiya",
-    "character_2": "Chevreuse",
-    "character_3": "Fischl",
-    "character_4": "Beidou",
     "DPS": 55400
   },
   {
@@ -14266,6 +14210,13 @@
     "DPS": 55333
   },
   {
+    "character_1": "Yoimiya",
+    "character_2": "Raiden Shogun",
+    "character_3": "Chevreuse",
+    "character_4": "Bennett",
+    "DPS": 55300
+  },
+  {
     "character_1": "Yelan",
     "character_2": "Baizhu",
     "character_3": "Yoimiya",
@@ -14343,13 +14294,6 @@
     "DPS": 55300
   },
   {
-    "character_1": "Wriothesley",
-    "character_2": "Furina",
-    "character_3": "Yelan",
-    "character_4": "Charlotte",
-    "DPS": 55300
-  },
-  {
     "character_1": "Xingqiu",
     "character_2": "Furina",
     "character_3": "Candace",
@@ -14413,13 +14357,6 @@
     "DPS": 55200
   },
   {
-    "character_1": "Kamisato Ayaka",
-    "character_2": "Ganyu",
-    "character_3": "Sangonomiya Kokomi",
-    "character_4": "Shenhe",
-    "DPS": 55200
-  },
-  {
     "character_1": "Yoimiya",
     "character_2": "Yae Miko",
     "character_3": "Fischl",
@@ -14459,13 +14396,6 @@
     "character_2": "Furina",
     "character_3": "Fischl",
     "character_4": "Jean",
-    "DPS": 55100
-  },
-  {
-    "character_1": "Xinyan",
-    "character_2": "Chevreuse",
-    "character_3": "Fischl",
-    "character_4": "Bennett",
     "DPS": 55100
   },
   {
@@ -14567,11 +14497,25 @@
     "DPS": 55100
   },
   {
+    "character_1": "MC (Hydro)",
+    "character_2": "Furina",
+    "character_3": "Citlali",
+    "character_4": "Escoffier",
+    "DPS": 55100
+  },
+  {
     "character_1": "Neuvillette",
     "character_2": "Kaedehara Kazuha",
     "character_3": "Zhongli",
     "character_4": "Albedo",
     "DPS": 55100
+  },
+  {
+    "character_1": "Xianyun",
+    "character_2": "Furina",
+    "character_3": "Beidou",
+    "character_4": "Fischl",
+    "DPS": 55050
   },
   {
     "character_1": "Rosaria",
@@ -14672,13 +14616,6 @@
     "DPS": 54900
   },
   {
-    "character_1": "Shenhe",
-    "character_2": "Wriothesley",
-    "character_3": "Bennett",
-    "character_4": "Xiangling",
-    "DPS": 54900
-  },
-  {
     "character_1": "Tighnari",
     "character_2": "Kamisato Ayato",
     "character_3": "Kuki Shinobu",
@@ -14749,17 +14686,17 @@
     "DPS": 54800
   },
   {
+    "character_1": "Neuvillette",
+    "character_2": "Shenhe",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Zhongli",
+    "DPS": 54800
+  },
+  {
     "character_1": "Dori",
     "character_2": "Tighnari",
     "character_3": "Fischl",
     "character_4": "Nahida",
-    "DPS": 54800
-  },
-  {
-    "character_1": "Yoimiya",
-    "character_2": "Yelan",
-    "character_3": "Lan Yan",
-    "character_4": "Bennett",
     "DPS": 54800
   },
   {
@@ -14861,13 +14798,6 @@
     "DPS": 54800
   },
   {
-    "character_1": "Yoimiya",
-    "character_2": "Ganyu",
-    "character_3": "Citlali",
-    "character_4": "Bennett",
-    "DPS": 54700
-  },
-  {
     "character_1": "Yae Miko",
     "character_2": "Fischl",
     "character_3": "Tighnari",
@@ -14952,13 +14882,6 @@
     "DPS": 54600
   },
   {
-    "character_1": "Xiangling",
-    "character_2": "Wanderer",
-    "character_3": "Faruzan",
-    "character_4": "Bennett",
-    "DPS": 54600
-  },
-  {
     "character_1": "Chevreuse",
     "character_2": "Fischl",
     "character_3": "Yae Miko",
@@ -15001,18 +14924,18 @@
     "DPS": 54600
   },
   {
+    "character_1": "Yanfei",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Xingqiu",
+    "DPS": 54550
+  },
+  {
     "character_1": "Ganyu",
     "character_2": "Xilonen",
     "character_3": "Xiangling",
     "character_4": "Bennett",
     "DPS": 54550
-  },
-  {
-    "character_1": "Wanderer",
-    "character_2": "Yelan",
-    "character_3": "Faruzan",
-    "character_4": "Zhongli",
-    "DPS": 54500
   },
   {
     "character_1": "Neuvillette",
@@ -15071,13 +14994,6 @@
     "DPS": 54500
   },
   {
-    "character_1": "Yae Miko",
-    "character_2": "Kaedehara Kazuha",
-    "character_3": "Fischl",
-    "character_4": "Sangonomiya Kokomi",
-    "DPS": 54500
-  },
-  {
     "character_1": "Wriothesley",
     "character_2": "Rosaria",
     "character_3": "Furina",
@@ -15099,24 +15015,10 @@
     "DPS": 54450
   },
   {
-    "character_1": "Raiden Shogun",
-    "character_2": "Chevreuse",
-    "character_3": "Fischl",
-    "character_4": "Dehya",
-    "DPS": 54400
-  },
-  {
     "character_1": "Wriothesley",
     "character_2": "Furina",
     "character_3": "Yun Jin",
     "character_4": "Xilonen",
-    "DPS": 54400
-  },
-  {
-    "character_1": "Chasca",
-    "character_2": "Barbara",
-    "character_3": "Xiangling",
-    "character_4": "Bennett",
     "DPS": 54400
   },
   {
@@ -15204,11 +15106,11 @@
     "DPS": 54400
   },
   {
-    "character_1": "Yoimiya",
-    "character_2": "Xingqiu",
-    "character_3": "Fischl",
-    "character_4": "Bennett",
-    "DPS": 54300
+    "character_1": "Emilie",
+    "character_2": "Fischl",
+    "character_3": "Bennett",
+    "character_4": "",
+    "DPS": 54350
   },
   {
     "character_1": "Klee",
@@ -15243,13 +15145,6 @@
     "character_2": "Lynette",
     "character_3": "Yelan",
     "character_4": "Furina",
-    "DPS": 54300
-  },
-  {
-    "character_1": "Wanderer",
-    "character_2": "Faruzan",
-    "character_3": "Thoma",
-    "character_4": "Bennett",
     "DPS": 54300
   },
   {
@@ -15323,13 +15218,6 @@
     "DPS": 54200
   },
   {
-    "character_1": "Raiden Shogun",
-    "character_2": "Kaedehara Kazuha",
-    "character_3": "Bennett",
-    "character_4": "Kujou Sara",
-    "DPS": 54200
-  },
-  {
     "character_1": "Kaedehara Kazuha",
     "character_2": "Furina",
     "character_3": "Chongyun",
@@ -15365,6 +15253,13 @@
     "DPS": 54150
   },
   {
+    "character_1": "Neuvillette",
+    "character_2": "Xiangling",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Kirara",
+    "DPS": 54100
+  },
+  {
     "character_1": "Klee",
     "character_2": "Furina",
     "character_3": "Ororon",
@@ -15383,13 +15278,6 @@
     "character_2": "Yelan",
     "character_3": "Furina",
     "character_4": "Mika",
-    "DPS": 54100
-  },
-  {
-    "character_1": "Wanderer",
-    "character_2": "Faruzan",
-    "character_3": "Yun Jin",
-    "character_4": "Bennett",
     "DPS": 54100
   },
   {
@@ -15463,13 +15351,6 @@
     "DPS": 54100
   },
   {
-    "character_1": "Kamisato Ayaka",
-    "character_2": "Sangonomiya Kokomi",
-    "character_3": "Venti",
-    "character_4": "Shenhe",
-    "DPS": 54050
-  },
-  {
     "character_1": "Eula",
     "character_2": "Raiden Shogun",
     "character_3": "Furina",
@@ -15520,13 +15401,6 @@
   },
   {
     "character_1": "Raiden Shogun",
-    "character_2": "Chevreuse",
-    "character_3": "Lisa",
-    "character_4": "Bennett",
-    "DPS": 54000
-  },
-  {
-    "character_1": "Raiden Shogun",
     "character_2": "Fischl",
     "character_3": "Sucrose",
     "character_4": "Collei",
@@ -15540,17 +15414,24 @@
     "DPS": 54000
   },
   {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Furina",
+    "character_3": "Xilonen",
+    "character_4": "Lan Yan",
+    "DPS": 53950
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Charlotte",
+    "DPS": 53900
+  },
+  {
     "character_1": "Sucrose",
     "character_2": "Keqing",
     "character_3": "Fischl",
     "character_4": "Collei",
-    "DPS": 53900
-  },
-  {
-    "character_1": "Yoimiya",
-    "character_2": "Bennett",
-    "character_3": "Layla",
-    "character_4": "Yelan",
     "DPS": 53900
   },
   {
@@ -15750,10 +15631,17 @@
     "DPS": 53700
   },
   {
-    "character_1": "Kamisato Ayato",
-    "character_2": "Nahida",
-    "character_3": "Beidou",
-    "character_4": "Kuki Shinobu",
+    "character_1": "Yoimiya",
+    "character_2": "Xingqiu",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 53600
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Yelan",
+    "character_3": "Lan Yan",
+    "character_4": "Bennett",
     "DPS": 53600
   },
   {
@@ -15775,13 +15663,6 @@
     "character_2": "Amber",
     "character_3": "Lynette",
     "character_4": "Bennett",
-    "DPS": 53600
-  },
-  {
-    "character_1": "Hu Tao",
-    "character_2": "Kaedehara Kazuha",
-    "character_3": "Bennett",
-    "character_4": "Xiangling",
     "DPS": 53600
   },
   {
@@ -15827,6 +15708,20 @@
     "DPS": 53600
   },
   {
+    "character_1": "Xinyan",
+    "character_2": "Chevreuse",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 53550
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Ganyu",
+    "character_3": "Citlali",
+    "character_4": "Bennett",
+    "DPS": 53500
+  },
+  {
     "character_1": "Neuvillette",
     "character_2": "Xiangling",
     "character_3": "Fischl",
@@ -15860,6 +15755,27 @@
     "character_3": "Fischl",
     "character_4": "Mavuika",
     "DPS": 53500
+  },
+  {
+    "character_1": "Chasca",
+    "character_2": "Layla",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 53450
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Faruzan",
+    "character_3": "Thoma",
+    "character_4": "Bennett",
+    "DPS": 53450
+  },
+  {
+    "character_1": "Kamisato Ayaka",
+    "character_2": "Sangonomiya Kokomi",
+    "character_3": "Venti",
+    "character_4": "Shenhe",
+    "DPS": 53433
   },
   {
     "character_1": "Xiao",
@@ -15909,6 +15825,20 @@
     "character_3": "Furina",
     "character_4": "Mika",
     "DPS": 53400
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Chevreuse",
+    "character_3": "Fischl",
+    "character_4": "Dehya",
+    "DPS": 53367
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Bennett",
+    "character_4": "Kujou Sara",
+    "DPS": 53300
   },
   {
     "character_1": "Chongyun",
@@ -16009,6 +15939,13 @@
     "DPS": 53300
   },
   {
+    "character_1": "Yae Miko",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Fischl",
+    "character_4": "Sangonomiya Kokomi",
+    "DPS": 53200
+  },
+  {
     "character_1": "Neuvillette",
     "character_2": "Xilonen",
     "character_3": "Lisa",
@@ -16023,13 +15960,6 @@
     "DPS": 53200
   },
   {
-    "character_1": "Xiao",
-    "character_2": "Faruzan",
-    "character_3": "MC (Geo)",
-    "character_4": "Zhongli",
-    "DPS": 53200
-  },
-  {
     "character_1": "Raiden Shogun",
     "character_2": "Yelan",
     "character_3": "Ororon",
@@ -16041,13 +15971,6 @@
     "character_2": "Furina",
     "character_3": "Kuki Shinobu",
     "character_4": "Baizhu",
-    "DPS": 53200
-  },
-  {
-    "character_1": "Eula",
-    "character_2": "Rosaria",
-    "character_3": "Furina",
-    "character_4": "Mika",
     "DPS": 53200
   },
   {
@@ -16121,6 +16044,13 @@
     "DPS": 53200
   },
   {
+    "character_1": "Raiden Shogun",
+    "character_2": "Chevreuse",
+    "character_3": "Lisa",
+    "character_4": "Bennett",
+    "DPS": 53150
+  },
+  {
     "character_1": "Ganyu",
     "character_2": "Furina",
     "character_3": "Kaedehara Kazuha",
@@ -16182,6 +16112,13 @@
     "character_3": "Shenhe",
     "character_4": "Bennett",
     "DPS": 53100
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Baizhu",
+    "character_4": "Fischl",
+    "DPS": 53050
   },
   {
     "character_1": "Yoimiya",
@@ -16317,13 +16254,6 @@
     "DPS": 52900
   },
   {
-    "character_1": "Lisa",
-    "character_2": "Kaedehara Kazuha",
-    "character_3": "Nahida",
-    "character_4": "Bennett",
-    "DPS": 52900
-  },
-  {
     "character_1": "Yoimiya",
     "character_2": "Furina",
     "character_3": "Candace",
@@ -16336,6 +16266,20 @@
     "character_3": "Bennett",
     "character_4": "Furina",
     "DPS": 52900
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Rosaria",
+    "character_3": "Furina",
+    "character_4": "Mika",
+    "DPS": 52850
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Kuki Shinobu",
+    "DPS": 52800
   },
   {
     "character_1": "Kaedehara Kazuha",
@@ -16366,13 +16310,6 @@
     "DPS": 52800
   },
   {
-    "character_1": "Razor",
-    "character_2": "Nahida",
-    "character_3": "Yelan",
-    "character_4": "Bennett",
-    "DPS": 52800
-  },
-  {
     "character_1": "Sayu",
     "character_2": "Nahida",
     "character_3": "Furina",
@@ -16385,5 +16322,2728 @@
     "character_3": "Raiden Shogun",
     "character_4": "Baizhu",
     "DPS": 52800
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Zhongli",
+    "character_3": "Furina",
+    "character_4": "Chiori",
+    "DPS": 52800
+  },
+  {
+    "character_1": "Yumemizuki Mizuki",
+    "character_2": "Furina",
+    "character_3": "Dori",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 52800
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Yelan",
+    "character_3": "Kirara",
+    "character_4": "Kuki Shinobu",
+    "DPS": 52800
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Faruzan",
+    "character_3": "Yun Jin",
+    "character_4": "Bennett",
+    "DPS": 52700
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 52700
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Lynette",
+    "character_3": "Shenhe",
+    "character_4": "Escoffier",
+    "DPS": 52700
+  },
+  {
+    "character_1": "Lan Yan",
+    "character_2": "Xingqiu",
+    "character_3": "Yelan",
+    "character_4": "Fischl",
+    "DPS": 52700
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Gorou",
+    "character_3": "Zhongli",
+    "character_4": "Chiori",
+    "DPS": 52700
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Bennett",
+    "character_3": "Rosaria",
+    "character_4": "Xiangling",
+    "DPS": 52700
+  },
+  {
+    "character_1": "Neuvillette",
+    "character_2": "Yae Miko",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Zhongli",
+    "DPS": 52638
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Zhongli",
+    "character_3": "Furina",
+    "character_4": "Charlotte",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Yelan",
+    "character_3": "Xilonen",
+    "character_4": "Chiori",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Xingqiu",
+    "character_2": "Nahida",
+    "character_3": "Thoma",
+    "character_4": "Kamisato Ayaka",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Fischl",
+    "character_3": "Bennett",
+    "character_4": "Gorou",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Neuvillette",
+    "character_2": "Fischl",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Nahida",
+    "character_3": "Lisa",
+    "character_4": "Fischl",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Keqing",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Xianyun",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Chevreuse",
+    "character_3": "Fischl",
+    "character_4": "Mavuika",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Rosaria",
+    "character_4": "Escoffier",
+    "DPS": 52600
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Chevreuse",
+    "character_3": "Fischl",
+    "character_4": "Beidou",
+    "DPS": 52550
+  },
+  {
+    "character_1": "Shenhe",
+    "character_2": "Wriothesley",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 52550
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Yelan",
+    "character_3": "Xingqiu",
+    "character_4": "Xiangling",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Yelan",
+    "character_3": "Yun Jin",
+    "character_4": "Zhongli",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Dehya",
+    "character_2": "Chongyun",
+    "character_3": "Nahida",
+    "character_4": "Xianyun",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Nahida",
+    "character_3": "Xingqiu",
+    "character_4": "Thoma",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Klee",
+    "character_2": "Furina",
+    "character_3": "Emilie",
+    "character_4": "Baizhu",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Furina",
+    "character_3": "Raiden Shogun",
+    "character_4": "Charlotte",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Charlotte",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Yumemizuki Mizuki",
+    "character_2": "Furina",
+    "character_3": "Sigewinne",
+    "character_4": "Ororon",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Yelan",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Yelan",
+    "character_3": "Citlali",
+    "character_4": "Xilonen",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Zhongli",
+    "character_3": "Bennett",
+    "character_4": "Kamisato Ayaka",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Collei",
+    "character_3": "Fischl",
+    "character_4": "Thoma",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Kamisato Ayaka",
+    "character_2": "Rosaria",
+    "character_3": "Shenhe",
+    "character_4": "",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Chongyun",
+    "character_3": "Escoffier",
+    "character_4": "Xianyun",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Yae Miko",
+    "character_4": "Mika",
+    "DPS": 52500
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Xiangling",
+    "character_3": "Furina",
+    "character_4": "MC (Anemo)",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Jean",
+    "character_3": "Kujou Sara",
+    "character_4": "Bennett",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Lyney",
+    "character_2": "Bennett",
+    "character_3": "Venti",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Kirara",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Sucrose",
+    "character_2": "Faruzan",
+    "character_3": "Furina",
+    "character_4": "Xianyun",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Xingqiu",
+    "character_2": "Tartaglia",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Yelan",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Yelan",
+    "character_3": "Furina",
+    "character_4": "Bennett",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Sethos",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Xilonen",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Furina",
+    "character_3": "Ningguang",
+    "character_4": "Chiori",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Lisa",
+    "character_2": "Fischl",
+    "character_3": "Zhongli",
+    "character_4": "Collei",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Mika",
+    "DPS": 52400
+  },
+  {
+    "character_1": "Xiao",
+    "character_2": "Faruzan",
+    "character_3": "MC (Geo)",
+    "character_4": "Zhongli",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Zhongli",
+    "character_3": "Rosaria",
+    "character_4": "Shenhe",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Albedo",
+    "character_2": "Nahida",
+    "character_3": "Xingqiu",
+    "character_4": "Thoma",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Xiao",
+    "character_2": "Furina",
+    "character_3": "Raiden Shogun",
+    "character_4": "Xianyun",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Faruzan",
+    "character_3": "Furina",
+    "character_4": "Xianyun",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kujou Sara",
+    "character_3": "Nahida",
+    "character_4": "Lisa",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Emilie",
+    "character_3": "Zhongli",
+    "character_4": "Bennett",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Dehya",
+    "character_2": "Fischl",
+    "character_3": "Chevreuse",
+    "character_4": "Yae Miko",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Baizhu",
+    "character_4": "Nahida",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Xiangling",
+    "character_3": "Rosaria",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Rosaria",
+    "character_2": "Bennett",
+    "character_3": "Xiangling",
+    "character_4": "Kaeya",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Kujou Sara",
+    "character_2": "Fischl",
+    "character_3": "Kirara",
+    "character_4": "",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Lan Yan",
+    "character_2": "Faruzan",
+    "character_3": "Rosaria",
+    "character_4": "Escoffier",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Yumemizuki Mizuki",
+    "character_2": "Furina",
+    "character_3": "Sucrose",
+    "character_4": "Ororon",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Yelan",
+    "character_2": "Bennett",
+    "character_3": "Citlali",
+    "character_4": "",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Nahida",
+    "character_3": "Yae Miko",
+    "character_4": "Kirara",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Xingqiu",
+    "character_3": "Yelan",
+    "character_4": "Zhongli",
+    "DPS": 52300
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Yelan",
+    "character_3": "Faruzan",
+    "character_4": "Zhongli",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Chiori",
+    "character_3": "Yelan",
+    "character_4": "Zhongli",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Ganyu",
+    "character_3": "Furina",
+    "character_4": "Xilonen",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Xingqiu",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Furina",
+    "character_3": "Candace",
+    "character_4": "Xianyun",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Furina",
+    "character_3": "Xiangling",
+    "character_4": "Candace",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Shenhe",
+    "character_3": "Jean",
+    "character_4": "Bennett",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Fischl",
+    "character_3": "Nahida",
+    "character_4": "Zhongli",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Yae Miko",
+    "character_3": "Nahida",
+    "character_4": "Xiao",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Nahida",
+    "character_4": "Xilonen",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Itto",
+    "character_2": "Escoffier",
+    "character_3": "Yelan",
+    "character_4": "Furina",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Yae Miko",
+    "character_2": "Zhongli",
+    "character_3": "Fischl",
+    "character_4": "Alhaitham",
+    "DPS": 52200
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Shenhe",
+    "character_4": "Layla",
+    "DPS": 52150
+  },
+  {
+    "character_1": "Kamisato Ayaka",
+    "character_2": "Ganyu",
+    "character_3": "Sangonomiya Kokomi",
+    "character_4": "Shenhe",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Bennett",
+    "character_3": "Layla",
+    "character_4": "Yelan",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Furina",
+    "character_2": "Candace",
+    "character_3": "Yelan",
+    "character_4": "Xianyun",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Tartaglia",
+    "character_2": "Fischl",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Beidou",
+    "character_3": "Xingqiu",
+    "character_4": "Nahida",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Lynette",
+    "character_2": "Faruzan",
+    "character_3": "Sayu",
+    "character_4": "Furina",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Faruzan",
+    "character_2": "Furina",
+    "character_3": "Bennett",
+    "character_4": "Jean",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Barbara",
+    "character_2": "Nilou",
+    "character_3": "Nahida",
+    "character_4": "Collei",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Albedo",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Beidou",
+    "character_2": "Emilie",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Furina",
+    "character_3": "Yun Jin",
+    "character_4": "Bennett",
+    "DPS": 52100
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Nahida",
+    "character_3": "Beidou",
+    "character_4": "Kuki Shinobu",
+    "DPS": 52050
+  },
+  {
+    "character_1": "Chasca",
+    "character_2": "Barbara",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Yelan",
+    "character_2": "Fischl",
+    "character_3": "Yae Miko",
+    "character_4": "Xingqiu",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Baizhu",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Nahida",
+    "character_3": "Xingqiu",
+    "character_4": "Alhaitham",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Nahida",
+    "character_3": "Rosaria",
+    "character_4": "Chongyun",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Furina",
+    "character_3": "Shenhe",
+    "character_4": "Dori",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Lynette",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Bennett",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Dehya",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Xingqiu",
+    "character_3": "Thoma",
+    "character_4": "Beidou",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Xilonen",
+    "character_2": "Ganyu",
+    "character_3": "Xiangling",
+    "character_4": "Shenhe",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Xingqiu",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 52000
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Fischl",
+    "character_3": "Lynette",
+    "character_4": "Nahida",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Nahida",
+    "character_3": "Yae Miko",
+    "character_4": "Kirara",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Beidou",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Lyney",
+    "character_2": "Xinyan",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Furina",
+    "character_3": "Rosaria",
+    "character_4": "Dori",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Chiori",
+    "character_3": "Bennett",
+    "character_4": "Zhongli",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Xingqiu",
+    "character_3": "Bennett",
+    "character_4": "",
+    "DPS": 51900
+  },
+  {
+    "character_1": "Xiangling",
+    "character_2": "Wanderer",
+    "character_3": "Faruzan",
+    "character_4": "Bennett",
+    "DPS": 51850
+  },
+  {
+    "character_1": "Sethos",
+    "character_2": "Chevreuse",
+    "character_3": "Fischl",
+    "character_4": "Thoma",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Xingqiu",
+    "character_3": "Sangonomiya Kokomi",
+    "character_4": "Thoma",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Yae Miko",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Yelan",
+    "character_2": "Xingqiu",
+    "character_3": "Zhongli",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Kirara",
+    "character_2": "Raiden Shogun",
+    "character_3": "Kujou Sara",
+    "character_4": "Sucrose",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Lynette",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Xiao",
+    "character_2": "Faruzan",
+    "character_3": "Jean",
+    "character_4": "Bennett",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Dori",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Jean",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Klee",
+    "character_2": "Xiangling",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 51800
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Fischl",
+    "character_3": "Yae Miko",
+    "character_4": "Bennett",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Xianyun",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Xiangling",
+    "character_3": "Nahida",
+    "character_4": "Sangonomiya Kokomi",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Sucrose",
+    "character_2": "Beidou",
+    "character_3": "Fischl",
+    "character_4": "Yaoyao",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Escoffier",
+    "character_4": "Mika",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Xingqiu",
+    "character_3": "Sucrose",
+    "character_4": "Bennett",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Xianyun",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Raiden Shogun",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Xiangling",
+    "character_3": "Bennett",
+    "character_4": "Escoffier",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Rosaria",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Fischl",
+    "character_3": "Collei",
+    "character_4": "Sucrose",
+    "DPS": 51700
+  },
+  {
+    "character_1": "Lisa",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Nahida",
+    "character_4": "Bennett",
+    "DPS": 51600
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Chevreuse",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 51600
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Xingqiu",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 51600
+  },
+  {
+    "character_1": "Xilonen",
+    "character_2": "Chiori",
+    "character_3": "Yun Jin",
+    "character_4": "Zhongli",
+    "DPS": 51600
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Fischl",
+    "character_3": "Faruzan",
+    "character_4": "Zhongli",
+    "DPS": 51600
+  },
+  {
+    "character_1": "Rosaria",
+    "character_2": "Xiangling",
+    "character_3": "Bennett",
+    "character_4": "Raiden Shogun",
+    "DPS": 51600
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Yelan",
+    "character_4": "Bennett",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Nahida",
+    "character_3": "Yoimiya",
+    "character_4": "Xingqiu",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Candace",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Zhongli",
+    "character_2": "Chiori",
+    "character_3": "Rosaria",
+    "character_4": "Fischl",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Fischl",
+    "character_3": "Tighnari",
+    "character_4": "Bennett",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Lyney",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Kaveh",
+    "character_2": "Furina",
+    "character_3": "Raiden Shogun",
+    "character_4": "Xianyun",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Lan Yan",
+    "character_3": "Shenhe",
+    "character_4": "Escoffier",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Kirara",
+    "character_3": "Yelan",
+    "character_4": "Kuki Shinobu",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Ganyu",
+    "character_3": "Lynette",
+    "character_4": "Bennett",
+    "DPS": 51500
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 51450
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Faruzan",
+    "character_3": "Dehya",
+    "character_4": "Bennett",
+    "DPS": 51450
+  },
+  {
+    "character_1": "Xilonen",
+    "character_2": "Albedo",
+    "character_3": "Gorou",
+    "character_4": "Chiori",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Itto",
+    "character_2": "Zhongli",
+    "character_3": "Albedo",
+    "character_4": "Chiori",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Faruzan",
+    "character_2": "Wanderer",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Chasca",
+    "character_2": "Mona",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Citlali",
+    "character_3": "Escoffier",
+    "character_4": "Bennett",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Yanfei",
+    "character_2": "Rosaria",
+    "character_3": "Bennett",
+    "character_4": "Xianyun",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Faruzan",
+    "character_3": "Zhongli",
+    "character_4": "Chiori",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Emilie",
+    "character_3": "Yun Jin",
+    "character_4": "Zhongli",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Layla",
+    "character_3": "Kamisato Ayaka",
+    "character_4": "Shenhe",
+    "DPS": 51400
+  },
+  {
+    "character_1": "Jean",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Candace",
+    "DPS": 51350
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Zhongli",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Xiangling",
+    "character_3": "Yae Miko",
+    "character_4": "Chevreuse",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Shenhe",
+    "character_3": "Rosaria",
+    "character_4": "Escoffier",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Xiao",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Xiangling",
+    "character_3": "Rosaria",
+    "character_4": "Chongyun",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Klee",
+    "character_2": "Chiori",
+    "character_3": "Bennett",
+    "character_4": "Zhongli",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Yelan",
+    "character_3": "Xiangling",
+    "character_4": "Raiden Shogun",
+    "DPS": 51300
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Alhaitham",
+    "DPS": 51250
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Tighnari",
+    "character_3": "Fischl",
+    "character_4": "Baizhu",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Furina",
+    "character_3": "Zhongli",
+    "character_4": "Bennett",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Charlotte",
+    "character_2": "Xiangling",
+    "character_3": "Bennett",
+    "character_4": "Xianyun",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Furina",
+    "character_3": "Nahida",
+    "character_4": "Thoma",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Shikanoin Heizou",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Beidou",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Sangonomiya Kokomi",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Shenhe",
+    "character_2": "Bennett",
+    "character_3": "Rosaria",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Fischl",
+    "character_3": "Lisa",
+    "character_4": "Wanderer",
+    "DPS": 51200
+  },
+  {
+    "character_1": "Sucrose",
+    "character_2": "Beidou",
+    "character_3": "Fischl",
+    "character_4": "Xingqiu",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Thoma",
+    "character_2": "Xingqiu",
+    "character_3": "Fischl",
+    "character_4": "Collei",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Shikanoin Heizou",
+    "character_2": "Yelan",
+    "character_3": "Ororon",
+    "character_4": "Fischl",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Itto",
+    "character_2": "Gorou",
+    "character_3": "Yae Miko",
+    "character_4": "Chiori",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Chiori",
+    "character_2": "Ganyu",
+    "character_3": "Zhongli",
+    "character_4": "Shenhe",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Lisa",
+    "character_2": "Fischl",
+    "character_3": "Nahida",
+    "character_4": "Baizhu",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Kamisato Ayato",
+    "character_3": "Raiden Shogun",
+    "character_4": "Collei",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Kamisato Ayato",
+    "character_3": "Kuki Shinobu",
+    "character_4": "Collei",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Arlecchino",
+    "character_2": "Kaeya",
+    "character_3": "Sucrose",
+    "character_4": "Layla",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Albedo",
+    "character_3": "Zhongli",
+    "character_4": "Chiori",
+    "DPS": 51100
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Mika",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Yae Miko",
+    "character_2": "Yaoyao",
+    "character_3": "Fischl",
+    "character_4": "Tighnari",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Lynette",
+    "character_2": "Faruzan",
+    "character_3": "Lan Yan",
+    "character_4": "Xianyun",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Furina",
+    "character_2": "Emilie",
+    "character_3": "Xiangling",
+    "character_4": "Noelle",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Nahida",
+    "character_3": "Lisa",
+    "character_4": "Yaoyao",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Furina",
+    "character_3": "Emilie",
+    "character_4": "Baizhu",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Bennett",
+    "character_3": "Xianyun",
+    "character_4": "Chevreuse",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Gorou",
+    "character_2": "Zhongli",
+    "character_3": "Chiori",
+    "character_4": "Albedo",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Chevreuse",
+    "character_3": "Fischl",
+    "character_4": "Thoma",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Layla",
+    "character_3": "Shenhe",
+    "character_4": "Chiori",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Shikanoin Heizou",
+    "character_2": "Xingqiu",
+    "character_3": "Kuki Shinobu",
+    "character_4": "MC (Dendro)",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kujou Sara",
+    "character_3": "Sucrose",
+    "character_4": "Yaoyao",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "MC (Dendro)",
+    "character_3": "Sucrose",
+    "character_4": "Lisa",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Beidou",
+    "character_3": "Fischl",
+    "character_4": "Xingqiu",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Shenhe",
+    "character_4": "Xilonen",
+    "DPS": 51000
+  },
+  {
+    "character_1": "Yanfei",
+    "character_2": "Xingqiu",
+    "character_3": "Yelan",
+    "character_4": "Bennett",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "MC (Dendro)",
+    "character_3": "Bennett",
+    "character_4": "Kujou Sara",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Candace",
+    "character_3": "Xingqiu",
+    "character_4": "Yelan",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Zhongli",
+    "character_2": "Candace",
+    "character_3": "Hu Tao",
+    "character_4": "Yelan",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Sucrose",
+    "character_3": "Baizhu",
+    "character_4": "Fischl",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Yae Miko",
+    "character_3": "Nahida",
+    "character_4": "Zhongli",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Furina",
+    "character_3": "Chongyun",
+    "character_4": "Escoffier",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Faruzan",
+    "character_3": "Furina",
+    "character_4": "Jean",
+    "DPS": 50900
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Fischl",
+    "character_3": "Lisa",
+    "character_4": "Xingqiu",
+    "DPS": 50867
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Kujou Sara",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Nahida",
+    "character_3": "Xingqiu",
+    "character_4": "Kuki Shinobu",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Xinyan",
+    "character_2": "Furina",
+    "character_3": "Raiden Shogun",
+    "character_4": "Escoffier",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Shikanoin Heizou",
+    "character_2": "Yelan",
+    "character_3": "Yae Miko",
+    "character_4": "Fischl",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Xiangling",
+    "character_3": "Xingqiu",
+    "character_4": "Yae Miko",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Beidou",
+    "character_3": "Collei",
+    "character_4": "Raiden Shogun",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Xingqiu",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Dehya",
+    "character_2": "Furina",
+    "character_3": "Bennett",
+    "character_4": "Xilonen",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Fischl",
+    "character_3": "Collei",
+    "character_4": "Kuki Shinobu",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Zhongli",
+    "character_3": "Kamisato Ayaka",
+    "character_4": "Shenhe",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Yelan",
+    "character_2": "Raiden Shogun",
+    "character_3": "Xingqiu",
+    "character_4": "Jean",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Citlali",
+    "character_2": "Xilonen",
+    "character_3": "Bennett",
+    "character_4": "Kaeya",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Fischl",
+    "character_3": "Nahida",
+    "character_4": "Yaoyao",
+    "DPS": 50800
+  },
+  {
+    "character_1": "Tartaglia",
+    "character_2": "Nahida",
+    "character_3": "Collei",
+    "character_4": "Raiden Shogun",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Xingqiu",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Chevreuse",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Zhongli",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Emilie",
+    "character_3": "Rosaria",
+    "character_4": "Bennett",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Furina",
+    "character_3": "Venti",
+    "character_4": "Charlotte",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Nilou",
+    "character_2": "Xingqiu",
+    "character_3": "Collei",
+    "character_4": "Yaoyao",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Rosaria",
+    "character_2": "Yelan",
+    "character_3": "Furina",
+    "character_4": "Kuki Shinobu",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Nahida",
+    "character_3": "Lynette",
+    "character_4": "Bennett",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Arlecchino",
+    "character_2": "Rosaria",
+    "character_3": "Lynette",
+    "character_4": "Layla",
+    "DPS": 50700
+  },
+  {
+    "character_1": "Kamisato Ayaka",
+    "character_2": "Sangonomiya Kokomi",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Ganyu",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Fischl",
+    "character_3": "Beidou",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Xiao",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Xianyun",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Charlotte",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Yae Miko",
+    "character_2": "Fischl",
+    "character_3": "Kujou Sara",
+    "character_4": "Chevreuse",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Gorou",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Xianyun",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Fischl",
+    "character_4": "Nahida",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Mika",
+    "DPS": 50600
+  },
+  {
+    "character_1": "Neuvillette",
+    "character_2": "Xiangling",
+    "character_3": "Bennett",
+    "character_4": "Yae Miko",
+    "DPS": 50500
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Faruzan",
+    "character_3": "Yelan",
+    "character_4": "Candace",
+    "DPS": 50500
+  },
+  {
+    "character_1": "Xingqiu",
+    "character_2": "Yelan",
+    "character_3": "Layla",
+    "character_4": "Yoimiya",
+    "DPS": 50500
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Xingqiu",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 50500
+  },
+  {
+    "character_1": "Keqing",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Mika",
+    "DPS": 50450
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Yelan",
+    "character_3": "Zhongli",
+    "character_4": "Nahida",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Xingqiu",
+    "character_3": "Sangonomiya Kokomi",
+    "character_4": "Xiangling",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Furina",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Charlotte",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Fischl",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Nahida",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Itto",
+    "character_2": "Albedo",
+    "character_3": "Gorou",
+    "character_4": "Zhongli",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Mika",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Furina",
+    "character_3": "Gorou",
+    "character_4": "Xianyun",
+    "DPS": 50400
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Furina",
+    "character_3": "Xingqiu",
+    "character_4": "Bennett",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Yae Miko",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Yelan",
+    "character_2": "Xingqiu",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Chongyun",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Rosaria",
+    "character_2": "Yelan",
+    "character_3": "Nahida",
+    "character_4": "Bennett",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Yelan",
+    "character_3": "Baizhu",
+    "character_4": "Nahida",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Lisa",
+    "character_2": "Xingqiu",
+    "character_3": "Klee",
+    "character_4": "Xiangling",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Albedo",
+    "character_3": "Gorou",
+    "character_4": "Chiori",
+    "DPS": 50300
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Beidou",
+    "character_3": "Raiden Shogun",
+    "character_4": "",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Shikanoin Heizou",
+    "character_2": "Nahida",
+    "character_3": "Faruzan",
+    "character_4": "Fischl",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Fischl",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Collei",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Emilie",
+    "character_3": "Thoma",
+    "character_4": "Dehya",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Neuvillette",
+    "character_2": "Rosaria",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Zhongli",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Layla",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Lisa",
+    "character_3": "Nahida",
+    "character_4": "Kujou Sara",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Kamisato Ayaka",
+    "character_3": "Layla",
+    "character_4": "Chiori",
+    "DPS": 50200
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "MC (Geo)",
+    "character_3": "Zhongli",
+    "character_4": "Chiori",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Yelan",
+    "character_4": "Kuki Shinobu",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Dehya",
+    "character_2": "Amber",
+    "character_3": "Xinyan",
+    "character_4": "Lyney",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "MC (Geo)",
+    "character_3": "Layla",
+    "character_4": "Chiori",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Yun Jin",
+    "character_3": "Furina",
+    "character_4": "Jean",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Sucrose",
+    "character_2": "Xiangling",
+    "character_3": "Fischl",
+    "character_4": "Sangonomiya Kokomi",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Shenhe",
+    "character_2": "Sangonomiya Kokomi",
+    "character_3": "Furina",
+    "character_4": "Ganyu",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Mika",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Chiori",
+    "character_3": "Yun Jin",
+    "character_4": "Zhongli",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Dori",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Bennett",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Emilie",
+    "character_3": "Xinyan",
+    "character_4": "Bennett",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Sucrose",
+    "character_2": "Keqing",
+    "character_3": "Fischl",
+    "character_4": "MC (Dendro)",
+    "DPS": 50100
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Yae Miko",
+    "character_3": "Mika",
+    "character_4": "Xianyun",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Shenhe",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kaedehara Kazuha",
+    "character_3": "Yaoyao",
+    "character_4": "Kujou Sara",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Yelan",
+    "character_2": "Bennett",
+    "character_3": "Xilonen",
+    "character_4": "",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Lan Yan",
+    "character_3": "Shenhe",
+    "character_4": "Xilonen",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Bennett",
+    "character_3": "Layla",
+    "character_4": "Xingqiu",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Kaveh",
+    "character_2": "Furina",
+    "character_3": "Bennett",
+    "character_4": "Xianyun",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Xianyun",
+    "character_2": "Faruzan",
+    "character_3": "Furina",
+    "character_4": "Ororon",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Kaveh",
+    "character_3": "Nahida",
+    "character_4": "Xingqiu",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Neuvillette",
+    "character_2": "Kamisato Ayaka",
+    "character_3": "Shenhe",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 50000
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Kamisato Ayato",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Kuki Shinobu",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Furina",
+    "character_3": "Gorou",
+    "character_4": "Yelan",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Zhongli",
+    "character_3": "Chiori",
+    "character_4": "Rosaria",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Albedo",
+    "character_2": "Chiori",
+    "character_3": "Bennett",
+    "character_4": "Fischl",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Bennett",
+    "character_3": "Rosaria",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Nahida",
+    "character_3": "Yelan",
+    "character_4": "Furina",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Yelan",
+    "character_3": "Yaoyao",
+    "character_4": "Raiden Shogun",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Kaveh",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Xingqiu",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Kamisato Ayaka",
+    "character_3": "Shenhe",
+    "character_4": "Chiori",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Xilonen",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Zhongli",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Mika",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Faruzan",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 49900
+  },
+  {
+    "character_1": "Sucrose",
+    "character_2": "Beidou",
+    "character_3": "Fischl",
+    "character_4": "Collei",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kujou Sara",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Baizhu",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Arlecchino",
+    "character_2": "Kuki Shinobu",
+    "character_3": "Beidou",
+    "character_4": "Chevreuse",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Xingqiu",
+    "character_3": "Klee",
+    "character_4": "Xiangling",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Layla",
+    "character_3": "Rosaria",
+    "character_4": "Chiori",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Jean",
+    "character_3": "Xilonen",
+    "character_4": "Bennett",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Furina",
+    "character_3": "Jean",
+    "character_4": "Yae Miko",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Rosaria",
+    "character_3": "Xinyan",
+    "character_4": "Kamisato Ayaka",
+    "DPS": 49800
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Yelan",
+    "character_3": "Xingqiu",
+    "character_4": "Citlali",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Itto",
+    "character_2": "Gorou",
+    "character_3": "Kuki Shinobu",
+    "character_4": "Chiori",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Yelan",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Yelan",
+    "character_3": "Diona",
+    "character_4": "Bennett",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Xiangling",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Yae Miko",
+    "character_3": "Kuki Shinobu",
+    "character_4": "Nahida",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Lisa",
+    "character_4": "Mika",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Nahida",
+    "character_3": "Fischl",
+    "character_4": "Citlali",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Diona",
+    "character_3": "Bennett",
+    "character_4": "Xiangling",
+    "DPS": 49700
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Shenhe",
+    "character_3": "Rosaria",
+    "character_4": "Escoffier",
+    "DPS": 49600
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Furina",
+    "character_3": "Lynette",
+    "character_4": "Charlotte",
+    "DPS": 49600
+  },
+  {
+    "character_1": "Xiao",
+    "character_2": "Rosaria",
+    "character_3": "Fischl",
+    "character_4": "Xianyun",
+    "DPS": 49600
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Xingqiu",
+    "character_3": "Sangonomiya Kokomi",
+    "character_4": "Yelan",
+    "DPS": 49600
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Furina",
+    "character_3": "Xiangling",
+    "character_4": "Barbara",
+    "DPS": 49600
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Noelle",
+    "character_3": "Furina",
+    "character_4": "Xianyun",
+    "DPS": 49600
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Yaoyao",
+    "character_3": "Fischl",
+    "character_4": "Faruzan",
+    "DPS": 49550
+  },
+  {
+    "character_1": "Baizhu",
+    "character_2": "Lynette",
+    "character_3": "Yelan",
+    "character_4": "Thoma",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Xianyun",
+    "character_2": "Faruzan",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Layla",
+    "character_2": "Furina",
+    "character_3": "Chongyun",
+    "character_4": "Escoffier",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Jean",
+    "character_3": "Yelan",
+    "character_4": "Furina",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Charlotte",
+    "DPS": 49500
+  },
+  {
+    "character_1": "MC (Hydro)",
+    "character_2": "Furina",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Xilonen",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Dehya",
+    "character_2": "Emilie",
+    "character_3": "Xianyun",
+    "character_4": "Bennett",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Furina",
+    "character_3": "Chongyun",
+    "character_4": "Xianyun",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Furina",
+    "character_2": "Zhongli",
+    "character_3": "Chiori",
+    "character_4": "Bennett",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Ganyu",
+    "character_2": "Furina",
+    "character_3": "Shenhe",
+    "character_4": "Charlotte",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Lisa",
+    "character_2": "Nahida",
+    "character_3": "Kamisato Ayato",
+    "character_4": "Beidou",
+    "DPS": 49500
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Xilonen",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Yelan",
+    "character_3": "Fischl",
+    "character_4": "Jean",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Yoimiya",
+    "character_2": "Xingqiu",
+    "character_3": "Yelan",
+    "character_4": "Thoma",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Kujou Sara",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Kirara",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Nahida",
+    "character_2": "Kamisato Ayato",
+    "character_3": "MC (Dendro)",
+    "character_4": "Kuki Shinobu",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Lan Yan",
+    "character_2": "Faruzan",
+    "character_3": "Furina",
+    "character_4": "Jean",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Xingqiu",
+    "character_3": "Zhongli",
+    "character_4": "Yun Jin",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Rosaria",
+    "character_4": "Dori",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Charlotte",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Furina",
+    "character_2": "Sangonomiya Kokomi",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Ganyu",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Emilie",
+    "character_3": "Thoma",
+    "character_4": "Xilonen",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Diluc",
+    "character_2": "Furina",
+    "character_3": "Yelan",
+    "character_4": "Bennett",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Hu Tao",
+    "character_2": "Xingqiu",
+    "character_3": "Zhongli",
+    "character_4": "Albedo",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Dori",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Kaedehara Kazuha",
+    "DPS": 49400
+  },
+  {
+    "character_1": "Freminet",
+    "character_2": "Furina",
+    "character_3": "Rosaria",
+    "character_4": "Xilonen",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Fischl",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Kirara",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Emilie",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Shenhe",
+    "character_3": "Thoma",
+    "character_4": "Emilie",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Lisa",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Xianyun",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Navia",
+    "character_2": "Tighnari",
+    "character_3": "Fischl",
+    "character_4": "Kirara",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Zhongli",
+    "character_3": "Fischl",
+    "character_4": "Keqing",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Lynette",
+    "character_2": "Faruzan",
+    "character_3": "Rosaria",
+    "character_4": "Escoffier",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Zhongli",
+    "character_3": "Xianyun",
+    "character_4": "Furina",
+    "DPS": 49300
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Shenhe",
+    "character_3": "Furina",
+    "character_4": "Charlotte",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Furina",
+    "character_3": "Xilonen",
+    "character_4": "Xianyun",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Kuki Shinobu",
+    "character_2": "Yaoyao",
+    "character_3": "Tighnari",
+    "character_4": "Mona",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Kamisato Ayaka",
+    "character_2": "Mona",
+    "character_3": "Venti",
+    "character_4": "Ganyu",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Sayu",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Bennett",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Yelan",
+    "character_3": "Nahida",
+    "character_4": "Thoma",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Razor",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Charlotte",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Noelle",
+    "character_2": "Navia",
+    "character_3": "Furina",
+    "character_4": "Gorou",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Raiden Shogun",
+    "character_2": "Emilie",
+    "character_3": "Kujou Sara",
+    "character_4": "Bennett",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Kamisato Ayaka",
+    "character_2": "Sangonomiya Kokomi",
+    "character_3": "Venti",
+    "character_4": "Ganyu",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Klee",
+    "character_2": "Xiangling",
+    "character_3": "Venti",
+    "character_4": "Bennett",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Kamisato Ayato",
+    "character_2": "Yelan",
+    "character_3": "Ororon",
+    "character_4": "Xilonen",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Tighnari",
+    "character_2": "Yae Miko",
+    "character_3": "Fischl",
+    "character_4": "Layla",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Rosaria",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 49200
+  },
+  {
+    "character_1": "Barbara",
+    "character_2": "Xiangling",
+    "character_3": "Bennett",
+    "character_4": "Xianyun",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Cyno",
+    "character_2": "Nahida",
+    "character_3": "Lisa",
+    "character_4": "Fischl",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Eula",
+    "character_2": "Furina",
+    "character_3": "Ororon",
+    "character_4": "Mika",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Sayu",
+    "character_2": "Furina",
+    "character_3": "Xiangling",
+    "character_4": "Bennett",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Fischl",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Bennett",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Alhaitham",
+    "character_2": "Raiden Shogun",
+    "character_3": "Xingqiu",
+    "character_4": "Diona",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Ningguang",
+    "character_2": "Kamisato Ayaka",
+    "character_3": "Bennett",
+    "character_4": "Chiori",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Bennett",
+    "character_2": "Lynette",
+    "character_3": "Xiangling",
+    "character_4": "Xingqiu",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Wanderer",
+    "character_2": "Faruzan",
+    "character_3": "Mika",
+    "character_4": "Bennett",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Furina",
+    "character_3": "Lynette",
+    "character_4": "Mika",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Kaedehara Kazuha",
+    "character_2": "Xiangling",
+    "character_3": "Xingqiu",
+    "character_4": "Bennett",
+    "DPS": 49100
+  },
+  {
+    "character_1": "Sangonomiya Kokomi",
+    "character_2": "Nahida",
+    "character_3": "Furina",
+    "character_4": "Dehya",
+    "DPS": 49000
+  },
+  {
+    "character_1": "Thoma",
+    "character_2": "Kamisato Ayato",
+    "character_3": "Beidou",
+    "character_4": "Nahida",
+    "DPS": 49000
+  },
+  {
+    "character_1": "Yae Miko",
+    "character_2": "Venti",
+    "character_3": "Fischl",
+    "character_4": "Sangonomiya Kokomi",
+    "DPS": 49000
+  },
+  {
+    "character_1": "Xianyun",
+    "character_2": "Furina",
+    "character_3": "Fischl",
+    "character_4": "Bennett",
+    "DPS": 49000
+  },
+  {
+    "character_1": "Wriothesley",
+    "character_2": "Layla",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Shenhe",
+    "DPS": 49000
+  },
+  {
+    "character_1": "Fischl",
+    "character_2": "Sangonomiya Kokomi",
+    "character_3": "Kaedehara Kazuha",
+    "character_4": "Beidou",
+    "DPS": 49000
   }
 ]
