@@ -183,6 +183,98 @@ async function main(){
     try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
   }
 
+  function goodStatus(msg, ok){
+    const el = document.getElementById('good-status'); if(!el) return; el.textContent = msg||''; el.style.color = ok? '#4caf50':'#ccc';
+  }
+  function normalizeGoodCharName(n){
+    if(!n) return '';
+    let s = String(n).trim();
+    s = s.replace(/^Traveler\s*(?:\((Anemo|Geo|Electro|Dendro|Hydro|Pyro)\))?$/i,(m,el)=> el? `MC (${el.charAt(0).toUpperCase()+el.slice(1).toLowerCase()})` : 'MC (Anemo)');
+    s = s.replace(/^Aether\s*(?:\((Anemo|Geo|Electro|Dendro|Hydro|Pyro)\))?$/i,(m,el)=> el? `MC (${el.charAt(0).toUpperCase()+el.slice(1).toLowerCase()})` : 'MC (Anemo)');
+    s = s.replace(/^Lumine\s*(?:\((Anemo|Geo|Electro|Dendro|Hydro|Pyro)\))?$/i,(m,el)=> el? `MC (${el.charAt(0).toUpperCase()+el.slice(1).toLowerCase()})` : 'MC (Anemo)');
+    const mapAlt = {
+      'Kaedehara Kazuha':'Kaedehara Kazuha','Kamisato Ayaka':'Kamisato Ayaka','Kamisato Ayato':'Kamisato Ayato','Kujou Sara':'Kujou Sara','Raiden Shogun':'Raiden Shogun','Sangonomiya Kokomi':'Sangonomiya Kokomi','Yae Miko':'Yae Miko','Yun Jin':'Yun Jin','Hu Tao':'Hu Tao'
+    };
+    if(mapAlt[s]) return mapAlt[s];
+    return s;
+  }
+  function importGoodData(obj){
+    if(!obj) return {added:0, removed:0, total: selected.size};
+    const displaySet = new Set(Object.values(names).map(v=> (v && typeof v==='object')? v.name : v));
+    const collapsedMap = (function(){
+      const m = {};
+      for(const disp of displaySet){
+        const key = disp.toLowerCase().replace(/[^a-z0-9]+/g,'');
+        if(!m[key]) m[key] = disp;
+      }
+      return m;
+    })();
+    const before = new Set(selected);
+    const imported = new Set();
+    function consider(raw){
+      if(!raw) return;
+      let d = normalizeGoodCharName(raw);
+      if(displaySet.has(d)){ imported.add(d); return; }
+      const collapsed = String(raw).toLowerCase().replace(/[^a-z0-9]+/g,'');
+      if(collapsedMap[collapsed]) imported.add(collapsedMap[collapsed]);
+    }
+    if(Array.isArray(obj.characters)){
+      for(const ch of obj.characters){
+        if(!ch) continue;
+        consider(ch.name || ch.key || ch.characterName || ch.displayName);
+      }
+    }
+    if(obj.charactersByKey && typeof obj.charactersByKey==='object'){
+      for(const k of Object.keys(obj.charactersByKey)){
+        const ch = obj.charactersByKey[k];
+        consider(ch?.name || k);
+      }
+    }
+    if(Array.isArray(obj.avatarInfoList)){
+      for(const ch of obj.avatarInfoList){
+        consider(ch?.name || ch?.characterName || ch?.key);
+      }
+    }
+    selected.clear();
+    for(const v of imported) selected.add(v);
+    const added = [...selected].filter(x=> !before.has(x)).length;
+    const removed = [...before].filter(x=> !selected.has(x)).length;
+    persistSelection();
+    renderOwnedCharacters();
+    renderActiveView();
+    return {added, removed, total: selected.size};
+  }
+  async function handleGoodText(text){
+    if(!text || !text.trim().length){ goodStatus('Empty input'); return; }
+    try{
+      const obj = JSON.parse(text);
+      const res = importGoodData(obj);
+      if(res.total===0){ goodStatus('No recognized characters'); return; }
+      goodStatus(`Imported ${res.total} (added ${res.added}, removed ${res.removed})`, res.total>0);
+    }catch(e){ goodStatus('Invalid JSON'); }
+  }
+  const openImport = document.getElementById('open-import');
+  const importModal = document.getElementById('import-modal');
+  const importClose = document.getElementById('import-close');
+  const importFile = document.getElementById('good-file');
+  const importText = document.getElementById('good-text');
+  const importPasteBtn = document.getElementById('import-paste');
+  const importClipboardBtn = document.getElementById('import-clipboard');
+  function showImport(){ if(importModal) importModal.hidden = false; }
+  function hideImport(){ if(importModal) importModal.hidden = true; }
+  openImport?.addEventListener('click', showImport);
+  importClose?.addEventListener('click', hideImport);
+  importModal?.querySelector('.modal-backdrop')?.addEventListener('click', hideImport);
+  importFile?.addEventListener('change', ()=>{
+    const f = importFile.files && importFile.files[0]; if(!f){ goodStatus('No file'); return; }
+    const reader = new FileReader();
+    reader.onload = ()=> handleGoodText(String(reader.result||''));
+    reader.onerror = ()=> goodStatus('Read error');
+    reader.readAsText(f);
+  });
+  importPasteBtn?.addEventListener('click', ()=>{ handleGoodText(importText?.value||''); });
+  importClipboardBtn?.addEventListener('click', async ()=>{ try{ const txt = await navigator.clipboard.readText(); if(importText) importText.value = txt; await handleGoodText(txt); }catch{ goodStatus('Clipboard denied'); } });
+
   const navLinks = Array.from(document.querySelectorAll('.nav-link'));
   function setActiveLink(hash){
     navLinks.forEach(a=>{

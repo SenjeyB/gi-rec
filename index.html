@@ -65,6 +65,10 @@
 
       <div class="side-card">
         <h2 class="side-title">Your characters</h2>
+        <div class="side-actions" style="margin-bottom:8px">
+          <button id="open-import" type="button">Import Characters</button>
+        </div>
+        <div id="good-status" class="small muted"></div>
         <div id="owned-filters" class="filter-bar" aria-label="Filter owned characters"></div>
         <div id="characters" class="characters-grid" aria-live="polite"></div>
         <div class="side-actions">
@@ -133,6 +137,24 @@
             <div class="picker-title">Suggested teams</div>
             <div id="team-picker-list"></div>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="import-modal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">Import Characters</div>
+        <button id="import-close" class="close-btn" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="small" style="margin-bottom:8px">Upload GOOD JSON or paste its contents below. Import replaces current selection.</div>
+        <input id="good-file" type="file" accept=".json" style="margin-bottom:8px" />
+        <textarea id="good-text" placeholder="Paste GOOD JSON here" style="width:100%;height:120px;resize:vertical;margin-bottom:8px"></textarea>
+        <div class="modal-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+          <button id="import-paste" type="button">Import From Text</button>
+          <button id="import-clipboard" type="button">Read Clipboard</button>
         </div>
       </div>
     </div>
