@@ -32,7 +32,6 @@ async function main(){
 
   const charactersDiv = document.getElementById('characters');
   const ownedFiltersHost = document.getElementById('owned-filters');
-  const mainFiltersHost = document.getElementById('main-filters');
   const displayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v).sort((a,b)=>a.localeCompare(b,'ru'));
   const selected = new Set();
 
@@ -305,6 +304,10 @@ async function main(){
     const content = document.getElementById('view-content');
     content.innerHTML = '';
     content.appendChild(createInlineHint());
+    const filtersDiv = createEl('div','filter-bar');
+    filtersDiv.setAttribute('aria-label', 'Filter current view');
+    content.appendChild(filtersDiv);
+    renderFilters(filtersDiv, 'main');
     const wrap = createEl('div');
     const list = createEl('div'); list.id = 'suggestions';
     wrap.appendChild(list);
@@ -490,6 +493,10 @@ async function main(){
     const content = document.getElementById('view-content');
     content.innerHTML = '';
     content.appendChild(createInlineHint());
+    const filtersDiv = createEl('div','filter-bar');
+    filtersDiv.setAttribute('aria-label', 'Filter current view');
+    content.appendChild(filtersDiv);
+    renderFilters(filtersDiv, 'main');
     const wrap = createEl('div');
     const area = createEl('div'); area.id = 'tierlist'; area.className = 'tier-grid';
     wrap.appendChild(area);
@@ -501,13 +508,10 @@ async function main(){
     const hash = location.hash || '#recommendations';
     setActiveLink(hash);
     if(hash === '#tierlist'){
-      renderFilters(mainFiltersHost, 'main');
       renderTier();
     } else if(hash === '#team-suggestions'){
-      if(mainFiltersHost) mainFiltersHost.innerHTML = '';
       renderTeamSuggestions();
     } else {
-      renderFilters(mainFiltersHost, 'main');
       renderRecommendations();
     }
   }

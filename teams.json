@@ -167,6 +167,13 @@
     "character_4": "Escoffier",
     "DPS": 111000
   },
+    {
+    "character_1": "Mavuika",
+    "character_2": "Varesa",
+    "character_3": "Ororon",
+    "character_4": "Chevreuse",
+    "DPS": 111000
+  },
   {
     "character_1": "Mavuika",
     "character_2": "Citlali",
@@ -256,6 +263,13 @@
     "character_2": "Bennett",
     "character_3": "Xilonen",
     "character_4": "Xingqiu",
+    "DPS": 105000
+  },
+    {
+    "character_1": "Mavuika",
+    "character_2": "Citlali",
+    "character_3": "Bennett",
+    "character_4": "Furina",
     "DPS": 105000
   },
   {
