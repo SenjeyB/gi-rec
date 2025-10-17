@@ -117,6 +117,13 @@ button:hover{opacity:0.95}
 .best-team-row{border:1px solid var(--line);background:rgba(255,255,255,0.02);margin-bottom:8px}
 .best-team-row:hover{background:rgba(255,255,255,0.04)}
 
+.macro-buttons{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}
+.macro-btn{padding:6px 10px;font-size:12px;background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:6px;cursor:pointer;color:#e6eef8}
+.macro-btn:hover{background:rgba(255,255,255,0.08)}
+
+.char.no-teams{opacity:0.3;filter:grayscale(0.8);cursor:not-allowed;pointer-events:none}
+.char.no-teams:hover{background:rgba(255,255,255,0.03)}
+
 @media (max-width: 1280px){
 	.app-container{grid-template-columns:minmax(360px, 600px) 1fr}
 }

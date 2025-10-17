@@ -34,16 +34,7 @@ async function main(){
   const ownedFiltersHost = document.getElementById('owned-filters');
   const displayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v).sort((a,b)=>a.localeCompare(b,'ru'));
   const selected = new Set();
-
-  const defaultAutoSelect = [
-    'Aino','Amber','Barbara','Collei','Kachina','Lynette',
-    'MC (Anemo)','MC (Geo)','MC (Electro)','MC (Dendro)','MC (Hydro)','MC (Pyro)',
-    'Noelle','Xiangling'
-  ];
-  try{
-    const saved = JSON.parse(localStorage.getItem('ownedSelection')||'[]');
-    for(const n of (saved.length? saved : defaultAutoSelect)) selected.add(n);
-  }catch{ for(const n of defaultAutoSelect) selected.add(n); }
+  let goodConfigBackup = null;
 
   const byWeapon = new Map();
   const byElement = new Map();
@@ -144,6 +135,35 @@ async function main(){
     };
   }
 
+  function hasTeams(displayName){
+    for(const t of teams){
+      const members = [t.character_1, t.character_2, t.character_3, t.character_4].map(normalizeName);
+      if(members.includes(displayName)) return true;
+    }
+    return false;
+  }
+
+  function getDefaultAutoSelect(){
+    const chars = [];
+    for(const [key, entry] of Object.entries(names)){
+      const disp = (entry && typeof entry === 'object') ? entry.name : entry;
+      const stars = (entry && entry.stars) ? entry.stars : null;
+      if(stars === 1 && hasTeams(disp)){
+        chars.push(disp);
+      }
+    }
+    return chars;
+  }
+
+  try{
+    const saved = JSON.parse(localStorage.getItem('ownedSelection')||'[]');
+    const defaultAutoSelect = getDefaultAutoSelect();
+    for(const n of (saved.length? saved : defaultAutoSelect)) selected.add(n);
+  }catch{ 
+    const defaultAutoSelect = getDefaultAutoSelect();
+    for(const n of defaultAutoSelect) selected.add(n); 
+  }
+
   function renderOwnedCharacters(){
     charactersDiv.innerHTML = '';
     const pred = makeFilterPredicate('owned');
@@ -155,13 +175,24 @@ async function main(){
       if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
       const lbl = createEl('div',null,disp);
       btn.appendChild(lbl);
+      
+      const noTeams = !hasTeams(disp);
+      if(noTeams){
+        btn.classList.add('no-teams');
+        btn.disabled = true;
+        btn.title = 'No teams available for this character';
+      }
+      
       if(selected.has(disp)) btn.classList.add('selected');
       if(!pred(disp)) btn.classList.add('dimmed');
-      btn.addEventListener('click',()=>{
-        if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
-        persistSelection();
-        renderActiveView();
-      });
+      
+      if(!noTeams){
+        btn.addEventListener('click',()=>{
+          if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
+          persistSelection();
+          renderActiveView();
+        });
+      }
       charactersDiv.appendChild(btn);
     }
   }
@@ -177,15 +208,66 @@ async function main(){
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
   maxShowEl.addEventListener('change', ()=> { localStorage.setItem('settingMaxShow', maxShowEl.value); renderActiveView(); });
-  document.getElementById('clear').addEventListener('click',()=>{
-    selected.clear();
-    document.querySelectorAll('.char.selected').forEach(el=>el.classList.remove('selected'));
-    persistSelection();
-    renderActiveView();
-  });
+  
   function persistSelection(){
     try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
   }
+
+  function updateCharacterSelection(){
+    renderOwnedCharacters();
+    persistSelection();
+    renderActiveView();
+  }
+
+  function getCharactersByStars(starsArray){
+    const chars = [];
+    for(const [key, entry] of Object.entries(names)){
+      const disp = (entry && typeof entry === 'object') ? entry.name : entry;
+      const stars = (entry && entry.stars) ? entry.stars : null;
+      if(stars !== null && starsArray.includes(stars) && hasTeams(disp)){
+        chars.push(disp);
+      }
+    }
+    return chars;
+  }
+
+  document.getElementById('macro-free')?.addEventListener('click', ()=>{
+    const freeChars = getCharactersByStars([1]);
+    for(const char of freeChars) selected.add(char);
+    updateCharacterSelection();
+  });
+
+  document.getElementById('macro-4star')?.addEventListener('click', ()=>{
+    const chars = getCharactersByStars([1, 2]);
+    for(const char of chars) selected.add(char);
+    updateCharacterSelection();
+  });
+
+  document.getElementById('macro-standard')?.addEventListener('click', ()=>{
+    const standardChars = getCharactersByStars([3]);
+    for(const char of standardChars) selected.add(char);
+    updateCharacterSelection();
+  });
+
+  document.getElementById('macro-all')?.addEventListener('click', ()=>{
+    for(const disp of displayNames){
+      if(hasTeams(disp)) selected.add(disp);
+    }
+    updateCharacterSelection();
+  });
+
+  document.getElementById('macro-clear')?.addEventListener('click', ()=>{
+    selected.clear();
+    updateCharacterSelection();
+  });
+
+  document.getElementById('macro-restore')?.addEventListener('click', ()=>{
+    if(goodConfigBackup && goodConfigBackup.size > 0){
+      selected.clear();
+      for(const char of goodConfigBackup) selected.add(char);
+      updateCharacterSelection();
+    }
+  });
 
   function goodStatus(msg, ok){
     const el = document.getElementById('good-status'); if(!el) return; el.textContent = msg||''; el.style.color = ok? '#4caf50':'#ccc';
@@ -204,6 +286,7 @@ async function main(){
   }
   function importGoodData(obj){
     if(!obj) return {added:0, removed:0, total: selected.size};
+    goodConfigBackup = new Set(selected);
     const displaySet = new Set(Object.values(names).map(v=> (v && typeof v==='object')? v.name : v));
     const collapsedMap = (function(){
       const m = {};
@@ -241,6 +324,7 @@ async function main(){
     }
     selected.clear();
     for(const v of imported) selected.add(v);
+    goodConfigBackup = new Set(imported);
     const added = [...selected].filter(x=> !before.has(x)).length;
     const removed = [...before].filter(x=> !selected.has(x)).length;
     persistSelection();
@@ -528,7 +612,7 @@ async function main(){
     optAvailable.value = 'available';
     optAvailable.textContent = 'Available Teams';
     select.appendChild(optAll);
-    select.appendChild(optAvailable);d
+    select.appendChild(optAvailable);
     try{
       const savedMode = localStorage.getItem('bestTeamsMode');
       if(savedMode) select.value = savedMode;

@@ -1,3 +1,12 @@
+## 1.4.0
+- Best Teams mode
+- Quick character pre-sets
+- All characters w/o teams temporary disabled
+- Team Suggestions -> Team Builder
+- Flins added (unavailable)
+- UI Tweaks
+- A lot of new teams added
+
 ## 1.3.1
 - UI Tweaks
 - New teams added
