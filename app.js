@@ -58,7 +58,8 @@ async function main(){
   const filterState = {
     owned: { weapons: new Set(), elements: new Set() },
     main: { weapons: new Set(), elements: new Set() },
-    picker: { weapons: new Set(), elements: new Set() }
+    picker: { weapons: new Set(), elements: new Set() },
+    bestTeams: { elements: new Set() }
   };
 
   function renderFilters(host, scope){
@@ -113,6 +114,10 @@ async function main(){
       const hash = location.hash || '#recommendations';
       if(hash === '#tierlist') renderTier();
       else if(hash === '#recommendations') renderRecommendations();
+      return;
+    }
+    if(scope === 'bestTeams'){
+      renderBestTeams();
       return;
     }
     if(scope === 'picker'){
@@ -315,7 +320,7 @@ async function main(){
     renderSuggestions(suggestions, keyByDisplay, maxShow);
   }
 
-  function renderTeamSuggestions(){
+  function renderTeamBuilder(){
     const owned = getOwned();
     const content = document.getElementById('view-content');
     content.innerHTML = '';
@@ -504,14 +509,165 @@ async function main(){
     renderTierlist(tierData, keyByDisplay, maxShow);
   }
 
+  function renderBestTeams(){
+    const owned = getOwned();
+    const maxShow = parseInt(maxShowEl.value||'3',10);
+    const content = document.getElementById('view-content');
+    content.innerHTML = '';
+    content.appendChild(createInlineHint());
+
+    const toggleWrap = createEl('div','best-teams-toggle');
+    const label = createEl('label', 'toggle-label');
+    label.textContent = 'Show: ';
+    const select = createEl('select','side-input toggle-select');
+    select.id = 'best-teams-mode';
+    const optAll = createEl('option');
+    optAll.value = 'all';
+    optAll.textContent = 'All Teams';
+    const optAvailable = createEl('option');
+    optAvailable.value = 'available';
+    optAvailable.textContent = 'Available Teams';
+    select.appendChild(optAll);
+    select.appendChild(optAvailable);d
+    try{
+      const savedMode = localStorage.getItem('bestTeamsMode');
+      if(savedMode) select.value = savedMode;
+    }catch{}
+    
+    select.addEventListener('change', ()=>{
+      try{ localStorage.setItem('bestTeamsMode', select.value); }catch{}
+      renderBestTeams();
+    });
+    
+    label.appendChild(select);
+    toggleWrap.appendChild(label);
+    content.appendChild(toggleWrap);
+
+    const filtersDiv = createEl('div','filter-bar');
+    filtersDiv.setAttribute('aria-label', 'Filter by first character element');
+    content.appendChild(filtersDiv);
+    renderBestTeamsFilters(filtersDiv);
+
+    const wrap = createEl('div');
+    const list = createEl('div'); 
+    list.id = 'best-teams-list';
+    wrap.appendChild(list);
+    content.appendChild(wrap);
+
+    const showMode = select.value || 'all';
+    renderBestTeamsList(showMode, maxShow);
+  }
+
+  function renderBestTeamsFilters(host){
+    if(!host) return;
+    host.innerHTML = '';
+    const mkChip = (key, label, iconSrc) => {
+      const chip = createEl('div','filter-chip');
+      const icon = new Image(); 
+      icon.src = iconSrc; 
+      icon.alt = key; 
+      icon.className = 'icon';
+      chip.appendChild(icon);
+      chip.appendChild(createEl('span',null,label));
+      const set = filterState.bestTeams.elements;
+      function sync(){ 
+        if(set.has(key)) chip.classList.add('selected'); 
+        else chip.classList.remove('selected'); 
+      }
+      chip.addEventListener('click', ()=>{ 
+        if(set.has(key)) set.delete(key); 
+        else set.add(key); 
+        sync(); 
+        onFiltersChanged('bestTeams'); 
+      });
+      sync();
+      return chip;
+    };
+    
+    const elOrder = ['anemo','cryo','dendro','electro','geo','hydro','pyro'];
+    for(const e of elOrder){
+      if(byElement.has(e)){
+        const label = e[0].toUpperCase()+e.slice(1);
+        const chip = mkChip(e, label, `filters/Element_${e[0].toUpperCase()+e.slice(1)}.png`);
+        host.appendChild(chip);
+      }
+    }
+  }
+
+  function renderBestTeamsList(showMode, maxShow){
+    const container = document.getElementById('best-teams-list');
+    if(!container) return;
+    container.innerHTML = '';
+
+    const owned = getOwned();
+    const elementsFilter = filterState.bestTeams.elements;
+    const hasElementFilter = elementsFilter.size > 0;
+
+    let allTeams = teams.map(t => {
+      const members = [t.character_1, t.character_2, t.character_3, t.character_4].map(normalizeName);
+      return {
+        members,
+        dps: t.DPS || 0
+      };
+    });
+
+    if(showMode === 'available'){
+      allTeams = allTeams.filter(team => {
+        return team.members.every(m => owned.has(m));
+      });
+    }
+
+    if(hasElementFilter){
+      allTeams = allTeams.filter(team => {
+        const firstChar = team.members[0];
+        const key = keyByDisplay[firstChar];
+        const entry = names[key];
+        const element = (entry && entry.element) ? String(entry.element).toLowerCase() : '';
+        return elementsFilter.has(element);
+      });
+    }
+    allTeams.sort((a, b) => b.dps - a.dps);
+    const topTeams = allTeams.slice(0, maxShow);
+
+    if(topTeams.length === 0){
+      container.appendChild(createEl('div','small','No teams found matching the current filters.'));
+      return;
+    }
+
+    container.appendChild(createEl('div','small muted',`Showing top ${topTeams.length} team(s) by DPS`));
+
+    for(const team of topTeams){
+      const row = createEl('div','team-row best-team-row');
+      const members = createEl('div','members');
+      for(const m of team.members){
+        const mk = keyByDisplay[m];
+        const img = createAvatarImg(m,'member-avatar', mk); 
+        if(img) members.appendChild(img);
+        const pill = createEl('div','member-pill',m);
+        if(showMode === 'all' && !owned.has(m)){
+          pill.classList.add('missing');
+        } else {
+          pill.classList.add('owned');
+        }
+        members.appendChild(pill);
+      }
+      row.appendChild(members);
+      const dpsEl = createEl('div','team-dps', `${Math.round(team.dps||0)}`);
+      row.appendChild(dpsEl);
+      container.appendChild(row);
+    }
+  }
+
   function renderActiveView(){
     const hash = location.hash || '#recommendations';
     setActiveLink(hash);
     if(hash === '#tierlist'){
       renderTier();
-    } else if(hash === '#team-suggestions'){
-      renderTeamSuggestions();
-    } else {
+    } else if(hash === '#team-builder'){
+      renderTeamBuilder();
+    } else if(hash === '#best-teams'){
+      renderBestTeams();
+    } else {  
       renderRecommendations();
     }
   }
