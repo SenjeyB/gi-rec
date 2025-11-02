@@ -71,6 +71,7 @@
     "nilou": {"name": "Nilou", "element": "hydro", "weapon": "sword", "stars": 4},
     "ningguang": {"name": "Ningguang", "element": "geo", "weapon": "catalyst", "stars": 2},
     "noelle": {"name": "Noelle", "element": "geo", "weapon": "claymore", "stars": 1},
+    "nefer": {"name": "Nefer", "element": "dendro", "weapon": "catalyst", "stars": 5},
     "ororon": {"name": "Ororon", "element": "electro", "weapon": "bow", "stars": 2},
     "qiqi": {"name": "Qiqi", "element": "cryo", "weapon": "sword", "stars": 3},
     "raiden": {"name": "Raiden Shogun", "element": "electro", "weapon": "polearm", "stars": 4},
