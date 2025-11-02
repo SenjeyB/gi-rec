@@ -577,20 +577,51 @@ async function main(){
     const owned = getOwned();
     const maxShow = parseInt(maxShowEl.value||'3',10);
     const mode = parseInt(modeEl.value||'1',10);
-    const pred = makeFilterPredicate('main');
-    const tierData = buildTierlist(names, teams, owned, maxShow, mode).filter(item=> pred(item.name));
     const content = document.getElementById('view-content');
     content.innerHTML = '';
     content.appendChild(createInlineHint());
+
+    const toggleWrap = createEl('div','best-teams-toggle');
+    const label = createEl('label', 'toggle-label');
+    label.textContent = 'Sorting: ';
+    const select = createEl('select','side-input toggle-select');
+    select.id = 'tier-sort-mode';
+    const optBest = createEl('option');
+    optBest.value = 'best';
+    optBest.textContent = 'Best DPS';
+    const optAvg = createEl('option');
+    optAvg.value = 'average';
+    optAvg.textContent = 'More flexible';
+    select.appendChild(optBest);
+    select.appendChild(optAvg);
+    try{
+      const savedMode = localStorage.getItem('tierSortMode');
+      if(savedMode) select.value = savedMode;
+    }catch{}
+    
+    select.addEventListener('change', ()=>{
+      try{ localStorage.setItem('tierSortMode', select.value); }catch{}
+      renderTier();
+    });
+    
+    label.appendChild(select);
+    toggleWrap.appendChild(label);
+    content.appendChild(toggleWrap);
+
     const filtersDiv = createEl('div','filter-bar');
     filtersDiv.setAttribute('aria-label', 'Filter current view');
     content.appendChild(filtersDiv);
     renderFilters(filtersDiv, 'main');
+
+    const sortMode = select.value || 'best';
+    const pred = makeFilterPredicate('main');
+    const tierData = buildTierlist(names, teams, owned, maxShow, mode, sortMode).filter(item=> pred(item.name));
+
     const wrap = createEl('div');
     const area = createEl('div'); area.id = 'tierlist'; area.className = 'tier-grid';
     wrap.appendChild(area);
     content.appendChild(wrap);
-    renderTierlist(tierData, keyByDisplay, maxShow);
+    renderTierlist(tierData, keyByDisplay, maxShow, owned);
   }
 
   function renderBestTeams(){
@@ -866,12 +897,12 @@ function renderSuggestions(list, keyByDisplay, maxShow){
 
     card.appendChild(left);
     card.appendChild(right);
-    card.addEventListener('click',()=> togglePanel(card, item, keyByDisplay, maxShow));
+    card.addEventListener('click',()=> togglePanel(card, item, keyByDisplay, null));
     container.appendChild(card);
   }
 }
 
-function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1){
+function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1, sortMode='best'){
   const results = [];
   const allDisplayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v);
   for(const disp of allDisplayNames){
@@ -892,10 +923,36 @@ function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1){
       }
     }
     if(candidates.length===0){ continue; }
-  candidates.sort((a,b)=> b.dps - a.dps);
-  const best = candidates[0];
-  const showteams = candidates.slice(0, Math.max(1, Math.min(maxShow, candidates.length)));
-    results.push({name:disp, score: best.dps || 0, teams: showteams});
+    candidates.sort((a,b)=> b.dps - a.dps);
+    
+    let score = 0;
+    if(sortMode === 'average'){
+      const uniqueTeams = [];
+      for(const cand of candidates){
+        const isUnique = uniqueTeams.every(existing => {
+          const candOthers = cand.members.filter(m => m !== disp).sort();
+          const existOthers = existing.members.filter(m => m !== disp).sort();
+          let diff = 0;
+          for(let i=0; i<candOthers.length; i++){
+            if(candOthers[i] !== existOthers[i]) diff++;
+          }
+          return diff >= 2;
+        });
+        if(isUnique){
+          uniqueTeams.push(cand);
+        }
+      }
+      
+      const top20percent = Math.ceil(uniqueTeams.length * 0.2);
+      const topTeams = uniqueTeams.slice(0, Math.max(1, top20percent));
+      const avgDps = topTeams.reduce((sum, t) => sum + t.dps, 0) / topTeams.length;
+      score = avgDps || 0;
+    } else {
+      score = candidates[0].dps || 0;
+    }
+    
+    const showteams = candidates.slice(0, Math.max(1, Math.min(maxShow, candidates.length)));
+    results.push({name:disp, score: score, teams: showteams});
   }
   const vals = results.map(r=>r.score);
   const mean = vals.length? (vals.reduce((s,v)=>s+v,0)/vals.length) : 0;
@@ -943,7 +1000,7 @@ function erf(x){
   return sign*y;
 }
 
-function renderTierlist(tierData, keyByDisplay, maxShow){
+function renderTierlist(tierData, keyByDisplay, maxShow, ownedSet){
   const container = document.getElementById('tierlist');
   container.innerHTML = '';
   const tiersOrder = ['ss','s','A','B','C','D'];
@@ -971,7 +1028,7 @@ function renderTierlist(tierData, keyByDisplay, maxShow){
       const avatar = createAvatarImg(member.name,'avatar', key);
       if(avatar) chip.appendChild(avatar);
       chip.appendChild(createEl('div','pill',member.name));
-      chip.addEventListener('click', ()=> togglePanel(chip, {missing:[member.name], topteams:member.teams}, keyByDisplay));
+      chip.addEventListener('click', ()=> togglePanel(chip, {missing:[member.name], topteams:member.teams}, keyByDisplay, ownedSet));
       membersTd.appendChild(chip);
     }
     row.appendChild(membersTd);
@@ -979,7 +1036,7 @@ function renderTierlist(tierData, keyByDisplay, maxShow){
   }
   container.appendChild(table);
 }
-function togglePanel(card, item, keyByDisplay){
+function togglePanel(card, item, keyByDisplay, ownedSet){
   const next = card.nextElementSibling;
   if(next && next.classList && next.classList.contains('panel')){
     next.remove();
@@ -999,7 +1056,13 @@ function togglePanel(card, item, keyByDisplay){
         const img = createAvatarImg(m,'member-avatar', memberKey);
         if(img) members.appendChild(img);
         const pill = createEl('div','member-pill',m);
-        if(item.missing && item.missing.includes(m)) pill.classList.add('missing'); else pill.classList.add('owned');
+        if(ownedSet && !ownedSet.has(m)) {
+          pill.classList.add('missing');
+        } else if(item.missing && item.missing.includes(m)) {
+          pill.classList.add('missing');
+        } else {
+          pill.classList.add('owned');
+        }
         members.appendChild(pill);
       }
       row.appendChild(members);
