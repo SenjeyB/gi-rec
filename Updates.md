@@ -1,3 +1,16 @@
+## Upcoming features:
+- Manual team builder
+- Bug reportring/suggestions button
+- More teams and characters
+
+## 1.5.0
+- Additional tier list sorting mode based more on character flexibility
+- Dalhia teams added
+- Nefer added (unavailable)
+- More new teams added (3500+ total)
+- "Upcoming features" section
+- UI tweaks
+
 ## 1.4.0
 - Best Teams mode
 - Quick character pre-sets
