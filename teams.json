@@ -231,6 +231,13 @@
     "DPS": 108333
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Mualani",
+    "character_3": "Mona",
+    "character_4": "Escoffier",
+    "DPS": 108000
+  },
+  {
     "character_1": "Mavuika",
     "character_2": "Citlali",
     "character_3": "Chongyun",
@@ -4305,6 +4312,13 @@
     "DPS": 72200
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Xingqiu",
+    "character_3": "Charlotte",
+    "character_4": "Dahlia",
+    "DPS": 72200
+  },
+  {
     "character_1": "Neuvillette",
     "character_2": "Raiden Shogun",
     "character_3": "Nahida",
@@ -4459,6 +4473,13 @@
     "DPS": 71900
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Xingqiu",
+    "character_3": "Layla",
+    "character_4": "Dahlia",
+    "DPS": 71900
+  },
+  {
     "character_1": "Hu Tao",
     "character_2": "Yelan",
     "character_3": "Sangonomiya Kokomi",
@@ -4541,6 +4562,13 @@
     "character_3": "Yelan",
     "character_4": "Bennett",
     "DPS": 71650
+  },
+  {
+    "character_1": "Skirk",
+    "character_2": "Xingqiu",
+    "character_3": "Chongyun",
+    "character_4": "Dahlia",
+    "DPS": 71600
   },
   {
     "character_1": "Neuvillette",
@@ -5383,6 +5411,13 @@
     "DPS": 69450
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Xingqiu",
+    "character_3": "Rosaria",
+    "character_4": "Dahlia",
+    "DPS": 69400
+  },
+  {
     "character_1": "Kinich",
     "character_2": "Ororon",
     "character_3": "Fischl",
@@ -6034,6 +6069,13 @@
     "DPS": 67650
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Candace",
+    "character_3": "Chongyun",
+    "character_4": "Dahlia",
+    "DPS": 67600
+  },
+  {
     "character_1": "Freminet",
     "character_2": "Furina",
     "character_3": "Rosaria",
@@ -6594,11 +6636,25 @@
     "DPS": 66700
   },
   {
+    "character_1": "Skirk",
+    "character_2": "Candace",
+    "character_3": "Layla",
+    "character_4": "Dahlia",
+    "DPS": 66700
+  },
+  {
     "character_1": "Wriothesley",
     "character_2": "Charlotte",
     "character_3": "Furina",
     "character_4": "Escoffier",
     "DPS": 66650
+  },
+  {
+    "character_1": "Skirk",
+    "character_2": "Candace",
+    "character_3": "Charlotte",
+    "character_4": "Dahlia",
+    "DPS": 66600
   },
   {
     "character_1": "Raiden Shogun",
@@ -7214,6 +7270,13 @@
     "character_2": "Emilie",
     "character_3": "Fischl",
     "character_4": "Bennett",
+    "DPS": 65400
+  },
+  {
+    "character_1": "Skirk",
+    "character_2": "Candace",
+    "character_3": "Rosaria",
+    "character_4": "Dahlia",
     "DPS": 65400
   },
   {

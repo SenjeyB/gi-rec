@@ -3,6 +3,10 @@
 - Bug reportring/suggestions button
 - More teams and characters
 
+## 1.5.1
+- Google search engine indexation
+- New teams added
+
 ## 1.5.0
 - Additional tier list sorting mode based more on character flexibility
 - Dalhia teams added
