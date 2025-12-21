@@ -3,6 +3,9 @@
 - Bug reportring/suggestions button
 - More teams and characters
 
+## 1.6.1
+- Random bug fixed
+
 ## 1.6.0
 - New tier list types added (All Characters, Owned Only)
 - Changed how flexibility lier list is calculated

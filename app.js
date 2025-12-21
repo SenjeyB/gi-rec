@@ -1007,38 +1007,34 @@ function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1, sortMod
     if(candidates.length===0){ continue; }
     candidates.sort((a,b)=> b.dps - a.dps);
     
-    const viableTeams = sortMode === 'average' 
-      ? candidates.filter(c => c.dps >= globalDpsThreshold)
-      : candidates;
-    
-    if(viableTeams.length === 0){ continue; }
-    
-    const uniqueTeams = [];
-    const seenMembers = new Set();
-    for(const cand of viableTeams){
-      const candOthers = cand.members.filter(m => m !== disp);
-      const newMembers = candOthers.filter(m => !seenMembers.has(m));
-      const isUnique = uniqueTeams.length === 0 || newMembers.length >= 2;
-      if(isUnique){
-        uniqueTeams.push(cand);
-        for(const m of candOthers) seenMembers.add(m);
-      }
-    }
-    
+    let showteams = [];
     let score = 0;
     if(sortMode === 'average'){
-      if(uniqueTeams.length === 0){
+      const viableTeams = candidates.filter(c => c.dps >= globalDpsThreshold);
+      if(viableTeams.length === 0){
         score = 0;
+        showteams = [];
       } else {
-        const bestDps = uniqueTeams[0].dps || 0;
+        const uniqueTeams = [];
+        const seenMembers = new Set();
+        for(const cand of viableTeams){
+          const candOthers = cand.members.filter(m => m !== disp);
+          const newMembers = candOthers.filter(m => !seenMembers.has(m));
+          const isUnique = uniqueTeams.length === 0 || newMembers.length >= 2;
+          if(isUnique){
+            uniqueTeams.push(cand);
+            for(const m of candOthers) seenMembers.add(m);
+          }
+        }
+        const bestDps = uniqueTeams[0]?.dps || 0;
         const flexBonus = 1 + 0.05 * (uniqueTeams.length - 1);
         score = bestDps * flexBonus;
+        showteams = uniqueTeams.slice(0, Math.max(1, Math.min(maxShow, uniqueTeams.length)));
       }
     } else {
-      score = candidates[0].dps || 0;
+      score = candidates[0]?.dps || 0;
+      showteams = candidates.slice(0, Math.max(1, Math.min(maxShow, candidates.length)));
     }
-    
-    const showteams = uniqueTeams.slice(0, Math.max(1, Math.min(maxShow, uniqueTeams.length)));
     results.push({name:disp, score: score, teams: showteams});
   }
   const vals = results.map(r=>r.score);
