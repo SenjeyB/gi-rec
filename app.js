@@ -50,7 +50,7 @@ async function main(){
     owned: { weapons: new Set(), elements: new Set() },
     main: { weapons: new Set(), elements: new Set() },
     picker: { weapons: new Set(), elements: new Set() },
-    bestTeams: { elements: new Set() }
+    bestTeams: { elements: new Set(), weapons: new Set() }
   };
 
   function renderFilters(host, scope){
@@ -582,6 +582,36 @@ async function main(){
     content.appendChild(createInlineHint());
 
     const toggleWrap = createEl('div','best-teams-toggle');
+    
+    const displayLabel = createEl('label', 'toggle-label');
+    displayLabel.textContent = 'Show: ';
+    const displaySelect = createEl('select','side-input toggle-select');
+    displaySelect.id = 'tier-display-mode';
+    const optNotOwned = createEl('option');
+    optNotOwned.value = 'not-owned';
+    optNotOwned.textContent = 'Not owned';
+    const optAll = createEl('option');
+    optAll.value = 'all';
+    optAll.textContent = 'All characters';
+    const optOwned = createEl('option');
+    optOwned.value = 'owned';
+    optOwned.textContent = 'Owned only';
+    displaySelect.appendChild(optNotOwned);
+    displaySelect.appendChild(optAll);
+    displaySelect.appendChild(optOwned);
+    try{
+      const savedDisplayMode = localStorage.getItem('tierDisplayMode');
+      if(savedDisplayMode) displaySelect.value = savedDisplayMode;
+    }catch{}
+    
+    displaySelect.addEventListener('change', ()=>{
+      try{ localStorage.setItem('tierDisplayMode', displaySelect.value); }catch{}
+      renderTier();
+    });
+    
+    displayLabel.appendChild(displaySelect);
+    toggleWrap.appendChild(displayLabel);
+
     const label = createEl('label', 'toggle-label');
     label.textContent = 'Sorting: ';
     const select = createEl('select','side-input toggle-select');
@@ -614,8 +644,10 @@ async function main(){
     renderFilters(filtersDiv, 'main');
 
     const sortMode = select.value || 'best';
+    const displayMode = displaySelect.value || 'not-owned';
     const pred = makeFilterPredicate('main');
-    const tierData = buildTierlist(names, teams, owned, maxShow, mode, sortMode).filter(item=> pred(item.name));
+    const effectiveMode = (displayMode === 'all') ? 99 : mode;
+    const tierData = buildTierlist(names, teams, owned, maxShow, effectiveMode, sortMode, displayMode).filter(item=> pred(item.name));
 
     const wrap = createEl('div');
     const area = createEl('div'); area.id = 'tierlist'; area.className = 'tier-grid';
@@ -627,6 +659,7 @@ async function main(){
   function renderBestTeams(){
     const owned = getOwned();
     const maxShow = parseInt(maxShowEl.value||'3',10);
+    const mode = parseInt(modeEl.value||'1',10);
     const content = document.getElementById('view-content');
     content.innerHTML = '';
     content.appendChild(createInlineHint());
@@ -670,13 +703,13 @@ async function main(){
     content.appendChild(wrap);
 
     const showMode = select.value || 'all';
-    renderBestTeamsList(showMode, maxShow);
+    renderBestTeamsList(showMode, maxShow, mode);
   }
 
   function renderBestTeamsFilters(host){
     if(!host) return;
     host.innerHTML = '';
-    const mkChip = (key, label, iconSrc) => {
+    const mkChip = (group, key, label, iconSrc) => {
       const chip = createEl('div','filter-chip');
       const icon = new Image(); 
       icon.src = iconSrc; 
@@ -684,7 +717,7 @@ async function main(){
       icon.className = 'icon';
       chip.appendChild(icon);
       chip.appendChild(createEl('span',null,label));
-      const set = filterState.bestTeams.elements;
+      const set = filterState.bestTeams[group];
       function sync(){ 
         if(set.has(key)) chip.classList.add('selected'); 
         else chip.classList.remove('selected'); 
@@ -703,28 +736,47 @@ async function main(){
     for(const e of elOrder){
       if(byElement.has(e)){
         const label = e[0].toUpperCase()+e.slice(1);
-        const chip = mkChip(e, label, `filters/Element_${e[0].toUpperCase()+e.slice(1)}.png`);
+        const chip = mkChip('elements', e, label, `filters/Element_${e[0].toUpperCase()+e.slice(1)}.png`);
+        host.appendChild(chip);
+      }
+    }
+    
+    const br = document.createElement('span');
+    br.className = 'filter-break';
+    host.appendChild(br);
+    
+    const wOrder = ['sword','polearm','bow','claymore','catalyst'];
+    for(const w of wOrder){
+      if(byWeapon.has(w)){
+        const label = w[0].toUpperCase()+w.slice(1);
+        const chip = mkChip('weapons', w, label, `filters/Class-${w}.png`);
         host.appendChild(chip);
       }
     }
   }
 
-  function renderBestTeamsList(showMode, maxShow){
+  function renderBestTeamsList(showMode, maxShow, mode){
     const container = document.getElementById('best-teams-list');
     if(!container) return;
     container.innerHTML = '';
 
     const owned = getOwned();
     const elementsFilter = filterState.bestTeams.elements;
+    const weaponsFilter = filterState.bestTeams.weapons;
     const hasElementFilter = elementsFilter.size > 0;
+    const hasWeaponFilter = weaponsFilter.size > 0;
 
     let allTeams = teams.map(t => {
       const members = [t.character_1, t.character_2, t.character_3, t.character_4].map(normalizeName);
+      const missingCount = members.filter(m => !owned.has(m)).length;
       return {
         members,
-        dps: t.DPS || 0
+        dps: t.DPS || 0,
+        missingCount
       };
     });
+
+    allTeams = allTeams.filter(team => team.missingCount <= mode);
 
     if(showMode === 'available'){
       allTeams = allTeams.filter(team => {
@@ -734,13 +786,36 @@ async function main(){
 
     if(hasElementFilter){
       allTeams = allTeams.filter(team => {
-        const firstChar = team.members[0];
-        const key = keyByDisplay[firstChar];
-        const entry = names[key];
-        const element = (entry && entry.element) ? String(entry.element).toLowerCase() : '';
-        return elementsFilter.has(element);
+        const teamElements = new Set();
+        for(const m of team.members){
+          const key = keyByDisplay[m];
+          const entry = names[key];
+          const element = (entry && entry.element) ? String(entry.element).toLowerCase() : '';
+          if(element) teamElements.add(element);
+        }
+        for(const reqElement of elementsFilter){
+          if(!teamElements.has(reqElement)) return false;
+        }
+        return true;
       });
     }
+
+    if(hasWeaponFilter){
+      allTeams = allTeams.filter(team => {
+        const teamWeapons = new Set();
+        for(const m of team.members){
+          const key = keyByDisplay[m];
+          const entry = names[key];
+          const weapon = (entry && entry.weapon) ? String(entry.weapon).toLowerCase() : '';
+          if(weapon) teamWeapons.add(weapon);
+        }
+        for(const reqWeapon of weaponsFilter){
+          if(!teamWeapons.has(reqWeapon)) return false;
+        }
+        return true;
+      });
+    }
+
     allTeams.sort((a, b) => b.dps - a.dps);
     const topTeams = allTeams.slice(0, maxShow);
 
@@ -902,13 +977,20 @@ function renderSuggestions(list, keyByDisplay, maxShow){
   }
 }
 
-function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1, sortMode='best'){
+function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1, sortMode='best', displayMode='not-owned'){
   const results = [];
   const allDisplayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v);
+  
+  let globalDpsThreshold = 0;
+  if(sortMode === 'average'){
+    const allDps = teams.map(t => t.DPS || 0).sort((a,b) => a - b);
+    globalDpsThreshold = allDps[Math.floor(allDps.length * 0.5)] || 0;
+  }
+  
   for(const disp of allDisplayNames){
-    if(ownedDisplaySet && ownedDisplaySet.has(disp)){
-      continue;
-    }
+    const isOwned = ownedDisplaySet && ownedDisplaySet.has(disp);
+    if(displayMode === 'not-owned' && isOwned) continue;
+    if(displayMode === 'owned' && !isOwned) continue;
     const candidates = [];
     for(const s of teams){
       const members = [s.character_1, s.character_2, s.character_3, s.character_4].map(normalizeName);
@@ -916,8 +998,8 @@ function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1, sortMod
         const others = members.filter(m=>m!==disp);
         let ownedCount = 0; for(const o of others) if(ownedDisplaySet.has(o)) ownedCount++;
         const missingOthers = others.length - ownedCount;
-        const totalMissing = 1 + missingOthers;
-        if(totalMissing <= mode && ownedCount>0){
+        const totalMissing = (displayMode !== 'not-owned' && isOwned) ? missingOthers : (1 + missingOthers);
+        if(totalMissing <= mode && (ownedCount > 0 || displayMode !== 'not-owned')){
           candidates.push({members, dps: s.DPS||0, ownedCount});
         }
       }
@@ -925,33 +1007,38 @@ function buildTierlist(names, teams, ownedDisplaySet, maxShow=3, mode=1, sortMod
     if(candidates.length===0){ continue; }
     candidates.sort((a,b)=> b.dps - a.dps);
     
+    const viableTeams = sortMode === 'average' 
+      ? candidates.filter(c => c.dps >= globalDpsThreshold)
+      : candidates;
+    
+    if(viableTeams.length === 0){ continue; }
+    
+    const uniqueTeams = [];
+    const seenMembers = new Set();
+    for(const cand of viableTeams){
+      const candOthers = cand.members.filter(m => m !== disp);
+      const newMembers = candOthers.filter(m => !seenMembers.has(m));
+      const isUnique = uniqueTeams.length === 0 || newMembers.length >= 2;
+      if(isUnique){
+        uniqueTeams.push(cand);
+        for(const m of candOthers) seenMembers.add(m);
+      }
+    }
+    
     let score = 0;
     if(sortMode === 'average'){
-      const uniqueTeams = [];
-      for(const cand of candidates){
-        const isUnique = uniqueTeams.every(existing => {
-          const candOthers = cand.members.filter(m => m !== disp).sort();
-          const existOthers = existing.members.filter(m => m !== disp).sort();
-          let diff = 0;
-          for(let i=0; i<candOthers.length; i++){
-            if(candOthers[i] !== existOthers[i]) diff++;
-          }
-          return diff >= 2;
-        });
-        if(isUnique){
-          uniqueTeams.push(cand);
-        }
+      if(uniqueTeams.length === 0){
+        score = 0;
+      } else {
+        const bestDps = uniqueTeams[0].dps || 0;
+        const flexBonus = 1 + 0.05 * (uniqueTeams.length - 1);
+        score = bestDps * flexBonus;
       }
-      
-      const top20percent = Math.ceil(uniqueTeams.length * 0.2);
-      const topTeams = uniqueTeams.slice(0, Math.max(1, top20percent));
-      const avgDps = topTeams.reduce((sum, t) => sum + t.dps, 0) / topTeams.length;
-      score = avgDps || 0;
     } else {
       score = candidates[0].dps || 0;
     }
     
-    const showteams = candidates.slice(0, Math.max(1, Math.min(maxShow, candidates.length)));
+    const showteams = uniqueTeams.slice(0, Math.max(1, Math.min(maxShow, uniqueTeams.length)));
     results.push({name:disp, score: score, teams: showteams});
   }
   const vals = results.map(r=>r.score);
@@ -1057,8 +1144,6 @@ function togglePanel(card, item, keyByDisplay, ownedSet){
         if(img) members.appendChild(img);
         const pill = createEl('div','member-pill',m);
         if(ownedSet && !ownedSet.has(m)) {
-          pill.classList.add('missing');
-        } else if(item.missing && item.missing.includes(m)) {
           pill.classList.add('missing');
         } else {
           pill.classList.add('owned');

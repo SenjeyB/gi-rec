@@ -3,6 +3,12 @@
 - Bug reportring/suggestions button
 - More teams and characters
 
+## 1.6.0
+- New tier list types added (All Characters, Owned Only)
+- Changed how flexibility lier list is calculated
+- New team
+- UI tweaks
+
 ## 1.5.1
 - Google search engine indexation
 - New teams added
