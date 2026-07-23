@@ -1,15 +1,8 @@
 ## Upcoming features:
 - Bug reporting/suggestions button
 
-## 1.8.0 (2026/07/23)
-- Character search box
-- C1 badges for characters whose teams use C1 data
-- Tier list now uses global DPS thresholds (owned characters are placed on the shared scale)
-- Team Builder: Spiral Abyss (2 teams) / Stygian Onslaught (3 teams) modes, selections are saved
-- DPS numbers formatted with thousands separators
-- Keyboard support for filters and Esc to close dialogs
-- Team picker: progressively select up to 4 characters to narrow down teams, click a selected character to remove them
-- Performance and UI fixes
+## 1.7.1 (2026/07/24)
+- Performance UI fixes
 
 ## 1.7.0 (2026/07/23)
 - Manual team builder

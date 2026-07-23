@@ -191,6 +191,7 @@ async function main(){
     const q = (document.getElementById('char-search')?.value || '').trim().toLowerCase();
     for(const disp of displayNames){
       if(q && !disp.toLowerCase().includes(q)) continue;
+      if(!pred(disp)) continue;
       const btn = createEl('button','char');
       btn.type = 'button';
       const key = keyByDisplay[disp];
@@ -207,8 +208,7 @@ async function main(){
       }
       
       if(selected.has(disp)) btn.classList.add('selected');
-      if(!pred(disp)) btn.classList.add('dimmed');
-      
+
       if(!noTeams){
         btn.addEventListener('click',()=>{
           if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
@@ -220,7 +220,11 @@ async function main(){
     }
   }
 
-  document.getElementById('char-search')?.addEventListener('input', ()=> renderOwnedCharacters());
+  let searchTimer = null;
+  document.getElementById('char-search')?.addEventListener('input', ()=>{
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(renderOwnedCharacters, 80);
+  });
 
   renderFilters(ownedFiltersHost, 'owned');
   renderOwnedCharacters();
@@ -544,12 +548,12 @@ async function main(){
           for(const s of cands){ for(const m of s.members) addable.add(m); }
         }
         for(const name of [...owned].sort((a,b)=>a.localeCompare(b,'en'))){
-          const chip = createEl('div','tier-member');
           const inAnchor = anchors.has(name);
+          if(!inAnchor && !predPicker(name)) continue;
+          const chip = createEl('div','tier-member');
           const eligible = inAnchor || (!used.has(name) && addable.has(name));
           if(inAnchor) chip.classList.add('active');
           if(!eligible) chip.classList.add('disabled');
-          if(!predPicker(name)) chip.classList.add('dimmed');
           const key = keyByDisplay[name];
           const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
           chip.appendChild(createEl('div','pill',name));
@@ -1205,6 +1209,8 @@ function sanitizeFileName(name){
 function createAvatarImg(displayName, cls, key){
   const file = key ? (key.toLowerCase() + '.png') : sanitizeFileName(displayName);
   const img = new Image();
+  img.loading = 'lazy';
+  img.decoding = 'async';
   img.src = `characters/${file}`;
   img.className = cls;
   img.onerror = ()=>{ img.style.display = 'none'; };

@@ -161,19 +161,17 @@ button:hover{opacity:0.95}
 }
 
 button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clickable,.macro-btn,.anchor-chip{
-	transition:background .15s ease,border-color .15s ease,opacity .15s ease,transform .12s ease,box-shadow .15s ease}
+	transition:background .15s ease,border-color .15s ease}
 :focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .side-input:focus{border-color:var(--accent);outline:none}
 
 .team-dps,.dps-badge{font-variant-numeric:tabular-nums}
 
 .char:hover:not(.selected):not(.no-teams){background:rgba(255,255,255,0.08)}
-.char:active:not(.no-teams){transform:scale(0.97)}
 .tier-member:hover:not(.disabled){background:rgba(255,255,255,0.07)}
 .squad{border:1px solid transparent}
 .squad.clickable:hover{border-color:rgba(96,165,250,0.35);background:rgba(0,0,0,0.28)}
-.team-row.clickable:hover{transform:translateY(-1px);box-shadow:0 2px 8px rgba(0,0,0,0.25)}
-.macro-btn:active,.small-btn:active{transform:scale(0.96)}
+.team-row.clickable:hover{border-color:rgba(96,165,250,0.35)}
 .nav-link.active{border-color:rgba(96,165,250,0.5);box-shadow:inset 0 0 0 1px rgba(96,165,250,0.25)}
 
 .characters-grid,.picker-grid,.modal-body{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent}
