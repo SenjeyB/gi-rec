@@ -18,7 +18,6 @@
   <meta property="twitter:image" content="https://senjeyb.github.io/gi-rec/preview.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="assets/favicon.ico" sizes="any">
   <link rel="preload" href="tiers/ss.png" as="image">
   <link rel="preload" href="tiers/s.png" as="image">
   <link rel="preload" href="tiers/A.png" as="image">
@@ -84,11 +83,12 @@
           <button id="open-import" type="button">Import Characters</button>
         </div>
         <div id="good-status" class="small muted"></div>
+        <input id="char-search" class="side-input" type="search" placeholder="Search characters..." aria-label="Search characters" autocomplete="off" />
         <div id="owned-filters" class="filter-bar" aria-label="Filter owned characters"></div>
         <div class="macro-buttons">
           <button id="macro-free" type="button" class="macro-btn">All free</button>
           <button id="macro-4star" type="button" class="macro-btn">All 4*</button>
-          <button id="macro-standard" type="button" class="macro-btn">All Standart 5*</button>
+          <button id="macro-standard" type="button" class="macro-btn">All Standard 5*</button>
           <button id="macro-all" type="button" class="macro-btn">All</button>
           <button id="macro-clear" type="button" class="macro-btn">Clear all</button>
           <button id="macro-restore" type="button" class="macro-btn">Return to config</button>
@@ -105,6 +105,7 @@
             <li>Pick a view in Mode: Recommendations, Tier List, or Team Suggestions.</li>
             <li>Adjust Settings to control how many new characters you're willing to obtain.</li>
             <li>Use DPS numbers as reference. You most probably will have different DPS values in your account.</li>
+            <li>Characters marked with a <strong>C1</strong> badge are calculated using their C1 versions. All other 5* characters are C0, 4* characters are C6.</li>
           </ol>
           <div>Developed by <strong>SenjeyB</strong>.</div>
         </div>
@@ -165,7 +166,7 @@
         <button id="team-picker-close" class="close-btn" type="button" aria-label="Close">✕</button>
       </div>
       <div class="modal-body">
-        <div class="small muted" style="margin-bottom:8px">Pick an owned character to anchor the team, then choose one of the suggested full teams.</div>
+        <div class="small muted" style="margin-bottom:8px">Click up to 4 owned characters to narrow down the team — suggestions on the right update with every pick. Click a selected character to remove them, then pick one of the suggested teams.</div>
         <div class="team-picker-layout">
           <div>
             <div class="picker-title">Your characters</div>
