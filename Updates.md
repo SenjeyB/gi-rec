@@ -1,6 +1,11 @@
 ## Upcoming features:
 - Bug reporting/suggestions button
 
+## 1.7.2 (2026/09/13)
+- Added new teams (3951 total) and characters
+- Fixed list of C1 characters from "To Temper Thyself and Journey Far" event (including Standart characters now)
+- UI tweaks
+
 ## 1.7.1 (2026/07/24)
 - Performance UI fixes
 
