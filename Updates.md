@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Bug reporting/suggestions button
 
+## 1.7.3 (2026/09/23)
+- Jahoda added
+- Added new teams (3981 total)
+
 ## 1.7.2 (2026/09/13)
 - Added new teams (3951 total) and characters
 - Fixed list of C1 characters from "To Temper Thyself and Journey Far" event (including Standart characters now)

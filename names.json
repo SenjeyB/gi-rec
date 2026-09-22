@@ -49,6 +49,7 @@
     "ifa": {"name": "Ifa", "element": "anemo", "weapon": "catalyst", "stars": 2},
     "illuga": {"name": "Illuga", "element": "geo", "weapon": "polearm", "stars": 2},
     "ineffa": {"name": "Ineffa", "element": "electro", "weapon": "polearm", "stars": 4},
+    "jahoda": {"name": "Jahoda", "element": "anemo", "weapon": "bow", "stars": 2},
     "jean": {"name": "Jean", "element": "anemo", "weapon": "sword", "stars": 3, "cons": 1},
     "kachina": {"name": "Kachina", "element": "geo", "weapon": "polearm", "stars": 1},
     "kazuha": {"name": "Kaedehara Kazuha", "element": "anemo", "weapon": "sword", "stars": 4},
