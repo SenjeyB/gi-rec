@@ -1039,6 +1039,9 @@ export async function start(ctx){
     },
     rerender(){
       keepScroll(()=>{
+        // чипы фильтра в «Ваших персонажах» рисуются один раз при старте —
+        // при смене языка их тоже нужно пересобрать, иначе подписи остаются старыми
+        renderFilters(ownedFiltersHost, 'owned');
         renderOwnedCharacters();
         renderActiveView();
       });

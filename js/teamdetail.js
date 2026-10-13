@@ -38,10 +38,13 @@ function icon(src, alt, cls) {
   return img;
 }
 
+// Две метки KQMS. «Полное соответствие» требует и созвездий, и артефактов по
+// стандарту, поэтому зелёной бывает только вместе с «артефактами».
 function kqmBadge(okCons, okArt) {
+  const okFull = !!(okCons && okArt);
   const wrap = el("div", "td-kqm");
   for (const [ok, labelKey, hintKey] of [
-    [okCons, "team.kqmCons", "team.kqmConsHint"],
+    [okFull, "team.kqmFull", "team.kqmFullHint"],
     [okArt, "team.kqmArt", "team.kqmArtHint"],
   ]) {
     const b = el("span", `td-flag${ok ? " is-ok" : ""}`);

@@ -19,7 +19,7 @@ let refs = null;
 let app = null;
 let syncing = false;
 
-const settings = { allowFiveStar: false, onlyMyWeapons: false, kqmCons: false, kqmArt: false };
+const settings = { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false };
 
 async function loadJSON(path) {
   const resp = await fetch(path, { cache: "no-cache" });
@@ -34,7 +34,8 @@ function loadSettings() {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
     settings.allowFiveStar = !!raw.allowFiveStar;
     settings.onlyMyWeapons = !!raw.onlyMyWeapons;
-    settings.kqmCons = !!raw.kqmCons;
+    // до 2.2.1 фильтр назывался kqmCons и проверял только созвездия
+    settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
     settings.kqmArt = !!raw.kqmArt;
   } catch { /* нет сохранённых — остаются значения по умолчанию */ }
 }
@@ -53,7 +54,7 @@ function currentTeams() {
     weapons,
     allowFiveStar: settings.allowFiveStar,
     onlyMyWeapons: settings.onlyMyWeapons,
-    kqmCons: settings.kqmCons,
+    kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
   });
 }
@@ -70,7 +71,7 @@ function strictTeams() {
     cons, weapons, strictCons: true,
     allowFiveStar: settings.allowFiveStar,
     onlyMyWeapons: true,
-    kqmCons: settings.kqmCons,
+    kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
   });
 }
@@ -97,7 +98,7 @@ function wireSettings() {
       refresh();
     });
   }
-  for (const [id, key] of [["kqm-cons", "kqmCons"], ["kqm-art", "kqmArt"]]) {
+  for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
     const box = document.getElementById(id);
     if (!box) continue;
     box.checked = settings[key];
@@ -110,10 +111,10 @@ function wireSettings() {
   const reset = document.getElementById("reset-filters");
   if (reset) {
     reset.addEventListener("click", () => {
-      Object.assign(settings, { allowFiveStar: false, onlyMyWeapons: false, kqmCons: false, kqmArt: false });
+      Object.assign(settings, { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false });
       saveSettings();
       for (const [id, key] of [["allow-five-star", "allowFiveStar"], ["only-my-weapons", "onlyMyWeapons"],
-                               ["kqm-cons", "kqmCons"], ["kqm-art", "kqmArt"]]) {
+                               ["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
         const box = document.getElementById(id);
         if (box) box.checked = settings[key];
       }

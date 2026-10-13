@@ -81,7 +81,8 @@ export function query(opts = {}) {
   const invWeapons = opts.weapons || {};
   const allowFive = !!opts.allowFiveStar;
   const onlyMine = !!opts.onlyMyWeapons;
-  const needCons = !!opts.kqmCons;
+  // «Полное соответствие» KQMS = созвездия и артефакты по стандарту одновременно
+  const needFull = !!opts.kqmFull;
   const needArt = !!opts.kqmArt;
   const strict = !!opts.strictCons;
 
@@ -107,7 +108,7 @@ export function query(opts = {}) {
 
     for (let bi = 0; bi < team.builds.length; bi++) {
       const build = team.builds[bi];
-      if (needCons && !build.kqmCons) continue;
+      if (needFull && !(build.kqmCons && build.kqmArt)) continue;
       if (needArt && !build.kqmArt) continue;
       let ok = true;
       const needed = onlyMine ? {} : null;     // ключ -> рефайны, которые требует сборка

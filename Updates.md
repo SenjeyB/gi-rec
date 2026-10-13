@@ -1,6 +1,12 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.2.1 (2026/10/13)
+- KQM renamed to **KQMS** (KQM Standards).
+- The “constellations” badge is replaced by **“full compliance”**: it turns green only when both constellations and artifacts follow the standard. The filter under Advanced works the same way.
+- A character whose C1 is free but who sits at C0 in a team now counts as standard. Such teams used to be wrongly flagged — there are now 2.3× more fully compliant teams.
+- Fixed filter labels under “Your characters” not switching language.
+
 ## 2.2.0 (2026/10/13)
 - **Character window.** Clicking a character in the tier list, or a card in recommendations, opens a window with a large portrait, rarity, element, weapon type, whether you own them, their best DPS, and all of their teams page by page.
 - **5★ weapons are tracked as copies, like the in-game inventory.** Instead of ticking a weapon, you add it one copy at a time from a picker. A team that needs two of the same 5★ weapon needs two copies. GOOD import carries over every copy too.

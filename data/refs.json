@@ -1,257 +1,17 @@
 {
- "generated": "2026-10-13T10:10:53Z",
+ "generated": "2026-10-13T14:22:56Z",
  "weapons": {
-  "favoniussword": {
-   "name": "Favonius Sword",
+  "fluteofezpitzal": {
+   "name": "Flute of Ezpitzal",
    "rarity": 4,
    "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Zephyrus"
+   "icon": "UI_EquipIcon_Sword_Isikhulu"
   },
-  "mouunsmoon": {
-   "name": "Mouun's Moon",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Maria"
-  },
-  "athousandfloatingdreams": {
-   "name": "A Thousand Floating Dreams",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Ayus"
-  },
-  "absolution": {
-   "name": "Absolution",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Estoc"
-  },
-  "sacrificialbow": {
-   "name": "Sacrificial Bow",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Fossil"
-  },
-  "snowtombedstarsilver": {
-   "name": "Snow-Tombed Starsilver",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Dragonfell"
-  },
-  "favoniusgreatsword": {
-   "name": "Favonius Greatsword",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Zephyrus"
-  },
-  "symphonistofscents": {
-   "name": "Symphonist of Scents",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Trident"
-  },
-  "jadefallssplendor": {
-   "name": "Jadefall's Splendor",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Morax"
-  },
-  "favoniuslance": {
-   "name": "Favonius Lance",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Zephyrus"
-  },
-  "calamityqueller": {
-   "name": "Calamity Queller",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Santika"
-  },
-  "crescentpike": {
-   "name": "Crescent Pike",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Exotic"
-  },
-  "angelosheptades": {
-   "name": "Angelos' Heptades",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_FairyGarden"
-  },
-  "slingshot": {
-   "name": "Slingshot",
-   "rarity": 3,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Sling"
-  },
-  "mailedflower": {
-   "name": "Mailed Flower",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Fleurfair"
-  },
-  "thestringless": {
-   "name": "The Stringless",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Troupe"
-  },
-  "balladofthefjords": {
-   "name": "Ballad of the Fjords",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Shanty"
-  },
-  "akuoumaru": {
-   "name": "Akuoumaru",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Maria"
-  },
-  "xiphosmoonlight": {
-   "name": "Xiphos' Moonlight",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Pleroma"
-  },
-  "elegyfortheend": {
-   "name": "Elegy for the End",
+  "amosbow": {
+   "name": "Amos' Bow",
    "rarity": 5,
    "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Widsith"
-  },
-  "hunterspath": {
-   "name": "Hunter's Path",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Ayus"
-  },
-  "kagurasverity": {
-   "name": "Kagura's Verity",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Narukami"
-  },
-  "fadingtwilight": {
-   "name": "Fading Twilight",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Fallensun"
-  },
-  "skywardatlas": {
-   "name": "Skyward Atlas",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Dvalin"
-  },
-  "everlastingmoonglow": {
-   "name": "Everlasting Moonglow",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Kaleido"
-  },
-  "primordialjadecutter": {
-   "name": "Primordial Jade Cutter",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Morax"
-  },
-  "rust": {
-   "name": "Rust",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Recluse"
-  },
-  "ringofyaxche": {
-   "name": "Ring of Yaxche",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Isikhulu"
-  },
-  "forestregalia": {
-   "name": "Forest Regalia",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Arakalari"
-  },
-  "prototypecrescent": {
-   "name": "Prototype Crescent",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Proto"
-  },
-  "vividnotions": {
-   "name": "Vivid Notions",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_VaresaTransformer"
-  },
-  "thedockhandsassistant": {
-   "name": "The Dockhand's Assistant",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Mechanic"
-  },
-  "aquilafavonia": {
-   "name": "Aquila Favonia",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Falcon"
-  },
-  "thewidsith": {
-   "name": "The Widsith",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Troupe"
-  },
-  "toukaboushigure": {
-   "name": "Toukabou Shigure",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Kasabouzu"
-  },
-  "thunderingpulse": {
-   "name": "Thundering Pulse",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Narukami"
-  },
-  "moonpiercer": {
-   "name": "Moonpiercer",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Arakalari"
-  },
-  "fleuvecendreferryman": {
-   "name": "Fleuve Cendre Ferryman",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Machination"
-  },
-  "sacrificialgreatsword": {
-   "name": "Sacrificial Greatsword",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Fossil"
-  },
-  "favoniuswarbow": {
-   "name": "Favonius Warbow",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Zephyrus"
-  },
-  "ashgravendrinkinghorn": {
-   "name": "Ash-Graven Drinking Horn",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_ConchSprayer"
-  },
-  "wolffang": {
-   "name": "Wolf-Fang",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Boreas"
+   "icon": "UI_EquipIcon_Bow_Amos"
   },
   "travelershandysword": {
    "name": "Traveler's Handy Sword",
@@ -259,53 +19,17 @@
    "type": "sword",
    "icon": "UI_EquipIcon_Sword_Traveler"
   },
-  "fluteofezpitzal": {
-   "name": "Flute of Ezpitzal",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Isikhulu"
-  },
-  "skywardblade": {
-   "name": "Skyward Blade",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Dvalin"
-  },
-  "ultimateoverlordsmegamagicsword": {
-   "name": "\"Ultimate Overlord's Mega Magic Sword\"",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Champion"
-  },
-  "talkingstick": {
-   "name": "Talking Stick",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_BeastTamer"
-  },
-  "lostprayertothesacredwinds": {
-   "name": "Lost Prayer to the Sacred Winds",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Fourwinds"
-  },
-  "moonweaversdawn": {
-   "name": "Moonweaver's Dawn",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Miekka"
-  },
-  "flowingpurity": {
-   "name": "Flowing Purity",
+  "sacrificialjade": {
+   "name": "Sacrificial Jade",
    "rarity": 4,
    "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Vorpal"
+   "icon": "UI_EquipIcon_Catalyst_Yue"
   },
-  "prototypeamber": {
-   "name": "Prototype Amber",
+  "rust": {
+   "name": "Rust",
    "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Proto"
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Recluse"
   },
   "redhornstonethresher": {
    "name": "Redhorn Stonethresher",
@@ -313,251 +37,29 @@
    "type": "claymore",
    "icon": "UI_EquipIcon_Claymore_Itadorimaru"
   },
-  "finaleofthedeep": {
-   "name": "Finale of the Deep",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Vorpal"
-  },
-  "chainbreaker": {
-   "name": "Chain Breaker",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Isikhulu"
-  },
   "windblumeode": {
    "name": "Windblume Ode",
    "rarity": 4,
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Fleurfair"
   },
-  "reliquaryoftruth": {
-   "name": "Reliquary of Truth",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Sistrum"
-  },
-  "festeringdesire": {
-   "name": "Festering Desire",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Magnum"
-  },
-  "hakushinring": {
-   "name": "Hakushin Ring",
+  "flowingpurity": {
+   "name": "Flowing Purity",
    "rarity": 4,
    "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Bakufu"
+   "icon": "UI_EquipIcon_Catalyst_Vorpal"
   },
-  "theblacksword": {
-   "name": "The Black Sword",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Bloodstained"
-  },
-  "beaconofthereedsea": {
-   "name": "Beacon of the Reed Sea",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Deshret"
-  },
-  "engulfinglightning": {
-   "name": "Engulfing Lightning",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Narukami"
-  },
-  "songofbrokenpines": {
-   "name": "Song of Broken Pines",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Widsith"
-  },
-  "staffofhoma": {
-   "name": "Staff of Homa",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Homa"
-  },
-  "splendoroftranquilwaters": {
-   "name": "Splendor of Tranquil Waters",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Regalis"
-  },
-  "verdict": {
-   "name": "Verdict",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_GoldenVerdict"
-  },
-  "dullblade": {
-   "name": "Dull Blade",
-   "rarity": 1,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Blunt"
-  },
-  "athameartis": {
-   "name": "Athame Artis",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Motsognir"
-  },
-  "deathmatch": {
-   "name": "Deathmatch",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Gladiator"
-  },
-  "primordialjadewingedspear": {
-   "name": "Primordial Jade Winged-Spear",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Morax"
-  },
-  "prospectorsdrill": {
-   "name": "Prospector's Drill",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Mechanic"
-  },
-  "flameforgedinsight": {
-   "name": "Flame-Forged Insight",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Polilith"
-  },
-  "aquasimulacra": {
-   "name": "Aqua Simulacra",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Kirin"
-  },
-  "mistsplitterreforged": {
-   "name": "Mistsplitter Reforged",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Narukami"
-  },
-  "memoryofdust": {
-   "name": "Memory of Dust",
+  "angelosheptades": {
+   "name": "Angelos' Heptades",
    "rarity": 5,
    "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Kunwu"
+   "icon": "UI_EquipIcon_Catalyst_FairyGarden"
   },
-  "harbingerofdawn": {
-   "name": "Harbinger of Dawn",
-   "rarity": 3,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Dawn"
-  },
-  "thealleyflash": {
-   "name": "The Alley Flash",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Outlaw"
-  },
-  "starcallerswatch": {
-   "name": "Starcaller's Watch",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Figurines"
-  },
-  "dawningfrost": {
-   "name": "Dawning Frost",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Ziedas"
-  },
-  "wavebreakersfin": {
-   "name": "Wavebreaker's Fin",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Maria"
-  },
-  "tamayurateinoohanashi": {
-   "name": "Tamayuratei no Ohanashi",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Aoandon"
-  },
-  "sacrificialfragments": {
-   "name": "Sacrificial Fragments",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Fossil"
-  },
-  "kagotsurubeisshin": {
-   "name": "Kagotsurube Isshin",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Youtou"
-  },
-  "tidalshadow": {
-   "name": "Tidal Shadow",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Vorpal"
-  },
-  "thecatch": {
-   "name": "\"The Catch\"",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Mori"
-  },
-  "skywardharp": {
-   "name": "Skyward Harp",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Dvalin"
-  },
-  "fracturedhalo": {
-   "name": "Fractured Halo",
+  "lumidouceelegy": {
+   "name": "Lumidouce Elegy",
    "rarity": 5,
    "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Perdix"
-  },
-  "thebell": {
-   "name": "The Bell",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Troupe"
-  },
-  "whitetassel": {
-   "name": "White Tassel",
-   "rarity": 3,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Ruby"
-  },
-  "cashflowsupervision": {
-   "name": "Cashflow Supervision",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Wheatley"
-  },
-  "serenityscall": {
-   "name": "Serenity's Call",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Ilmarinen"
-  },
-  "thefirstgreatmagic": {
-   "name": "The First Great Magic",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Pledge"
-  },
-  "cinnabarspindle": {
-   "name": "Cinnabar Spindle",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Opus"
-  },
-  "etherlightspindlelute": {
-   "name": "Etherlight Spindlelute",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_SeeliesLute"
+   "icon": "UI_EquipIcon_Pole_Muguet"
   },
   "balladoftheboundlessblue": {
    "name": "Ballad of the Boundless Blue",
@@ -565,113 +67,17 @@
    "type": "catalyst",
    "icon": "UI_EquipIcon_Catalyst_DandelionPoem"
   },
-  "peakpatrolsong": {
-   "name": "Peak Patrol Song",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_XochitlsTube"
-  },
-  "lightoffoliarincision": {
-   "name": "Light of Foliar Incision",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Ayus"
-  },
-  "crimsonmoonssemblance": {
-   "name": "Crimson Moon's Semblance",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_BloodMoon"
-  },
-  "keyofkhajnisut": {
-   "name": "Key of Khaj-Nisut",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Deshret"
-  },
-  "rightfulreward": {
-   "name": "Rightful Reward",
+  "hamayumi": {
+   "name": "Hamayumi",
    "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Vorpal"
-  },
-  "oathsworneye": {
-   "name": "Oathsworn Eye",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Jyanome"
-  },
-  "tomeoftheeternalflow": {
-   "name": "Tome of the Eternal Flow",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Iudex"
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Bakufu"
   },
   "favoniuscodex": {
    "name": "Favonius Codex",
    "rarity": 4,
    "type": "catalyst",
    "icon": "UI_EquipIcon_Catalyst_Zephyrus"
-  },
-  "luxurioussealord": {
-   "name": "Luxurious Sea-Lord",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_MillenniaTuna"
-  },
-  "makhairaaquamarine": {
-   "name": "Makhaira Aquamarine",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Pleroma"
-  },
-  "lithicspear": {
-   "name": "Lithic Spear",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Lapis"
-  },
-  "apprenticesnotes": {
-   "name": "Apprentice's Notes",
-   "rarity": 1,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Apprentice"
-  },
-  "calamityofeshu": {
-   "name": "Calamity of Eshu",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_SacrificialNgombe"
-  },
-  "silvershowerheartstrings": {
-   "name": "Silvershower Heartstrings",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Arcdange"
-  },
-  "songofstillness": {
-   "name": "Song of Stillness",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Vorpal"
-  },
-  "prospectorsshovel": {
-   "name": "Prospector's Shovel",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Ilmarinen"
-  },
-  "blacktassel": {
-   "name": "Black Tassel",
-   "rarity": 3,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Noire"
-  },
-  "fangofthemountainking": {
-   "name": "Fang of the Mountain King",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_EmeraldSword"
   },
   "magicguide": {
    "name": "Magic Guide",
@@ -685,59 +91,29 @@
    "type": "claymore",
    "icon": "UI_EquipIcon_Claymore_RadianceSword"
   },
-  "harangeppakufutsu": {
-   "name": "Haran Geppaku Futsu",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Amenoma"
-  },
-  "kitaincrossspear": {
-   "name": "Kitain Cross Spear",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Bakufu"
-  },
   "sacrificialsword": {
    "name": "Sacrificial Sword",
    "rarity": 4,
    "type": "sword",
    "icon": "UI_EquipIcon_Sword_Fossil"
   },
-  "gestofthemightywolf": {
-   "name": "Gest of the Mighty Wolf",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_EnsisAquilonis"
+  "fleuvecendreferryman": {
+   "name": "Fleuve Cendre Ferryman",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Machination"
   },
-  "thrillingtalesofdragonslayers": {
-   "name": "Thrilling Tales of Dragon Slayers",
-   "rarity": 3,
+  "dawningfrost": {
+   "name": "Dawning Frost",
+   "rarity": 4,
    "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Pulpfic"
+   "icon": "UI_EquipIcon_Catalyst_Ziedas"
   },
-  "rainslasher": {
-   "name": "Rainslasher",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Perdue"
-  },
-  "katsuragikirinagamasa": {
-   "name": "Katsuragikiri Nagamasa",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Bakufu"
-  },
-  "serpentspine": {
-   "name": "Serpent Spine",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Kione"
-  },
-  "bloodsoakedruins": {
-   "name": "Bloodsoaked Ruins",
+  "jadefallssplendor": {
+   "name": "Jadefall's Splendor",
    "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_TummaLyhty"
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Morax"
   },
   "jadevista": {
    "name": "Jade Vista",
@@ -745,161 +121,17 @@
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_ShatteredMirror"
   },
-  "footprintoftherainbow": {
-   "name": "Footprint of the Rainbow",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Isikhulu"
-  },
-  "dialoguesofthedesertsages": {
-   "name": "Dialogues of the Desert Sages",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Caduceus"
-  },
-  "staffofthescarletsands": {
-   "name": "Staff of the Scarlet Sands",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Deshret"
-  },
-  "lithicblade": {
-   "name": "Lithic Blade",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Lapis"
-  },
-  "urakumisugiri": {
-   "name": "Uraku Misugiri",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Needle"
-  },
-  "surfsup": {
-   "name": "Surf's Up",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_MechaPufferfish"
-  },
-  "nocturnescurtaincall": {
-   "name": "Nocturne's Curtain Call",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Brisingamen"
-  },
-  "skywardpride": {
-   "name": "Skyward Pride",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Dvalin"
-  },
-  "amosbow": {
-   "name": "Amos' Bow",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Amos"
-  },
-  "amenomakageuchi": {
-   "name": "Amenoma Kageuchi",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Bakufu"
-  },
-  "dodocotales": {
-   "name": "Dodoco Tales",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Ludiharpastum"
-  },
-  "ironsting": {
-   "name": "Iron Sting",
-   "rarity": 4,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Exotic"
-  },
-  "azurelight": {
-   "name": "Azurelight",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_OuterSword"
-  },
-  "prototypestarglitter": {
-   "name": "Prototype Starglitter",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Proto"
-  },
-  "wanderingevenstar": {
-   "name": "Wandering Evenstar",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Pleroma"
-  },
-  "sacrificersstaff": {
-   "name": "Sacrificer's Staff",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Krivule"
-  },
-  "dragonsbane": {
-   "name": "Dragon's Bane",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Stardust"
-  },
   "sequenceofsolitude": {
    "name": "Sequence of Solitude",
    "rarity": 4,
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Stinger"
   },
-  "missivewindspear": {
-   "name": "Missive Windspear",
-   "rarity": 4,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Windvane"
-  },
-  "mappamare": {
-   "name": "Mappa Mare",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Exotic"
-  },
-  "earthshaker": {
-   "name": "Earth Shaker",
-   "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Isikhulu"
-  },
-  "sapwoodblade": {
-   "name": "Sapwood Blade",
+  "serenityscall": {
+   "name": "Serenity's Call",
    "rarity": 4,
    "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Arakalari"
-  },
-  "rainbowserpentsrainbow": {
-   "name": "Rainbow Serpent's Rain Bow",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_ElegguaBow"
-  },
-  "nightweaverslookingglass": {
-   "name": "Nightweaver's Looking Glass",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_MenulisRing"
-  },
-  "scionoftheblazingsun": {
-   "name": "Scion of the Blazing Sun",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Gurabad"
-  },
-  "tulaytullahsremembrance": {
-   "name": "Tulaytullah's Remembrance",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Alaya"
+   "icon": "UI_EquipIcon_Sword_Ilmarinen"
   },
   "recurvebow": {
    "name": "Recurve Bow",
@@ -907,11 +139,11 @@
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Curve"
   },
-  "sacrificialjade": {
-   "name": "Sacrificial Jade",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Yue"
+  "thunderingpulse": {
+   "name": "Thundering Pulse",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Narukami"
   },
   "polarstar": {
    "name": "Polar Star",
@@ -919,23 +151,149 @@
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Worldbane"
   },
-  "whiteblind": {
-   "name": "Whiteblind",
+  "moonpiercer": {
+   "name": "Moonpiercer",
    "rarity": 4,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Exotic"
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Arakalari"
   },
-  "cranesechoingcall": {
-   "name": "Crane's Echoing Call",
+  "sacrificersstaff": {
+   "name": "Sacrificer's Staff",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Krivule"
+  },
+  "cashflowsupervision": {
+   "name": "Cashflow Supervision",
    "rarity": 5,
    "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_MountainGale"
+   "icon": "UI_EquipIcon_Catalyst_Wheatley"
   },
-  "beginnersprotector": {
-   "name": "Beginner's Protector",
-   "rarity": 1,
+  "festeringdesire": {
+   "name": "Festering Desire",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Magnum"
+  },
+  "akuoumaru": {
+   "name": "Akuoumaru",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Maria"
+  },
+  "peakpatrolsong": {
+   "name": "Peak Patrol Song",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_XochitlsTube"
+  },
+  "primordialjadewingedspear": {
+   "name": "Primordial Jade Winged-Spear",
+   "rarity": 5,
    "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Gewalt"
+   "icon": "UI_EquipIcon_Pole_Morax"
+  },
+  "rainbowserpentsrainbow": {
+   "name": "Rainbow Serpent's Rain Bow",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_ElegguaBow"
+  },
+  "favoniuslance": {
+   "name": "Favonius Lance",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Zephyrus"
+  },
+  "amenomakageuchi": {
+   "name": "Amenoma Kageuchi",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Bakufu"
+  },
+  "dialoguesofthedesertsages": {
+   "name": "Dialogues of the Desert Sages",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Caduceus"
+  },
+  "kagurasverity": {
+   "name": "Kagura's Verity",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Narukami"
+  },
+  "tomeoftheeternalflow": {
+   "name": "Tome of the Eternal Flow",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Iudex"
+  },
+  "starcallerswatch": {
+   "name": "Starcaller's Watch",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Figurines"
+  },
+  "mouunsmoon": {
+   "name": "Mouun's Moon",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Maria"
+  },
+  "favoniuswarbow": {
+   "name": "Favonius Warbow",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Zephyrus"
+  },
+  "memoryofdust": {
+   "name": "Memory of Dust",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Kunwu"
+  },
+  "deathmatch": {
+   "name": "Deathmatch",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Gladiator"
+  },
+  "elegyfortheend": {
+   "name": "Elegy for the End",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Widsith"
+  },
+  "calamityqueller": {
+   "name": "Calamity Queller",
+   "rarity": 5,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Santika"
+  },
+  "dodocotales": {
+   "name": "Dodoco Tales",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Ludiharpastum"
+  },
+  "thestringless": {
+   "name": "The Stringless",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Troupe"
+  },
+  "harbingerofdawn": {
+   "name": "Harbinger of Dawn",
+   "rarity": 3,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Dawn"
+  },
+  "prototypeamber": {
+   "name": "Prototype Amber",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Proto"
   },
   "lionsroar": {
    "name": "Lion's Roar",
@@ -943,11 +301,35 @@
    "type": "sword",
    "icon": "UI_EquipIcon_Sword_Rockkiller"
   },
-  "sharpshootersoath": {
-   "name": "Sharpshooter's Oath",
-   "rarity": 3,
+  "symphonistofscents": {
+   "name": "Symphonist of Scents",
+   "rarity": 5,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Trident"
+  },
+  "xiphosmoonlight": {
+   "name": "Xiphos' Moonlight",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Pleroma"
+  },
+  "whiteblind": {
+   "name": "Whiteblind",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Exotic"
+  },
+  "thecatch": {
+   "name": "\"The Catch\"",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Mori"
+  },
+  "fadingtwilight": {
+   "name": "Fading Twilight",
+   "rarity": 4,
    "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Arjuna"
+   "icon": "UI_EquipIcon_Bow_Fallensun"
   },
   "theviridescenthunt": {
    "name": "The Viridescent Hunt",
@@ -955,17 +337,239 @@
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Viridescent"
   },
-  "wolfsgravestone": {
-   "name": "Wolf's Gravestone",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_Wolfmound"
+  "wavebreakersfin": {
+   "name": "Wavebreaker's Fin",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Maria"
   },
-  "freedomsworn": {
-   "name": "Freedom-Sworn",
+  "engulfinglightning": {
+   "name": "Engulfing Lightning",
+   "rarity": 5,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Narukami"
+  },
+  "sharpshootersoath": {
+   "name": "Sharpshooter's Oath",
+   "rarity": 3,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Arjuna"
+  },
+  "lostprayertothesacredwinds": {
+   "name": "Lost Prayer to the Sacred Winds",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Fourwinds"
+  },
+  "thealleyflash": {
+   "name": "The Alley Flash",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Outlaw"
+  },
+  "dullblade": {
+   "name": "Dull Blade",
+   "rarity": 1,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Blunt"
+  },
+  "missivewindspear": {
+   "name": "Missive Windspear",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Windvane"
+  },
+  "blacktassel": {
+   "name": "Black Tassel",
+   "rarity": 3,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Noire"
+  },
+  "finaleofthedeep": {
+   "name": "Finale of the Deep",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Vorpal"
+  },
+  "mistsplitterreforged": {
+   "name": "Mistsplitter Reforged",
    "rarity": 5,
    "type": "sword",
-   "icon": "UI_EquipIcon_Sword_Widsith"
+   "icon": "UI_EquipIcon_Sword_Narukami"
+  },
+  "prototypestarglitter": {
+   "name": "Prototype Starglitter",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Proto"
+  },
+  "songofstillness": {
+   "name": "Song of Stillness",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Vorpal"
+  },
+  "cinnabarspindle": {
+   "name": "Cinnabar Spindle",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Opus"
+  },
+  "fangofthemountainking": {
+   "name": "Fang of the Mountain King",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_EmeraldSword"
+  },
+  "ringofyaxche": {
+   "name": "Ring of Yaxche",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Isikhulu"
+  },
+  "katsuragikirinagamasa": {
+   "name": "Katsuragikiri Nagamasa",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Bakufu"
+  },
+  "lightoffoliarincision": {
+   "name": "Light of Foliar Incision",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Ayus"
+  },
+  "tulaytullahsremembrance": {
+   "name": "Tulaytullah's Remembrance",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Alaya"
+  },
+  "thedockhandsassistant": {
+   "name": "The Dockhand's Assistant",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Mechanic"
+  },
+  "crimsonmoonssemblance": {
+   "name": "Crimson Moon's Semblance",
+   "rarity": 5,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_BloodMoon"
+  },
+  "nightweaverslookingglass": {
+   "name": "Nightweaver's Looking Glass",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_MenulisRing"
+  },
+  "wanderingevenstar": {
+   "name": "Wandering Evenstar",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Pleroma"
+  },
+  "sacrificialgreatsword": {
+   "name": "Sacrificial Greatsword",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Fossil"
+  },
+  "prototypecrescent": {
+   "name": "Prototype Crescent",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Proto"
+  },
+  "dragonsbane": {
+   "name": "Dragon's Bane",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Stardust"
+  },
+  "reliquaryoftruth": {
+   "name": "Reliquary of Truth",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Sistrum"
+  },
+  "ashgravendrinkinghorn": {
+   "name": "Ash-Graven Drinking Horn",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_ConchSprayer"
+  },
+  "gestofthemightywolf": {
+   "name": "Gest of the Mighty Wolf",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_EnsisAquilonis"
+  },
+  "fracturedhalo": {
+   "name": "Fractured Halo",
+   "rarity": 5,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Perdix"
+  },
+  "splendoroftranquilwaters": {
+   "name": "Splendor of Tranquil Waters",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Regalis"
+  },
+  "whitetassel": {
+   "name": "White Tassel",
+   "rarity": 3,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Ruby"
+  },
+  "surfsup": {
+   "name": "Surf's Up",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_MechaPufferfish"
+  },
+  "favoniusgreatsword": {
+   "name": "Favonius Greatsword",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Zephyrus"
+  },
+  "sapwoodblade": {
+   "name": "Sapwood Blade",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Arakalari"
+  },
+  "ironsting": {
+   "name": "Iron Sting",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Exotic"
+  },
+  "skywardblade": {
+   "name": "Skyward Blade",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Dvalin"
+  },
+  "tidalshadow": {
+   "name": "Tidal Shadow",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Vorpal"
+  },
+  "skywardatlas": {
+   "name": "Skyward Atlas",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Dvalin"
+  },
+  "scionoftheblazingsun": {
+   "name": "Scion of the Blazing Sun",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Gurabad"
   },
   "solarpearl": {
    "name": "Solar Pearl",
@@ -973,35 +577,89 @@
    "type": "catalyst",
    "icon": "UI_EquipIcon_Catalyst_Resurrection"
   },
+  "flameforgedinsight": {
+   "name": "Flame-Forged Insight",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Polilith"
+  },
+  "silvershowerheartstrings": {
+   "name": "Silvershower Heartstrings",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Arcdange"
+  },
+  "urakumisugiri": {
+   "name": "Uraku Misugiri",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Needle"
+  },
+  "rainslasher": {
+   "name": "Rainslasher",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Perdue"
+  },
+  "forestregalia": {
+   "name": "Forest Regalia",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Arakalari"
+  },
+  "theblacksword": {
+   "name": "The Black Sword",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Bloodstained"
+  },
+  "songofbrokenpines": {
+   "name": "Song of Broken Pines",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Widsith"
+  },
+  "skywardpride": {
+   "name": "Skyward Pride",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Dvalin"
+  },
+  "mailedflower": {
+   "name": "Mailed Flower",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Fleurfair"
+  },
+  "hakushinring": {
+   "name": "Hakushin Ring",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Bakufu"
+  },
   "alleyhunter": {
    "name": "Alley Hunter",
    "rarity": 4,
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Outlaw"
   },
-  "eyeofperception": {
-   "name": "Eye of Perception",
+  "sacrificialbow": {
+   "name": "Sacrificial Bow",
    "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Truelens"
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Fossil"
   },
-  "fruitoffulfillment": {
-   "name": "Fruit of Fulfillment",
-   "rarity": 4,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_Arakalari"
-  },
-  "astralvulturescrimsonplumage": {
-   "name": "Astral Vulture's Crimson Plumage",
+  "staffofthescarletsands": {
+   "name": "Staff of the Scarlet Sands",
    "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Qoyllorsnova"
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Deshret"
   },
-  "hamayumi": {
-   "name": "Hamayumi",
-   "rarity": 4,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_Bakufu"
+  "beaconofthereedsea": {
+   "name": "Beacon of the Reed Sea",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Deshret"
   },
   "prototyperancour": {
    "name": "Prototype Rancour",
@@ -1009,11 +667,353 @@
    "type": "sword",
    "icon": "UI_EquipIcon_Sword_Proto"
   },
-  "lumidouceelegy": {
-   "name": "Lumidouce Elegy",
+  "calamityofeshu": {
+   "name": "Calamity of Eshu",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_SacrificialNgombe"
+  },
+  "aquilafavonia": {
+   "name": "Aquila Favonia",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Falcon"
+  },
+  "aquasimulacra": {
+   "name": "Aqua Simulacra",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Kirin"
+  },
+  "primordialjadecutter": {
+   "name": "Primordial Jade Cutter",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Morax"
+  },
+  "staffofhoma": {
+   "name": "Staff of Homa",
    "rarity": 5,
    "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_Muguet"
+   "icon": "UI_EquipIcon_Pole_Homa"
+  },
+  "keyofkhajnisut": {
+   "name": "Key of Khaj-Nisut",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Deshret"
+  },
+  "verdict": {
+   "name": "Verdict",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_GoldenVerdict"
+  },
+  "fruitoffulfillment": {
+   "name": "Fruit of Fulfillment",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Arakalari"
+  },
+  "kagotsurubeisshin": {
+   "name": "Kagotsurube Isshin",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Youtou"
+  },
+  "wolffang": {
+   "name": "Wolf-Fang",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Boreas"
+  },
+  "thebell": {
+   "name": "The Bell",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Troupe"
+  },
+  "serpentspine": {
+   "name": "Serpent Spine",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Kione"
+  },
+  "balladofthefjords": {
+   "name": "Ballad of the Fjords",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Shanty"
+  },
+  "wolfsgravestone": {
+   "name": "Wolf's Gravestone",
+   "rarity": 5,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Wolfmound"
+  },
+  "lithicblade": {
+   "name": "Lithic Blade",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Lapis"
+  },
+  "prospectorsdrill": {
+   "name": "Prospector's Drill",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Mechanic"
+  },
+  "earthshaker": {
+   "name": "Earth Shaker",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Isikhulu"
+  },
+  "thewidsith": {
+   "name": "The Widsith",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Troupe"
+  },
+  "nocturnescurtaincall": {
+   "name": "Nocturne's Curtain Call",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Brisingamen"
+  },
+  "luxurioussealord": {
+   "name": "Luxurious Sea-Lord",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_MillenniaTuna"
+  },
+  "oathsworneye": {
+   "name": "Oathsworn Eye",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Jyanome"
+  },
+  "skywardharp": {
+   "name": "Skyward Harp",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Dvalin"
+  },
+  "talkingstick": {
+   "name": "Talking Stick",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_BeastTamer"
+  },
+  "eyeofperception": {
+   "name": "Eye of Perception",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Truelens"
+  },
+  "crescentpike": {
+   "name": "Crescent Pike",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Exotic"
+  },
+  "cranesechoingcall": {
+   "name": "Crane's Echoing Call",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_MountainGale"
+  },
+  "astralvulturescrimsonplumage": {
+   "name": "Astral Vulture's Crimson Plumage",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Qoyllorsnova"
+  },
+  "thrillingtalesofdragonslayers": {
+   "name": "Thrilling Tales of Dragon Slayers",
+   "rarity": 3,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Pulpfic"
+  },
+  "apprenticesnotes": {
+   "name": "Apprentice's Notes",
+   "rarity": 1,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Apprentice"
+  },
+  "toukaboushigure": {
+   "name": "Toukabou Shigure",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Kasabouzu"
+  },
+  "tamayurateinoohanashi": {
+   "name": "Tamayuratei no Ohanashi",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Aoandon"
+  },
+  "everlastingmoonglow": {
+   "name": "Everlasting Moonglow",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Kaleido"
+  },
+  "harangeppakufutsu": {
+   "name": "Haran Geppaku Futsu",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Amenoma"
+  },
+  "rightfulreward": {
+   "name": "Rightful Reward",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Vorpal"
+  },
+  "lithicspear": {
+   "name": "Lithic Spear",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Lapis"
+  },
+  "freedomsworn": {
+   "name": "Freedom-Sworn",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Widsith"
+  },
+  "vividnotions": {
+   "name": "Vivid Notions",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_VaresaTransformer"
+  },
+  "etherlightspindlelute": {
+   "name": "Etherlight Spindlelute",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_SeeliesLute"
+  },
+  "moonweaversdawn": {
+   "name": "Moonweaver's Dawn",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Miekka"
+  },
+  "favoniussword": {
+   "name": "Favonius Sword",
+   "rarity": 4,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Zephyrus"
+  },
+  "ultimateoverlordsmegamagicsword": {
+   "name": "\"Ultimate Overlord's Mega Magic Sword\"",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Champion"
+  },
+  "azurelight": {
+   "name": "Azurelight",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_OuterSword"
+  },
+  "makhairaaquamarine": {
+   "name": "Makhaira Aquamarine",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Pleroma"
+  },
+  "athousandfloatingdreams": {
+   "name": "A Thousand Floating Dreams",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Ayus"
+  },
+  "bloodsoakedruins": {
+   "name": "Bloodsoaked Ruins",
+   "rarity": 5,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_TummaLyhty"
+  },
+  "hunterspath": {
+   "name": "Hunter's Path",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Ayus"
+  },
+  "kitaincrossspear": {
+   "name": "Kitain Cross Spear",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Bakufu"
+  },
+  "mappamare": {
+   "name": "Mappa Mare",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Exotic"
+  },
+  "athameartis": {
+   "name": "Athame Artis",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Motsognir"
+  },
+  "thefirstgreatmagic": {
+   "name": "The First Great Magic",
+   "rarity": 5,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Pledge"
+  },
+  "slingshot": {
+   "name": "Slingshot",
+   "rarity": 3,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Sling"
+  },
+  "footprintoftherainbow": {
+   "name": "Footprint of the Rainbow",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Isikhulu"
+  },
+  "sacrificialfragments": {
+   "name": "Sacrificial Fragments",
+   "rarity": 4,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Fossil"
+  },
+  "absolution": {
+   "name": "Absolution",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_Estoc"
+  },
+  "snowtombedstarsilver": {
+   "name": "Snow-Tombed Starsilver",
+   "rarity": 4,
+   "type": "claymore",
+   "icon": "UI_EquipIcon_Claymore_Dragonfell"
+  },
+  "prospectorsshovel": {
+   "name": "Prospector's Shovel",
+   "rarity": 4,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Ilmarinen"
+  },
+  "beginnersprotector": {
+   "name": "Beginner's Protector",
+   "rarity": 1,
+   "type": "polearm",
+   "icon": "UI_EquipIcon_Pole_Gewalt"
+  },
+  "chainbreaker": {
+   "name": "Chain Breaker",
+   "rarity": 4,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Isikhulu"
   }
  },
  "fiveStars": {

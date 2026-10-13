@@ -140,13 +140,13 @@
     "substats": "Substats",
     "details": "Team details",
     "close": "Close",
-    "kqmCons": "KQM constellations",
-    "kqmArt": "KQM artifacts",
-    "kqmConsHint": "5★ at C0 (or forced C1), 4★ at C6",
+    "kqmArt": "KQMS: artifacts",
     "kqmArtHint": "40 substat rolls, at least 2 of each",
     "notKqm": "Does not follow the standard",
     "level": "Level",
-    "talents": "Talents"
+    "talents": "Talents",
+    "kqmFull": "KQMS: full compliance",
+    "kqmFullHint": "Constellations and artifacts both follow the standard: 5★ at C0 (up to C1 when C1 is free), 4★ at C6"
   },
   "feedback": {
     "title": "Leave feedback",
@@ -169,10 +169,9 @@
     "show": "Show filters",
     "hide": "Hide filters",
     "reset": "Reset filters",
-    "kqmOnly": "KQM standard only",
-    "kqmConsOnly": "KQM constellations only",
-    "kqmArtOnly": "KQM artifacts only",
-    "active": "{n} active"
+    "kqmArtOnly": "Only KQMS artifacts",
+    "active": "{n} active",
+    "kqmFullOnly": "Only full KQMS compliance"
   },
   "builder": {
     "content": "Content: ",
