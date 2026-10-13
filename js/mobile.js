@@ -72,6 +72,9 @@ function moveInto(node, target) {
 function activeFilterCount() {
   let n = document.querySelectorAll("#view-controls .filter-chip.selected").length;
   n += document.querySelectorAll("#settings-card input[type=checkbox]:checked").length;
+  for (const sel of document.querySelectorAll("#settings-card select[data-default]")) {
+    if (sel.value !== sel.dataset.default) n++;
+  }
   return n;
 }
 

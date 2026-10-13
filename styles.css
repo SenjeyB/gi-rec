@@ -585,3 +585,56 @@ body.sheet-open{overflow:hidden}
     color:#041322;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
   .filters-fab-count[hidden]{display:none}
 }
+
+/* ===================== карточки инвентаря: ничего не шире самой карточки ===== */
+/* Степпер — три резиновые ячейки на всю ширину карточки, а не набор кнопок
+   фиксированной ширины: на узкой карточке те вылезали за край. */
+.inv-card-main{flex:0 0 auto}
+.inv-card-foot{margin-top:auto;min-width:0}            /* прижат к низу: степперы в ряду на одной линии */
+.inv-stepper{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;
+  gap:3px;width:100%;max-width:132px;min-width:0}
+.inv-step{width:100%;min-width:0;height:24px}
+.inv-step-value{min-width:24px;padding:0 2px}
+.inv-min-badge{display:none}
+/* крестик — в углу карточки; сетка ниже оставляет иконке поля, чтобы он её не перекрывал */
+.inv-remove{top:4px;right:4px;width:20px;height:20px;font-size:10px}
+.inv-grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
+
+@media (max-width:640px){
+  /* на телефоне три колонки: в четыре (~73px) не помещались ни степпер, ни крестик рядом с иконкой */
+  .inv-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
+  .inv-portrait{width:46px;height:46px}
+  .inv-card-weapon .inv-portrait{width:46px;height:46px}
+  .inv-card-main{padding:8px 4px 6px}
+}
+@media (pointer: coarse){
+  .inv-step{width:100%;height:30px}
+}
+@media (max-width:640px){
+  .inv-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
+}
+@media (max-width:380px){
+  /* самые узкие экраны: иконка и крестик чуть меньше, чтобы не сходились */
+  .inv-portrait,.inv-card-weapon .inv-portrait{width:42px;height:42px}
+  .inv-remove{top:3px;right:3px;width:18px;height:18px}
+}
+
+/* ------------------------------------------- сборки отряда на разных созвездиях */
+.td-variants{margin:0 0 12px;padding:8px 0 0;border-top:1px solid var(--line)}
+.td-variant{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;margin-top:4px;border-radius:8px;
+  border:1px solid var(--line);background:rgba(255,255,255,.02);color:inherit;cursor:pointer;text-align:left}
+.td-variant:hover{background:rgba(96,165,250,.08);border-color:rgba(96,165,250,.35)}
+.td-variant.is-current{cursor:default;border-color:rgba(96,165,250,.55);background:rgba(96,165,250,.10)}
+.td-variant-members{display:flex;gap:4px;flex:0 0 auto}
+.td-variant-cell{position:relative;width:30px;height:30px;line-height:0}
+.td-variant-cell img{width:30px;height:30px;border-radius:6px;object-fit:cover}
+.td-variant-cell.has-five img{box-shadow:0 0 0 1.5px rgba(245,158,11,.75)}
+.td-variant-cons{position:absolute;left:-2px;bottom:-3px;font-size:8px;line-height:1;padding:1px 3px;border-radius:3px;
+  background:#0f172a;border:1px solid var(--line);color:#bfdbfe;font-weight:700}
+.td-variant-tag{font-size:10px;padding:1px 6px;border-radius:999px;background:rgba(245,158,11,.14);color:#fcd34d;white-space:nowrap}
+.td-variant-tag.is-current{background:rgba(96,165,250,.2);color:#bfdbfe}
+.td-variant-dps{margin-left:auto;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums}
+@media (max-width:640px){
+  .td-variant{flex-wrap:wrap}
+  .td-variant-cell,.td-variant-cell img{width:26px;height:26px}
+}

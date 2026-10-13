@@ -154,6 +154,9 @@ export async function start(ctx){
   // строгий срез под инвентарь — для сборщика и подсказок, где отряд должен
   // реально собираться на тех созвездиях и оружии, что есть у игрока
   let strictTeams = [];
+  // общий срез без учёта инвентаря: стандартные созвездия для всех — для
+  // «Все отряды», где рейтинг не должен зависеть от того, что есть у игрока
+  let baseTeams = [];
   if(!names){
     document.body.prepend(createEl('div','small',T('errors.loadData','Failed to load data. Check that names.json and data/db.json are next to index.html.')))
     return null;
@@ -172,15 +175,18 @@ export async function start(ctx){
   let parsedTeams = [];
   let teamsByMember = new Map();
 
-  function rebuildTeams(list, strictList){
+  const toTeam = (t) => ({
+    members: t.chars ? t.chars.slice() : [],
+    dps: t.dps != null ? t.dps : 0,
+    build: t.build || null, src: t.src || null, sims: t.sims || 0,
+    kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
+    teamIndex: t.teamIndex, buildIndex: t.buildIndex,
+  });
+
+  function rebuildTeams(list, strictList, baseList){
     teams = list || [];
-    strictTeams = (strictList || list || []).map(t => ({
-      members: t.chars ? t.chars.slice() : [],
-      dps: t.dps != null ? t.dps : 0,
-      build: t.build || null, src: t.src || null, sims: t.sims || 0,
-      kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
-      teamIndex: t.teamIndex, buildIndex: t.buildIndex,
-    }));
+    strictTeams = (strictList || list || []).map(toTeam);
+    baseTeams = (baseList || list || []).map(toTeam);
     parsedTeams = teams.map(t => ({
       members: t.chars
         ? t.chars.slice()
@@ -203,7 +209,7 @@ export async function start(ctx){
       }
     }
   }
-  rebuildTeams(teams, (ctx && ctx.strictTeams));
+  rebuildTeams(teams, (ctx && ctx.strictTeams), (ctx && ctx.baseTeams));
 
   const charactersDiv = document.getElementById('characters');
   const ownedFiltersHost = document.getElementById('owned-filters');
@@ -894,7 +900,12 @@ export async function start(ctx){
     const hasElementFilter = elementsFilter.size > 0;
     const hasWeaponFilter = weaponsFilter.size > 0;
 
-    let allTeams = parsedTeams.map(t => {
+    // «Все отряды» — вся база на стандартных созвездиях, без оглядки на инвентарь.
+    // Раньше обе опции резались настройкой «Готов получить», и при нуле «все»
+    // совпадали с «доступными». «Доступные» — только то, что реально собирается:
+    // ваши персонажи на ваших созвездиях и с вашим 5★ оружием.
+    const source = showMode === 'available' ? strictTeams : baseTeams;
+    let allTeams = source.map(t => {
       const missingCount = t.members.filter(m => !owned.has(m)).length;
       return {
         members: t.members,
@@ -905,8 +916,6 @@ export async function start(ctx){
         missingCount
       };
     });
-
-    allTeams = allTeams.filter(team => team.missingCount <= mode);
 
     if(showMode === 'available'){
       allTeams = allTeams.filter(team => {
@@ -1030,9 +1039,9 @@ export async function start(ctx){
 
   return {
     // новый список отрядов (сменился инвентарь или настройки фильтра)
-    refreshTeams(list, strictList){
+    refreshTeams(list, strictList, baseList){
       keepScroll(()=>{
-        rebuildTeams(list, strictList);
+        rebuildTeams(list, strictList, baseList);
         renderOwnedCharacters();
         renderActiveView();
       });

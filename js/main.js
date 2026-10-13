@@ -19,7 +19,7 @@ let refs = null;
 let app = null;
 let syncing = false;
 
-const settings = { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false };
+const settings = { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false, consMode: "mine" };
 
 async function loadJSON(path) {
   const resp = await fetch(path, { cache: "no-cache" });
@@ -37,6 +37,7 @@ function loadSettings() {
     // до 2.2.1 фильтр назывался kqmCons и проверял только созвездия
     settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
     settings.kqmArt = !!raw.kqmArt;
+    settings.consMode = ["standard", "mine", "any"].includes(raw.consMode) ? raw.consMode : "mine";
   } catch { /* нет сохранённых — остаются значения по умолчанию */ }
 }
 
@@ -52,6 +53,7 @@ function currentTeams() {
   return db.query({
     cons,
     weapons,
+    consMode: settings.consMode,
     allowFiveStar: settings.allowFiveStar,
     onlyMyWeapons: settings.onlyMyWeapons,
     kqmFull: settings.kqmFull,
@@ -76,9 +78,22 @@ function strictTeams() {
   });
 }
 
+/** Срез без учёта инвентаря: у всех стандартные созвездия. Явные фильтры из
+ *  настроек (5★, KQMS, «только моё оружие») при этом действуют. */
+function baseTeams() {
+  return db.query({
+    weapons: store.weaponCopies(),
+    consMode: settings.consMode === "any" ? "any" : "standard",
+    allowFiveStar: settings.allowFiveStar,
+    onlyMyWeapons: settings.onlyMyWeapons,
+    kqmFull: settings.kqmFull,
+    kqmArt: settings.kqmArt,
+  });
+}
+
 function refresh() {
   if (!app) return;
-  app.refreshTeams(currentTeams(), strictTeams());
+  app.refreshTeams(currentTeams(), strictTeams(), baseTeams());
   updateFilterHint();
 }
 
@@ -108,10 +123,21 @@ function wireSettings() {
       refresh();
     });
   }
+  const consSel = document.getElementById("cons-mode");
+  if (consSel) {
+    consSel.value = settings.consMode;
+    consSel.addEventListener("change", () => {
+      settings.consMode = consSel.value;
+      saveSettings();
+      refresh();
+    });
+  }
   const reset = document.getElementById("reset-filters");
   if (reset) {
     reset.addEventListener("click", () => {
-      Object.assign(settings, { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false });
+      Object.assign(settings, { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false, consMode: "mine" });
+      const cm = document.getElementById("cons-mode");
+      if (cm) cm.value = "mine";
       saveSettings();
       for (const [id, key] of [["allow-five-star", "allowFiveStar"], ["only-my-weapons", "onlyMyWeapons"],
                                ["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
@@ -220,7 +246,7 @@ function syncFromLegacy() {
       keys.push(store.keyOfDisplay(item) || item);
     }
     store.setCharacterSet(keys);
-    if (app) app.refreshTeams(currentTeams(), strictTeams());
+    if (app) app.refreshTeams(currentTeams(), strictTeams(), baseTeams());
   } finally { syncing = false; }
 }
 
@@ -283,7 +309,7 @@ async function boot() {
   // набор по умолчанию и сразу шлёт girec:owned-changed — если слушателя ещё нет,
   // инвентарь останется пустым, пока пользователь что-нибудь не тронет.
   bridge();
-  app = await startApp({ names, teams: currentTeams(), strictTeams: strictTeams(), refs });
+  app = await startApp({ names, teams: currentTeams(), strictTeams: strictTeams(), baseTeams: baseTeams(), refs });
 
   // и подтягиваем то, что app.js успел записать до появления слушателя
   syncFromLegacy();

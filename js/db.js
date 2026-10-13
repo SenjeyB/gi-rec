@@ -85,9 +85,16 @@ export function query(opts = {}) {
   const needFull = !!opts.kqmFull;
   const needArt = !!opts.kqmArt;
   const strict = !!opts.strictCons;
+  // Потолок созвездий: standard — у всех стандарт (5★ C0 или бесплатный C1, 4★ C6),
+  // инвентарь не учитывается; mine — свои созвездия поднимают потолок; any — любые
+  // сборки до C6. Сборки на повышенных созвездиях в базе есть всегда, вопрос
+  // только в том, какую из них показывать.
+  const consMode = opts.consMode || "mine";
 
   const capFor = (charKey) => {
     const base = baseCap[charKey] === undefined ? 6 : baseCap[charKey];
+    if (consMode === "any" && !strict) return 6;
+    if (consMode === "standard" && !strict) return base;
     const own = invCons[charKey];
     if (own === undefined) return base;
     // В строгом режиме (сборщик, подсказки) у 5* берём ровно то созвездие, что
@@ -205,5 +212,27 @@ export async function loadDetails(teamIndex, buildIndex) {
   return entry.members.map((m) => ({
     main: (m.main || []).map((si) => db.dict.stats[si]),
     subs: order.map((stat, k) => ({ stat, rolls: (m.subs || [])[k] || 0 })),
+  }));
+}
+
+/**
+ * Все сборки отряда без фильтров — для сравнения в карточке: сколько даёт C2
+ * или C6 относительно стандарта. Порядок — по убыванию DPS, как в базе.
+ */
+export function teamBuilds(teamIndex) {
+  if (!db || !db.teams[teamIndex]) return [];
+  const team = db.teams[teamIndex];
+  const charKeys = team.chars.map((i) => db.dict.chars[i]);
+  return team.builds.map((b, bi) => ({
+    teamIndex,
+    buildIndex: bi,
+    chars: charKeys,
+    dps: b.dps,
+    sims: b.sims,
+    src: b.src,
+    kqmCons: !!b.kqmCons,
+    kqmArt: !!b.kqmArt,
+    build: expandBuild(team, b),
+    aboveStandard: b.members.some((m, i) => m.cons > (baseCap[charKeys[i]] ?? 6)),
   }));
 }

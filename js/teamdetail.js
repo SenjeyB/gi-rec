@@ -3,7 +3,7 @@
 
 import { t } from "./i18n.js";
 import { charLabel, weaponLabel, setLabel, statLabel } from "./labels.js";
-import { loadDetails } from "./db.js";
+import { loadDetails, teamBuilds } from "./db.js";
 
 // Цена одного ролла сабстата по стандарту KQM (5★ артефакт). В базе хранится
 // число роллов, реальное значение — роллы × цена ролла.
@@ -129,12 +129,47 @@ function memberBlock(slot, stats) {
   return card;
 }
 
+const fmtDps = (n) => Math.round(n || 0).toLocaleString("en-US").replace(/,/g, " ");
+
 /**
- * Собирает панель подробностей.
- * @param {object} team запись из js/db.js (нужны build, dps, sims, src, kqm*)
+ * Сборки этого отряда на разных созвездиях и оружии — чтобы игрок с персонажем
+ * на C2 видел, сколько это даёт относительно стандарта. Клик переключает
+ * карточку на выбранную сборку.
  */
-export async function buildPanel(team) {
-  const panel = el("div", "team-detail");
+function variantsBlock(team, onPick) {
+  const builds = teamBuilds(team.teamIndex);
+  if (builds.length < 2) return null;
+  const box = el("div", "td-variants");
+  box.appendChild(el("div", "td-stats-title", t("team.variants", { n: builds.length })));
+  for (const v of builds) {
+    const current = v.buildIndex === team.buildIndex;
+    const row = el("button", `td-variant${current ? " is-current" : ""}`);
+    row.type = "button";
+    const who = el("div", "td-variant-members");
+    v.build.forEach((slot) => {
+      const cell = el("span", "td-variant-cell");
+      const pic = new Image();
+      pic.loading = "lazy";
+      pic.src = `characters/${slot.char}.png`;
+      pic.alt = charLabel(slot.char);
+      pic.title = `${charLabel(slot.char)} C${slot.cons}`;
+      cell.appendChild(pic);
+      cell.appendChild(el("span", "td-variant-cons", `C${slot.cons}`));
+      if (slot.fiveStar) cell.classList.add("has-five");
+      who.appendChild(cell);
+    });
+    row.appendChild(who);
+    if (v.aboveStandard) row.appendChild(el("span", "td-variant-tag", t("team.aboveStd")));
+    if (current) row.appendChild(el("span", "td-variant-tag is-current", t("team.shown")));
+    row.appendChild(el("span", "td-variant-dps", fmtDps(v.dps)));
+    if (!current) row.addEventListener("click", (e) => { e.stopPropagation(); onPick(v); });
+    box.appendChild(row);
+  }
+  return box;
+}
+
+async function fillPanel(panel, team) {
+  panel.innerHTML = "";
 
   const head = el("div", "td-head");
   head.appendChild(el("div", "td-title", t("team.details")));
@@ -152,6 +187,9 @@ export async function buildPanel(team) {
   head.appendChild(meta);
   panel.appendChild(head);
 
+  const variants = variantsBlock(team, (v) => fillPanel(panel, v));
+  if (variants) panel.appendChild(variants);
+
   const grid = el("div", "td-members");
   panel.appendChild(grid);
 
@@ -160,7 +198,17 @@ export async function buildPanel(team) {
   (team.build || []).forEach((slot, i) => {
     grid.appendChild(memberBlock(slot, stats && stats[i]));
   });
+}
 
+/**
+ * Собирает панель подробностей.
+ * @param {object} team запись из js/db.js (нужны build, dps, sims, src, kqm*, teamIndex, buildIndex)
+ */
+export async function buildPanel(team) {
+  const panel = el("div", "team-detail");
+  // клики внутри панели не должны всплывать до строки отряда и закрывать её
+  panel.addEventListener("click", (e) => e.stopPropagation());
+  await fillPanel(panel, team);
   return panel;
 }
 

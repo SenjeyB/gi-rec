@@ -30,7 +30,11 @@
     "characters_4": "4 characters",
     "allowFiveStar": "Allow 5★ weapons",
     "onlyMyWeapons": "Only my 5★ weapons",
-    "onlyMyWeaponsHint": "Restrict 5★ weapon teams to the ones you marked as owned in Account."
+    "onlyMyWeaponsHint": "Restrict 5★ weapon teams to the ones you marked as owned in Account.",
+    "consMode": "Constellations:",
+    "consStandard": "Standard (5★ C0, 4★ C6)",
+    "consMine": "With my constellations",
+    "consAny": "Any, up to C6"
   },
   "roster": {
     "title": "Your characters",
@@ -74,7 +78,7 @@
     "tabCharacters": "Characters",
     "tabWeapons": "5★ Weapons",
     "charactersTitle": "Your characters",
-    "charactersHint": "Click a character to own them. For 5★ characters set the constellation with − and +.",
+    "charactersHint": "Tap a character to mark them as owned. For 5★ characters set the constellation with − and +; those whose C1 is free start at C1 and can't go lower.",
     "weaponsTitle": "Your 5★ weapons",
     "weaponsHint": "Add your 5★ weapons one copy at a time, like the in-game inventory: if you own two of the same weapon, add both.",
     "weaponsNotInDb": "Not used by any team in the database yet",
@@ -146,7 +150,10 @@
     "level": "Level",
     "talents": "Talents",
     "kqmFull": "KQMS: full compliance",
-    "kqmFullHint": "Constellations and artifacts both follow the standard: 5★ at C0 (up to C1 when C1 is free), 4★ at C6"
+    "kqmFullHint": "Constellations and artifacts both follow the standard: 5★ at C0 (up to C1 when C1 is free), 4★ at C6",
+    "variants": "Builds of this team ({n})",
+    "shown": "shown",
+    "aboveStd": "above standard"
   },
   "feedback": {
     "title": "Leave feedback",

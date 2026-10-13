@@ -1,6 +1,12 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.3.0 (2026/10/13)
+- **Teams at any constellation.** A new “Constellations” setting offers “Standard (5★ C0, 4★ C6)”, “With my constellations” (the previous behaviour) and “Any, up to C6”. “Any” unlocks teams that only exist at high constellations: +111 teams, +150 with 5★ weapons.
+- **Every build of a team.** An expanded team now lists all of its builds from the database, with constellations, weapons and DPS. Builds above the standard are marked, and any of them can be opened to see its stats. 819 teams have more than one build.
+- Fixed “All teams” in Best Teams still showing only your characters at your constellations. It now really shows every team, with missing characters highlighted.
+- Fixed the inventory cards on phones: the constellation and refinement buttons no longer spill out of the card, the remove button no longer covers the icon, and rows line up.
+
 ## 2.2.1 (2026/10/13)
 - KQM renamed to **KQMS** (KQM Standards).
 - The “constellations” badge is replaced by **“full compliance”**: it turns green only when both constellations and artifacts follow the standard. The filter under Advanced works the same way.

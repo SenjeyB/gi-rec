@@ -93,10 +93,11 @@ function searchBox(value, onInput) {
   return input;
 }
 
-function stepper(value, min, max, onChange, fmt) {
+function stepper(value, min, max, onChange, fmt, minNote) {
   const box = el("div", "inv-stepper");
   const dec = button("inv-step", "−");
   dec.disabled = value <= min;
+  if (dec.disabled && minNote) dec.title = minNote;
   dec.addEventListener("click", (e) => { e.stopPropagation(); onChange(value - 1); });
   const out = el("span", "inv-step-value", fmt(value));
   const inc = button("inv-step", "+");
@@ -174,17 +175,15 @@ function characterCard(key) {
   if (owned && store.isFiveStar(key)) {
     const min = store.minCons(key);
     const row = el("div", "inv-card-foot");
+    // минимум (бесплатный C1) виден по заблокированной «−»; отдельный бейдж
+    // рядом со степпером на телефоне не помещался в карточку
     row.appendChild(stepper(store.consOf(key), min, 6,
       (v) => {
         local(() => store.setCons(key, v));
         card.replaceWith(characterCard(key));
       },
-      (v) => `${t("inventory.consShort")}${v}`));
-    if (min > 0) {
-      const badge = el("span", "inv-min-badge", `${t("inventory.consShort")}${min}`);
-      badge.title = t("inventory.minC1Note");
-      row.appendChild(badge);
-    }
+      (v) => `${t("inventory.consShort")}${v}`,
+      min > 0 ? t("inventory.minC1Note") : ""));
     card.appendChild(row);
   }
   return card;
