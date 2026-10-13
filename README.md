@@ -2,10 +2,24 @@
 
 Genshin Impact Recommendations service.
 
-- Uses teams from GCSim: https://simpact.app/
-- All 5* considered as C0 (characters marked with a C1 badge use C1 data) and 4* considered as C6
-- Mainly uses teams calculated with KQMs
+- Teams come from the KQM sim database: https://db.kqm.gg/database
+- Constellations are filters: by default 5★ at C0 (or a free C1), 4★ at C6; your inventory or the "Any" setting can raise them
+- Builds are checked against KQM Standards (constellations and artifacts)
+- Current Spiral Abyss and Stygian Onslaught enemies come from the Genshin Impact wiki: https://genshin-impact.fandom.com
 
 Current link: https://senjeyb.github.io/gi-rec/
 
 Hosted by Github Pages
+
+## Data updates
+
+Data is refreshed by GitHub Actions (`.github/workflows/update-data.yml`):
+
+- daily — Spiral Abyss and Stygian Onslaught (`tools/build_content.py`)
+- weekly — the team database (`tools/build_db.py`)
+
+A commit is made only when the data actually changes. To run it by hand: Actions → Update data → Run workflow.
+Locally: `python tools/build_content.py`, `python tools/build_db.py --icons` (needs Pillow for icons).
+
+New characters still need a manual entry in `names.json` and a portrait in `characters/`; the workflow
+prints a warning when the sims contain characters it doesn't know.

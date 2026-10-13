@@ -1,0 +1,101 @@
+# Автообновление данных сайта.
+#   каждый день  — Витая Бездна и Мрачный натиск (tools/build_content.py, вики)
+#   раз в неделю — база отрядов из симов KQM (tools/build_db.py)
+# Коммит появляется, только если данные действительно изменились; GitHub Pages
+# после него пересобирает сайт сам. Запустить вручную: Actions → Update data →
+# Run workflow.
+name: Update data
+
+on:
+  schedule:
+    - cron: "20 5 * * *"    # ежедневно 05:20 UTC — Бездна и Натиск
+    - cron: "40 4 * * 1"    # по понедельникам 04:40 UTC — база отрядов
+  workflow_dispatch:
+    inputs:
+      what:
+        description: Что обновить
+        type: choice
+        options: [all, content, teams]
+        default: all
+  push:
+    branches: [main]
+    paths:
+      - "tools/**"
+      - ".github/workflows/update-data.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Pillow (иконки оружия и сетов)
+        run: pip install --quiet pillow
+
+      - name: Что запускать
+        id: plan
+        run: |
+          content=false; teams=false
+          case "${{ github.event_name }}" in
+            schedule)
+              if [ "${{ github.event.schedule }}" = "40 4 * * 1" ]; then teams=true; else content=true; fi ;;
+            workflow_dispatch)
+              case "${{ inputs.what }}" in
+                content) content=true ;;
+                teams) teams=true ;;
+                *) content=true; teams=true ;;
+              esac ;;
+            *) content=true; teams=true ;;
+          esac
+          echo "content=$content" >> "$GITHUB_OUTPUT"
+          echo "teams=$teams" >> "$GITHUB_OUTPUT"
+
+      # Шаги не валят друг друга: если вики недоступна, база отрядов всё равно
+      # обновится, а упавший шаг подсветит весь запуск красным в конце.
+      - name: Бездна и Натиск
+        id: content
+        if: steps.plan.outputs.content == 'true'
+        continue-on-error: true
+        run: python tools/build_content.py
+
+      - name: База отрядов
+        id: teams
+        if: steps.plan.outputs.teams == 'true'
+        continue-on-error: true
+        run: python tools/build_db.py --icons
+
+      - name: Коммит изменений
+        run: |
+          git add data enemies weapons sets
+          if git diff --cached --quiet; then
+            echo "Данные не изменились — коммитить нечего"
+            exit 0
+          fi
+          parts=""
+          git diff --cached --quiet -- data/content.json enemies || parts="Abyss/Onslaught"
+          git diff --cached --quiet -- data/db.json data/details data/refs.json data/names.en.json data/names.ru.json weapons sets \
+            || parts="${parts:+$parts, }teams"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: update ${parts:-data}"
+          # пока шёл запуск, в main могли что-то запушить
+          git pull --rebase --quiet origin main
+          git push origin HEAD:main
+
+      - name: Итог
+        if: steps.content.outcome == 'failure' || steps.teams.outcome == 'failure'
+        run: |
+          echo "::error::Шаг обновления упал: content=${{ steps.content.outcome }}, teams=${{ steps.teams.outcome }}"
+          exit 1

@@ -1,0 +1,486 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+build_content.py
+
+Текущий цикл Витой Бездны (12 этаж) и Мрачного натиска для вкладки «Сборка
+отряда» в gi-rec. Источник — вики Genshin Impact на Fandom (MediaWiki API):
+  Spiral Abyss/Floors/<дата>      — враги по залам и половинам, аномалии
+  Stygian Onslaught/<дата>        — три босса и их преимущества
+Иконки врагов берутся из отрендеренной страницы вики (те же, что видит
+читатель) и кладутся в gi-rec/enemies/. Русские названия врагов — из игровых
+данных yatta.moe, а если там нет — из таблицы Other Languages на вики.
+
+Выход:
+  gi-rec/data/content.json
+  gi-rec/enemies/<id>.png
+
+Использование:
+  python tools/build_content.py            # текущий цикл (по сегодняшней дате)
+  python tools/build_content.py --date 2026-10-20
+  python tools/build_content.py --force-icons
+"""
+
+import os
+import re
+import sys
+import json
+import time
+import argparse
+import datetime
+import urllib.parse
+import urllib.request
+from typing import Dict, List, Optional, Tuple
+
+WIKI = "https://genshin-impact.fandom.com"
+API = WIKI + "/api.php"
+YATTA = "https://gi.yatta.moe/api/v2"
+UA = "gi-rec-content/1.0 (fan site https://senjeyb.github.io/gi-rec)"
+
+ROOT = os.path.dirname(os.path.abspath(__file__))
+# скрипт лежит в gi-rec/tools/ — сайт уровнем выше
+SITE = os.environ.get("GIREC_SITE") or os.path.dirname(ROOT)
+IN_CI = os.environ.get("GITHUB_ACTIONS") == "true"
+OUT = os.path.join(SITE, "data", "content.json")
+ICONS = os.path.join(SITE, "enemies")
+
+# Префиксы усиленных версий «местных легенд» в Бездне и Натиске
+LEGEND_PREFIXES = ("Battle-Hardened ", "Veteran ")
+
+# Игровые названия реакций на русском. Проверены по русским текстам талантов
+# (yatta.moe); чего здесь нет — остаётся по-английски, а скрипт предупредит.
+REACTION_RU = {
+    "Swirl": "Рассеивание",
+    "Stellar-Swirl": "Звёздное рассеивание",
+    "Stellar Swirl": "Звёздное рассеивание",
+    "Electro-Charged": "Заряжен",
+    "Lunar-Charged": "Лунный заряд",
+    "Lunar-Bloom": "Лунная бутонизация",
+    "Lunar-Crystallize": "Лунный кристалл",
+    "Overloaded": "Перегрузка",
+    "Burning": "Горение",
+    "Bloom": "Бутонизация",
+    "Burgeon": "Вегетация",
+    "Hyperbloom": "Цветение",
+    "Quicken": "Стимуляция",
+    "Aggravate": "Обострение",
+    "Spread": "Разрастание",
+}
+ELEMENT_RU = {
+    "Anemo": "Анемо", "Cryo": "Крио", "Dendro": "Дендро", "Electro": "Электро",
+    "Geo": "Гео", "Hydro": "Гидро", "Pyro": "Пиро", "Physical": "Физический",
+}
+# Метки преимуществ в Натиске (перевод — из Other Languages на вики)
+TAG_RU = {
+    "Stellar Glimmer": "Звёздный блеск",
+}
+
+warnings: List[str] = []
+
+
+def warn(msg: str) -> None:
+    warnings.append(msg)
+    # в GitHub Actions предупреждение видно на странице запуска
+    print(("::warning::" if IN_CI else "  ! ") + msg)
+
+
+# ------------------------------------------------------------------ сеть
+
+def http(url: str, tries: int = 4) -> bytes:
+    last = None
+    for attempt in range(tries):
+        try:
+            # CDN картинок вики отвечает 403 без Referer с самой вики
+            req = urllib.request.Request(url, headers={"User-Agent": UA, "Referer": WIKI + "/"})
+            with urllib.request.urlopen(req, timeout=40) as r:
+                return r.read()
+        except Exception as e:      # сеть бывает капризной — пробуем ещё раз
+            last = e
+            time.sleep(1.5 * (attempt + 1))
+    raise RuntimeError(f"не удалось скачать {url[:140]}: {last}")
+
+
+def api(**params) -> dict:
+    params.setdefault("format", "json")
+    params.setdefault("formatversion", "2")
+    return json.loads(http(API + "?" + urllib.parse.urlencode(params)).decode("utf-8"))
+
+
+def wikitext(page: str) -> Tuple[str, str]:
+    """(текст страницы, итоговый заголовок после редиректов)."""
+    p = api(action="parse", page=page, prop="wikitext", redirects=1).get("parse") or {}
+    return p.get("wikitext") or "", p.get("title") or page
+
+
+def rendered(page: str) -> str:
+    p = api(action="parse", page=page, prop="text").get("parse") or {}
+    return p.get("text") or ""
+
+
+def subpages(prefix: str) -> List[str]:
+    res = api(action="query", list="allpages", apprefix=prefix, aplimit="500")
+    return [p["title"] for p in res["query"]["allpages"]]
+
+
+# ------------------------------------------------------------- разбор вики
+
+def slug(s: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")
+
+
+def clean(s: str) -> str:
+    """Снимает вики-разметку со строки."""
+    s = re.sub(r"\{\{Color\|[^|}]*\|([^}]*)\}\}", r"\1", s)
+    s = re.sub(r"\[\[(?:[^|\]]*\|)?([^\]]*)\]\]", r"\1", s)
+    s = re.sub(r"\{\{[^}]*\}\}", "", s)
+    s = s.replace("'''", "").replace("''", "")
+    return re.sub(r"\s+", " ", s).strip()
+
+
+def template_params(text: str, name: str) -> Dict[str, str]:
+    """Параметры первого вхождения шаблона {{name ...}} (без вложенных)."""
+    i = text.find("{{" + name)
+    if i < 0:
+        return {}
+    depth, j = 0, i
+    while j < len(text):
+        if text.startswith("{{", j):
+            depth += 1
+            j += 2
+            continue
+        if text.startswith("}}", j):
+            depth -= 1
+            j += 2
+            if depth == 0:
+                break
+            continue
+        j += 1
+    body = text[i + 2 + len(name):j - 2]
+    out: Dict[str, str] = {}
+    for part in re.split(r"\n\s*\|", "\n" + body):
+        if "=" in part:
+            k, v = part.split("=", 1)
+            out[k.strip().lstrip("|").strip()] = v.strip()
+    return out
+
+
+def icon_map(html: str) -> Dict[str, str]:
+    """alt картинки -> URL иконки (вики грузит лениво, адрес лежит в data-src)."""
+    out: Dict[str, str] = {}
+    for tag in re.findall(r"<img [^>]*>", html):
+        alt = re.search(r'alt="([^"]*)"', tag)
+        src = re.search(r'data-src="([^"]+)"', tag) or re.search(r'src="(https?://[^"]+)"', tag)
+        if alt and src and alt.group(1) and alt.group(1) not in out:
+            out[alt.group(1).replace("&#039;", "'").replace("&amp;", "&")] = src.group(1).replace("&amp;", "&")
+    return out
+
+
+def parse_enemy_list(s: str) -> List[List[dict]]:
+    """«A*9// B; C*2» -> волны -> [{name, count}]."""
+    waves = []
+    for wave in s.split("//"):
+        items = []
+        for part in wave.split(";"):
+            part = clean(part)
+            if not part:
+                continue
+            m = re.match(r"(.+?)\s*\*\s*(\d+)$", part)
+            name, count = (m.group(1).strip(), int(m.group(2))) if m else (part, 1)
+            items.append({"name": name, "count": count})
+        if items:
+            waves.append(items)
+    return waves
+
+
+def disorder_ru(text: str) -> Optional[str]:
+    """Переводит типовые формулировки аномалий; None — если формулировка новая."""
+    t = text.strip().rstrip(".")
+    m = re.match(r"All party members gain an? (\d+)% (\w+) DMG Bonus$", t)
+    if m and m.group(2) in ELEMENT_RU:
+        return f"Бонус {ELEMENT_RU[m.group(2)]} урона +{m.group(1)}% всему отряду"
+    m = re.match(r"Characters' (.+)$", t)
+    if m:
+        parts = []
+        for clause in re.split(r",? and |, ", m.group(1)):
+            c = re.match(r"(.+?) DMG (?:is )?increased by (\d+)%$", clause.strip())
+            if not c or c.group(1) not in REACTION_RU:
+                return None
+            parts.append(f"{REACTION_RU[c.group(1)]}: урон +{c.group(2)}%")
+        return "; ".join(parts)
+    return None
+
+
+# ------------------------------------------------------------- враги
+
+class Enemies:
+    """Реестр врагов: id -> названия и иконка. Русские названия — из yatta
+    (игровые данные), иначе из Other Languages на вики."""
+
+    def __init__(self):
+        self.items: Dict[str, dict] = {}
+        self._yatta_ru: Optional[Dict[str, str]] = None
+
+    def yatta_ru(self) -> Dict[str, str]:
+        if self._yatta_ru is None:
+            en = json.loads(http(f"{YATTA}/en/monster"))["data"]["items"]
+            ru = json.loads(http(f"{YATTA}/ru/monster"))["data"]["items"]
+            self._yatta_ru = {}
+            for k, v in en.items():
+                r = ru.get(k)
+                if v.get("name") and r and r.get("name"):
+                    self._yatta_ru.setdefault(v["name"], r["name"])
+        return self._yatta_ru
+
+    def resolve_ru(self, full: str, base: str) -> Optional[str]:
+        """Игровое русское название. Усиленные версии на вики — редиректы на
+        страницу самой местной легенды (Battle-Hardened Lightkeeper -> Sigurd),
+        поэтому идём по редиректу полного имени."""
+        y = self.yatta_ru()
+        if full in y:
+            return y[full]
+        if base in y:
+            return y[base]
+        try:
+            text, title = wikitext(full)
+        except Exception:
+            return None
+        plain = re.sub(r"\s*\(Local Legend\)$", "", title)
+        if title in y or plain in y:
+            return y.get(title) or y.get(plain)
+        return self.other_languages_ru(text, title)
+
+    def wiki_ru(self, name: str) -> Optional[str]:
+        try:
+            text, title = wikitext(name)
+        except Exception:
+            return None
+        return self.other_languages_ru(text, title)
+
+    def other_languages_ru(self, text: str, name: str) -> Optional[str]:
+        m = re.search(r"\{\{Other Languages([\s\S]*?)\n\}\}", text) or \
+            re.search(r"\{\{Other Languages([^}]*)\}\}", text)
+        if not m:
+            return None
+        body = m.group(1)
+        ru = re.search(r"\|\s*ru\s*=\s*(.+)", body)
+        if ru:
+            return clean(ru.group(1)) or None
+        # {{Other Languages|Churin}} или {{Other Languages|Transclude = Sigurd}}
+        ref = re.search(r"\|\s*(?:Transclude\s*=\s*)?([^|=}\n]+)", body)
+        if ref and ref.group(1).strip() != name:
+            return self.wiki_ru(ref.group(1).strip())
+        return None
+
+    def add(self, full_name: str, icon_url: Optional[str]) -> dict:
+        legend = full_name.startswith(LEGEND_PREFIXES)
+        base = full_name
+        for p in LEGEND_PREFIXES:
+            if base.startswith(p):
+                base = base[len(p):]
+        eid = slug(full_name)
+        if eid in self.items:
+            return {"id": eid}
+        ru = self.resolve_ru(full_name, base)
+        if not ru:
+            warn(f"нет русского названия для «{full_name}» — останется английское")
+        # en — точное игровое название (с Battle-Hardened); в русском префикса
+        # нет, вместо него сайт ставит метку «Местная легенда»
+        self.items[eid] = {"en": full_name, "ru": ru or base, "legend": legend, "src": icon_url}
+        if not icon_url:
+            warn(f"нет иконки для «{full_name}»")
+        return {"id": eid}
+
+    def download_icons(self, force: bool) -> None:
+        os.makedirs(ICONS, exist_ok=True)
+        for eid, e in self.items.items():
+            src = e.pop("src", None)
+            path = os.path.join(ICONS, eid + ".png")
+            e["icon"] = f"enemies/{eid}.png" if (src or os.path.exists(path)) else None
+            if not src or (os.path.exists(path) and not force):
+                continue
+            # вики отдаёт превью нужной ширины; 128px хватает и на ретину
+            url = re.sub(r"/scale-to-width-down/\d+", "/scale-to-width-down/128", src)
+            if "/scale-to-width-down/" not in url:
+                url = url.replace("/revision/latest", "/revision/latest/scale-to-width-down/128")
+            # без format=original CDN отдаёт WebP
+            url += ("&" if "?" in url else "?") + "format=original"
+            data = http(url)
+            if not data.startswith(b"\x89PNG"):
+                warn(f"иконка «{e['en']}» пришла не PNG — пропускаю")
+                e["icon"] = None
+                continue
+            with open(path, "wb") as f:
+                f.write(data)
+
+
+# ---------------------------------------------------------- Витая Бездна
+
+def pick_cycle(titles: List[str], prefix: str, today: datetime.date) -> Optional[str]:
+    """Последняя страница цикла, начавшегося не позже сегодняшнего дня."""
+    best = None
+    for t in titles:
+        m = re.fullmatch(re.escape(prefix) + r"(\d{4}-\d{2}-\d{2})", t)
+        if not m:
+            continue
+        d = datetime.date.fromisoformat(m.group(1))
+        if d <= today and (best is None or d > best[0]):
+            best = (d, t)
+    return best[1] if best else None
+
+
+def build_abyss(today: datetime.date, enemies: Enemies) -> Optional[dict]:
+    title = pick_cycle(subpages("Spiral Abyss/Floors/"), "Spiral Abyss/Floors/", today)
+    if not title:
+        warn("не нашёл страницу текущего цикла Бездны")
+        return None
+    print(f"Бездна: {title}")
+    text, _ = wikitext(title)
+    icons = icon_map(rendered(title))
+    head = template_params(text, "Abyssal Moon Spire")
+    start, end = head.get("start"), head.get("end")
+
+    sec = re.search(r"===\s*Floor 12\s*===([\s\S]*?)(?:\n==[^=]|\Z)", text)
+    if not sec:
+        warn("на странице нет 12 этажа")
+        return None
+    body = sec.group(1)
+
+    disorder = {"all": [], "first": [], "second": []}
+    for line in re.findall(r"^\*\*\s*(.+)$", body, re.M):
+        half = "all"
+        if "First Half" in line:
+            half = "first"
+        elif "Second Half" in line:
+            half = "second"
+        en = clean(re.sub(r"^\{\{Color\|[^}]*\}\}\s*:?\s*", "", line))
+        en = re.sub(r"^(First|Second) Half\s*:\s*", "", en)
+        ru = disorder_ru(en)
+        if ru is None:
+            warn(f"аномалия без перевода: {en}")
+        disorder[half].append({"en": en, "ru": ru or en})
+
+    params = template_params(body, "Domain Enemies")
+    chambers = []
+    for n in (1, 2, 3):
+        halves = []
+        for h in (1, 2):
+            waves = parse_enemy_list(params.get(f"enemies{n}_{h}", ""))
+            halves.append([[dict(enemies.add(e["name"], icons.get(e["name"])), count=e["count"])
+                            for e in wave] for wave in waves])
+        chambers.append({
+            "n": n,
+            "level": int(params.get(f"level{n}") or 0) or None,
+            "first": halves[0],
+            "second": halves[1],
+        })
+    return {
+        "start": start, "end": end,
+        "floor": 12,
+        "source": WIKI + "/wiki/" + urllib.parse.quote(title.replace(" ", "_")),
+        "disorder": disorder,
+        "chambers": chambers,
+    }
+
+
+# ------------------------------------------------------- Мрачный натиск
+
+def build_onslaught(today: datetime.date, enemies: Enemies) -> Optional[dict]:
+    titles = [t for t in subpages("Stygian Onslaught/") if t.count("/") == 1]
+    title = pick_cycle(titles, "Stygian Onslaught/", today)
+    if not title:
+        warn("не нашёл страницу текущего Натиска")
+        return None
+    print(f"Натиск: {title}")
+    text, _ = wikitext(title)
+    icons = icon_map(rendered(title))
+    ev = template_params(text, "Event")
+    start = (ev.get("time_start") or "")[:10] or None
+    end = (ev.get("time_end") or "")[:10] or None
+
+    bosses = []
+    for row in re.findall(r"!\s*Battlefield\s*\d+\s*\n\|([\s\S]*?)(?=\n\|-|\n\|\})", text):
+        m = re.search(r"\{\{Enemy\|([^}|]+)", row)
+        if not m:
+            continue
+        name = m.group(1).strip()
+        elements, tags = [], []
+        for adv in re.findall(r"Advantage:\s*(.+)", row):
+            els = re.findall(r"\{\{Element\|(\w+)", adv)
+            elements += [e.lower() for e in els]
+            rest = clean(re.sub(r"\{\{Element\|[^}]*\}\}", "", adv))
+            rest = re.sub(r"\s*(Elemental\s+)?Characters?$", "", rest).strip()
+            if rest:
+                if rest not in TAG_RU:
+                    warn(f"метка преимущества без перевода: {rest}")
+                tags.append({"en": rest, "ru": TAG_RU.get(rest, rest)})
+        bosses.append(dict(enemies.add(name, icons.get(name)), elements=elements, tags=tags))
+    if len(bosses) != 3:
+        warn(f"в Натиске нашлось боссов: {len(bosses)} (ожидалось 3)")
+    return {
+        "start": start, "end": end,
+        "source": WIKI + "/wiki/" + urllib.parse.quote(title.replace(" ", "_")),
+        "bosses": bosses,
+    }
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--date", help="считать сегодняшней эту дату (YYYY-MM-DD)")
+    ap.add_argument("--force-icons", action="store_true", help="перекачать иконки")
+    args = ap.parse_args()
+    today = (datetime.date.fromisoformat(args.date) if args.date
+             else datetime.datetime.now(datetime.timezone.utc).date())
+
+    enemies = Enemies()
+    abyss = build_abyss(today, enemies)
+    onslaught = build_onslaught(today, enemies)
+    enemies.download_icons(args.force_icons)
+
+    old = None
+    if os.path.exists(OUT):
+        try:
+            with open(OUT, "r", encoding="utf-8") as f:
+                old = json.load(f)
+        except Exception:  # noqa: BLE001
+            old = None
+
+    # Если раздел не разобрался (вики недоступна, страница нового цикла ещё
+    # пустая), оставляем прежний — лучше старый цикл, чем пустая вкладка.
+    items = dict(enemies.items)
+    for key, fresh in (("abyss", abyss), ("onslaught", onslaught)):
+        if fresh is None and old and old.get(key):
+            warn(f"{key}: оставляю данные прошлого запуска")
+            for ref in _refs(old[key]):
+                if ref in (old.get("enemies") or {}):
+                    items.setdefault(ref, old["enemies"][ref])
+    data = {
+        "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "abyss": abyss if abyss is not None else (old or {}).get("abyss"),
+        "onslaught": onslaught if onslaught is not None else (old or {}).get("onslaught"),
+        "enemies": items,
+    }
+    # Цикл не сменился — файл не трогаем, иначе автообновление коммитило бы
+    # каждый день ради одной метки generated
+    if old and {k: v for k, v in old.items() if k != "generated"} == \
+            {k: v for k, v in data.items() if k != "generated"}:
+        print(f"content.json: без изменений (предупреждений: {len(warnings)})")
+        return 0
+    with open(OUT, "w", encoding="utf-8", newline="\n") as f:
+        json.dump(data, f, ensure_ascii=False, indent=1)
+    print(f"Записано: {OUT} (врагов: {len(items)}, предупреждений: {len(warnings)})")
+    return 0
+
+
+def _refs(section: dict) -> List[str]:
+    """id всех врагов, на которых ссылается раздел content.json."""
+    out = []
+    for ch in section.get("chambers") or []:
+        for half in ("first", "second"):
+            for wave in ch.get(half) or []:
+                out += [e["id"] for e in wave]
+    out += [b["id"] for b in section.get("bosses") or []]
+    return out
+
+
+if __name__ == "__main__":
+    sys.exit(main())
