@@ -1,0 +1,177 @@
+{
+  "lang": {
+    "name": "English",
+    "switch": "Language",
+    "en": "English",
+    "ru": "Русский"
+  },
+  "app": {
+    "title": "GI-Rec",
+    "subtitle": "recommendations & tier list",
+    "updates": "Updates",
+    "github": "GitHub repository",
+    "feedback": "Leave feedback"
+  },
+  "nav": {
+    "mode": "Mode",
+    "recommendations": "Recommendations",
+    "tierlist": "Tier List",
+    "teamBuilder": "Team Builder",
+    "bestTeams": "Best Teams",
+    "inventory": "Inventory"
+  },
+  "settings": {
+    "title": "Settings",
+    "willingToObtain": "Willing to obtain:",
+    "characters_0": "0 characters",
+    "characters_1": "1 character",
+    "characters_2": "2 characters",
+    "characters_3": "3 characters",
+    "characters_4": "4 characters",
+    "squadsOnExpand": "Squads to show on expand:",
+    "autoApply": "Changes apply automatically.",
+    "allowFiveStar": "Allow 5★ weapons",
+    "allowFiveStarHint": "Show teams whose builds use 5★ weapons at R1. Off by default — the baseline assumes 4★ weapons only.",
+    "onlyMyWeapons": "Only my 5★ weapons",
+    "onlyMyWeaponsHint": "Restrict 5★ weapon teams to the ones you marked as owned in Account."
+  },
+  "roster": {
+    "title": "Your characters",
+    "import": "Import Characters",
+    "search": "Search characters...",
+    "searchLabel": "Search characters",
+    "filterLabel": "Filter owned characters",
+    "allFree": "All free",
+    "all4star": "All 4★",
+    "allStandard": "All Standard 5★",
+    "all": "All",
+    "clearAll": "Clear all",
+    "restore": "Return to config",
+    "openInventory": "Open full Inventory editor",
+    "noTeamsForChar": "No teams available for this character",
+    "removeFromSelection": "Remove from selection"
+  },
+  "about": {
+    "title": "About",
+    "howTo": "How to use:",
+    "step1": "Select the characters you own in the list below.",
+    "step2": "Pick a view in Mode: Recommendations, Tier List, or Team Suggestions.",
+    "step3": "Adjust Settings to control how many new characters you're willing to obtain.",
+    "step4": "Use DPS numbers as reference. You most probably will have different DPS values in your account.",
+    "step5": "Characters marked with a C1 badge are calculated using their C1 versions. All other 5★ characters are C0, 4★ characters are C6.",
+    "developedBy": "Developed by"
+  },
+  "views": {
+    "recommendationsHint": "The list updates when you change selection or settings",
+    "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",
+    "emptyTierlist": "Tier list is empty: no characters have teams that include any of your selected characters.",
+    "noTeamsSelection": "No teams available with this selection.",
+    "noTeamsFiltered": "No teams found matching the current filters.",
+    "noTopTeams": "No top teams found.",
+    "showingOf": "Showing {shown} of {total} team(s) by DPS",
+    "showingTop": "Showing top {n} team(s) by DPS",
+    "bestTeamsFor": "Best teams for: {list}",
+    "medianDps": "Median DPS: {value}",
+    "teamsMatchSet": "{n} team(s) match this set"
+  },
+  "inventory": {
+    "title": "Inventory",
+    "hint": "Mark the characters and 5★ weapons you own. Everything is stored in this browser only — nothing is uploaded.",
+    "tabCharacters": "Characters",
+    "tabWeapons": "5★ Weapons",
+    "charactersTitle": "Your characters",
+    "charactersHint": "Click a character to own them. For 5★ characters set the constellation with − and +.",
+    "weaponsTitle": "Your 5★ weapons",
+    "weaponsHint": "Mark the 5★ weapons you own. Teams that need a 5★ weapon you don't have can then be hidden.",
+    "weaponsNotInDb": "Not used by any team in the database yet",
+    "owned": "Owned",
+    "notOwned": "Not owned",
+    "constellation": "Constellation",
+    "consShort": "C",
+    "minC1Note": "This character is simulated at C1, so C1 is the minimum.",
+    "search": "Search...",
+    "filterAll": "All",
+    "filterOwned": "Owned",
+    "filterMissing": "Missing",
+    "summary": "{chars} characters, {weapons} 5★ weapons",
+    "reset": "Reset inventory",
+    "resetConfirm": "Clear all owned characters and weapons?",
+    "importGood": "Import from GOOD",
+    "exportJson": "Export",
+    "empty": "Nothing selected yet."
+  },
+  "import": {
+    "title": "Import Characters",
+    "hint": "Upload a GOOD JSON file or paste its contents below. Import replaces your current account.",
+    "fromText": "Import From Text",
+    "readClipboard": "Read Clipboard",
+    "placeholder": "Paste GOOD JSON here",
+    "empty": "Empty input",
+    "invalidJson": "Invalid JSON",
+    "notGood": "This does not look like a GOOD export",
+    "none": "No recognized characters",
+    "done": "Imported {chars} characters and {weapons} 5★ weapons",
+    "unknown": "Not recognized: {list}",
+    "noFile": "No file",
+    "readError": "Read error",
+    "clipboardDenied": "Clipboard denied",
+    "doneLegacy": "Imported {total} (added {added}, removed {removed})"
+  },
+  "picker": {
+    "title": "Pick team",
+    "hint": "Click up to 4 owned characters to narrow down the team — suggestions on the right update with every pick. Click a selected character to remove them, then pick one of the suggested teams.",
+    "yourCharacters": "Your characters",
+    "suggested": "Suggested teams",
+    "rosterFilter": "Filter team picker roster"
+  },
+  "team": {
+    "weapon": "Weapon",
+    "sets": "Artifact sets",
+    "noSet": "No artifact set",
+    "refine": "R{n}",
+    "source": "Open source sim",
+    "sims": "{n} sims averaged",
+    "builds": "{n} builds",
+    "showBuilds": "Show builds",
+    "hideBuilds": "Hide builds"
+  },
+  "feedback": {
+    "title": "Leave feedback",
+    "body": "Feedback and bug reports go to GitHub Issues. You will be taken to github.com and will need a GitHub account to post.",
+    "warning": "Please do not include personal data — issues are public and visible to everyone.",
+    "proceed": "Open GitHub Issues",
+    "cancel": "Cancel"
+  },
+  "common": {
+    "close": "Close",
+    "cancel": "Cancel",
+    "apply": "Apply",
+    "loading": "Loading..."
+  },
+  "filters": {
+    "currentView": "Filter current view",
+    "byElementWeapon": "Filter teams by element and weapon"
+  },
+  "builder": {
+    "content": "Content: ",
+    "abyss": "Spiral Abyss (2 teams)",
+    "onslaught": "Stygian Onslaught (3 teams)",
+    "pickTeam": "Pick team #{n}",
+    "teamSelected": "Team #{n} selected"
+  },
+  "tier": {
+    "show": "Show: ",
+    "notOwned": "Not owned",
+    "allCharacters": "All characters",
+    "ownedOnly": "Owned only",
+    "sorting": "Sorting: ",
+    "bestDps": "Best DPS",
+    "moreFlexible": "More flexible",
+    "allTeams": "All Teams",
+    "availableTeams": "Available Teams"
+  },
+  "errors": {
+    "loadData": "Failed to load data. Check that names.json and data/db.json are next to index.html.",
+    "loadUpdates": "Failed to load updates."
+  }
+}

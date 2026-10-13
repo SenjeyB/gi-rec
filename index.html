@@ -33,14 +33,17 @@
       <header class="app-header">
         <div class="brand">
           <img src="assets/logo.svg" alt="GI-Rec" class="logo-img" width="32" height="32" />
-      <div class="titles">
-        <div class="app-title">GI-Rec</div>
-  <div class="app-subtitle">recommendations & tier list</div>
+          <div class="titles">
+            <div class="app-title" data-i18n="app.title">GI-Rec</div>
+            <div class="app-subtitle" data-i18n="app.subtitle">recommendations &amp; tier list</div>
           </div>
         </div>
         <div class="app-nav">
-          <button id="open-updates" class="nav-link" type="button">Updates</button>
-          <a class="nav-link" href="https://github.com/SenjeyB/gi-rec" target="_blank" rel="noopener" aria-label="GitHub repository">
+          <div id="lang-switch" class="lang-switch" role="group"></div>
+          <button id="open-feedback" class="nav-link" type="button" data-i18n="app.feedback">Leave feedback</button>
+          <button id="open-updates" class="nav-link" type="button" data-i18n="app.updates">Updates</button>
+          <a class="nav-link" href="https://github.com/SenjeyB/gi-rec" target="_blank" rel="noopener"
+             data-i18n-attr="aria-label:app.github">
             <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
             </svg>
@@ -50,83 +53,104 @@
       </header>
 
       <div class="app-container">
-    <aside class="sidebar" aria-label="Settings panel">
-      <div class="side-row">
-        <div class="side-card">
-          <h2 class="side-title">Mode</h2>
-          <div class="side-nav" role="tablist" aria-label="View switcher">
-            <a href="#recommendations" class="nav-link" data-view="recommendations" role="tab">Recommendations</a>
-            <a href="#tierlist" class="nav-link" data-view="tierlist" role="tab">Tier List</a>
-            <a href="#team-builder" class="nav-link" data-view="team-builder" role="tab">Team Builder</a>
-            <a href="#best-teams" class="nav-link" data-view="best-teams" role="tab">Best Teams</a>
+        <aside class="sidebar" aria-label="Settings panel">
+          <div class="side-row">
+            <div class="side-card">
+              <h2 class="side-title" data-i18n="nav.mode">Mode</h2>
+              <div class="side-nav" role="tablist" aria-label="View switcher">
+                <a href="#recommendations" class="nav-link" data-view="recommendations" role="tab" data-i18n="nav.recommendations">Recommendations</a>
+                <a href="#tierlist" class="nav-link" data-view="tierlist" role="tab" data-i18n="nav.tierlist">Tier List</a>
+                <a href="#team-builder" class="nav-link" data-view="team-builder" role="tab" data-i18n="nav.teamBuilder">Team Builder</a>
+                <a href="#best-teams" class="nav-link" data-view="best-teams" role="tab" data-i18n="nav.bestTeams">Best Teams</a>
+                <a href="#inventory" class="nav-link" role="tab" data-i18n="nav.inventory">Inventory</a>
+              </div>
+            </div>
+            <div class="side-card">
+              <h2 class="side-title" data-i18n="settings.title">Settings</h2>
+              <label for="mode" class="side-label" data-i18n="settings.willingToObtain">Willing to obtain:</label>
+              <select id="mode" class="side-input">
+                <option value="0" data-i18n="settings.characters_0">0 characters</option>
+                <option value="1" data-i18n="settings.characters_1">1 character</option>
+                <option value="2" data-i18n="settings.characters_2">2 characters</option>
+                <option value="3" data-i18n="settings.characters_3">3 characters</option>
+                <option value="4" data-i18n="settings.characters_4">4 characters</option>
+              </select>
+              <label for="maxShow" class="side-label" data-i18n="settings.squadsOnExpand">Squads to show on expand:</label>
+              <input id="maxShow" class="side-input" type="number" min="1" max="10" value="3" />
+
+              <label class="side-check">
+                <input id="allow-five-star" type="checkbox" />
+                <span data-i18n="settings.allowFiveStar">Allow 5★ weapons</span>
+              </label>
+              <label class="side-check">
+                <input id="only-my-weapons" type="checkbox" />
+                <span data-i18n="settings.onlyMyWeapons">Only my 5★ weapons</span>
+              </label>
+              <div id="five-star-hint" class="side-note small"></div>
+
+              <div class="side-note small" data-i18n="settings.autoApply">Changes apply automatically.</div>
+            </div>
           </div>
-        </div>
-        <div class="side-card">
-          <h2 class="side-title">Settings</h2>
-          <label for="mode" class="side-label">Willing to obtain:</label>
-          <select id="mode" class="side-input">
-            <option value="0">0 characters</option>
-            <option value="1">1 character</option>
-            <option value="2">2 characters</option>
-            <option value="3">3 characters</option>
-            <option value="4">4 characters</option>
-          </select>
-          <label for="maxShow" class="side-label">Squads to show on expand:</label>
-          <input id="maxShow" class="side-input" type="number" min="1" max="10" value="3" />
-          <div class="side-note small">Changes apply automatically.</div>
-        </div>
-  </div>
 
-      <div class="side-card">
-        <h2 class="side-title">Your characters</h2>
-        <div class="side-actions" style="margin-bottom:8px">
-          <button id="open-import" type="button">Import Characters</button>
-        </div>
-        <div id="good-status" class="small muted"></div>
-        <input id="char-search" class="side-input" type="search" placeholder="Search characters..." aria-label="Search characters" autocomplete="off" />
-        <div id="owned-filters" class="filter-bar" aria-label="Filter owned characters"></div>
-        <div class="macro-buttons">
-          <button id="macro-free" type="button" class="macro-btn">All free</button>
-          <button id="macro-4star" type="button" class="macro-btn">All 4*</button>
-          <button id="macro-standard" type="button" class="macro-btn">All Standard 5*</button>
-          <button id="macro-all" type="button" class="macro-btn">All</button>
-          <button id="macro-clear" type="button" class="macro-btn">Clear all</button>
-          <button id="macro-restore" type="button" class="macro-btn">Return to config</button>
-        </div>
-        <div id="characters" class="characters-grid" aria-live="polite"></div>
-      </div>
+          <div class="side-card">
+            <h2 class="side-title" data-i18n="roster.title">Your characters</h2>
+            <div class="side-actions" style="margin-bottom:8px">
+              <button id="open-import" type="button" data-i18n="roster.import">Import Characters</button>
+              <a class="macro-btn" href="#inventory" data-i18n="roster.openInventory">Open full Inventory editor</a>
+            </div>
+            <div id="good-status" class="small muted"></div>
+            <input id="char-search" class="side-input" type="search"
+                   data-i18n-attr="placeholder:roster.search, aria-label:roster.searchLabel" autocomplete="off" />
+            <div id="owned-filters" class="filter-bar" data-i18n-attr="aria-label:roster.filterLabel"></div>
+            <div class="macro-buttons">
+              <button id="macro-free" type="button" class="macro-btn" data-i18n="roster.allFree">All free</button>
+              <button id="macro-4star" type="button" class="macro-btn" data-i18n="roster.all4star">All 4★</button>
+              <button id="macro-standard" type="button" class="macro-btn" data-i18n="roster.allStandard">All Standard 5★</button>
+              <button id="macro-all" type="button" class="macro-btn" data-i18n="roster.all">All</button>
+              <button id="macro-clear" type="button" class="macro-btn" data-i18n="roster.clearAll">Clear all</button>
+              <button id="macro-restore" type="button" class="macro-btn" data-i18n="roster.restore">Return to config</button>
+            </div>
+            <div id="characters" class="characters-grid" aria-live="polite"></div>
+          </div>
 
-      <div class="side-card">
-        <h2 class="side-title">About</h2>
-        <div class="small">
-          How to use:
-          <ol class="small">
-            <li>Select the characters you own in the list below.</li>
-            <li>Pick a view in Mode: Recommendations, Tier List, or Team Suggestions.</li>
-            <li>Adjust Settings to control how many new characters you're willing to obtain.</li>
-            <li>Use DPS numbers as reference. You most probably will have different DPS values in your account.</li>
-            <li>Characters marked with a <strong>C1</strong> badge are calculated using their C1 versions. All other 5* characters are C0, 4* characters are C6.</li>
-          </ol>
-          <div>Developed by <strong>SenjeyB</strong>.</div>
-        </div>
-      </div>
-    </aside>
+          <div class="side-card">
+            <h2 class="side-title" data-i18n="about.title">About</h2>
+            <div class="small">
+              <span data-i18n="about.howTo">How to use:</span>
+              <ol class="small">
+                <li data-i18n="about.step1">Select the characters you own in the list below.</li>
+                <li data-i18n="about.step2">Pick a view in Mode.</li>
+                <li data-i18n="about.step3">Adjust Settings to control how many new characters you're willing to obtain.</li>
+                <li data-i18n="about.step4">Use DPS numbers as reference.</li>
+                <li data-i18n="about.step5">Characters marked with a C1 badge are calculated using their C1 versions.</li>
+              </ol>
+              <div><span data-i18n="about.developedBy">Developed by</span> <strong>SenjeyB</strong>.</div>
+            </div>
+          </div>
+        </aside>
 
         <main id="main" class="maincol" role="main">
-      <section id="view-container">
-        <div id="view-header" class="view-header">
-          <h1 id="view-title">Recommendations</h1>
-          <div id="view-hint" class="small muted">The list updates when you change selection or settings</div>
-        </div>
-        <div id="view-content" class="view-content">
-        </div>
-      </section>
+          <section id="view-container">
+            <div id="view-header" class="view-header">
+              <h1 id="view-title" data-i18n="nav.recommendations">Recommendations</h1>
+              <div id="view-hint" class="small muted" data-i18n="views.recommendationsHint">The list updates when you change selection or settings</div>
+            </div>
+            <div id="view-content" class="view-content"></div>
+          </section>
+
+          <section id="inventory-view" hidden>
+            <div class="view-header">
+              <h1 data-i18n="inventory.title">Inventory</h1>
+            </div>
+            <div id="inventory-content" class="view-content"></div>
+          </section>
         </main>
       </div>
     </div>
   </div>
 
-  <script src="app.js"></script>
+  <!-- app.js подключается как модуль из js/main.js, когда готовы язык, инвентарь и база -->
+  <script type="module" src="js/main.js"></script>
   <script type="application/ld+json" id="structured-data">
     {
         "@context": "https://schema.org",
@@ -147,14 +171,33 @@
         }
     }
   </script>
+
   <div id="updates-modal" class="modal" hidden>
     <div class="modal-backdrop"></div>
     <div class="modal-dialog">
       <div class="modal-header">
-        <div class="modal-title">Updates</div>
-        <button id="close-updates" class="close-btn" type="button" aria-label="Close">✕</button>
+        <div class="modal-title" data-i18n="app.updates">Updates</div>
+        <button id="close-updates" class="close-btn" type="button" data-i18n-attr="aria-label:common.close">✕</button>
       </div>
       <div id="updates-content" class="modal-body small"></div>
+    </div>
+  </div>
+
+  <div id="feedback-modal" class="modal" hidden>
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title" data-i18n="feedback.title">Leave feedback</div>
+        <button class="close-btn" type="button" data-feedback-close data-i18n-attr="aria-label:common.close">✕</button>
+      </div>
+      <div class="modal-body small">
+        <p data-i18n="feedback.body">Feedback and bug reports go to GitHub Issues.</p>
+        <p class="feedback-warning" data-i18n="feedback.warning">Please do not include personal data — issues are public.</p>
+        <div class="modal-actions" style="display:flex;gap:8px;flex-wrap:wrap">
+          <button type="button" data-feedback-proceed data-i18n="feedback.proceed">Open GitHub Issues</button>
+          <button type="button" class="macro-btn" data-feedback-cancel data-i18n="feedback.cancel">Cancel</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -162,39 +205,41 @@
     <div class="modal-backdrop"></div>
     <div class="modal-dialog">
       <div class="modal-header">
-        <div id="team-picker-title" class="modal-title">Pick team</div>
-        <button id="team-picker-close" class="close-btn" type="button" aria-label="Close">✕</button>
+        <div id="team-picker-title" class="modal-title" data-i18n="picker.title">Pick team</div>
+        <button id="team-picker-close" class="close-btn" type="button" data-i18n-attr="aria-label:common.close">✕</button>
       </div>
       <div class="modal-body">
-        <div class="small muted" style="margin-bottom:8px">Click up to 4 owned characters to narrow down the team — suggestions on the right update with every pick. Click a selected character to remove them, then pick one of the suggested teams.</div>
+        <div class="small muted" style="margin-bottom:8px" data-i18n="picker.hint">Click up to 4 owned characters to narrow down the team.</div>
         <div class="team-picker-layout">
           <div>
-            <div class="picker-title">Your characters</div>
-            <div id="team-picker-filters" class="filter-bar compact" aria-label="Filter team picker roster"></div>
+            <div class="picker-title" data-i18n="picker.yourCharacters">Your characters</div>
+            <div id="team-picker-filters" class="filter-bar compact" data-i18n-attr="aria-label:picker.rosterFilter"></div>
             <div id="team-picker-roster" class="picker-grid" aria-live="polite"></div>
           </div>
           <div>
-            <div class="picker-title">Suggested teams</div>
+            <div class="picker-title" data-i18n="picker.suggested">Suggested teams</div>
             <div id="team-picker-list"></div>
           </div>
         </div>
       </div>
     </div>
   </div>
+
   <div id="import-modal" class="modal" hidden>
     <div class="modal-backdrop"></div>
     <div class="modal-dialog">
       <div class="modal-header">
-        <div class="modal-title">Import Characters</div>
-        <button id="import-close" class="close-btn" type="button" aria-label="Close">✕</button>
+        <div class="modal-title" data-i18n="import.title">Import Characters</div>
+        <button id="import-close" class="close-btn" type="button" data-i18n-attr="aria-label:common.close">✕</button>
       </div>
       <div class="modal-body">
-        <div class="small" style="margin-bottom:8px">Upload GOOD JSON or paste its contents below. Import replaces current selection.</div>
+        <div class="small" style="margin-bottom:8px" data-i18n="import.hint">Upload a GOOD JSON file or paste its contents below.</div>
         <input id="good-file" type="file" accept=".json" style="margin-bottom:8px" />
-        <textarea id="good-text" placeholder="Paste GOOD JSON here" style="width:100%;height:120px;resize:vertical;margin-bottom:8px"></textarea>
+        <textarea id="good-text" data-i18n-attr="placeholder:import.placeholder"
+                  style="width:100%;height:120px;resize:vertical;margin-bottom:8px"></textarea>
         <div class="modal-actions" style="display:flex;gap:8px;flex-wrap:wrap">
-          <button id="import-paste" type="button">Import From Text</button>
-          <button id="import-clipboard" type="button">Read Clipboard</button>
+          <button id="import-paste" type="button" data-i18n="import.fromText">Import From Text</button>
+          <button id="import-clipboard" type="button" data-i18n="import.readClipboard">Read Clipboard</button>
         </div>
       </div>
     </div>

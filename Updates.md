@@ -1,5 +1,16 @@
 ## Upcoming features:
-- Bug reporting/suggestions button
+- Saving your own teams
+
+## 2.0.0 (2026/10/13)
+- **Inventory** — a new section where you mark the characters you own, set their constellations, and list your 5★ weapons. Everything is stored in your browser only.
+- **Weapons and artifact sets** are now shown for every character in a team. Characters running a 2+2 split show both sets; characters with no set show only the weapon.
+- **5★ weapon teams** can be enabled with a toggle. Only R1 is allowed, since that is what a single banner pull gives you (+26 teams). "Only my 5★ weapons" narrows them down to the ones you actually have.
+- **English / Russian interface** with a language switcher in the header. The language is picked from your browser on the first visit and remembered afterwards.
+- **Feedback button** linking to GitHub Issues.
+- Import from GOOD now reads constellations and 5★ weapons, not just the character list.
+- Moved to the new KQM sim database — the old host went offline. Teams are rebuilt from 5606 simulations (3989 teams, 4015 with 5★ weapons enabled).
+- Team data reworked into a proper database: every team now keeps all of its known builds, so constellations and weapons are filters rather than a fixed assumption. Each build links back to its source simulation.
+- Fixed teams with the Traveler being listed twice, once per gender.
 
 ## 1.7.3 (2026/09/23)
 - Jahoda added

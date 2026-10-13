@@ -1,13 +1,74 @@
-async function loadJSON(path){
-  try{
-    const resp = await fetch(path);
-    if(!resp.ok) throw new Error('Fetch failed');
-    return await resp.json();
-  }catch(e){
-    console.error('Error loading',path,e);
-    return null;
-  }
+import { t } from './js/i18n.js';
+
+// Имена оружия и сетов для подсказок — заполняются из data/refs.json при старте.
+let WEAPON_NAMES = {};
+let SET_NAMES = {};
+
+// Перевод динамических строк. Второй аргумент — английский текст: он подставится,
+// если ключа нет в словаре, так что вид не развалится из-за опечатки в ключе.
+function T(key, fallback, vars){
+  const s = t(key, vars);
+  return s === key ? fallback : s;
 }
+
+// Оружие и сеты персонажа внутри отряда: иконка пушки с рефайном и до двух сетов.
+// Данные приходят из data/db.json через js/db.js, поэтому рисуем только если
+// сборка известна (у отрядов, восстановленных из localStorage, её нет).
+function renderLoadout(slot){
+  if(!slot) return null;
+  const wrap = createEl('div','loadout');
+  if(slot.weapon){
+    const w = createEl('div', 'loadout-weapon' + (slot.fiveStar ? ' is-five' : ''));
+    const img = new Image();
+    img.loading = 'lazy'; img.decoding = 'async';
+    img.src = `weapons/${slot.weapon}.png`;
+    img.alt = '';
+    img.onerror = ()=>{ img.style.visibility = 'hidden'; };
+    w.appendChild(img);
+    if(slot.refine > 1) w.appendChild(createEl('span','loadout-refine', T('team.refine','R'+slot.refine,{n:slot.refine})));
+    const wname = (WEAPON_NAMES && WEAPON_NAMES[slot.weapon]) || slot.weapon;
+    w.title = `${T('team.weapon','Weapon')}: ${wname} R${slot.refine}`;
+    wrap.appendChild(w);
+  }
+  const sets = slot.sets || [];
+  if(sets.length === 0){
+    const none = createEl('div','loadout-set is-empty','—');
+    none.title = T('team.noSet','No artifact set');
+    wrap.appendChild(none);
+  } else {
+    // 4 детали одного сета — одна иконка; 2+2 — две
+    for(const s of sets.slice(0,2)){
+      const node = createEl('div','loadout-set');
+      const img = new Image();
+      img.loading = 'lazy'; img.decoding = 'async';
+      img.src = `sets/${s.key}.png`;
+      img.alt = '';
+      img.onerror = ()=>{ img.style.visibility = 'hidden'; };
+      node.appendChild(img);
+      node.appendChild(createEl('span','loadout-pieces', String(s.pieces)));
+      const sname = (SET_NAMES && SET_NAMES[s.key]) || s.key;
+      node.title = `${T('team.sets','Artifact sets')}: ${sname} ×${s.pieces}`;
+      wrap.appendChild(node);
+    }
+  }
+  return wrap;
+}
+
+// Ячейка участника отряда: портрет, имя и его сборка (оружие + сеты).
+// idx — позиция в отряде; build в данных выровнен с members, поэтому берём по индексу.
+function appendMemberCell(host, displayName, key, team, idx, pillClass){
+  const cell = createEl('div','member-cell');
+  const img = createAvatarImg(displayName,'member-avatar', key);
+  if(img) cell.appendChild(img);
+  const pill = createEl('div','member-pill', displayName);
+  if(pillClass) pill.classList.add(pillClass);
+  cell.appendChild(pill);
+  const lo = (team && team.build) ? renderLoadout(team.build[idx]) : null;
+  if(lo) cell.appendChild(lo);
+  host.appendChild(cell);
+  return pill;
+}
+
 function createEl(tag,cls,txt){
   const el = document.createElement(tag);
   if(cls) el.className = cls;
@@ -15,12 +76,30 @@ function createEl(tag,cls,txt){
   return el;
 }
 
-async function main(){
-  const names = await loadJSON('names.json');
-  const teams = await loadJSON('teams.json');
-  if(!names || !teams){
-    document.body.prepend(createEl('div','small','Failed to load data. Ensure `names.json` and `teams.json` are next to `index.html`.'))
-    return;
+/**
+ * Точка входа. Вызывается из js/main.js, когда уже подняты локализация,
+ * инвентарь и база — поэтому первый же рендер уходит сразу переведённым
+ * и с отрядами, отфильтрованными под инвентарь.
+ *
+ * @param {object} ctx
+ *   names  — names.json
+ *   teams  — отряды из js/db.js (там же лежит build с оружием и сетами)
+ *   refs   — data/refs.json, нужен для подписей оружия и сетов
+ * @returns {{refreshTeams:Function, rerender:Function}}
+ */
+export async function start(ctx){
+  const names = ctx && ctx.names;
+  let teams = (ctx && ctx.teams) || [];
+  if(!names){
+    document.body.prepend(createEl('div','small',T('errors.loadData','Failed to load data. Check that names.json and data/db.json are next to index.html.')))
+    return null;
+  }
+  if(ctx.refs){
+    WEAPON_NAMES = {};
+    for(const [k,v] of Object.entries(ctx.refs.weapons||{})) WEAPON_NAMES[k] = v.name;
+    for(const [k,v] of Object.entries(ctx.refs.fiveStars||{})) WEAPON_NAMES[k] = v.name;
+    SET_NAMES = {};
+    for(const [k,v] of Object.entries(ctx.refs.sets||{})) SET_NAMES[k] = v.name;
   }
 
   const keyByDisplay = {};
@@ -37,18 +116,32 @@ async function main(){
     }
   }
 
-  const parsedTeams = teams.map(t => ({
-    members: [t.character_1, t.character_2, t.character_3, t.character_4].map(normalizeName),
-    dps: t.DPS || 0
-  }));
-  const teamsByMember = new Map();
-  for(const pt of parsedTeams){
-    for(const m of pt.members){
-      if(!m) continue;
-      if(!teamsByMember.has(m)) teamsByMember.set(m, []);
-      teamsByMember.get(m).push(pt);
+  // Отряды пересобираются при каждом изменении инвентаря или настроек,
+  // поэтому держим их в let и умеем перестраивать индекс по участникам.
+  let parsedTeams = [];
+  let teamsByMember = new Map();
+
+  function rebuildTeams(list){
+    teams = list || [];
+    parsedTeams = teams.map(t => ({
+      members: t.display
+        ? t.display.map(normalizeName)
+        : [t.character_1, t.character_2, t.character_3, t.character_4].map(normalizeName),
+      dps: t.dps != null ? t.dps : (t.DPS || 0),
+      build: t.build || null,      // оружие и сеты по слотам, выровнены с members
+      src: t.src || null,
+      sims: t.sims || 0,
+    }));
+    teamsByMember = new Map();
+    for(const pt of parsedTeams){
+      for(const m of pt.members){
+        if(!m) continue;
+        if(!teamsByMember.has(m)) teamsByMember.set(m, []);
+        teamsByMember.get(m).push(pt);
+      }
     }
   }
+  rebuildTeams(teams);
 
   const charactersDiv = document.getElementById('characters');
   const ownedFiltersHost = document.getElementById('owned-filters');
@@ -176,13 +269,21 @@ async function main(){
     return chars;
   }
 
+  let usedDefaults = false;
   try{
     const saved = JSON.parse(localStorage.getItem('ownedSelection')||'[]');
     const defaultAutoSelect = getDefaultAutoSelect();
+    usedDefaults = !saved.length;
     for(const n of (saved.length? saved : defaultAutoSelect)) selected.add(n);
-  }catch{ 
+  }catch{
     const defaultAutoSelect = getDefaultAutoSelect();
-    for(const n of defaultAutoSelect) selected.add(n); 
+    usedDefaults = true;
+    for(const n of defaultAutoSelect) selected.add(n);
+  }
+  // Автовыбор по умолчанию раньше жил только в памяти, и инвентарь (js/store.js),
+  // который читает ownedSelection, видел пустой список. Закрепляем сразу.
+  if(usedDefaults){
+    try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
   }
 
   function renderOwnedCharacters(){
@@ -199,14 +300,14 @@ async function main(){
       if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
       const lbl = createEl('div',null,disp);
       btn.appendChild(lbl);
-      
+
       const noTeams = !hasTeams(disp);
       if(noTeams){
         btn.classList.add('no-teams');
         btn.disabled = true;
-        btn.title = 'No teams available for this character';
+        btn.title = T('roster.noTeamsForChar','No teams available for this character');
       }
-      
+
       if(selected.has(disp)) btn.classList.add('selected');
 
       if(!noTeams){
@@ -237,10 +338,28 @@ async function main(){
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
   maxShowEl.addEventListener('change', ()=> { localStorage.setItem('settingMaxShow', maxShowEl.value); renderActiveView(); });
-  
+
   function persistSelection(){
     try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
+    // Сообщаем новому коду (js/main.js), что выбор изменился здесь, чтобы он
+    // подтянул его в инвентарь, не потеряв выставленные созвездия.
+    try{ window.dispatchEvent(new CustomEvent('girec:owned-changed')); }catch{}
   }
+
+  // Инвентарь поменялся снаружи (раздел «Инвентарь» или смена языка) —
+  // перечитываем выбор. Перерисовку инициирует js/main.js через refreshTeams().
+  window.addEventListener('girec:inventory-changed', ()=>{
+    let list = [];
+    try{ list = JSON.parse(localStorage.getItem('ownedSelection')||'[]'); }catch{ list = []; }
+    if(!Array.isArray(list)) list = [];
+    const next = new Set(list);
+    let same = next.size === selected.size;
+    if(same){ for(const v of next){ if(!selected.has(v)){ same = false; break; } } }
+    if(!same){
+      selected.clear();
+      for(const v of next) selected.add(v);
+    }
+  });
 
   function updateCharacterSelection(){
     renderOwnedCharacters();
@@ -362,13 +481,13 @@ async function main(){
     return {added, removed, total: selected.size};
   }
   async function handleGoodText(text){
-    if(!text || !text.trim().length){ goodStatus('Empty input'); return; }
+    if(!text || !text.trim().length){ goodStatus(T('import.empty','Empty input')); return; }
     try{
       const obj = JSON.parse(text);
       const res = importGoodData(obj);
-      if(res.total===0){ goodStatus('No recognized characters'); return; }
-      goodStatus(`Imported ${res.total} (added ${res.added}, removed ${res.removed})`, res.total>0);
-    }catch(e){ goodStatus('Invalid JSON'); }
+      if(res.total===0){ goodStatus(T('import.none','No recognized characters')); return; }
+      goodStatus(T('import.doneLegacy','Imported '+res.total+' (added '+res.added+', removed '+res.removed+')',{total:res.total,added:res.added,removed:res.removed}), res.total>0);
+    }catch(e){ goodStatus(T('import.invalidJson','Invalid JSON')); }
   }
   const openImport = document.getElementById('open-import');
   const importModal = document.getElementById('import-modal');
@@ -383,14 +502,14 @@ async function main(){
   importClose?.addEventListener('click', hideImport);
   importModal?.querySelector('.modal-backdrop')?.addEventListener('click', hideImport);
   importFile?.addEventListener('change', ()=>{
-    const f = importFile.files && importFile.files[0]; if(!f){ goodStatus('No file'); return; }
+    const f = importFile.files && importFile.files[0]; if(!f){ goodStatus(T('import.noFile','No file')); return; }
     const reader = new FileReader();
     reader.onload = ()=> handleGoodText(String(reader.result||''));
-    reader.onerror = ()=> goodStatus('Read error');
+    reader.onerror = ()=> goodStatus(T('import.readError','Read error'));
     reader.readAsText(f);
   });
   importPasteBtn?.addEventListener('click', ()=>{ handleGoodText(importText?.value||''); });
-  importClipboardBtn?.addEventListener('click', async ()=>{ try{ const txt = await navigator.clipboard.readText(); if(importText) importText.value = txt; await handleGoodText(txt); }catch{ goodStatus('Clipboard denied'); } });
+  importClipboardBtn?.addEventListener('click', async ()=>{ try{ const txt = await navigator.clipboard.readText(); if(importText) importText.value = txt; await handleGoodText(txt); }catch{ goodStatus(T('import.clipboardDenied','Clipboard denied')); } });
 
   const navLinks = Array.from(document.querySelectorAll('.nav-link'));
   function setActiveLink(hash){
@@ -423,7 +542,7 @@ async function main(){
     content.innerHTML = '';
     content.appendChild(createInlineHint());
     const filtersDiv = createEl('div','filter-bar');
-    filtersDiv.setAttribute('aria-label', 'Filter current view');
+    filtersDiv.setAttribute('aria-label', T('filters.currentView','Filter current view'));
     content.appendChild(filtersDiv);
     renderFilters(filtersDiv, 'main');
     const wrap = createEl('div');
@@ -442,11 +561,11 @@ async function main(){
 
     const toggleWrap = createEl('div','best-teams-toggle');
     const contentLabel = createEl('label','toggle-label');
-    contentLabel.textContent = 'Content: ';
+    contentLabel.textContent = T('builder.content','Content: ');
     const contentSelect = createEl('select','side-input toggle-select');
     contentSelect.id = 'builder-content-mode';
-    const optAbyss = createEl('option'); optAbyss.value = 'abyss'; optAbyss.textContent = 'Spiral Abyss (2 teams)';
-    const optOnslaught = createEl('option'); optOnslaught.value = 'onslaught'; optOnslaught.textContent = 'Stygian Onslaught (3 teams)';
+    const optAbyss = createEl('option'); optAbyss.value = 'abyss'; optAbyss.textContent = T('builder.abyss','Spiral Abyss (2 teams)');
+    const optOnslaught = createEl('option'); optOnslaught.value = 'onslaught'; optOnslaught.textContent = T('builder.onslaught','Stygian Onslaught (3 teams)');
     contentSelect.appendChild(optAbyss);
     contentSelect.appendChild(optOnslaught);
     try{
@@ -470,7 +589,7 @@ async function main(){
         const arr = Array.isArray(all[contentKey]) ? all[contentKey] : [];
         return Array(targetTeams).fill(null).map((_, i)=>{
           const s = arr[i];
-          if(s && Array.isArray(s.members) && s.members.length === 4) return {members: s.members.map(String), dps: +s.dps || 0};
+          if(s && Array.isArray(s.members) && s.members.length === 4) return {members: s.members.map(String), dps: +s.dps || 0, build: s.build || null};
           return null;
         });
       }catch{ return Array(targetTeams).fill(null); }
@@ -494,7 +613,7 @@ async function main(){
   const pickButtonsRow = createEl('div','tier-members pick-row');
     const pickButtons = [];
     for(let i=0;i<targetTeams;i++){
-      const btn = createEl('button','small-btn big-btn', `Pick team #${i+1}`);
+      const btn = createEl('button','small-btn big-btn', T('builder.pickTeam','Pick team #'+(i+1),{n:i+1}));
       btn.addEventListener('click', ()=> openTeamPicker(i));
       if(state.selections[i]) btn.style.display = 'none';
       pickButtons.push(btn);
@@ -517,7 +636,7 @@ async function main(){
       const filterHost = document.getElementById('team-picker-filters');
       const list = document.getElementById('team-picker-list');
       const title = document.getElementById('team-picker-title');
-      title.textContent = `Pick team #${idx+1}`;
+      title.textContent = T('builder.pickTeam','Pick team #'+(idx+1),{n:idx+1});
 
       const used = new Set();
       for(let j=0;j<state.selections.length;j++){
@@ -582,7 +701,7 @@ async function main(){
           for(const a of anchors){
             const chip = createEl('button','anchor-chip');
             chip.type = 'button';
-            chip.title = 'Remove from selection';
+            chip.title = T('roster.removeFromSelection','Remove from selection');
             const img = createAvatarImg(a,'member-avatar', keyByDisplay[a]); if(img) chip.appendChild(img);
             chip.appendChild(createEl('span','member-pill',a));
             chip.appendChild(createEl('span','anchor-x','✕'));
@@ -593,23 +712,19 @@ async function main(){
         }
 
         const candidates = currentCandidates();
-        if(candidates.length===0){ list.appendChild(createEl('div','small','No teams available with this selection.')); return; }
-        list.appendChild(createEl('div','small muted',`Showing ${Math.min(10,candidates.length)} of ${candidates.length} team(s) by DPS`));
+        if(candidates.length===0){ list.appendChild(createEl('div','small',T('views.noTeamsSelection','No teams available with this selection.'))); return; }
+        list.appendChild(createEl('div','small muted',T('views.showingOf','Showing '+Math.min(10,candidates.length)+' of '+candidates.length+' team(s) by DPS',{shown:Math.min(10,candidates.length),total:candidates.length})));
         const top = candidates.slice(0, 10);
         for(const team of top){
           const row = createEl('div','team-row clickable');
           const members = createEl('div','members');
-          for(const m of team.members){
-            const mk = keyByDisplay[m];
-            const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
-            const pill = createEl('div','member-pill',m);
-            if(anchors.has(m)) pill.classList.add('owned');
-            members.appendChild(pill);
-          }
+          team.members.forEach((m, mi)=>{
+            appendMemberCell(members, m, keyByDisplay[m], team, mi, anchors.has(m) ? 'owned' : null);
+          });
           row.appendChild(members);
           row.appendChild(createEl('div','team-dps', fmtDps(team.dps)));
           row.addEventListener('click',()=>{
-            state.selections[idx] = {members: team.members, dps: team.dps||0};
+            state.selections[idx] = {members: team.members, dps: team.dps||0, build: team.build||null};
             saveSelections();
             renderSummaries();
             if(pickButtons[idx]) pickButtons[idx].style.display = 'none';
@@ -642,18 +757,16 @@ async function main(){
         if(!sel) continue;
         const card = createEl('div','summary-card');
         const head = createEl('div','summary-head');
-        head.appendChild(createEl('h3',null,`Team #${i+1} selected`));
+        head.appendChild(createEl('h3',null,T('builder.teamSelected','Team #'+(i+1)+' selected',{n:i+1})));
         const clearBtn = createEl('button','small-btn big-btn','Clear');
         clearBtn.addEventListener('click',()=>{ state.selections[i]=null; saveSelections(); renderSummaries(); if(pickButtons[i]) pickButtons[i].style.display=''; updatePickRowVisibility(); });
         head.appendChild(clearBtn);
         card.appendChild(head);
         const row = createEl('div','team-row');
         const members = createEl('div','members');
-        for(const m of sel.members){
-          const mk = keyByDisplay[m];
-          const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
-          members.appendChild(createEl('div','member-pill',m));
-        }
+        sel.members.forEach((m, mi)=>{
+          appendMemberCell(members, m, keyByDisplay[m], sel, mi, null);
+        });
         row.appendChild(members);
         row.appendChild(createEl('div','team-dps', fmtDps(sel.dps)));
         card.appendChild(row);
@@ -674,20 +787,20 @@ async function main(){
     content.appendChild(createInlineHint());
 
     const toggleWrap = createEl('div','best-teams-toggle');
-    
+
     const displayLabel = createEl('label', 'toggle-label');
-    displayLabel.textContent = 'Show: ';
+    displayLabel.textContent = T('tier.show','Show: ');
     const displaySelect = createEl('select','side-input toggle-select');
     displaySelect.id = 'tier-display-mode';
     const optNotOwned = createEl('option');
     optNotOwned.value = 'not-owned';
-    optNotOwned.textContent = 'Not owned';
+    optNotOwned.textContent = T('tier.notOwned','Not owned');
     const optAll = createEl('option');
     optAll.value = 'all';
-    optAll.textContent = 'All characters';
+    optAll.textContent = T('tier.allCharacters','All characters');
     const optOwned = createEl('option');
     optOwned.value = 'owned';
-    optOwned.textContent = 'Owned only';
+    optOwned.textContent = T('tier.ownedOnly','Owned only');
     displaySelect.appendChild(optNotOwned);
     displaySelect.appendChild(optAll);
     displaySelect.appendChild(optOwned);
@@ -695,43 +808,43 @@ async function main(){
       const savedDisplayMode = localStorage.getItem('tierDisplayMode');
       if(savedDisplayMode) displaySelect.value = savedDisplayMode;
     }catch{}
-    
+
     displaySelect.addEventListener('change', ()=>{
       try{ localStorage.setItem('tierDisplayMode', displaySelect.value); }catch{}
       renderTier();
     });
-    
+
     displayLabel.appendChild(displaySelect);
     toggleWrap.appendChild(displayLabel);
 
     const label = createEl('label', 'toggle-label');
-    label.textContent = 'Sorting: ';
+    label.textContent = T('tier.sorting','Sorting: ');
     const select = createEl('select','side-input toggle-select');
     select.id = 'tier-sort-mode';
     const optBest = createEl('option');
     optBest.value = 'best';
-    optBest.textContent = 'Best DPS';
+    optBest.textContent = T('tier.bestDps','Best DPS');
     const optAvg = createEl('option');
     optAvg.value = 'average';
-    optAvg.textContent = 'More flexible';
+    optAvg.textContent = T('tier.moreFlexible','More flexible');
     select.appendChild(optBest);
     select.appendChild(optAvg);
     try{
       const savedMode = localStorage.getItem('tierSortMode');
       if(savedMode) select.value = savedMode;
     }catch{}
-    
+
     select.addEventListener('change', ()=>{
       try{ localStorage.setItem('tierSortMode', select.value); }catch{}
       renderTier();
     });
-    
+
     label.appendChild(select);
     toggleWrap.appendChild(label);
     content.appendChild(toggleWrap);
 
     const filtersDiv = createEl('div','filter-bar');
-    filtersDiv.setAttribute('aria-label', 'Filter current view');
+    filtersDiv.setAttribute('aria-label', T('filters.currentView','Filter current view'));
     content.appendChild(filtersDiv);
     renderFilters(filtersDiv, 'main');
 
@@ -757,38 +870,38 @@ async function main(){
 
     const toggleWrap = createEl('div','best-teams-toggle');
     const label = createEl('label', 'toggle-label');
-    label.textContent = 'Show: ';
+    label.textContent = T('tier.show','Show: ');
     const select = createEl('select','side-input toggle-select');
     select.id = 'best-teams-mode';
     const optAll = createEl('option');
     optAll.value = 'all';
-    optAll.textContent = 'All Teams';
+    optAll.textContent = T('tier.allTeams','All Teams');
     const optAvailable = createEl('option');
     optAvailable.value = 'available';
-    optAvailable.textContent = 'Available Teams';
+    optAvailable.textContent = T('tier.availableTeams','Available Teams');
     select.appendChild(optAll);
     select.appendChild(optAvailable);
     try{
       const savedMode = localStorage.getItem('bestTeamsMode');
       if(savedMode) select.value = savedMode;
     }catch{}
-    
+
     select.addEventListener('change', ()=>{
       try{ localStorage.setItem('bestTeamsMode', select.value); }catch{}
       renderBestTeams();
     });
-    
+
     label.appendChild(select);
     toggleWrap.appendChild(label);
     content.appendChild(toggleWrap);
 
     const filtersDiv = createEl('div','filter-bar');
-    filtersDiv.setAttribute('aria-label', 'Filter teams by element and weapon');
+    filtersDiv.setAttribute('aria-label', T('filters.byElementWeapon','Filter teams by element and weapon'));
     content.appendChild(filtersDiv);
     renderFilters(filtersDiv, 'bestTeams');
 
     const wrap = createEl('div');
-    const list = createEl('div'); 
+    const list = createEl('div');
     list.id = 'best-teams-list';
     wrap.appendChild(list);
     content.appendChild(wrap);
@@ -813,6 +926,7 @@ async function main(){
       return {
         members: t.members,
         dps: t.dps,
+        build: t.build, src: t.src, sims: t.sims,
         missingCount
       };
     });
@@ -861,27 +975,19 @@ async function main(){
     const topTeams = allTeams.slice(0, maxShow);
 
     if(topTeams.length === 0){
-      container.appendChild(createEl('div','small','No teams found matching the current filters.'));
+      container.appendChild(createEl('div','small',T('views.noTeamsFiltered','No teams found matching the current filters.')));
       return;
     }
 
-    container.appendChild(createEl('div','small muted',`Showing top ${topTeams.length} team(s) by DPS`));
+    container.appendChild(createEl('div','small muted',T('views.showingTop','Showing top '+topTeams.length+' team(s) by DPS',{n:topTeams.length})));
 
     for(const team of topTeams){
       const row = createEl('div','team-row best-team-row');
       const members = createEl('div','members');
-      for(const m of team.members){
-        const mk = keyByDisplay[m];
-        const img = createAvatarImg(m,'member-avatar', mk); 
-        if(img) members.appendChild(img);
-        const pill = createEl('div','member-pill',m);
-        if(showMode === 'all' && !owned.has(m)){
-          pill.classList.add('missing');
-        } else {
-          pill.classList.add('owned');
-        }
-        members.appendChild(pill);
-      }
+      team.members.forEach((m, mi)=>{
+        appendMemberCell(members, m, keyByDisplay[m], team, mi,
+          (showMode === 'all' && !owned.has(m)) ? 'missing' : 'owned');
+      });
       row.appendChild(members);
       const dpsEl = createEl('div','team-dps', fmtDps(team.dps));
       row.appendChild(dpsEl);
@@ -892,13 +998,16 @@ async function main(){
   function renderActiveView(){
     const hash = location.hash || '#recommendations';
     setActiveLink(hash);
+    // «Инвентарь» рисует js/inventory.js в своей секции — здесь ничего не делаем,
+    // иначе в скрытый #view-content зря уедут рекомендации.
+    if(hash === '#inventory') return;
     if(hash === '#tierlist'){
       renderTier();
     } else if(hash === '#team-builder'){
       renderTeamBuilder();
     } else if(hash === '#best-teams'){
       renderBestTeams();
-    } else {  
+    } else {
       renderRecommendations();
     }
   }
@@ -919,7 +1028,7 @@ async function main(){
       const text = await resp.text();
       updatesContent.innerHTML = renderMarkdownBasic(text);
     }catch(e){
-      updatesContent.textContent = 'Failed to load updates.';
+      updatesContent.textContent = T('errors.loadUpdates','Failed to load updates.');
     }
   }
   function closeUpdates(){ updatesModal.hidden = true; }
@@ -936,6 +1045,19 @@ async function main(){
       for(const m of document.querySelectorAll('.modal:not([hidden])')) m.hidden = true;
     }
   });
+
+  return {
+    // новый список отрядов (сменился инвентарь или настройки фильтра)
+    refreshTeams(list){
+      rebuildTeams(list);
+      renderOwnedCharacters();
+      renderActiveView();
+    },
+    rerender(){
+      renderOwnedCharacters();
+      renderActiveView();
+    },
+  };
 }
 
 function normalizeName(name){
@@ -959,7 +1081,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode, maxShow=3){
       const sortedMissing = missing.slice().sort();
       const key = sortedMissing.join('||');
       const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
-      list.teams.push({members: s.members, dps: s.dps});
+      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims});
       byMissingSet.set(key, list);
     }
   }
@@ -990,7 +1112,7 @@ function renderSuggestions(list, keyByDisplay, maxShow){
   const container = document.getElementById('suggestions');
   container.innerHTML = '';
   if(list.length === 0){
-    container.appendChild(createEl('div','small','No recommendations: either too few characters are selected or no teams fit the current rules.'));
+    container.appendChild(createEl('div','small',T('views.emptyRecommendations','No recommendations: either too few characters are selected or no teams fit the current rules.')));
     return;
   }
   for(const item of list){
@@ -1004,23 +1126,20 @@ function renderSuggestions(list, keyByDisplay, maxShow){
       group.appendChild(createEl('div','pill',missingName));
     }
     left.appendChild(group);
-    left.appendChild(createEl('div','small',`${item.count} team(s) match this set`));
+    left.appendChild(createEl('div','small',T('views.teamsMatchSet',item.count+' team(s) match this set',{n:item.count})));
 
     const right = createEl('div','right');
-    const medianBadge = createEl('div','dps-badge', `Median DPS: ${fmtDps(item.median)}`);
+    const medianBadge = createEl('div','dps-badge', T('views.medianDps','Median DPS: '+fmtDps(item.median),{value:fmtDps(item.median)}));
     right.appendChild(medianBadge);
 
     if(item.topteams && item.topteams.length){
       const best = item.topteams[0];
       const preview = createEl('div','team-row preview');
       const members = createEl('div','members');
-      for(const m of best.members){
-        const mk = keyByDisplay[m];
-        const img = createAvatarImg(m,'member-avatar', mk); if(img) members.appendChild(img);
-        const pill = createEl('div','member-pill', m);
-        if(item.missing.includes(m)) pill.classList.add('missing'); else pill.classList.add('owned');
-        members.appendChild(pill);
-      }
+      best.members.forEach((m, mi)=>{
+        appendMemberCell(members, m, keyByDisplay[m], best, mi,
+          item.missing.includes(m) ? 'missing' : 'owned');
+      });
       preview.appendChild(members);
       const dpsEl = createEl('div','team-dps', fmtDps(best.dps));
       preview.appendChild(dpsEl);
@@ -1053,12 +1172,12 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxSh
       const missingOthers = others.length - ownedCount;
       const totalMissing = isOwned ? missingOthers : (1 + missingOthers);
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, ownedCount});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, ownedCount});
       }
     }
     if(candidates.length===0){ continue; }
     candidates.sort((a,b)=> b.dps - a.dps);
-    
+
     let showteams = [];
     let score = 0;
     if(sortMode === 'average'){
@@ -1137,7 +1256,7 @@ function renderTierlist(tierData, keyByDisplay, maxShow, ownedSet){
   const table = createEl('table','tier-table');
   const anyMembers = tierData && tierData.length>0;
   if(!anyMembers){
-    container.appendChild(createEl('div','small','Tier list is empty: no characters have teams that include any of your selected characters.'));
+    container.appendChild(createEl('div','small',T('views.emptyTierlist','Tier list is empty: no characters have teams that include any of your selected characters.')));
     return;
   }
   for(const t of tiersOrder){
@@ -1169,26 +1288,18 @@ function togglePanel(card, item, keyByDisplay, ownedSet){
     return;
   }
   const panel = createEl('div','panel');
-  const title = createEl('div','small',`Best teams for: ${item.missing.join(', ')}`);
+  const title = createEl('div','small',T('views.bestTeamsFor','Best teams for: '+item.missing.join(', '),{list:item.missing.join(', ')}));
   panel.appendChild(title);
   if(!item.topteams || item.topteams.length===0){
-    panel.appendChild(createEl('div','small','No top teams found.'));
+    panel.appendChild(createEl('div','small',T('views.noTopTeams','No top teams found.')));
   } else {
     for(const team of item.topteams){
       const row = createEl('div','team-row');
       const members = createEl('div','members');
-      for(const m of team.members){
-        const memberKey = findKeyForDisplay(m, keyByDisplay);
-        const img = createAvatarImg(m,'member-avatar', memberKey);
-        if(img) members.appendChild(img);
-        const pill = createEl('div','member-pill',m);
-        if(ownedSet && !ownedSet.has(m)) {
-          pill.classList.add('missing');
-        } else {
-          pill.classList.add('owned');
-        }
-        members.appendChild(pill);
-      }
+      team.members.forEach((m, mi)=>{
+        appendMemberCell(members, m, findKeyForDisplay(m, keyByDisplay), team, mi,
+          (ownedSet && !ownedSet.has(m)) ? 'missing' : 'owned');
+      });
       row.appendChild(members);
       const dpsEl = createEl('div','team-dps', fmtDps(team.dps));
       row.appendChild(dpsEl);
@@ -1224,14 +1335,13 @@ function createAvatarImg(displayName, cls, key){
   return img;
 }
 
-window.addEventListener('DOMContentLoaded',main);
 
 function createInlineHint(){
   const hintWrap = document.createElement('div');
   hintWrap.className = 'view-hint-inline';
   const hint = document.createElement('div');
   hint.className = 'small muted';
-  hint.textContent = 'The list updates when you change selection or settings';
+  hint.textContent = T('views.recommendationsHint','The list updates when you change selection or settings');
   hintWrap.appendChild(hint);
   return hintWrap;
 }
@@ -1244,7 +1354,7 @@ function renderMarkdownBasic(md){
     if(/^\s*[-*]\s+/.test(line)){
       if(!inList){ out.push('<ul>'); inList = true; }
       const item = line.replace(/^\s*[-*]\s+/, '');
-      out.push(`<li>${escapeHtml(item)}</li>`);
+      out.push(`<li>${inlineMd(item)}</li>`);
       continue;
     } else if(inList){ out.push('</ul>'); inList = false; }
     const h = line.match(/^(#+)\s+(.*)$/);
@@ -1257,4 +1367,10 @@ function renderMarkdownBasic(md){
 }
 function escapeHtml(s){
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Жирный текст в списке обновлений. Экранируем сначала, размечаем потом,
+// поэтому разметка из самого файла в HTML не просочится.
+function inlineMd(s){
+  return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 }
