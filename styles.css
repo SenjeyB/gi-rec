@@ -639,3 +639,68 @@ body.sheet-open{overflow:hidden}
   .td-variant{flex-wrap:wrap}
   .td-variant-cell,.td-variant-cell img{width:26px;height:26px}
 }
+
+/* ---------- сборка отряда: контент, слоты, враги (2.5.0) */
+.builder{display:flex;flex-direction:column;gap:12px}
+.builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.seg{display:inline-flex;padding:3px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--line);gap:3px}
+.seg-btn{border:0;background:transparent;color:var(--muted);padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer}
+.seg-btn:hover{color:#e6eef8;background:rgba(255,255,255,0.04)}
+.seg-btn.is-active{background:rgba(96,165,250,0.18);color:#e6eef8;box-shadow:inset 0 0 0 1px rgba(96,165,250,0.45)}
+.builder-cycle{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.builder-cycle.is-stale{color:#fbbf24}
+.builder-source{color:var(--accent);text-decoration:none}
+.builder-source:hover{text-decoration:underline}
+.builder-slots{display:flex;flex-direction:column;gap:12px}
+.slot-card{position:relative;border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))}
+.slot-card.is-filled{border-color:rgba(96,165,250,0.28)}
+.slot-card.has-problem{border-color:rgba(248,113,113,0.55)}
+.slot-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.slot-num{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background:rgba(96,165,250,0.16);color:var(--accent);flex:none}
+.slot-titles{display:flex;flex-direction:column;line-height:1.2;min-width:0;flex:1}
+.slot-title{font-size:15px;font-weight:700}
+.slot-sub{font-size:11px;color:var(--muted)}
+.slot-dps{font-size:18px;font-weight:800;color:var(--accent);font-variant-numeric:tabular-nums}
+.slot-context{display:flex;flex-direction:column;gap:6px;padding:8px 10px;margin-bottom:10px;border-radius:10px;background:rgba(0,0,0,0.18);border:1px solid var(--line)}
+.slot-context.is-boss{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ctx-chamber{display:flex;align-items:flex-start;gap:10px}
+.ctx-label{display:flex;flex-direction:column;align-items:flex-start;min-width:46px;flex:none;padding-top:4px}
+.ctx-room{font-size:12px;font-weight:700}
+.ctx-level{font-size:10px;color:var(--muted)}
+.ctx-enemies{display:flex;flex-wrap:wrap;align-items:center;gap:6px;min-width:0}
+.ctx-wave{color:var(--muted);font-size:12px}
+.enemy-chip{display:inline-flex;align-items:center;gap:6px;padding:2px 9px 2px 2px;border-radius:999px;background:rgba(255,255,255,0.05);border:1px solid var(--line);max-width:100%;min-width:0}
+.enemy-chip img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,0.06);flex:none}
+.enemy-text{display:flex;flex-direction:column;line-height:1.15;min-width:0}
+.enemy-name{font-size:12px;overflow-wrap:anywhere}
+.enemy-legend{font-size:9.5px;color:#fbbf24;text-transform:uppercase;letter-spacing:.3px}
+.enemy-count{font-size:11px;color:var(--muted);font-weight:700}
+.enemy-chip.is-big{padding:2px 12px 2px 2px;border-radius:14px;background:transparent;border:0}
+.enemy-chip.is-big img{width:52px;height:52px;border-radius:12px}
+.enemy-chip.is-big .enemy-name{font-size:14px;font-weight:700}
+.ctx-disorder,.ctx-advantage{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12px;color:#cbd5e1}
+.ctx-disorder{padding-top:6px;border-top:1px dashed var(--line)}
+.ctx-disorder-label{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-right:2px}
+.ctx-element{width:20px;height:20px}
+.ctx-tag{font-size:11px;padding:2px 8px;border-radius:999px;background:rgba(167,139,250,0.16);border:1px solid rgba(167,139,250,0.4);color:#ddd6fe}
+.slot-team{margin:0}
+.slot-problem{margin-top:8px;font-size:12px;color:#fca5a5}
+.slot-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:10px}
+.slot-remove:hover{border-color:rgba(248,113,113,0.5);color:#fca5a5}
+.slot-pick{width:100%;display:flex;align-items:center;justify-content:center;gap:10px;padding:18px;border-radius:10px;border:1.5px dashed rgba(96,165,250,0.45);background:rgba(96,165,250,0.05);color:#e6eef8;font-size:14px;font-weight:600;cursor:pointer}
+.slot-pick:hover{background:rgba(96,165,250,0.12);border-color:rgba(96,165,250,0.75)}
+.slot-pick-plus{width:26px;height:26px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;background:rgba(96,165,250,0.2);color:var(--accent);font-size:18px;line-height:1}
+.builder-used{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.builder-used:empty{display:none}
+.builder-used-line{display:flex;flex-wrap:wrap;gap:6px}
+.builder-used-sep{opacity:.5}
+.picker-note{margin-bottom:6px}
+@media (max-width:640px){
+  .slot-card{padding:10px}
+  .slot-dps{font-size:16px}
+  .ctx-chamber{flex-direction:column;gap:4px}
+  .ctx-label{flex-direction:row;gap:6px;align-items:baseline;padding-top:0}
+  .seg{width:100%}
+  .seg-btn{flex:1;padding:8px 6px}
+}
+.slot-team .team-dps{display:none}

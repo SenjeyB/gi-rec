@@ -1,6 +1,7 @@
-import { t } from './js/i18n.js';
+import { t, lang } from './js/i18n.js';
 import { charLabel, weaponLabel, setLabel, statLabel } from './js/labels.js';
 import { toggleDetail } from './js/teamdetail.js';
+import { copiesNeeded, subtractCopies, haveCopies, meta as dbMeta } from './js/db.js';
 import { openCharacterWindow } from './js/charwindow.js';
 
 // Имена оружия и сетов для подсказок — заполняются из data/refs.json при старте.
@@ -533,82 +534,202 @@ export async function start(ctx){
     renderSuggestions(suggestions, getOwned());
   }
 
+  // ------------------------------------------------------------ сборка отряда
+  // Слоты под контент: Бездна — две половины 12 этажа, Натиск — три поля боя.
+  // Персонажи и копии 5★ оружия, занятые одним слотом, остальным недоступны:
+  // если у игрока одна копия, второй отряд с тем же оружием не соберётся.
+
+  const BUILDER_KEY = 'builderSelections';
+
   function renderTeamBuilder(){
     viewControls().innerHTML = '';
     const owned = getOwned();
     const content = document.getElementById('view-content');
     content.innerHTML = '';
-    const wrap = createEl('div');
+    const wrap = createEl('div','builder');
 
-    const toggleWrap = createEl('div','best-teams-toggle');
-    const contentLabel = createEl('label','toggle-label');
-    contentLabel.textContent = T('builder.content','Content: ');
-    const contentSelect = createEl('select','side-input toggle-select');
-    contentSelect.id = 'builder-content-mode';
-    const optAbyss = createEl('option'); optAbyss.value = 'abyss'; optAbyss.textContent = T('builder.abyss','Spiral Abyss (2 teams)');
-    const optOnslaught = createEl('option'); optOnslaught.value = 'onslaught'; optOnslaught.textContent = T('builder.onslaught','Stygian Onslaught (3 teams)');
-    contentSelect.appendChild(optAbyss);
-    contentSelect.appendChild(optOnslaught);
-    try{
-      const savedContent = localStorage.getItem('builderContent');
-      if(savedContent) contentSelect.value = savedContent;
-    }catch{}
-    contentSelect.addEventListener('change', ()=>{
-      try{ localStorage.setItem('builderContent', contentSelect.value); }catch{}
-      renderTeamBuilder();
-    });
-    contentLabel.appendChild(contentSelect);
-    toggleWrap.appendChild(contentLabel);
-    wrap.appendChild(toggleWrap);
-
-    const contentKey = contentSelect.value || 'abyss';
+    let contentKey = 'abyss';
+    try{ if(localStorage.getItem('builderContent') === 'onslaught') contentKey = 'onslaught'; }catch{}
     const targetTeams = contentKey === 'onslaught' ? 3 : 2;
+    const info = (ctx && ctx.content && ctx.content[contentKey]) || null;
+    const enemies = (ctx && ctx.content && ctx.content.enemies) || {};
+    const gen = (dbMeta() || {}).generated || '';
+    const ownedCopies = (ctx && ctx.weaponCopies) ? ctx.weaponCopies() : {};
 
+    // ---------- шапка: контент, цикл, «очистить всё»
+    const head = createEl('div','builder-head');
+    const seg = createEl('div','seg');
+    for(const [key, label] of [['abyss', T('builder.abyssShort','Spiral Abyss')], ['onslaught', T('builder.onslaughtShort','Stygian Onslaught')]]){
+      const b = createEl('button','seg-btn' + (key === contentKey ? ' is-active' : ''), label);
+      b.type = 'button';
+      b.setAttribute('aria-pressed', key === contentKey ? 'true' : 'false');
+      b.addEventListener('click', ()=>{
+        if(key === contentKey) return;
+        try{ localStorage.setItem('builderContent', key); }catch{}
+        renderTeamBuilder();
+      });
+      seg.appendChild(b);
+    }
+    head.appendChild(seg);
+    if(info) head.appendChild(cycleMeta(info));
+    wrap.appendChild(head);
+
+    // ---------- выбранные отряды
     function loadSelections(){
       try{
-        const all = JSON.parse(localStorage.getItem('builderSelections')||'{}');
+        const all = JSON.parse(localStorage.getItem(BUILDER_KEY)||'{}');
         const arr = Array.isArray(all[contentKey]) ? all[contentKey] : [];
         return Array(targetTeams).fill(null).map((_, i)=>{
           const s = arr[i];
-          if(s && Array.isArray(s.members) && s.members.length === 4) return {members: s.members.map(String), dps: +s.dps || 0, build: s.build || null};
-          return null;
+          return (s && Array.isArray(s.members) && s.members.length === 4) ? s : null;
         });
       }catch{ return Array(targetTeams).fill(null); }
     }
     function saveSelections(){
       try{
-        const all = JSON.parse(localStorage.getItem('builderSelections')||'{}');
+        const all = JSON.parse(localStorage.getItem(BUILDER_KEY)||'{}');
         all[contentKey] = state.selections;
-        localStorage.setItem('builderSelections', JSON.stringify(all));
+        localStorage.setItem(BUILDER_KEY, JSON.stringify(all));
       }catch{}
     }
-
     const state = { selections: loadSelections() };
 
-    const summaryBlocks = state.selections.map(()=> createEl('div'));
-    summaryBlocks.forEach(b=> wrap.appendChild(b));
+    const pack = (team)=> ({
+      members: team.members.slice(), dps: team.dps || 0, build: team.build || null,
+      src: team.src || null, sims: team.sims || 0, kqmCons: !!team.kqmCons, kqmArt: !!team.kqmArt,
+      teamIndex: team.teamIndex, buildIndex: team.buildIndex, gen,
+    });
+    const sameMembers = (a, b)=> a.length === b.length && a.every(m => b.includes(m));
+    const strictFor = (weapons)=> (ctx && ctx.strictWith ? ctx.strictWith(weapons) : []).map(toTeam);
 
-    const grid = createEl('div','two-col');
-    wrap.appendChild(grid);
-
-  const pickButtonsRow = createEl('div','tier-members pick-row');
-    const pickButtons = [];
-    for(let i=0;i<targetTeams;i++){
-      const btn = createEl('button','small-btn big-btn', T('builder.pickTeam','Pick team #'+(i+1),{n:i+1}));
-      btn.addEventListener('click', ()=> openTeamPicker(i));
-      if(state.selections[i]) btn.style.display = 'none';
-      pickButtons.push(btn);
-      pickButtonsRow.appendChild(btn);
+    // Что занято слотами, кроме skip: персонажи и остаток копий 5★.
+    function takenExcept(skip){
+      let weapons = ownedCopies;
+      const chars = new Set();
+      const weaponKeys = [];
+      state.selections.forEach((s, j)=>{
+        if(j === skip || !s) return;
+        s.members.forEach(m => chars.add(m));
+        const need = copiesNeeded(s.build);
+        weaponKeys.push(...Object.keys(need));
+        const left = subtractCopies(weapons, need);
+        if(left) weapons = left;
+      });
+      return { chars, weapons, weaponKeys };
     }
-  grid.appendChild(pickButtonsRow);
 
-    function updatePickRowVisibility(){
-      const anyVisible = pickButtons.some(b => b && b.style.display !== 'none');
-      if(!anyVisible){
-        if(pickButtonsRow.parentElement){ pickButtonsRow.parentElement.removeChild(pickButtonsRow); }
-      } else if(!pickButtonsRow.parentElement){
-        grid.appendChild(pickButtonsRow);
+    // Проверяем слоты по порядку: каждый забирает своих персонажей и копии.
+    // После пересборки базы индексы отрядов сдвигаются — тогда находим тот же
+    // состав заново, под то, что осталось от предыдущих слотов.
+    function checkSlots(){
+      let weapons = ownedCopies;
+      const chars = new Set();
+      let changed = false;
+      const out = state.selections.map((sel)=>{
+        if(!sel) return null;
+        const problems = [];
+        if(sel.gen !== gen){
+          const fresh = strictFor(weapons).find(t => sameMembers(t.members, sel.members));
+          if(fresh){ Object.assign(sel, pack(fresh)); changed = true; }
+        }
+        const missing = sel.members.filter(m => !owned.has(m));
+        const dup = sel.members.filter(m => chars.has(m));
+        if(missing.length) problems.push(T('builder.problemChars','Not in your inventory: {list}',{list: missing.map(charLabel).join(', ')}));
+        if(dup.length) problems.push(T('builder.problemDup','Already in another team: {list}',{list: dup.map(charLabel).join(', ')}));
+        const need = copiesNeeded(sel.build);
+        const left = subtractCopies(weapons, need);
+        if(left) weapons = left;
+        else {
+          const short = Object.keys(need).filter(k => !haveCopies({[k]: need[k]}, weapons));
+          problems.push(T('builder.problemWeapons','Not enough copies: {list}',{list: short.map(k => weaponLabel(k) || k).join(', ')}));
+        }
+        sel.members.forEach(m => chars.add(m));
+        return problems;
+      });
+      if(changed) saveSelections();
+      return out;
+    }
+
+    const slotsHost = createEl('div','builder-slots');
+    wrap.appendChild(slotsHost);
+    const usedHost = createEl('div','builder-used');
+    wrap.appendChild(usedHost);
+
+    function slotTitle(i){
+      if(contentKey === 'abyss') return i === 0 ? T('builder.firstHalf','First half') : T('builder.secondHalf','Second half');
+      return T('builder.battlefield','Battlefield {n}',{n: i+1});
+    }
+
+    function renderSlots(){
+      slotsHost.innerHTML = '';
+      const problems = checkSlots();
+      for(let i=0;i<targetTeams;i++) slotsHost.appendChild(slotCard(i, problems[i]));
+      renderUsed();
+    }
+
+    function slotCard(i, problems){
+      const sel = state.selections[i];
+      const card = createEl('section','slot-card' + (sel ? ' is-filled' : ' is-empty') + (problems && problems.length ? ' has-problem' : ''));
+      const head = createEl('div','slot-head');
+      head.appendChild(createEl('span','slot-num', String(i+1)));
+      const titles = createEl('div','slot-titles');
+      titles.appendChild(createEl('div','slot-title', slotTitle(i)));
+      if(contentKey === 'abyss') titles.appendChild(createEl('div','slot-sub', T('builder.floor12','Floor 12')));
+      head.appendChild(titles);
+      if(sel) head.appendChild(createEl('div','slot-dps', fmtDps(sel.dps)));
+      card.appendChild(head);
+
+      const context = contentKey === 'abyss' ? abyssHalf(info, enemies, i) : onslaughtBoss(info, enemies, i);
+      if(context) card.appendChild(context);
+
+      if(sel){
+        const row = buildTeamRow(sel, owned, 'slot-team');
+        card.appendChild(row);
+        for(const p of problems || []) card.appendChild(createEl('div','slot-problem', p));
+        const actions = createEl('div','slot-actions');
+        const change = createEl('button','macro-btn', T('builder.change','Change'));
+        change.type = 'button';
+        change.addEventListener('click', ()=> openTeamPicker(i));
+        const remove = createEl('button','macro-btn slot-remove', T('builder.remove','Remove'));
+        remove.type = 'button';
+        remove.addEventListener('click', ()=>{ state.selections[i] = null; saveSelections(); renderSlots(); });
+        actions.append(change, remove);
+        card.appendChild(actions);
+      } else {
+        const pick = createEl('button','slot-pick');
+        pick.type = 'button';
+        pick.appendChild(createEl('span','slot-pick-plus','+'));
+        pick.appendChild(createEl('span',null, T('builder.pick','Pick a team')));
+        pick.addEventListener('click', ()=> openTeamPicker(i));
+        card.appendChild(pick);
       }
+      return card;
+    }
+
+    function renderUsed(){
+      usedHost.innerHTML = '';
+      const chosen = state.selections.filter(Boolean);
+      if(!chosen.length) return;
+      const chars = new Set();
+      const weapons = {};
+      for(const s of chosen){
+        s.members.forEach(m => chars.add(m));
+        for(const [k, refines] of Object.entries(copiesNeeded(s.build))) weapons[k] = (weapons[k] || 0) + refines.length;
+      }
+      const line = createEl('div','builder-used-line');
+      line.appendChild(createEl('span',null, T('builder.usedChars','Characters in use: {n}',{n: chars.size})));
+      const wl = Object.entries(weapons);
+      if(wl.length){
+        line.appendChild(createEl('span','builder-used-sep','·'));
+        line.appendChild(createEl('span',null, T('builder.usedWeapons','5★ weapons: {list}',{
+          list: wl.map(([k, n]) => (weaponLabel(k) || k) + (n > 1 ? ` ×${n}` : '')).join(', ')
+        })));
+      }
+      usedHost.appendChild(line);
+      const clear = createEl('button','macro-btn', T('builder.clearAll','Clear all'));
+      clear.type = 'button';
+      clear.addEventListener('click', ()=>{ state.selections = state.selections.map(()=> null); saveSelections(); renderSlots(); });
+      usedHost.appendChild(clear);
     }
 
     function openTeamPicker(idx){
@@ -617,49 +738,40 @@ export async function start(ctx){
       const filterHost = document.getElementById('team-picker-filters');
       const list = document.getElementById('team-picker-list');
       const title = document.getElementById('team-picker-title');
-      title.textContent = T('builder.pickTeam','Pick team #'+(idx+1),{n:idx+1});
+      title.textContent = T('builder.pickFor','Team {n} · {slot}',{n: idx+1, slot: slotTitle(idx)});
 
-      const used = new Set();
-      for(let j=0;j<state.selections.length;j++){
-        if(j===idx) continue;
-        const sel = state.selections[j];
-        if(sel?.members){ for(const m of sel.members) used.add(m); }
-      }
-      const availOwned = new Set([...owned].filter(n=> !used.has(n)));
-
-      const baseCandidates = strictTeams
-        .filter(s=> s.members.every(m=> availOwned.has(m)))
-        .slice()
+      const taken = takenExcept(idx);
+      const availOwned = new Set([...owned].filter(n => !taken.chars.has(n)));
+      // отряды под то, что осталось: персонажи не заняты, копий 5★ хватает
+      const baseCandidates = strictFor(taken.weapons)
+        .filter(s => s.members.every(m => availOwned.has(m)))
         .sort((a,b)=> b.dps - a.dps);
 
       const anchors = new Set();
-
-      function currentCandidates(){
-        if(anchors.size === 0) return baseCandidates;
-        return baseCandidates.filter(s=> [...anchors].every(a=> s.members.includes(a)));
-      }
+      const currentCandidates = ()=> anchors.size === 0
+        ? baseCandidates
+        : baseCandidates.filter(s => [...anchors].every(a => s.members.includes(a)));
 
       function refreshRoster(){
         roster.innerHTML = '';
         const predPicker = makeFilterPredicate('picker');
-        const cands = currentCandidates();
         const addable = new Set();
         if(anchors.size < 4){
-          for(const s of cands){ for(const m of s.members) addable.add(m); }
+          for(const s of currentCandidates()){ for(const m of s.members) addable.add(m); }
         }
-        for(const name of [...owned].sort((a,b)=>a.localeCompare(b,'en'))){
-          const inAnchor = anchors.has(name);
-          if(!inAnchor && !predPicker(name)) continue;
+        for(const key of [...owned].sort((a,b)=> charLabel(a).localeCompare(charLabel(b)))){
+          const inAnchor = anchors.has(key);
+          if(!inAnchor && !predPicker(key)) continue;
           const chip = createEl('div','tier-member');
-          const eligible = inAnchor || (!used.has(name) && addable.has(name));
+          const eligible = inAnchor || (!taken.chars.has(key) && addable.has(key));
           if(inAnchor) chip.classList.add('active');
           if(!eligible) chip.classList.add('disabled');
-          const key = name;
-          const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
-          chip.appendChild(createEl('div','pill',name));
+          if(taken.chars.has(key)) chip.title = T('builder.inOtherTeam','In another team');
+          const avatar = createAvatarImg(key,'avatar'); if(avatar) chip.appendChild(avatar);
+          chip.appendChild(createEl('div','pill', charLabel(key)));
           if(eligible){
             chip.addEventListener('click',()=>{
-              if(anchors.has(name)) anchors.delete(name); else anchors.add(name);
+              if(anchors.has(key)) anchors.delete(key); else anchors.add(key);
               refreshRoster();
               renderList();
             });
@@ -670,10 +782,15 @@ export async function start(ctx){
 
       function renderList(){
         list.innerHTML = '';
-
+        if(taken.weaponKeys.length){
+          const uniq = [...new Set(taken.weaponKeys)];
+          list.appendChild(createEl('div','small muted picker-note', T('builder.weaponsTaken','5★ weapons used by other teams: {list}',{
+            list: uniq.map(k => weaponLabel(k) || k).join(', ')
+          })));
+        }
         if(anchors.size > 0){
           const selHead = createEl('div','picker-selected-head');
-          const clearBtn = createEl('button','small-btn','Clear');
+          const clearBtn = createEl('button','small-btn', T('picker.clear','Clear'));
           clearBtn.type = 'button';
           clearBtn.addEventListener('click',()=>{ anchors.clear(); refreshRoster(); renderList(); });
           selHead.appendChild(clearBtn);
@@ -684,7 +801,7 @@ export async function start(ctx){
             chip.type = 'button';
             chip.title = T('roster.removeFromSelection','Remove from selection');
             const img = createAvatarImg(a,'member-avatar'); if(img) chip.appendChild(img);
-            chip.appendChild(createEl('span','member-pill',a));
+            chip.appendChild(createEl('span','member-pill', charLabel(a)));
             chip.appendChild(createEl('span','anchor-x','✕'));
             chip.addEventListener('click',()=>{ anchors.delete(a); refreshRoster(); renderList(); });
             selRow.appendChild(chip);
@@ -693,32 +810,31 @@ export async function start(ctx){
         }
 
         const candidates = currentCandidates();
-        if(candidates.length===0){ list.appendChild(createEl('div','small',T('views.noTeamsSelection','No teams available with this selection.'))); return; }
-        list.appendChild(createEl('div','small muted',T('views.showingOf','Showing '+Math.min(10,candidates.length)+' of '+candidates.length+' team(s) by DPS',{shown:Math.min(10,candidates.length),total:candidates.length})));
-        const top = candidates.slice(0, 10);
-        for(const team of top){
+        if(candidates.length === 0){
+          list.appendChild(createEl('div','small', T('views.noTeamsSelection','No teams available with this selection.')));
+          return;
+        }
+        list.appendChild(createEl('div','small muted', T('views.showingTop','Teams found: {n}',{n: candidates.length})));
+        const holder = createEl('div');
+        list.appendChild(holder);
+        paginate(holder, candidates, 15, (team)=>{
           const row = createEl('div','team-row clickable');
           const members = createEl('div','members');
-          team.members.forEach((m, mi)=>{
-            appendMemberCell(members, m, team, mi, anchors.has(m) ? 'owned' : null);
-          });
+          team.members.forEach((m, mi)=> appendMemberCell(members, m, team, mi, anchors.has(m) ? 'owned' : null));
           row.appendChild(members);
           row.appendChild(createEl('div','team-dps', fmtDps(team.dps)));
           row.addEventListener('click',()=>{
-            state.selections[idx] = {members: team.members, dps: team.dps||0, build: team.build||null};
+            state.selections[idx] = pack(team);
             saveSelections();
-            renderSummaries();
-            if(pickButtons[idx]) pickButtons[idx].style.display = 'none';
-            updatePickRowVisibility();
+            renderSlots();
             closeTeamPicker();
           });
-          list.appendChild(row);
-        }
+          return row;
+        });
       }
 
       renderFilters(filterHost, 'picker');
       pickerRefresh = refreshRoster;
-
       refreshRoster();
       renderList();
       modal.hidden = false;
@@ -726,36 +842,10 @@ export async function start(ctx){
     }
 
     function closeTeamPicker(){
-      const modal = document.getElementById('team-picker-modal');
-      modal.hidden = true;
+      document.getElementById('team-picker-modal').hidden = true;
     }
 
-    function renderSummaries(){
-      for(let i=0;i<summaryBlocks.length;i++){
-        const host = summaryBlocks[i];
-        host.innerHTML = '';
-        const sel = state.selections[i];
-        if(!sel) continue;
-        const card = createEl('div','summary-card');
-        const head = createEl('div','summary-head');
-        head.appendChild(createEl('h3',null,T('builder.teamSelected','Team #'+(i+1)+' selected',{n:i+1})));
-        const clearBtn = createEl('button','small-btn big-btn','Clear');
-        clearBtn.addEventListener('click',()=>{ state.selections[i]=null; saveSelections(); renderSummaries(); if(pickButtons[i]) pickButtons[i].style.display=''; updatePickRowVisibility(); });
-        head.appendChild(clearBtn);
-        card.appendChild(head);
-        const row = createEl('div','team-row');
-        const members = createEl('div','members');
-        sel.members.forEach((m, mi)=>{
-          appendMemberCell(members, m, sel, mi, null);
-        });
-        row.appendChild(members);
-        row.appendChild(createEl('div','team-dps', fmtDps(sel.dps)));
-        card.appendChild(row);
-        host.appendChild(card);
-      }
-    }
-
-    renderSummaries();
+    renderSlots();
     content.appendChild(wrap);
   }
 
@@ -1299,6 +1389,112 @@ function createAvatarImg(key, cls){
   // Общий бейдж «C1» на персонаже убран: созвездие теперь показывается у каждой
   // сборки отдельно, из её собственных данных, и не висит там, где неуместен.
   return img;
+}
+
+// ------------------------------------------------ Бездна и Натиск в сборщике
+// Данные — data/content.json (собирает build_content.py с вики). Файла может
+// не быть: тогда слоты просто без подсказок о врагах.
+
+const isRu = ()=> lang() === 'ru';
+
+function fmtDay(iso){
+  if(!iso) return '';
+  const d = new Date(iso + 'T00:00:00');
+  if(isNaN(d)) return iso;
+  return d.toLocaleDateString(isRu() ? 'ru-RU' : 'en-US', { day: 'numeric', month: 'short' });
+}
+
+function cycleMeta(info){
+  const box = createEl('div','builder-cycle');
+  const today = new Date().toISOString().slice(0,10);
+  if(info.end && info.end < today){
+    box.classList.add('is-stale');
+    box.appendChild(createEl('span',null, T('builder.cycleOver','The cycle ended on {end}; the data will refresh with the next site update',{end: fmtDay(info.end)})));
+  } else {
+    box.appendChild(createEl('span',null, T('builder.cycle','{start} – {end}',{start: fmtDay(info.start), end: fmtDay(info.end)})));
+  }
+  if(info.source){
+    const a = createEl('a','builder-source', T('builder.source','Wiki'));
+    a.href = info.source; a.target = '_blank'; a.rel = 'noopener';
+    box.appendChild(a);
+  }
+  return box;
+}
+
+function enemyChip(enemies, ref, big){
+  const e = enemies[ref.id] || { en: ref.id, ru: ref.id };
+  const chip = createEl('span','enemy-chip' + (big ? ' is-big' : ''));
+  if(e.icon){
+    const img = new Image();
+    img.loading = 'lazy'; img.decoding = 'async';
+    img.src = e.icon; img.alt = '';
+    img.onerror = ()=>{ img.style.visibility = 'hidden'; };
+    chip.appendChild(img);
+  }
+  const text = createEl('span','enemy-text');
+  text.appendChild(createEl('span','enemy-name', isRu() ? e.ru : e.en));
+  // по-английски «Battle-Hardened» уже в названии, по-русски — отдельной меткой
+  if(e.legend && isRu()) text.appendChild(createEl('span','enemy-legend', T('builder.legend','Local Legend')));
+  chip.appendChild(text);
+  if(ref.count > 1) chip.appendChild(createEl('span','enemy-count', `×${ref.count}`));
+  return chip;
+}
+
+function disorderLine(items){
+  if(!items || !items.length) return null;
+  const line = createEl('div','ctx-disorder');
+  line.appendChild(createEl('span','ctx-disorder-label', T('builder.disorder','Ley Line Disorder')));
+  line.appendChild(createEl('span',null, items.map(d => isRu() ? d.ru : d.en).join('; ')));
+  return line;
+}
+
+/** Враги половины 12 этажа по залам: волны через стрелку. */
+function abyssHalf(info, enemies, half){
+  if(!info || !info.chambers) return null;
+  const key = half === 0 ? 'first' : 'second';
+  const box = createEl('div','slot-context');
+  for(const ch of info.chambers){
+    const waves = ch[key] || [];
+    if(!waves.length) continue;
+    const row = createEl('div','ctx-chamber');
+    const label = createEl('div','ctx-label');
+    label.appendChild(createEl('span','ctx-room', `${info.floor || 12}-${ch.n}`));
+    if(ch.level) label.appendChild(createEl('span','ctx-level', T('builder.level','Lv. {n}',{n: ch.level})));
+    row.appendChild(label);
+    const list = createEl('div','ctx-enemies');
+    waves.forEach((wave, wi)=>{
+      if(wi > 0) list.appendChild(createEl('span','ctx-wave','→'));
+      for(const ref of wave) list.appendChild(enemyChip(enemies, ref, false));
+    });
+    row.appendChild(list);
+    box.appendChild(row);
+  }
+  const dis = disorderLine([...((info.disorder || {}).all || []), ...((info.disorder || {})[key] || [])]);
+  if(dis) box.appendChild(dis);
+  return box;
+}
+
+/** Босс поля боя в Натиске и его преимущества. */
+function onslaughtBoss(info, enemies, i){
+  const boss = info && info.bosses && info.bosses[i];
+  if(!boss) return null;
+  const box = createEl('div','slot-context is-boss');
+  box.appendChild(enemyChip(enemies, boss, true));
+  if((boss.elements && boss.elements.length) || (boss.tags && boss.tags.length)){
+    const adv = createEl('div','ctx-advantage');
+    adv.appendChild(createEl('span','ctx-disorder-label', T('builder.advantage','Advantage')));
+    for(const el of boss.elements || []){
+      const img = new Image();
+      img.src = `filters/Element_${el.charAt(0).toUpperCase() + el.slice(1)}.png`;
+      img.alt = T('element.' + el, el);
+      img.title = img.alt;
+      img.className = 'ctx-element';
+      adv.appendChild(img);
+    }
+    for(const tag of boss.tags || []) adv.appendChild(createEl('span','ctx-tag', isRu() ? tag.ru : tag.en));
+    box.appendChild(adv);
+  }
+  return box;
 }
 
 

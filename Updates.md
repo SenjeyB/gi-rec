@@ -1,6 +1,13 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.5.0 (2026/10/13)
+- **5★ weapons are one choice instead of two.** The “Only my 5★ weapons” checkbox contradicted “R1 only” and “Any refinement”, so it became a fourth option of the same choice: “Only mine (inventory)”. In this mode a weapon must be in your inventory, you need enough copies, and the refinement can't be higher than your copy's. “R1 only” and “Any refinement” no longer look at the inventory.
+- **The team builder accounts for 5★ weapons.** It only uses 5★ weapons from your inventory, by number of copies and refinement, whatever the setting says. Copies are shared between teams: if you have one Key of Khaj-Nisut and it is used in the first half, teams that need it are not offered for the second. If an inventory change leaves a team short of copies, it is highlighted.
+- **Redesigned team builder.** A Spiral Abyss / Stygian Onslaught switch, a card per team with DPS plus Change and Remove buttons, and a summary of the characters and 5★ weapons in use.
+- **Current cycle enemies.** For the Abyss, each half of Floor 12 shows its enemies by chamber with icons, counts and waves, plus chamber level and Ley Line Disorder. For the Onslaught, each battlefield shows its boss and advantages. The cycle dates and a link to the source (the Genshin Impact wiki) are in the tab header.
+- Team picker: characters are listed by name instead of internal keys, and suggested teams are paginated.
+
 ## 2.4.0 (2026/10/13)
 - **5★ weapons at any refinement.** The “Allow 5★ weapons” checkbox is replaced by a “5★ weapons” choice: “None”, “R1 only” and “Any refinement”. This brings in C6R5 builds — for example, teams with C6 Mavuika: the database only has them with R5 weapons, so they never showed up, even with “Any” constellations. “Any” constellations together with “Any refinement” unlock all 4223 teams in the database.
 - The refinement of your own 5★ weapons now counts: if you have an R5 copy, R5 builds show up in “R1 only” mode and in the team builder.

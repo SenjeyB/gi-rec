@@ -10,9 +10,8 @@
 //               инвентаре и его созвездие выше потолка, потолок поднимается — свои
 //               созвездия только открывают сборки, но никогда не отнимают.
 //   5★ оружие — режим none отбрасывает такие сборки целиком, r1 пускает их на R1,
-//               any — на любом пробуждении. Свои копии поднимают потолок до их
-//               пробуждения. «Только мои» дополнительно требует, чтобы оружие
-//               лежало в инвентаре с рефайном не ниже, чем в симе.
+//               any — на любом пробуждении, mine — только то, что лежит в
+//               инвентаре: копий хватает и пробуждение не выше, чем у своей копии.
 
 let db = null;
 let refs = null;
@@ -72,25 +71,21 @@ function expandBuild(team, build) {
  * @param {object} opts
  *  - cons:        {charKey: число} созвездия из инвентаря
  *  - weapons:     {weaponKey: [рефайн каждой копии]} своё 5★ оружие
- *  - fiveStar:    "none" | "r1" | "any" — сборки с 5★ оружием (allowFiveStar: true
- *                 — старое имя для "r1")
- *  - onlyMyWeapons: из них оставлять лишь те, где всё 5★ оружие есть у игрока
+ *  - fiveStar:    "none" | "r1" | "any" | "mine" — сборки с 5★ оружием
+ *                 (allowFiveStar: true — старое имя для "r1")
+ *  - onlyMyWeapons: старый флаг, то же, что fiveStar "mine"
  * @returns {Array} отряды с выбранной сборкой, отсортированные по DPS
  */
 export function query(opts = {}) {
   if (!db) return [];
   const invCons = opts.cons || {};
   const invWeapons = opts.weapons || {};
-  const fiveMode = opts.fiveStar || (opts.allowFiveStar ? "r1" : "none");
+  const fiveMode = opts.onlyMyWeapons ? "mine" : (opts.fiveStar || (opts.allowFiveStar ? "r1" : "none"));
   const allowFive = fiveMode !== "none";
-  const onlyMine = !!opts.onlyMyWeapons;
-  // Потолок пробуждения 5★: R1 или R5 по режиму, а своя копия поднимает его до
-  // своего пробуждения — у кого R5 Сияющая жатва, тому R5-сборки и нужны.
-  const refineCap = (key) => {
-    const cap = fiveMode === "any" ? 5 : 1;
-    const own = ownedRefines(invWeapons[key]);
-    return own.length ? Math.max(cap, ...own) : cap;
-  };
+  // «Только моё»: оружие должно лежать в инвентаре — и по числу копий, и по
+  // пробуждению (сборку на R5 закрывает только своя копия R5)
+  const onlyMine = fiveMode === "mine";
+  const refineCap = fiveMode === "r1" ? 1 : 5;
   // «Полное соответствие» KQMS = созвездия и артефакты по стандарту одновременно
   const needFull = !!opts.kqmFull;
   const needArt = !!opts.kqmArt;
@@ -134,7 +129,7 @@ export function query(opts = {}) {
         if (m.cons > capFor(charKeys[i])) { ok = false; break; }
         if (isFiveStar(m.weapon)) {
           const key = weaponKey(m.weapon);
-          if (!allowFive || m.refine > refineCap(key)) { ok = false; break; }
+          if (!allowFive || m.refine > refineCap) { ok = false; break; }
           if (needed) (needed[key] ||= []).push(m.refine);
         }
       }
@@ -188,6 +183,36 @@ export function haveCopies(needed, owned) {
     for (let i = 0; i < need.length; i++) if (got[i] < need[i]) return false;
   }
   return true;
+}
+
+/** Какие копии 5★ оружия занимает сборка: ключ -> рефайны. */
+export function copiesNeeded(build) {
+  const need = {};
+  for (const m of build || []) {
+    if (m && m.fiveStar && m.weapon) (need[m.weapon] ||= []).push(m.refine || 1);
+  }
+  return need;
+}
+
+/**
+ * Копии, которые останутся после того, как сборка заберёт свои. Каждому
+ * требованию отдаём самую слабую подходящую копию, начиная со старших
+ * требований, — так сильные копии остаются другим отрядам.
+ * Возвращает null, если копий не хватает.
+ */
+export function subtractCopies(owned, needed) {
+  const out = {};
+  for (const [k, v] of Object.entries(owned || {})) out[k] = ownedRefines(v).slice();
+  for (const [key, refines] of Object.entries(needed || {})) {
+    const have = (out[key] || []).slice().sort((a, b) => a - b);
+    for (const r of refines.slice().sort((a, b) => b - a)) {
+      const i = have.findIndex((x) => x >= r);
+      if (i < 0) return null;
+      have.splice(i, 1);
+    }
+    out[key] = have;
+  }
+  return out;
 }
 
 // ------------------------------------------------- подробные статы артефактов

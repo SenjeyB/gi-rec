@@ -32,8 +32,7 @@
     "fiveNone": "None",
     "fiveR1": "R1 only",
     "fiveAny": "Any refinement",
-    "onlyMyWeapons": "Only my 5★ weapons",
-    "onlyMyWeaponsHint": "Restrict 5★ weapon teams to the ones you marked as owned in Account.",
+    "fiveMine": "Only mine (inventory)",
     "consMode": "Constellations:",
     "consStandard": "Standard (5★ C0, 4★ C6)",
     "consMine": "With my constellations",
@@ -131,7 +130,8 @@
     "hint": "Click up to 4 owned characters to narrow down the team — suggestions on the right update with every pick. Click a selected character to remove them, then pick one of the suggested teams.",
     "yourCharacters": "Your characters",
     "suggested": "Suggested teams",
-    "rosterFilter": "Filter team picker roster"
+    "rosterFilter": "Filter team picker roster",
+    "clear": "Clear"
   },
   "team": {
     "weapon": "Weapon",
@@ -186,11 +186,33 @@
     "kqmFullOnly": "Only full KQMS compliance"
   },
   "builder": {
-    "content": "Content: ",
     "abyss": "Spiral Abyss (2 teams)",
     "onslaught": "Stygian Onslaught (3 teams)",
-    "pickTeam": "Pick team #{n}",
-    "teamSelected": "Team #{n} selected"
+    "abyssShort": "Spiral Abyss",
+    "onslaughtShort": "Stygian Onslaught",
+    "firstHalf": "First half",
+    "secondHalf": "Second half",
+    "battlefield": "Battlefield {n}",
+    "floor12": "Floor 12",
+    "level": "Lv. {n}",
+    "pick": "Pick a team",
+    "pickFor": "Team {n} · {slot}",
+    "change": "Change",
+    "remove": "Remove",
+    "clearAll": "Clear all",
+    "cycle": "{start} – {end}",
+    "cycleOver": "The cycle ended on {end}; the data will refresh with the next site update",
+    "source": "Wiki",
+    "legend": "Local Legend",
+    "disorder": "Ley Line Disorder",
+    "advantage": "Advantage",
+    "usedChars": "Characters in use: {n}",
+    "usedWeapons": "5★ weapons: {list}",
+    "problemChars": "Not in your inventory: {list}",
+    "problemDup": "Already in another team: {list}",
+    "problemWeapons": "Not enough copies: {list}",
+    "weaponsTaken": "5★ weapons used by other teams: {list}",
+    "inOtherTeam": "In another team"
   },
   "tier": {
     "show": "Show: ",

@@ -19,8 +19,12 @@ let refs = null;
 let app = null;
 let syncing = false;
 
-const DEFAULTS = { fiveStar: "none", onlyMyWeapons: false, kqmFull: false, kqmArt: false, consMode: "mine" };
+const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine" };
 const settings = { ...DEFAULTS };
+const FIVE_MODES = ["none", "r1", "any", "mine"];
+
+// Бездна и Натиск для сборщика: необязательный файл, без него сборщик работает
+let content = null;
 
 async function loadJSON(path) {
   const resp = await fetch(path, { cache: "no-cache" });
@@ -33,10 +37,11 @@ async function loadJSON(path) {
 function loadSettings() {
   try {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    // до 2.4.0 был тогл allowFiveStar (только R1)
-    settings.fiveStar = ["none", "r1", "any"].includes(raw.fiveStar) ? raw.fiveStar
-      : (raw.allowFiveStar ? "r1" : "none");
-    settings.onlyMyWeapons = !!raw.onlyMyWeapons;
+    // до 2.4.0 был тогл allowFiveStar (только R1), до 2.5.0 — отдельная галочка
+    // onlyMyWeapons; теперь всё это один выбор
+    let five = FIVE_MODES.includes(raw.fiveStar) ? raw.fiveStar : (raw.allowFiveStar ? "r1" : "none");
+    if (raw.onlyMyWeapons && five !== "none") five = "mine";
+    settings.fiveStar = five;
     // до 2.2.1 фильтр назывался kqmCons и проверял только созвездия
     settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
     settings.kqmArt = !!raw.kqmArt;
@@ -48,47 +53,46 @@ function saveSettings() {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* не критично */ }
 }
 
-/** Текущий срез отрядов под инвентарь и настройки. */
-function currentTeams() {
+function ownedCons() {
   const cons = {};
   for (const k of store.ownedCharacters()) cons[k] = store.consOf(k);
-  const weapons = store.weaponCopies();   // ключ -> рефайны всех копий
+  return cons;
+}
+
+/** Текущий срез отрядов под инвентарь и настройки. */
+function currentTeams() {
   return db.query({
-    cons,
-    weapons,
+    cons: ownedCons(),
+    weapons: store.weaponCopies(),   // ключ -> рефайны всех копий
     consMode: settings.consMode,
     fiveStar: settings.fiveStar,
-    onlyMyWeapons: settings.onlyMyWeapons,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
   });
 }
 
 /** Строгий срез для сборщика и подсказок: отряд должен реально собираться на
- *  том, что есть у игрока. Созвездия берём как выставлено, а 5* оружие обязано
- *  лежать в инвентаре — даже если в общих настройках «только мои» выключено.
- *  В общем списке это было бы лишним: там показываются и те, кого ещё нет. */
-function strictTeams() {
-  const cons = {};
-  for (const k of store.ownedCharacters()) cons[k] = store.consOf(k);
-  const weapons = store.weaponCopies();   // ключ -> рефайны всех копий
+ *  том, что есть у игрока. Созвездия берём как выставлено, а 5* оружие — только
+ *  из инвентаря, по числу копий и их пробуждению, что бы ни стояло в настройках.
+ *  weapons — копии, если часть уже занята другими отрядами сборщика. */
+function strictTeams(weapons) {
   return db.query({
-    cons, weapons, strictCons: true,
-    fiveStar: settings.fiveStar,
-    onlyMyWeapons: true,
+    cons: ownedCons(),
+    weapons: weapons || store.weaponCopies(),
+    strictCons: true,
+    fiveStar: "mine",
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
   });
 }
 
 /** Срез без учёта инвентаря: у всех стандартные созвездия. Явные фильтры из
- *  настроек (5★, KQMS, «только моё оружие») при этом действуют. */
+ *  настроек (5★, KQMS) при этом действуют; копии нужны только режиму «моё». */
 function baseTeams() {
   return db.query({
-    weapons: settings.onlyMyWeapons ? store.weaponCopies() : {},
+    weapons: settings.fiveStar === "mine" ? store.weaponCopies() : {},
     consMode: settings.consMode === "any" ? "any" : "standard",
     fiveStar: settings.fiveStar,
-    onlyMyWeapons: settings.onlyMyWeapons,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
   });
@@ -106,12 +110,10 @@ function updateFilterHint() {
 
 function wireSettings() {
   const five = document.getElementById("five-mode");
-  const mine = document.getElementById("only-my-weapons");
   if (five) {
     five.value = settings.fiveStar;
     five.addEventListener("change", () => {
       settings.fiveStar = five.value;
-      if (mine) mine.disabled = settings.fiveStar === "none";
       saveSettings();
       refresh();
     });
@@ -143,22 +145,10 @@ function wireSettings() {
       if (cm) cm.value = settings.consMode;
       const fm = document.getElementById("five-mode");
       if (fm) fm.value = settings.fiveStar;
-      saveSettings();
-      for (const [id, key] of [["only-my-weapons", "onlyMyWeapons"],
-                               ["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
+      for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
         const box = document.getElementById(id);
         if (box) box.checked = settings[key];
       }
-      const m = document.getElementById("only-my-weapons");
-      if (m) m.disabled = true;
-      refresh();
-    });
-  }
-  if (mine) {
-    mine.checked = settings.onlyMyWeapons;
-    mine.disabled = settings.fiveStar === "none";
-    mine.addEventListener("change", () => {
-      settings.onlyMyWeapons = mine.checked;
       saveSettings();
       refresh();
     });
@@ -314,7 +304,14 @@ async function boot() {
   // набор по умолчанию и сразу шлёт girec:owned-changed — если слушателя ещё нет,
   // инвентарь останется пустым, пока пользователь что-нибудь не тронет.
   bridge();
-  app = await startApp({ names, teams: currentTeams(), strictTeams: strictTeams(), baseTeams: baseTeams(), refs });
+  try { content = await loadJSON("data/content.json"); } catch { content = null; }
+  app = await startApp({
+    names, refs, content,
+    teams: currentTeams(), strictTeams: strictTeams(), baseTeams: baseTeams(),
+    // сборщик: отряды под остаток копий 5★ после других слотов
+    strictWith: (weapons) => strictTeams(weapons),
+    weaponCopies: () => store.weaponCopies(),
+  });
 
   // и подтягиваем то, что app.js успел записать до появления слушателя
   syncFromLegacy();

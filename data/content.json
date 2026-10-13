@@ -1,0 +1,198 @@
+{
+ "generated": "2026-10-13T17:29:12Z",
+ "abyss": {
+  "start": "2026-09-16",
+  "end": "2026-10-15",
+  "floor": 12,
+  "source": "https://genshin-impact.fandom.com/wiki/Spiral_Abyss/Floors/2026-09-16",
+  "disorder": {
+   "all": [],
+   "first": [
+    {
+     "en": "Characters' Swirl DMG increased by 200% and Stellar-Swirl DMG increased by 75%.",
+     "ru": "Рассеивание: урон +200%; Звёздное рассеивание: урон +75%"
+    }
+   ],
+   "second": [
+    {
+     "en": "Characters' Electro-Charged DMG increased by 200% and Lunar-Charged DMG increased by 75%.",
+     "ru": "Заряжен: урон +200%; Лунный заряд: урон +75%"
+    }
+   ]
+  },
+  "chambers": [
+   {
+    "n": 1,
+    "level": 95,
+    "first": [
+     [
+      {
+       "id": "battle-hardened-chimeric-burrowbeast",
+       "count": 1
+      }
+     ]
+    ],
+    "second": [
+     [
+      {
+       "id": "wilderness-exile",
+       "count": 9
+      }
+     ],
+     [
+      {
+       "id": "battle-hardened-fireblade-shock-trooper",
+       "count": 1
+      }
+     ]
+    ]
+   },
+   {
+    "n": 2,
+    "level": 98,
+    "first": [
+     [
+      {
+       "id": "immortal-construct",
+       "count": 1
+      }
+     ]
+    ],
+    "second": [
+     [
+      {
+       "id": "fisher-of-hidden-depths",
+       "count": 4
+      }
+     ],
+     [
+      {
+       "id": "lord-of-the-hidden-depths-whisperer-of-nightmares",
+       "count": 1
+      }
+     ]
+    ]
+   },
+   {
+    "n": 3,
+    "level": 100,
+    "first": [
+     [
+      {
+       "id": "battle-hardened-domovoy-sculptor",
+       "count": 1
+      }
+     ]
+    ],
+    "second": [
+     [
+      {
+       "id": "battle-hardened-lightkeeper",
+       "count": 1
+      }
+     ]
+    ]
+   }
+  ]
+ },
+ "onslaught": {
+  "start": "2026-09-30",
+  "end": "2026-11-03",
+  "source": "https://genshin-impact.fandom.com/wiki/Stygian_Onslaught/2026-09-30",
+  "bosses": [
+   {
+    "id": "battle-hardened-domovoy-sculptor",
+    "elements": [],
+    "tags": [
+     {
+      "en": "Stellar Glimmer",
+      "ru": "Звёздный блеск"
+     }
+    ]
+   },
+   {
+    "id": "secret-source-automaton-overseer-device",
+    "elements": [
+     "cryo"
+    ],
+    "tags": []
+   },
+   {
+    "id": "guardian-blade-of-drifting-snow",
+    "elements": [
+     "electro",
+     "anemo",
+     "pyro"
+    ],
+    "tags": [
+     {
+      "en": "Stellar Glimmer",
+      "ru": "Звёздный блеск"
+     }
+    ]
+   }
+  ]
+ },
+ "enemies": {
+  "battle-hardened-chimeric-burrowbeast": {
+   "en": "Battle-Hardened Chimeric Burrowbeast",
+   "ru": "Химера-землерой",
+   "legend": true,
+   "icon": "enemies/battle-hardened-chimeric-burrowbeast.png"
+  },
+  "wilderness-exile": {
+   "en": "Wilderness Exile",
+   "ru": "Изгнанник пустошей",
+   "legend": false,
+   "icon": "enemies/wilderness-exile.png"
+  },
+  "battle-hardened-fireblade-shock-trooper": {
+   "en": "Battle-Hardened Fireblade Shock Trooper",
+   "ru": "Опричник: Штурмовик огненного клинка",
+   "legend": true,
+   "icon": "enemies/battle-hardened-fireblade-shock-trooper.png"
+  },
+  "immortal-construct": {
+   "en": "Immortal Construct",
+   "ru": "Бессмертный конструкт",
+   "legend": false,
+   "icon": "enemies/immortal-construct.png"
+  },
+  "fisher-of-hidden-depths": {
+   "en": "Fisher of Hidden Depths",
+   "ru": "Рыболов скрытых глубин",
+   "legend": false,
+   "icon": "enemies/fisher-of-hidden-depths.png"
+  },
+  "lord-of-the-hidden-depths-whisperer-of-nightmares": {
+   "en": "Lord of the Hidden Depths: Whisperer of Nightmares",
+   "ru": "Повелитель скрытых глубин: Шёпот кошмаров",
+   "legend": false,
+   "icon": "enemies/lord-of-the-hidden-depths-whisperer-of-nightmares.png"
+  },
+  "battle-hardened-domovoy-sculptor": {
+   "en": "Battle-Hardened Domovoy Sculptor",
+   "ru": "Чурин",
+   "legend": true,
+   "icon": "enemies/battle-hardened-domovoy-sculptor.png"
+  },
+  "battle-hardened-lightkeeper": {
+   "en": "Battle-Hardened Lightkeeper",
+   "ru": "Сигурд",
+   "legend": true,
+   "icon": "enemies/battle-hardened-lightkeeper.png"
+  },
+  "secret-source-automaton-overseer-device": {
+   "en": "Secret Source Automaton: Overseer Device",
+   "ru": "Автоматон таинственного источника: Надсмотрщик",
+   "legend": false,
+   "icon": "enemies/secret-source-automaton-overseer-device.png"
+  },
+  "guardian-blade-of-drifting-snow": {
+   "en": "Guardian Blade of Drifting Snow",
+   "ru": "Разящая вьюга",
+   "legend": false,
+   "icon": "enemies/guardian-blade-of-drifting-snow.png"
+  }
+ }
+}
