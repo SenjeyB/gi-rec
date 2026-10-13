@@ -250,12 +250,20 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 .side-check input:disabled + span{opacity:.45}
 
 .members{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
-.member-cell{display:grid;grid-template-columns:auto auto;grid-template-rows:auto auto;
-  column-gap:7px;row-gap:4px;align-items:center;padding:5px 9px 5px 5px;border-radius:9px;
+/* Ячейка участника: портрет с созвездием, имя обычным текстом и его сборка.
+   Статус «есть/нет» теперь красит рамку ячейки, а не плашку с именем. */
+.member-cell{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;
+  column-gap:8px;row-gap:2px;align-items:center;padding:5px 10px 5px 5px;border-radius:9px;
   border:1px solid var(--line);background:rgba(255,255,255,0.025)}
-.member-cell:hover{border-color:rgba(96,165,250,0.35);background:rgba(96,165,250,0.06)}
-.member-cell .member-avatar{grid-row:1 / span 2;align-self:center;width:38px;height:38px;border-radius:7px}
-.member-cell .member-pill{grid-column:2;grid-row:1;margin:0}
+.member-cell:hover{background:rgba(255,255,255,0.05)}
+.member-cell.owned{border-color:rgba(96,165,250,0.45);background:rgba(96,165,250,0.07)}
+.member-cell.missing{border-color:rgba(248,113,113,0.40);background:rgba(248,113,113,0.06)}
+.member-portrait{grid-row:1 / span 2;position:relative;align-self:center;line-height:0}
+.member-cell .member-avatar{width:40px;height:40px;border-radius:7px;display:block;object-fit:cover}
+.member-portrait .cons-badge{position:absolute;left:-3px;bottom:-3px;font-size:9px;line-height:1;
+  padding:2px 4px;border-radius:4px;background:#0f172a;border:1px solid var(--line);
+  color:#bfdbfe;font-weight:700}
+.member-name{grid-column:2;grid-row:1;font-size:12px;font-weight:600;white-space:nowrap}
 .member-cell .loadout{grid-column:2;grid-row:2}
 
 .loadout{display:flex;align-items:center;gap:5px}
@@ -354,4 +362,120 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .nav-link{min-height:38px}
   .side-check{min-height:38px}
   .inv-step{width:26px;height:26px}
+}
+
+/* ------------------------------------------- подробная карточка отряда */
+.team-row.expandable{cursor:pointer}
+.team-row.expandable:hover{background:rgba(255,255,255,0.05)}
+.team-row.is-open{background:rgba(96,165,250,0.08);border-radius:8px 8px 0 0}
+
+.team-detail{border:1px solid rgba(96,165,250,0.35);border-top:0;border-radius:0 0 8px 8px;
+  background:rgba(8,15,30,0.75);padding:12px;margin:-6px 0 10px}
+.td-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-bottom:10px}
+.td-title{font-weight:700;font-size:13px}
+.td-kqm{display:flex;gap:6px;flex-wrap:wrap}
+.td-flag{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;
+  font-size:11px;font-weight:600;border:1px solid rgba(248,113,113,0.35);
+  background:rgba(248,113,113,0.10);color:#fca5a5}
+.td-flag.is-ok{border-color:rgba(52,211,153,0.40);background:rgba(52,211,153,0.12);color:#6ee7b7}
+.td-flag-mark{font-size:10px}
+.td-meta{margin-left:auto;display:flex;gap:10px;align-items:center;font-size:11px;color:var(--muted)}
+.td-src{color:var(--accent);text-decoration:none}
+.td-src:hover{text-decoration:underline}
+
+.td-members{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px}
+.td-member{border:1px solid var(--line);border-radius:8px;padding:10px;background:rgba(255,255,255,0.02)}
+.td-member-head{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.td-portrait{position:relative;line-height:0;flex:0 0 auto}
+.td-avatar{width:48px;height:48px;border-radius:8px;object-fit:cover;display:block}
+.td-portrait .cons-badge{position:absolute;left:-3px;bottom:-3px;font-size:9px;line-height:1;
+  padding:2px 4px;border-radius:4px;background:#0f172a;border:1px solid var(--line);
+  color:#bfdbfe;font-weight:700}
+.td-member-name{font-weight:700;font-size:13px}
+
+.td-row{display:flex;align-items:center;gap:8px;margin:5px 0}
+.td-icon{width:28px;height:28px;border-radius:5px;padding:2px;flex:0 0 auto;
+  background:linear-gradient(145deg,rgba(226,232,240,0.30),rgba(148,163,184,0.14))}
+.td-icon.is-five{box-shadow:0 0 0 1.5px rgba(245,158,11,0.75)}
+.td-icon img{width:100%;height:100%;object-fit:contain;display:block}
+.td-row-text{min-width:0}
+.td-row-title{font-size:11px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.td-row-sub{font-size:10px;color:var(--muted)}
+.td-muted{color:var(--muted);font-size:11px}
+
+.td-stats{margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}
+.td-stats-title{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:4px}
+.td-mains{display:flex;flex-wrap:wrap;gap:4px}
+.td-main{padding:2px 7px;border-radius:4px;background:rgba(96,165,250,0.16);
+  border:1px solid rgba(96,165,250,0.30);font-size:10px;font-weight:600}
+.td-subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:3px}
+.td-sub{display:flex;justify-content:space-between;gap:6px;font-size:10px;padding:2px 5px;
+  border-radius:4px;background:rgba(255,255,255,0.03);color:var(--muted)}
+.td-sub.is-rolled{background:rgba(255,255,255,0.08);color:#e6eef8;font-weight:600}
+.td-sub-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.td-sub-rolls{flex:0 0 auto}
+
+@media (max-width:640px){
+  .td-members{grid-template-columns:1fr}
+  .td-meta{margin-left:0;width:100%}
+}
+
+.adv-filters{margin-top:10px;border-top:1px solid var(--line);padding-top:8px}
+.adv-filters > summary{cursor:pointer;font-size:12px;color:var(--muted);list-style:none;
+  padding:4px 0;user-select:none}
+.adv-filters > summary::-webkit-details-marker{display:none}
+.adv-filters > summary::before{content:'▸ ';font-size:10px}
+.adv-filters[open] > summary::before{content:'▾ '}
+.adv-filters > summary:hover{color:#e6eef8}
+.adv-filters .macro-btn{margin-top:8px}
+
+/* ===================== мобильная раскладка: панель + нижняя навигация ===== */
+.drawer-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;
+  font-size:18px;line-height:1;border:1px solid var(--line);border-radius:8px;
+  background:rgba(255,255,255,0.04);color:#e6eef8;cursor:pointer;flex:0 0 auto}
+.drawer-backdrop{display:none}
+.mobile-nav{display:none}
+
+@media (max-width:640px){
+  .drawer-toggle{display:inline-flex}
+
+  /* сайдбар уезжает за край и выдвигается поверх контента */
+  .app-container{grid-template-columns:1fr;padding-bottom:68px}
+  /* Панель прячем за край без анимации: transition между calc() и 0 в Chrome
+     (fixed-элемент внутри контейнера с zoom) не доезжает — панель оставалась
+     за экраном. Мгновенное открытие надёжнее красивого, но сломанного. */
+  .sidebar{position:fixed;top:0;bottom:0;width:min(86vw,360px);z-index:60;
+    left:0;display:none;
+    overflow-y:auto;border-radius:0;background:#0b1424;
+    box-shadow:2px 0 18px rgba(0,0,0,.45);
+    padding:12px 10px 76px}
+  .sidebar.is-open{display:flex}
+  body.drawer-open{overflow:hidden}
+
+  /* :not([hidden]) обязателен: обычное правило с display перебивало бы
+     атрибут hidden, и подложка оставалась бы висеть поверх контента */
+  .drawer-backdrop:not([hidden]){display:block;position:fixed;inset:0;z-index:55;
+    background:rgba(2,6,16,.6);backdrop-filter:blur(2px)}
+
+  /* нижняя навигация по видам */
+  .mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;
+    left:0;right:0;bottom:0;z-index:50;background:rgba(7,17,41,.96);
+    backdrop-filter:blur(8px);border-top:1px solid var(--line);
+    padding-bottom:env(safe-area-inset-bottom,0)}
+  .mnav-item{display:flex;flex-direction:column;align-items:center;gap:2px;
+    padding:8px 2px;text-decoration:none;color:var(--muted);font-size:10px;min-height:52px;
+    justify-content:center}
+  .mnav-glyph{font-size:16px;line-height:1}
+  .mnav-label{line-height:1.1;text-align:center;white-space:nowrap;overflow:hidden;
+    text-overflow:ellipsis;max-width:100%}
+  .mnav-item.is-active{color:#e6eef8;box-shadow:inset 0 2px 0 var(--accent);
+    background:rgba(96,165,250,.10)}
+
+  /* боковой список видов внутри панели дублирует нижнюю навигацию — прячем */
+  .sidebar .side-nav{display:none}
+  .sidebar .side-card:first-child .side-title{display:none}
+  .side-row{grid-template-columns:1fr}
+
+  /* контент получает весь экран */
+  .maincol{min-height:50vh}
 }

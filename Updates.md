@@ -1,6 +1,17 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.1.0 (2026/10/13)
+- **Russian character, weapon and artifact names.** The whole interface now switches language, not just the labels around it. Search accepts either language.
+- **Team details.** Click a team to expand a panel with large portraits, weapons, artifact sets, artifact main stats and substat rolls, plus a link to the source simulation.
+- **KQM standard.** Every build is checked against the [KQM calculation standard](https://compendium.keqingmains.com/): constellations (5★ at C0 or a forced C1, 4★ at C6) and artifacts (40 substat rolls, at least 2 of each). Both are shown on the team panel and can be used as filters under Advanced.
+- Constellations are now shown per team from that team's own build, instead of a fixed C1 badge on the character everywhere.
+- Character names in team cards are no longer boxed — the owned/missing colour moved to the card frame itself.
+- Weapon refinement is shown for R1 too, not only R2+.
+- **Phone layout.** Settings and your roster moved into a drawer behind the ☰ button, views moved to a bottom bar, and the content now gets the whole screen.
+- Fixed the inventory jumping back to the top on every click.
+- Fixed the page and roster losing their scroll position when switching language.
+
 ## 2.0.1 (2026/10/13)
 - Fixed the layout on phones: the page no longer scrolls sideways. The header now wraps, the sidebar stops forcing its own width, and recommendation cards stack instead of sitting side by side.
 - Buttons, chips and filters are now at least 38px tall on touch devices, and the interface is no longer scaled down to 90% there.

@@ -133,7 +133,18 @@
     "sims": "{n} sims averaged",
     "builds": "{n} builds",
     "showBuilds": "Show builds",
-    "hideBuilds": "Hide builds"
+    "hideBuilds": "Hide builds",
+    "mainStats": "Main stats",
+    "substats": "Substats",
+    "details": "Team details",
+    "close": "Close",
+    "kqmCons": "KQM constellations",
+    "kqmArt": "KQM artifacts",
+    "kqmConsHint": "5★ at C0 (or forced C1), 4★ at C6",
+    "kqmArtHint": "40 substat rolls, at least 2 of each",
+    "notKqm": "Does not follow the standard",
+    "level": "Level",
+    "talents": "Talents"
   },
   "feedback": {
     "title": "Leave feedback",
@@ -150,7 +161,16 @@
   },
   "filters": {
     "currentView": "Filter current view",
-    "byElementWeapon": "Filter teams by element and weapon"
+    "byElementWeapon": "Filter teams by element and weapon",
+    "title": "Filters",
+    "advanced": "Advanced",
+    "show": "Show filters",
+    "hide": "Hide filters",
+    "reset": "Reset filters",
+    "kqmOnly": "KQM standard only",
+    "kqmConsOnly": "KQM constellations only",
+    "kqmArtOnly": "KQM artifacts only",
+    "active": "{n} active"
   },
   "builder": {
     "content": "Content: ",
@@ -173,5 +193,26 @@
   "errors": {
     "loadData": "Failed to load data. Check that names.json and data/db.json are next to index.html.",
     "loadUpdates": "Failed to load updates."
+  },
+  "stats": {
+    "hp": "HP",
+    "hpPct": "HP%",
+    "atk": "ATK",
+    "atkPct": "ATK%",
+    "def": "DEF",
+    "defPct": "DEF%",
+    "er": "Energy Recharge",
+    "em": "Elemental Mastery",
+    "cr": "CRIT Rate",
+    "cd": "CRIT DMG",
+    "heal": "Healing Bonus",
+    "physPct": "Physical DMG",
+    "pyroPct": "Pyro DMG",
+    "hydroPct": "Hydro DMG",
+    "electroPct": "Electro DMG",
+    "cryoPct": "Cryo DMG",
+    "anemoPct": "Anemo DMG",
+    "geoPct": "Geo DMG",
+    "dendroPct": "Dendro DMG"
   }
 }

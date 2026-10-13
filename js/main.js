@@ -5,8 +5,10 @@
 import * as i18n from "./i18n.js";
 import * as store from "./store.js";
 import * as db from "./db.js";
+import * as labels from "./labels.js";
 import { mount as mountInventory } from "./inventory.js";
 import { parseGood, looksLikeGood } from "./good.js";
+import * as mobile from "./mobile.js";
 import { start as startApp } from "../app.js";
 
 const GITHUB_ISSUES = "https://github.com/SenjeyB/gi-rec/issues/new/choose";
@@ -17,7 +19,7 @@ let refs = null;
 let app = null;
 let syncing = false;
 
-const settings = { allowFiveStar: false, onlyMyWeapons: false };
+const settings = { allowFiveStar: false, onlyMyWeapons: false, kqmCons: false, kqmArt: false };
 
 async function loadJSON(path) {
   const resp = await fetch(path, { cache: "no-cache" });
@@ -32,6 +34,8 @@ function loadSettings() {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
     settings.allowFiveStar = !!raw.allowFiveStar;
     settings.onlyMyWeapons = !!raw.onlyMyWeapons;
+    settings.kqmCons = !!raw.kqmCons;
+    settings.kqmArt = !!raw.kqmArt;
   } catch { /* нет сохранённых — остаются значения по умолчанию */ }
 }
 
@@ -50,6 +54,8 @@ function currentTeams() {
     weapons,
     allowFiveStar: settings.allowFiveStar,
     onlyMyWeapons: settings.onlyMyWeapons,
+    kqmCons: settings.kqmCons,
+    kqmArt: settings.kqmArt,
   });
 }
 
@@ -76,6 +82,31 @@ function wireSettings() {
       settings.allowFiveStar = five.checked;
       if (mine) mine.disabled = !settings.allowFiveStar;
       saveSettings();
+      refresh();
+    });
+  }
+  for (const [id, key] of [["kqm-cons", "kqmCons"], ["kqm-art", "kqmArt"]]) {
+    const box = document.getElementById(id);
+    if (!box) continue;
+    box.checked = settings[key];
+    box.addEventListener("change", () => {
+      settings[key] = box.checked;
+      saveSettings();
+      refresh();
+    });
+  }
+  const reset = document.getElementById("reset-filters");
+  if (reset) {
+    reset.addEventListener("click", () => {
+      Object.assign(settings, { allowFiveStar: false, onlyMyWeapons: false, kqmCons: false, kqmArt: false });
+      saveSettings();
+      for (const [id, key] of [["allow-five-star", "allowFiveStar"], ["only-my-weapons", "onlyMyWeapons"],
+                               ["kqm-cons", "kqmCons"], ["kqm-art", "kqmArt"]]) {
+        const box = document.getElementById(id);
+        if (box) box.checked = settings[key];
+      }
+      const m = document.getElementById("only-my-weapons");
+      if (m) m.disabled = true;
       refresh();
     });
   }
@@ -230,6 +261,7 @@ async function boot() {
   refs = db.references();
   console.info(`gi-rec: база от ${info.generated} — ${info.teams} отрядов, ${info.builds} сборок`);
 
+  await labels.init(names);
   store.init(names);
 
   app = await startApp({ names, teams: currentTeams(), refs });
@@ -240,9 +272,11 @@ async function boot() {
   wireFeedback();
   wireImport();
   wireInventoryView();
+  mobile.init();
   updateFilterHint();
 
-  i18n.onChange(() => {
+  i18n.onChange(async () => {
+    await labels.reload();
     buildLangSwitcher();
     updateFilterHint();
     if (app) app.rerender();

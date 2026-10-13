@@ -1,4 +1,6 @@
 import { t } from './js/i18n.js';
+import { charLabel, weaponLabel, setLabel, statLabel } from './js/labels.js';
+import { toggleDetail } from './js/teamdetail.js';
 
 // Имена оружия и сетов для подсказок — заполняются из data/refs.json при старте.
 let WEAPON_NAMES = {};
@@ -25,8 +27,8 @@ function renderLoadout(slot){
     img.alt = '';
     img.onerror = ()=>{ img.style.visibility = 'hidden'; };
     w.appendChild(img);
-    if(slot.refine > 1) w.appendChild(createEl('span','loadout-refine', T('team.refine','R'+slot.refine,{n:slot.refine})));
-    const wname = (WEAPON_NAMES && WEAPON_NAMES[slot.weapon]) || slot.weapon;
+    w.appendChild(createEl('span','loadout-refine', T('team.refine','R'+slot.refine,{n:slot.refine})));
+    const wname = weaponLabel(slot.weapon) || (WEAPON_NAMES && WEAPON_NAMES[slot.weapon]) || slot.weapon;
     w.title = `${T('team.weapon','Weapon')}: ${wname} R${slot.refine}`;
     wrap.appendChild(w);
   }
@@ -46,7 +48,7 @@ function renderLoadout(slot){
       img.onerror = ()=>{ img.style.visibility = 'hidden'; };
       node.appendChild(img);
       node.appendChild(createEl('span','loadout-pieces', String(s.pieces)));
-      const sname = (SET_NAMES && SET_NAMES[s.key]) || s.key;
+      const sname = setLabel(s.key) || (SET_NAMES && SET_NAMES[s.key]) || s.key;
       node.title = `${T('team.sets','Artifact sets')}: ${sname} ×${s.pieces}`;
       wrap.appendChild(node);
     }
@@ -57,16 +59,28 @@ function renderLoadout(slot){
 // Ячейка участника отряда: портрет, имя и его сборка (оружие + сеты).
 // idx — позиция в отряде; build в данных выровнен с members, поэтому берём по индексу.
 function appendMemberCell(host, displayName, key, team, idx, pillClass){
+  const slot = (team && team.build) ? team.build[idx] : null;
+  // Статус «есть / нет персонажа» раньше красил плашку с именем; теперь он на
+  // рамке всей ячейки, а имя идёт обычным текстом — так карточка спокойнее.
   const cell = createEl('div','member-cell');
+  if(pillClass) cell.classList.add(pillClass);
+
+  const avatarWrap = createEl('div','member-portrait');
   const img = createAvatarImg(displayName,'member-avatar', key);
-  if(img) cell.appendChild(img);
-  const pill = createEl('div','member-pill', displayName);
-  if(pillClass) pill.classList.add(pillClass);
-  cell.appendChild(pill);
-  const lo = (team && team.build) ? renderLoadout(team.build[idx]) : null;
+  if(img) avatarWrap.appendChild(img);
+  // созвездие берём из самой сборки, а не из общего признака персонажа:
+  // в разных отрядах один и тот же герой может считаться на разных констах
+  if(slot && Number.isFinite(slot.cons)){
+    avatarWrap.appendChild(createEl('span','cons-badge', `C${slot.cons}`));
+  }
+  cell.appendChild(avatarWrap);
+
+  cell.appendChild(createEl('div','member-name', charLabel(displayName)));
+
+  const lo = renderLoadout(slot);
   if(lo) cell.appendChild(lo);
   host.appendChild(cell);
-  return pill;
+  return cell;
 }
 
 function createEl(tag,cls,txt){
@@ -131,6 +145,8 @@ export async function start(ctx){
       build: t.build || null,      // оружие и сеты по слотам, выровнены с members
       src: t.src || null,
       sims: t.sims || 0,
+      kqmCons: !!t.kqmCons,
+      kqmArt: !!t.kqmArt,
     }));
     teamsByMember = new Map();
     for(const pt of parsedTeams){
@@ -291,14 +307,16 @@ export async function start(ctx){
     const pred = makeFilterPredicate('owned');
     const q = (document.getElementById('char-search')?.value || '').trim().toLowerCase();
     for(const disp of displayNames){
-      if(q && !disp.toLowerCase().includes(q)) continue;
+      // ищем и по английскому имени, и по подписи текущего языка: иначе на
+      // русском интерфейсе поиск по «Ху Тао» ничего бы не находил
+      if(q && !disp.toLowerCase().includes(q) && !charLabel(disp).toLowerCase().includes(q)) continue;
       if(!pred(disp)) continue;
       const btn = createEl('button','char');
       btn.type = 'button';
       const key = keyByDisplay[disp];
       const img = createAvatarImg(disp,'avatar', key);
       if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
-      const lbl = createEl('div',null,disp);
+      const lbl = createEl('div',null,charLabel(disp));
       btn.appendChild(lbl);
 
       const noTeams = !hasTeams(disp);
@@ -927,6 +945,7 @@ export async function start(ctx){
         members: t.members,
         dps: t.dps,
         build: t.build, src: t.src, sims: t.sims,
+        kqmCons: t.kqmCons, kqmArt: t.kqmArt,
         missingCount
       };
     });
@@ -991,6 +1010,11 @@ export async function start(ctx){
       row.appendChild(members);
       const dpsEl = createEl('div','team-dps', fmtDps(team.dps));
       row.appendChild(dpsEl);
+      if(team.build){
+        row.classList.add('expandable');
+        row.title = T('team.details','Team details');
+        row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
+      }
       container.appendChild(row);
     }
   }
@@ -1046,16 +1070,31 @@ export async function start(ctx){
     }
   });
 
+  // Перерисовка пересобирает DOM целиком, из-за чего страница и список персонажей
+  // прыгали наверх (особенно заметно при смене языка). Запоминаем позиции и
+  // возвращаем их в том же кадре, чтобы перерисовка была незаметной.
+  function keepScroll(fn){
+    const page = window.scrollY;
+    const roster = charactersDiv ? charactersDiv.scrollTop : 0;
+    fn();
+    if(charactersDiv) charactersDiv.scrollTop = roster;
+    window.scrollTo({top: page, behavior: 'instant'});
+  }
+
   return {
     // новый список отрядов (сменился инвентарь или настройки фильтра)
     refreshTeams(list){
-      rebuildTeams(list);
-      renderOwnedCharacters();
-      renderActiveView();
+      keepScroll(()=>{
+        rebuildTeams(list);
+        renderOwnedCharacters();
+        renderActiveView();
+      });
     },
     rerender(){
-      renderOwnedCharacters();
-      renderActiveView();
+      keepScroll(()=>{
+        renderOwnedCharacters();
+        renderActiveView();
+      });
     },
   };
 }
@@ -1081,7 +1120,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode, maxShow=3){
       const sortedMissing = missing.slice().sort();
       const key = sortedMissing.join('||');
       const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
-      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims});
+      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt});
       byMissingSet.set(key, list);
     }
   }
@@ -1123,7 +1162,7 @@ function renderSuggestions(list, keyByDisplay, maxShow){
       const key = keyByDisplay[missingName];
       const img = createAvatarImg(missingName,'avatar-sm', key);
       if(img) group.appendChild(img);
-      group.appendChild(createEl('div','pill',missingName));
+      group.appendChild(createEl('div','pill',charLabel(missingName)));
     }
     left.appendChild(group);
     left.appendChild(createEl('div','small',T('views.teamsMatchSet',item.count+' team(s) match this set',{n:item.count})));
@@ -1172,7 +1211,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxSh
       const missingOthers = others.length - ownedCount;
       const totalMissing = isOwned ? missingOthers : (1 + missingOthers);
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, ownedCount});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, ownedCount});
       }
     }
     if(candidates.length===0){ continue; }
@@ -1272,7 +1311,7 @@ function renderTierlist(tierData, keyByDisplay, maxShow, ownedSet){
       const chip = createEl('div','tier-member');
       const avatar = createAvatarImg(member.name,'avatar', key);
       if(avatar) chip.appendChild(avatar);
-      chip.appendChild(createEl('div','pill',member.name));
+      chip.appendChild(createEl('div','pill',charLabel(member.name)));
       chip.addEventListener('click', ()=> togglePanel(chip, {missing:[member.name], topteams:member.teams}, keyByDisplay, ownedSet));
       membersTd.appendChild(chip);
     }
@@ -1303,6 +1342,11 @@ function togglePanel(card, item, keyByDisplay, ownedSet){
       row.appendChild(members);
       const dpsEl = createEl('div','team-dps', fmtDps(team.dps));
       row.appendChild(dpsEl);
+      if(team.build){
+        row.classList.add('expandable');
+        row.title = T('team.details','Team details');
+        row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
+      }
       panel.appendChild(row);
     }
   }
@@ -1324,14 +1368,10 @@ function createAvatarImg(displayName, cls, key){
   img.decoding = 'async';
   img.src = `characters/${file}`;
   img.className = cls;
+  img.alt = charLabel(displayName);
   img.onerror = ()=>{ img.style.display = 'none'; };
-  const cons = CONS_BY_DISPLAY[displayName];
-  if(cons){
-    const wrap = createEl('span','avatar-wrap');
-    wrap.appendChild(img);
-    wrap.appendChild(createEl('span','cons-badge',`C${cons}`));
-    return wrap;
-  }
+  // Общий бейдж «C1» на персонаже убран: созвездие теперь показывается у каждой
+  // сборки отдельно, из её собственных данных, и не висит там, где неуместен.
   return img;
 }
 

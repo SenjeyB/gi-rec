@@ -56,6 +56,7 @@ function isFiveStar(weaponIdx) {
 
 /** Разворачивает сборку в удобный для рендера вид. */
 function expandBuild(team, build) {
+  const order = db.dict.subOrder || [];
   return build.members.map((m, i) => ({
     char: db.dict.chars[team.chars[i]],
     cons: m.cons,
@@ -63,6 +64,10 @@ function expandBuild(team, build) {
     refine: m.refine,
     fiveStar: isFiveStar(m.weapon),
     sets: (m.sets || []).map(([si, pieces]) => ({ key: db.dict.sets[si], pieces })),
+    // мейн-статы песка, кубка и короны; цветок и перо фиксированы и не хранятся
+    main: (m.main || []).map((si) => db.dict.stats[si]),
+    // роллы сабстатов в порядке dict.subOrder
+    subs: order.map((stat, k) => ({ stat, rolls: (m.subs || [])[k] || 0 })),
   }));
 }
 
@@ -80,6 +85,8 @@ export function query(opts = {}) {
   const invWeapons = opts.weapons || {};
   const allowFive = !!opts.allowFiveStar;
   const onlyMine = !!opts.onlyMyWeapons;
+  const needCons = !!opts.kqmCons;
+  const needArt = !!opts.kqmArt;
 
   const capFor = (charKey) => {
     const base = baseCap[charKey] === undefined ? 6 : baseCap[charKey];
@@ -95,6 +102,8 @@ export function query(opts = {}) {
     let best = null;
 
     for (const build of team.builds) {
+      if (needCons && !build.kqmCons) continue;
+      if (needArt && !build.kqmArt) continue;
       let ok = true;
       for (let i = 0; i < build.members.length; i++) {
         const m = build.members[i];
@@ -120,6 +129,8 @@ export function query(opts = {}) {
       dps: best.dps,
       sims: best.sims,
       src: best.src,
+      kqmCons: !!best.kqmCons,
+      kqmArt: !!best.kqmArt,
       build: expandBuild(team, best),
       buildCount: team.builds.length,
     });

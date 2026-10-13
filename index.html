@@ -31,6 +31,8 @@
   <div class="ui-scale">
     <div class="ui-scale-inner">
       <header class="app-header">
+        <button id="drawer-toggle" class="drawer-toggle" type="button"
+                aria-expanded="false" data-i18n-attr="aria-label:filters.title">☰</button>
         <div class="brand">
           <img src="assets/logo.svg" alt="GI-Rec" class="logo-img" width="32" height="32" />
           <div class="titles">
@@ -52,6 +54,7 @@
         </div>
       </header>
 
+      <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
       <div class="app-container">
         <aside class="sidebar" aria-label="Settings panel">
           <div class="side-row">
@@ -87,6 +90,20 @@
                 <span data-i18n="settings.onlyMyWeapons">Only my 5★ weapons</span>
               </label>
               <div id="five-star-hint" class="side-note small"></div>
+
+              <details id="advanced-filters" class="adv-filters">
+                <summary data-i18n="filters.advanced">Advanced</summary>
+                <label class="side-check">
+                  <input id="kqm-cons" type="checkbox" />
+                  <span data-i18n="filters.kqmConsOnly">KQM constellations only</span>
+                </label>
+                <label class="side-check">
+                  <input id="kqm-art" type="checkbox" />
+                  <span data-i18n="filters.kqmArtOnly">KQM artifacts only</span>
+                </label>
+                <div class="side-note small" data-i18n="team.kqmConsHint">5★ at C0 (or forced C1), 4★ at C6</div>
+                <button id="reset-filters" type="button" class="macro-btn" data-i18n="filters.reset">Reset filters</button>
+              </details>
 
               <div class="side-note small" data-i18n="settings.autoApply">Changes apply automatically.</div>
             </div>
@@ -148,6 +165,8 @@
       </div>
     </div>
   </div>
+
+  <nav id="mobile-nav" class="mobile-nav" aria-label="Views"></nav>
 
   <!-- app.js подключается как модуль из js/main.js, когда готовы язык, инвентарь и база -->
   <script type="module" src="js/main.js"></script>

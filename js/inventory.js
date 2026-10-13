@@ -3,6 +3,7 @@
 
 import * as store from "./store.js";
 import { t, onChange as onLangChange } from "./i18n.js";
+import { charLabel, weaponLabel } from "./labels.js";
 
 const ELEMENTS = ["pyro", "hydro", "anemo", "electro", "dendro", "cryo", "geo"];
 const WEAPON_TYPES = ["sword", "claymore", "polearm", "bow", "catalyst"];
@@ -20,6 +21,32 @@ const ui = {
   weaponOwned: "all",
   weaponType: null,
 };
+
+// Полная перерисовка списка сбрасывала прокрутку наверх при каждом клике.
+// Поэтому изменения, сделанные прямо здесь, применяем точечно: подменяем одну
+// карточку и обновляем счётчики, не трогая остальной DOM.
+let localEdit = false;
+
+function local(fn) {
+  localEdit = true;
+  try { fn(); } finally { localEdit = false; }
+}
+
+function swapCard(key, build) {
+  if (!host) return;
+  const old = host.querySelector(`.inv-card[data-key="${CSS.escape(key)}"]`);
+  if (!old) { render(); return; }
+  old.replaceWith(build(key));
+  updateCounts();
+}
+
+function updateCounts() {
+  if (!host) return;
+  const c = store.counts();
+  const tabs = host.querySelectorAll(".inv-tab .inv-tab-count");
+  if (tabs[0]) tabs[0].textContent = String(c.chars);
+  if (tabs[1]) tabs[1].textContent = String(c.weapons);
+}
 
 function el(tag, cls, text) {
   const node = document.createElement(tag);
@@ -108,15 +135,16 @@ function characterCard(key) {
   top.type = "button";
   top.setAttribute("aria-pressed", String(owned));
   top.title = owned ? t("inventory.owned") : t("inventory.notOwned");
-  top.appendChild(icon(`characters/${key}.png`, entry.name || key, "inv-portrait"));
-  const nameRow = el("div", "inv-card-name", entry.name || key);
+  top.appendChild(icon(`characters/${key}.png`, charLabel(key), "inv-portrait"));
+  const nameRow = el("div", "inv-card-name", charLabel(key));
   top.appendChild(nameRow);
   if (entry.element) {
     top.appendChild(icon(`filters/Element_${entry.element.charAt(0).toUpperCase()}${entry.element.slice(1)}.png`,
       entry.element, "inv-element"));
   }
   top.addEventListener("click", () => {
-    store.toggleCharacter(key);
+    local(() => store.toggleCharacter(key));
+    swapCard(key, characterCard);
   });
   card.appendChild(top);
 
@@ -124,7 +152,9 @@ function characterCard(key) {
     const min = store.minCons(key);
     const cons = store.consOf(key);
     const row = el("div", "inv-card-foot");
-    row.appendChild(stepper(cons, min, 6, (v) => store.setCons(key, v), (v) => `${t("inventory.consShort")}${v}`));
+    row.appendChild(stepper(cons, min, 6,
+      (v) => { local(() => store.setCons(key, v)); swapCard(key, characterCard); },
+      (v) => `${t("inventory.consShort")}${v}`));
     if (min > 0) {
       const badge = el("span", "inv-min-badge", `${t("inventory.consShort")}${min}`);
       badge.title = t("inventory.minC1Note");
@@ -204,24 +234,29 @@ function weaponCard(key) {
   const w = refs.fiveStars[key] || {};
   const owned = store.hasWeapon(key);
   const card = el("div", `inv-card inv-card-weapon${owned ? " is-owned" : ""}`);
+  card.dataset.key = key;
 
   const top = el("button", "inv-card-main");
   top.type = "button";
   top.setAttribute("aria-pressed", String(owned));
-  top.appendChild(icon(`weapons/${key}.png`, w.name || key, "inv-portrait"));
-  top.appendChild(el("div", "inv-card-name", w.name || key));
+  top.appendChild(icon(`weapons/${key}.png`, weaponLabel(key) || w.name || key, "inv-portrait"));
+  top.appendChild(el("div", "inv-card-name", weaponLabel(key) || w.name || key));
   if (!w.inDb) {
     const mark = el("span", "inv-nodb", "·");
     mark.title = t("inventory.weaponsNotInDb");
     top.appendChild(mark);
   }
-  top.addEventListener("click", () => store.toggleWeapon(key));
+  top.addEventListener("click", () => {
+    local(() => store.toggleWeapon(key));
+    swapCard(key, weaponCard);
+  });
   card.appendChild(top);
 
   if (owned) {
     const row = el("div", "inv-card-foot");
     row.appendChild(stepper(store.refineOf(key), 1, 5,
-      (v) => store.setRefine(key, v), (v) => `R${v}`));
+      (v) => { local(() => store.setRefine(key, v)); swapCard(key, weaponCard); },
+      (v) => `R${v}`));
     card.appendChild(row);
   }
   return card;
@@ -272,6 +307,9 @@ function renderWeapons(container) {
 
 function render() {
   if (!host) return;
+  // перерисовка снаружи (импорт, сброс, смена языка) не должна ронять
+  // прокрутку списка — запоминаем и возвращаем
+  const keepScroll = host.querySelector(".inv-grid")?.scrollTop || 0;
   host.innerHTML = "";
 
   const head = el("div", "inv-head");
@@ -322,6 +360,8 @@ function render() {
   host.appendChild(body);
   if (ui.tab === "characters") renderCharacters(body);
   else renderWeapons(body);
+  const grid = host.querySelector(".inv-grid");
+  if (grid && keepScroll) grid.scrollTop = keepScroll;
 }
 
 /**
@@ -333,7 +373,10 @@ export function mount(container, namesJson, refsJson) {
   host = container;
   names = namesJson || {};
   refs = refsJson || { fiveStars: {} };
-  store.onChange(() => { if (host && host.isConnected) render(); });
+  store.onChange(() => {
+    if (localEdit) { updateCounts(); return; }
+    if (host && host.isConnected) render();
+  });
   onLangChange(() => { if (host && host.isConnected) render(); });
   render();
 }
