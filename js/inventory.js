@@ -1,12 +1,20 @@
-// Раздел «Инвентарь»: персонажи с созвездиями и свои 5★ пушки.
-// Полноценная замена быстрого списка в сайдбаре.
+// Раздел «Инвентарь»: персонажи с созвездиями и своё 5★ оружие.
+//
+// Оружие хранится копиями, как в игровом инвентаре: одинаковых может быть
+// несколько, и отряд, где два персонажа держат одну и ту же легендарку,
+// требует двух копий. Поэтому оружие не «отмечается», а добавляется по одному
+// экземпляру через окно выбора.
 
 import * as store from "./store.js";
 import { t, onChange as onLangChange } from "./i18n.js";
 import { charLabel, weaponLabel } from "./labels.js";
+import { openSheet } from "./sheet.js";
 
 const ELEMENTS = ["pyro", "hydro", "anemo", "electro", "dendro", "cryo", "geo"];
 const WEAPON_TYPES = ["sword", "claymore", "polearm", "bow", "catalyst"];
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const elementIcon = (e) => `filters/Element_${cap(e)}.png`;
+const typeIcon = (w) => `filters/Class-${w}.png`;
 
 let names = {};
 let refs = { fiveStars: {} };
@@ -15,37 +23,23 @@ let host = null;
 const ui = {
   tab: "characters",
   charSearch: "",
-  charOwned: "all",      // all | owned | missing
+  charOwned: "all",        // all | owned | missing
+  charRarity: null,        // 5 | 4
   charElement: null,
+  charWeapon: null,
   weaponSearch: "",
-  weaponOwned: "all",
   weaponType: null,
+  pickSearch: "",
+  pickType: null,
+  pickInTeams: false,
 };
 
-// Полная перерисовка списка сбрасывала прокрутку наверх при каждом клике.
-// Поэтому изменения, сделанные прямо здесь, применяем точечно: подменяем одну
-// карточку и обновляем счётчики, не трогая остальной DOM.
+// Изменения, сделанные прямо здесь, применяем точечно, а не полной перерисовкой:
+// иначе список прыгал наверх при каждом клике.
 let localEdit = false;
-
 function local(fn) {
   localEdit = true;
   try { fn(); } finally { localEdit = false; }
-}
-
-function swapCard(key, build) {
-  if (!host) return;
-  const old = host.querySelector(`.inv-card[data-key="${CSS.escape(key)}"]`);
-  if (!old) { render(); return; }
-  old.replaceWith(build(key));
-  updateCounts();
-}
-
-function updateCounts() {
-  if (!host) return;
-  const c = store.counts();
-  const tabs = host.querySelectorAll(".inv-tab .inv-tab-count");
-  if (tabs[0]) tabs[0].textContent = String(c.chars);
-  if (tabs[1]) tabs[1].textContent = String(c.weapons);
 }
 
 function el(tag, cls, text) {
@@ -66,39 +60,70 @@ function icon(src, alt, cls) {
   return img;
 }
 
-/** Кнопки-переключатели вида «Все / Есть / Нет» и фильтров по элементу/типу. */
+function button(cls, text) {
+  const b = el("button", cls, text);
+  b.type = "button";
+  return b;
+}
+
+/** Ряд чипов-переключателей. Повторный клик по активному снимает выбор, если clearable. */
 function chipRow(items, active, onPick, label) {
   const row = el("div", "inv-chips");
   if (label) row.setAttribute("aria-label", label);
   for (const item of items) {
-    const chip = el("button", "inv-chip");
-    chip.type = "button";
-    if (item.icon) chip.appendChild(icon(item.icon, item.label, "inv-chip-icon"));
+    const chip = button("inv-chip");
+    if (item.icon) chip.appendChild(icon(item.icon, item.title || item.label || "", "inv-chip-icon"));
     if (item.label) chip.appendChild(el("span", null, item.label));
-    if (item.value === active) chip.classList.add("is-active");
-    chip.addEventListener("click", () => onPick(item.value === active && item.clearable ? null : item.value));
+    if (item.title) chip.title = item.title;
+    const on = item.value === active;
+    chip.classList.toggle("is-active", on);
+    chip.setAttribute("aria-pressed", String(on));
+    chip.addEventListener("click", () => onPick(on && item.clearable ? null : item.value));
     row.appendChild(chip);
   }
   return row;
 }
 
+function searchBox(value, onInput) {
+  const input = el("input", "inv-search");
+  input.type = "search";
+  input.placeholder = t("inventory.search");
+  input.value = value;
+  input.addEventListener("input", () => onInput(input.value));
+  return input;
+}
+
 function stepper(value, min, max, onChange, fmt) {
   const box = el("div", "inv-stepper");
-  const dec = el("button", "inv-step", "−");
-  dec.type = "button";
+  const dec = button("inv-step", "−");
   dec.disabled = value <= min;
   dec.addEventListener("click", (e) => { e.stopPropagation(); onChange(value - 1); });
-
   const out = el("span", "inv-step-value", fmt(value));
-
-  const inc = el("button", "inv-step", "+");
-  inc.type = "button";
+  const inc = button("inv-step", "+");
   inc.disabled = value >= max;
   inc.addEventListener("click", (e) => { e.stopPropagation(); onChange(value + 1); });
-
   box.append(dec, out, inc);
   return box;
 }
+
+/** Перерисовывает сетку, не теряя прокрутку. */
+function fillGrid(grid, nodes, emptyText) {
+  const keep = grid.scrollTop;
+  grid.innerHTML = "";
+  if (!nodes.length) grid.appendChild(el("div", "small muted inv-empty", emptyText));
+  for (const n of nodes) grid.appendChild(n);
+  grid.scrollTop = keep;
+}
+
+function updateCounts() {
+  if (!host) return;
+  const c = store.counts();
+  const tabs = host.querySelectorAll(".inv-tab .inv-tab-count");
+  if (tabs[0]) tabs[0].textContent = String(c.chars);
+  if (tabs[1]) tabs[1].textContent = String(c.weapons);
+}
+
+const matches = (q, ...hay) => !q || hay.some((h) => String(h || "").toLowerCase().includes(q));
 
 // ------------------------------------------------------------- персонажи
 
@@ -106,22 +131,24 @@ function characterList() {
   const q = ui.charSearch.trim().toLowerCase();
   return Object.keys(names)
     .filter((k) => {
-      const entry = names[k];
-      if (!entry) return false;
-      if (ui.charElement && entry.element !== ui.charElement) return false;
+      const e = names[k];
+      if (!e) return false;
       const owned = store.hasCharacter(k);
       if (ui.charOwned === "owned" && !owned) return false;
       if (ui.charOwned === "missing" && owned) return false;
-      if (q) {
-        const hay = `${k} ${entry.name || ""}`.toLowerCase();
-        if (!hay.includes(q)) return false;
-      }
-      return true;
+      const five = (e.stars || 0) >= 3;
+      if (ui.charRarity === 5 && !five) return false;
+      if (ui.charRarity === 4 && five) return false;
+      if (ui.charElement && e.element !== ui.charElement) return false;
+      if (ui.charWeapon && e.weapon !== ui.charWeapon) return false;
+      // ищем по подписи текущего языка и по английскому имени
+      return matches(q, charLabel(k), e.name, k);
     })
     .sort((a, b) => {
-      const sa = names[a].stars || 0, sb = names[b].stars || 0;
-      if (sa !== sb) return sb - sa;                       // сначала 5★
-      return (names[a].name || a).localeCompare(names[b].name || b);
+      const sa = (names[a].stars || 0) >= 3 ? 1 : 0;
+      const sb = (names[b].stars || 0) >= 3 ? 1 : 0;
+      if (sa !== sb) return sb - sa;                        // сначала 5★
+      return charLabel(a).localeCompare(charLabel(b));
     });
 }
 
@@ -131,29 +158,27 @@ function characterCard(key) {
   const card = el("div", `inv-card${owned ? " is-owned" : ""}`);
   card.dataset.key = key;
 
-  const top = el("button", "inv-card-main");
-  top.type = "button";
+  const top = button("inv-card-main");
   top.setAttribute("aria-pressed", String(owned));
   top.title = owned ? t("inventory.owned") : t("inventory.notOwned");
   top.appendChild(icon(`characters/${key}.png`, charLabel(key), "inv-portrait"));
-  const nameRow = el("div", "inv-card-name", charLabel(key));
-  top.appendChild(nameRow);
-  if (entry.element) {
-    top.appendChild(icon(`filters/Element_${entry.element.charAt(0).toUpperCase()}${entry.element.slice(1)}.png`,
-      entry.element, "inv-element"));
-  }
+  top.appendChild(el("div", "inv-card-name", charLabel(key)));
+  if (entry.element) top.appendChild(icon(elementIcon(entry.element), "", "inv-element"));
   top.addEventListener("click", () => {
     local(() => store.toggleCharacter(key));
-    swapCard(key, characterCard);
+    card.replaceWith(characterCard(key));
+    updateCounts();
   });
   card.appendChild(top);
 
   if (owned && store.isFiveStar(key)) {
     const min = store.minCons(key);
-    const cons = store.consOf(key);
     const row = el("div", "inv-card-foot");
-    row.appendChild(stepper(cons, min, 6,
-      (v) => { local(() => store.setCons(key, v)); swapCard(key, characterCard); },
+    row.appendChild(stepper(store.consOf(key), min, 6,
+      (v) => {
+        local(() => store.setCons(key, v));
+        card.replaceWith(characterCard(key));
+      },
       (v) => `${t("inventory.consShort")}${v}`));
     if (min > 0) {
       const badge = el("span", "inv-min-badge", `${t("inventory.consShort")}${min}`);
@@ -166,149 +191,181 @@ function characterCard(key) {
 }
 
 function renderCharacters(container) {
-  container.innerHTML = "";
-
   const controls = el("div", "inv-controls");
-  const search = el("input", "inv-search");
-  search.type = "search";
-  search.placeholder = t("inventory.search");
-  search.value = ui.charSearch;
-  search.addEventListener("input", () => {
-    ui.charSearch = search.value;
-    renderGrid();
-  });
-  controls.appendChild(search);
+  const grid = el("div", "inv-grid");
+  const refill = () => fillGrid(grid, characterList().map(characterCard), t("inventory.notFound"));
+  const rebuild = () => { container.innerHTML = ""; renderCharacters(container); };
 
+  controls.appendChild(searchBox(ui.charSearch, (v) => { ui.charSearch = v; refill(); }));
   controls.appendChild(chipRow([
     { value: "all", label: t("inventory.filterAll") },
     { value: "owned", label: t("inventory.filterOwned") },
     { value: "missing", label: t("inventory.filterMissing") },
-  ], ui.charOwned, (v) => { ui.charOwned = v || "all"; render(); }));
-
+  ], ui.charOwned, (v) => { ui.charOwned = v || "all"; rebuild(); }));
+  controls.appendChild(chipRow([
+    { value: 5, label: "5★", clearable: true },
+    { value: 4, label: "4★", clearable: true },
+  ], ui.charRarity, (v) => { ui.charRarity = v; rebuild(); }));
   controls.appendChild(chipRow(
-    ELEMENTS.map((e) => ({
-      value: e, clearable: true,
-      icon: `filters/Element_${e.charAt(0).toUpperCase()}${e.slice(1)}.png`,
-    })),
-    ui.charElement,
-    (v) => { ui.charElement = v; render(); },
-  ));
+    ELEMENTS.map((e) => ({ value: e, clearable: true, icon: elementIcon(e), title: t(`element.${e}`) })),
+    ui.charElement, (v) => { ui.charElement = v; rebuild(); }));
+  controls.appendChild(chipRow(
+    WEAPON_TYPES.map((w) => ({ value: w, clearable: true, icon: typeIcon(w), title: t(`weaponType.${w}`) })),
+    ui.charWeapon, (v) => { ui.charWeapon = v; rebuild(); }));
+
   container.appendChild(controls);
-
   container.appendChild(el("p", "inv-hint small", t("inventory.charactersHint")));
-
-  const grid = el("div", "inv-grid");
   container.appendChild(grid);
-
-  function renderGrid() {
-    grid.innerHTML = "";
-    const list = characterList();
-    if (!list.length) {
-      grid.appendChild(el("div", "small muted", t("inventory.empty")));
-      return;
-    }
-    for (const key of list) grid.appendChild(characterCard(key));
-  }
-  renderGrid();
+  refill();
 }
 
 // ---------------------------------------------------------------- оружие
 
-function weaponList() {
+const catalog = () => refs.fiveStars || {};
+const wName = (key) => weaponLabel(key) || (catalog()[key] || {}).name || key;
+
+function ownedCopies() {
   const q = ui.weaponSearch.trim().toLowerCase();
-  const all = refs.fiveStars || {};
-  return Object.keys(all)
-    .filter((k) => {
-      const w = all[k];
-      if (ui.weaponType && w.type !== ui.weaponType) return false;
-      const owned = store.hasWeapon(k);
-      if (ui.weaponOwned === "owned" && !owned) return false;
-      if (ui.weaponOwned === "missing" && owned) return false;
-      if (q && !`${k} ${w.name || ""}`.toLowerCase().includes(q)) return false;
-      return true;
+  return store.weaponItems()
+    .filter((item) => {
+      const meta = catalog()[item.key] || {};
+      if (ui.weaponType && meta.type !== ui.weaponType) return false;
+      return matches(q, wName(item.key), meta.name, item.key);
     })
-    .sort((a, b) => (all[a].name || a).localeCompare(all[b].name || b));
+    // одинаковые копии держим рядом, как в игровом инвентаре
+    .sort((a, b) => wName(a.key).localeCompare(wName(b.key)) || b.refine - a.refine);
 }
 
-function weaponCard(key) {
-  const w = refs.fiveStars[key] || {};
-  const owned = store.hasWeapon(key);
-  const card = el("div", `inv-card inv-card-weapon${owned ? " is-owned" : ""}`);
-  card.dataset.key = key;
+function copyCard(item, onChanged) {
+  const card = el("div", "inv-card inv-card-weapon is-owned");
+  card.dataset.id = item.id;
 
-  const top = el("button", "inv-card-main");
-  top.type = "button";
-  top.setAttribute("aria-pressed", String(owned));
-  top.appendChild(icon(`weapons/${key}.png`, weaponLabel(key) || w.name || key, "inv-portrait"));
-  top.appendChild(el("div", "inv-card-name", weaponLabel(key) || w.name || key));
-  if (!w.inDb) {
-    const mark = el("span", "inv-nodb", "·");
-    mark.title = t("inventory.weaponsNotInDb");
-    top.appendChild(mark);
-  }
-  top.addEventListener("click", () => {
-    local(() => store.toggleWeapon(key));
-    swapCard(key, weaponCard);
+  const top = el("div", "inv-card-main inv-card-static");
+  top.appendChild(icon(`weapons/${item.key}.png`, wName(item.key), "inv-portrait"));
+  top.appendChild(el("div", "inv-card-name", wName(item.key)));
+  const remove = button("inv-remove", "✕");
+  remove.title = t("inventory.remove");
+  remove.setAttribute("aria-label", `${t("inventory.remove")}: ${wName(item.key)}`);
+  remove.addEventListener("click", () => {
+    local(() => store.removeWeapon(item.id));
+    onChanged();
   });
+  top.appendChild(remove);
   card.appendChild(top);
 
-  if (owned) {
-    const row = el("div", "inv-card-foot");
-    row.appendChild(stepper(store.refineOf(key), 1, 5,
-      (v) => { local(() => store.setRefine(key, v)); swapCard(key, weaponCard); },
-      (v) => `R${v}`));
-    card.appendChild(row);
-  }
+  const row = el("div", "inv-card-foot");
+  row.appendChild(stepper(item.refine, 1, 5,
+    (v) => {
+      local(() => store.setItemRefine(item.id, v));
+      card.replaceWith(copyCard({ ...item, refine: v }, onChanged));
+    },
+    (v) => `R${v}`));
+  card.appendChild(row);
   return card;
 }
 
 function renderWeapons(container) {
-  container.innerHTML = "";
-
   const controls = el("div", "inv-controls");
-  const search = el("input", "inv-search");
-  search.type = "search";
-  search.placeholder = t("inventory.search");
-  search.value = ui.weaponSearch;
-  search.addEventListener("input", () => { ui.weaponSearch = search.value; renderGrid(); });
-  controls.appendChild(search);
-
-  controls.appendChild(chipRow([
-    { value: "all", label: t("inventory.filterAll") },
-    { value: "owned", label: t("inventory.filterOwned") },
-    { value: "missing", label: t("inventory.filterMissing") },
-  ], ui.weaponOwned, (v) => { ui.weaponOwned = v || "all"; render(); }));
-
-  controls.appendChild(chipRow(
-    WEAPON_TYPES.map((ty) => ({ value: ty, clearable: true, icon: `filters/Class-${ty === "polearm" ? "polearm" : ty}.png` })),
-    ui.weaponType,
-    (v) => { ui.weaponType = v; render(); },
-  ));
-  container.appendChild(controls);
-
-  container.appendChild(el("p", "inv-hint small", t("inventory.weaponsHint")));
-
   const grid = el("div", "inv-grid");
-  container.appendChild(grid);
+  const summary = el("div", "inv-summary small muted");
 
-  function renderGrid() {
-    grid.innerHTML = "";
-    const list = weaponList();
-    if (!list.length) {
-      grid.appendChild(el("div", "small muted", t("inventory.empty")));
-      return;
+  const refill = () => {
+    fillGrid(grid, ownedCopies().map((it) => copyCard(it, refill)),
+      store.counts().weapons ? t("inventory.notFound") : t("inventory.noWeaponsYet"));
+    summary.textContent = t("inventory.copies", { n: store.counts().weapons });
+    updateCounts();
+  };
+  const rebuild = () => { container.innerHTML = ""; renderWeapons(container); };
+
+  const add = button("inv-btn inv-btn-primary", `+ ${t("inventory.addWeapon")}`);
+  add.addEventListener("click", () => openPicker(refill));
+
+  controls.appendChild(add);
+  controls.appendChild(searchBox(ui.weaponSearch, (v) => { ui.weaponSearch = v; refill(); }));
+  controls.appendChild(chipRow(
+    WEAPON_TYPES.map((w) => ({ value: w, clearable: true, icon: typeIcon(w), title: t(`weaponType.${w}`) })),
+    ui.weaponType, (v) => { ui.weaponType = v; rebuild(); }));
+
+  container.appendChild(controls);
+  container.appendChild(el("p", "inv-hint small", t("inventory.weaponsHint")));
+  container.appendChild(summary);
+  container.appendChild(grid);
+  refill();
+}
+
+/** Окно выбора: весь каталог 5★, клик добавляет одну копию. Окно не закрывается,
+ *  чтобы можно было накидать несколько штук подряд. */
+function openPicker(onAdded) {
+  const sheet = openSheet({ title: t("inventory.addWeapon"), className: "sheet-wide" });
+  const controls = el("div", "inv-controls");
+  const grid = el("div", "inv-grid inv-grid-picker");
+  const toast = el("div", "inv-toast");
+  toast.setAttribute("role", "status");
+  let toastTimer = null;
+
+  const list = () => {
+    const q = ui.pickSearch.trim().toLowerCase();
+    return Object.keys(catalog())
+      .filter((k) => {
+        const w = catalog()[k];
+        if (ui.pickType && w.type !== ui.pickType) return false;
+        if (ui.pickInTeams && !w.inDb) return false;
+        return matches(q, wName(k), w.name, k);
+      })
+      .sort((a, b) => wName(a).localeCompare(wName(b)));
+  };
+
+  const pickCard = (key) => {
+    const w = catalog()[key] || {};
+    const n = store.copiesOf(key);
+    const card = button(`inv-card inv-card-weapon inv-pick${n ? " is-owned" : ""}`);
+    card.appendChild(icon(`weapons/${key}.png`, wName(key), "inv-portrait"));
+    card.appendChild(el("div", "inv-card-name", wName(key)));
+    if (n) card.appendChild(el("span", "inv-count", `×${n}`));
+    if (!w.inDb) {
+      const mark = el("span", "inv-nodb", "·");
+      mark.title = t("inventory.weaponsNotInDb");
+      card.appendChild(mark);
     }
-    for (const key of list) grid.appendChild(weaponCard(key));
+    card.addEventListener("click", () => {
+      local(() => store.addWeapon(key, 1));
+      card.replaceWith(pickCard(key));
+      toast.textContent = t("inventory.added", { name: wName(key) });
+      toast.classList.add("is-on");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove("is-on"), 1400);
+      onAdded();
+    });
+    return card;
+  };
+
+  const refill = () => fillGrid(grid, list().map(pickCard), t("inventory.notFound"));
+  const rebuild = () => { sheet.body.innerHTML = ""; build(); };
+
+  function build() {
+    controls.innerHTML = "";
+    controls.appendChild(searchBox(ui.pickSearch, (v) => { ui.pickSearch = v; refill(); }));
+    controls.appendChild(chipRow(
+      WEAPON_TYPES.map((w) => ({ value: w, clearable: true, icon: typeIcon(w), title: t(`weaponType.${w}`) })),
+      ui.pickType, (v) => { ui.pickType = v; rebuild(); }));
+    controls.appendChild(chipRow([
+      { value: true, label: t("inventory.inTeamsOnly"), clearable: true },
+    ], ui.pickInTeams || null, (v) => { ui.pickInTeams = !!v; rebuild(); }));
+    sheet.body.append(controls, grid, toast);
+    refill();
   }
-  renderGrid();
+  build();
+
+  const done = button("inv-btn inv-btn-primary", t("inventory.done"));
+  done.addEventListener("click", () => sheet.close());
+  sheet.footer.hidden = false;
+  sheet.footer.appendChild(done);
 }
 
 // ------------------------------------------------------------------ каркас
 
 function render() {
   if (!host) return;
-  // перерисовка снаружи (импорт, сброс, смена языка) не должна ронять
-  // прокрутку списка — запоминаем и возвращаем
   const keepScroll = host.querySelector(".inv-grid")?.scrollTop || 0;
   host.innerHTML = "";
 
@@ -318,25 +375,18 @@ function render() {
   const c = store.counts();
   const tabs = el("div", "inv-tabs");
   for (const [id, labelKey] of [["characters", "inventory.tabCharacters"], ["weapons", "inventory.tabWeapons"]]) {
-    const btn = el("button", `inv-tab${ui.tab === id ? " is-active" : ""}`);
-    btn.type = "button";
-    btn.textContent = t(labelKey);
-    const badge = el("span", "inv-tab-count", String(id === "characters" ? c.chars : c.weapons));
-    btn.appendChild(badge);
+    const btn = button(`inv-tab${ui.tab === id ? " is-active" : ""}`, t(labelKey));
+    btn.appendChild(el("span", "inv-tab-count", String(id === "characters" ? c.chars : c.weapons)));
     btn.addEventListener("click", () => { ui.tab = id; render(); });
     tabs.appendChild(btn);
   }
   head.appendChild(tabs);
 
   const actions = el("div", "inv-actions");
-  const importBtn = el("button", "inv-btn", t("inventory.importGood"));
-  importBtn.type = "button";
-  importBtn.addEventListener("click", () => {
-    document.getElementById("open-import")?.click();
-  });
+  const importBtn = button("inv-btn", t("inventory.importGood"));
+  importBtn.addEventListener("click", () => document.getElementById("open-import")?.click());
 
-  const exportBtn = el("button", "inv-btn", t("inventory.exportJson"));
-  exportBtn.type = "button";
+  const exportBtn = button("inv-btn", t("inventory.exportJson"));
   exportBtn.addEventListener("click", () => {
     const blob = new Blob([JSON.stringify(store.snapshot(), null, 2)], { type: "application/json" });
     const a = document.createElement("a");
@@ -346,8 +396,7 @@ function render() {
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   });
 
-  const resetBtn = el("button", "inv-btn inv-btn-danger", t("inventory.reset"));
-  resetBtn.type = "button";
+  const resetBtn = button("inv-btn inv-btn-danger", t("inventory.reset"));
   resetBtn.addEventListener("click", () => {
     if (confirm(t("inventory.resetConfirm"))) store.reset();
   });

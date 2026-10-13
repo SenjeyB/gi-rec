@@ -47,8 +47,7 @@ function saveSettings() {
 function currentTeams() {
   const cons = {};
   for (const k of store.ownedCharacters()) cons[k] = store.consOf(k);
-  const weapons = {};
-  for (const k of store.ownedWeapons()) weapons[k] = store.refineOf(k);
+  const weapons = store.weaponCopies();   // ключ -> рефайны всех копий
   return db.query({
     cons,
     weapons,
@@ -59,18 +58,31 @@ function currentTeams() {
   });
 }
 
+/** Строгий срез для сборщика и подсказок: отряд должен реально собираться на
+ *  том, что есть у игрока. Созвездия берём как выставлено, а 5* оружие обязано
+ *  лежать в инвентаре — даже если в общих настройках «только мои» выключено.
+ *  В общем списке это было бы лишним: там показываются и те, кого ещё нет. */
+function strictTeams() {
+  const cons = {};
+  for (const k of store.ownedCharacters()) cons[k] = store.consOf(k);
+  const weapons = store.weaponCopies();   // ключ -> рефайны всех копий
+  return db.query({
+    cons, weapons, strictCons: true,
+    allowFiveStar: settings.allowFiveStar,
+    onlyMyWeapons: true,
+    kqmCons: settings.kqmCons,
+    kqmArt: settings.kqmArt,
+  });
+}
+
 function refresh() {
   if (!app) return;
-  app.refreshTeams(currentTeams());
+  app.refreshTeams(currentTeams(), strictTeams());
   updateFilterHint();
 }
 
 function updateFilterHint() {
-  const host = document.getElementById("five-star-hint");
-  if (!host) return;
-  host.textContent = settings.allowFiveStar
-    ? i18n.t("settings.allowFiveStarHint")
-    : "";
+  // пояснение под тоглом 5★ убрано по просьбе: оно дублировало подпись
 }
 
 function wireSettings() {
@@ -192,21 +204,23 @@ function bridge() {
   });
 
   // выбор поменялся в сайдбаре app.js -> подтягиваем в инвентарь, созвездия не теряем
-  window.addEventListener("girec:owned-changed", () => {
-    if (syncing) return;
-    syncing = true;
-    try {
-      let list = [];
-      try { list = JSON.parse(localStorage.getItem("ownedSelection") || "[]"); } catch { list = []; }
-      const keys = [];
-      for (const disp of Array.isArray(list) ? list : []) {
-        const k = store.keyOfDisplay(disp);
-        if (k) keys.push(k);
-      }
-      store.setCharacterSet(keys);
-      if (app) app.refreshTeams(currentTeams());
-    } finally { syncing = false; }
-  });
+  window.addEventListener("girec:owned-changed", syncFromLegacy);
+}
+
+function syncFromLegacy() {
+  if (syncing) return;
+  syncing = true;
+  try {
+    let list = [];
+    try { list = JSON.parse(localStorage.getItem("ownedSelection") || "[]"); } catch { list = []; }
+    // app.js с 2.2 кладёт сюда ключи; на всякий случай принимаем и старые имена
+    const keys = [];
+    for (const item of Array.isArray(list) ? list : []) {
+      keys.push(store.keyOfDisplay(item) || item);
+    }
+    store.setCharacterSet(keys);
+    if (app) app.refreshTeams(currentTeams(), strictTeams());
+  } finally { syncing = false; }
 }
 
 // ------------------------------------------------------------- импорт GOOD
@@ -264,9 +278,14 @@ async function boot() {
   await labels.init(names);
   store.init(names);
 
-  app = await startApp({ names, teams: currentTeams(), refs });
-
+  // Мост поднимаем до старта вьюх: app.js при первом запуске сам проставляет
+  // набор по умолчанию и сразу шлёт girec:owned-changed — если слушателя ещё нет,
+  // инвентарь останется пустым, пока пользователь что-нибудь не тронет.
   bridge();
+  app = await startApp({ names, teams: currentTeams(), strictTeams: strictTeams(), refs });
+
+  // и подтягиваем то, что app.js успел записать до появления слушателя
+  syncFromLegacy();
   buildLangSwitcher();
   wireSettings();
   wireFeedback();

@@ -1,6 +1,20 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.2.0 (2026/10/13)
+- **Character window.** Clicking a character in the tier list, or a card in recommendations, opens a window with a large portrait, rarity, element, weapon type, whether you own them, their best DPS, and all of their teams page by page.
+- **5★ weapons are tracked as copies, like the in-game inventory.** Instead of ticking a weapon, you add it one copy at a time from a picker. A team that needs two of the same 5★ weapon needs two copies. GOOD import carries over every copy too.
+- **Search and filters in the inventory**: characters can be narrowed by ownership, rarity, element and weapon type, and search works in either language. Weapons have their own search and type filter.
+- **Filter sheet on phones.** Filters and settings moved off the page into a sheet behind a “Filters” button, which shows how many filters are active.
+- **Substats show real values**: “CRIT DMG 66.2% (10)”, with the number of rolls in brackets.
+- **Team builder and suggestions follow your inventory strictly**: only teams that actually come together on your constellations are shown, and you must own every 5★ weapon they use.
+- **Pagination** in recommendations, best teams and the character window. The “Squads to show on expand” setting is no longer needed and was removed.
+- **Team details load on demand.** Artifact stats no longer ship with the main database — they are fetched when you expand a team. The initial download is about a third smaller.
+- Characters are identified by an internal key rather than their name, so your saved selection no longer depends on the interface language.
+- Filter labels are translated: elements and weapon types.
+- Removed redundant explanatory text from the interface.
+- The update list is translated and kept as a separate file per language.
+
 ## 2.1.0 (2026/10/13)
 - **Russian character, weapon and artifact names.** The whole interface now switches language, not just the labels around it. Search accepts either language.
 - **Team details.** Click a team to expand a panel with large portraits, weapons, artifact sets, artifact main stats and substat rolls, plus a link to the source simulation.

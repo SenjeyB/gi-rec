@@ -41,7 +41,7 @@ export function parseGood(good, names, refs) {
   }
 
   const characters = {};
-  const weapons = {};
+  const weapons = [];   // каждая запись GOOD — отдельная копия оружия
   const unknownChars = new Set();
   const unknownWeapons = new Set();
 
@@ -66,8 +66,9 @@ export function parseGood(good, names, refs) {
     if (!id) return;                       // не 5★ или неизвестное — просто пропускаем
     const n = Number(refine);
     const value = Math.min(5, Math.max(1, Number.isFinite(n) ? Math.round(n) : 1));
-    const prev = weapons[id];
-    weapons[id] = { refine: prev ? Math.max(prev.refine, value) : value };
+    // не схлопываем одинаковые: две Хомы — это две копии, и отряд с двумя
+    // владельцами Хомы должен найтись
+    weapons.push({ key: id, refine: value });
   }
 
   // --- персонажи -----------------------------------------------------------
@@ -100,8 +101,8 @@ export function parseGood(good, names, refs) {
   }
 
   return {
-    account: { version: 1, characters, weapons },
-    stats: { chars: Object.keys(characters).length, weapons: Object.keys(weapons).length },
+    account: { version: 2, characters, weapons },
+    stats: { chars: Object.keys(characters).length, weapons: weapons.length },
     unknown: {
       characters: [...unknownChars].sort(),
       weapons: [...unknownWeapons].sort(),

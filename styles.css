@@ -479,3 +479,109 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   /* контент получает весь экран */
   .maincol{min-height:50vh}
 }
+
+.more-btn{display:block;width:100%;margin-top:10px;padding:10px}
+
+.td-sub-count{color:var(--muted);font-weight:400}
+.td-subs{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
+
+/* ============================================================ шторка / окно */
+.sheet-layer{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center}
+.sheet-backdrop{position:absolute;inset:0;background:rgba(2,6,16,.62);backdrop-filter:blur(2px)}
+.sheet-panel{position:relative;display:flex;flex-direction:column;width:min(760px,94vw);max-height:86vh;
+  background:#0b1424;border:1px solid var(--line);border-radius:12px;box-shadow:0 18px 50px rgba(0,0,0,.55);
+  color:#e6eef8;font-size:14px;animation:sheet-in .16s ease-out}
+.sheet-panel.sheet-wide{width:min(980px,96vw)}
+.sheet-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line)}
+.sheet-grip{display:none}
+.sheet-title{flex:1;font-weight:700;font-size:15px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sheet-close{width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);
+  color:#e6eef8;cursor:pointer;font-size:14px;flex:0 0 auto}
+.sheet-close:hover{background:rgba(255,255,255,.1)}
+.sheet-body{padding:12px 14px;overflow:auto;flex:1;min-height:0;position:relative;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent}
+.sheet-foot{display:flex;justify-content:flex-end;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
+.sheet-foot[hidden]{display:none}
+body.sheet-open{overflow:hidden}
+@keyframes sheet-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media (max-width:640px){
+  .sheet-layer{align-items:flex-end}
+  .sheet-panel,.sheet-panel.sheet-wide{width:100vw;max-height:88vh;border-radius:16px 16px 0 0;
+    border-bottom:0;animation:sheet-up .2s ease-out;padding-bottom:env(safe-area-inset-bottom,0)}
+  .sheet-head{flex-wrap:wrap;padding:6px 12px 10px}
+  .sheet-grip{display:block;width:100%;height:14px;position:relative}
+  .sheet-grip::after{content:"";position:absolute;left:50%;top:6px;width:40px;height:4px;
+    margin-left:-20px;border-radius:2px;background:rgba(255,255,255,.22)}
+  .sheet-body{padding:10px 12px}
+}
+@keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
+
+/* ======================================================= инвентарь: оружие */
+.inv-btn-primary{border-color:rgba(96,165,250,.55);background:rgba(96,165,250,.16);font-weight:600}
+.inv-btn-primary:hover{background:rgba(96,165,250,.26)}
+.inv-summary{margin:0 0 6px}
+.inv-empty{grid-column:1 / -1;padding:14px 4px}
+.inv-card-static{cursor:default}
+.inv-remove{position:absolute;top:3px;right:3px;width:22px;height:22px;border-radius:5px;border:1px solid var(--line);
+  background:rgba(15,23,42,.85);color:#fca5a5;cursor:pointer;font-size:11px;line-height:1;padding:0}
+.inv-remove:hover{background:rgba(248,113,113,.2)}
+.inv-pick{position:relative;cursor:pointer;opacity:.85;filter:none;padding:8px 6px;color:inherit;
+  display:flex;flex-direction:column;align-items:center;gap:4px}
+.inv-pick:hover{opacity:1;border-color:rgba(96,165,250,.45)}
+.inv-count{position:absolute;top:4px;right:5px;font-size:11px;font-weight:700;color:#bfdbfe;
+  background:rgba(96,165,250,.22);border-radius:999px;padding:1px 6px}
+.inv-grid-picker{max-height:none}
+.inv-toast{position:sticky;bottom:0;margin-top:8px;padding:8px 12px;border-radius:8px;
+  background:rgba(52,211,153,.16);border:1px solid rgba(52,211,153,.4);color:#a7f3d0;font-size:12px;
+  opacity:0;pointer-events:none;transition:opacity .15s}
+.inv-toast.is-on{opacity:1}
+
+/* ============================================================ окно персонажа */
+.cw-head{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.cw-char{flex:1 1 300px;display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;
+  border:1px solid var(--line);background:rgba(255,255,255,0.03)}
+.cw-portrait{flex:0 0 auto;width:84px;height:84px;border-radius:12px;overflow:hidden;
+  background:linear-gradient(160deg,rgba(124,93,190,.45),rgba(60,48,110,.25))}
+.cw-portrait.is-five{background:linear-gradient(160deg,rgba(214,151,72,.55),rgba(120,72,30,.25))}
+.cw-avatar{width:100%;height:100%;object-fit:cover;display:block}
+.cw-info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.cw-name{font-size:17px;font-weight:700;line-height:1.2}
+.cw-stars{font-size:12px;letter-spacing:1px;color:#c4b5fd}
+.cw-stars.is-five{color:#fbbf24}
+.cw-tags{display:flex;flex-wrap:wrap;gap:6px}
+.cw-tag{display:inline-flex;align-items:center;gap:5px;padding:2px 8px 2px 4px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:12px}
+.cw-tag-icon{width:18px;height:18px;display:block}
+.cw-status{font-size:12px;color:#fca5a5}
+.cw-status.is-owned{color:#6ee7b7}
+.cw-best{font-size:12px;color:var(--muted)}
+.cw-list-head{font-weight:700;font-size:13px;margin:4px 0 8px}
+.cw-list .team-row{border:1px solid var(--line);background:rgba(255,255,255,0.02);margin-bottom:6px}
+
+@media (max-width:640px){
+  .cw-portrait{width:64px;height:64px}
+  .cw-name{font-size:15px}
+}
+
+/* ===================================== контейнер фильтров вида и шторка фильтров */
+.view-controls:empty{display:none}
+.view-controls{margin-bottom:8px}
+.filters-fab{display:none}
+.filters-sheet .view-controls{display:block;margin:0 0 12px}
+.filters-sheet #settings-card{display:block;margin:0;border:0;background:transparent;padding:0}
+.filters-sheet #settings-card .side-title{display:block}
+
+@media (max-width:640px){
+  /* на телефоне фильтры живут в шторке, а не над списком */
+  .view-box > .view-controls{display:none}
+  .sidebar #settings-card{display:none}
+  .filters-fab{display:inline-flex;align-items:center;gap:8px;position:fixed;right:12px;bottom:66px;z-index:45;
+    padding:10px 16px;border-radius:999px;border:1px solid rgba(96,165,250,.55);
+    background:#13233f;color:#e6eef8;font-weight:600;font-size:14px;cursor:pointer;
+    box-shadow:0 6px 18px rgba(0,0,0,.45)}
+  .filters-fab[hidden]{display:none}
+  .filters-fab-count{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--accent);
+    color:#041322;font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+  .filters-fab-count[hidden]{display:none}
+}

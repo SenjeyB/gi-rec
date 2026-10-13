@@ -1,4 +1,4 @@
-// Аккаунт игрока: персонажи с созвездиями и свои 5★ пушки.
+// Аккаунт игрока: персонажи с созвездиями и своё 5★ оружие.
 // Живёт только в localStorage этого браузера, никуда не отправляется.
 //
 // Внутри всё идентифицируется ключами из names.json ("hutao", "kamisatoayaka"
@@ -7,11 +7,11 @@
 
 const KEY = "girec.inventory";
 const LEGACY_KEY = "ownedSelection";
-const VERSION = 1;
+const VERSION = 2;          // 2: оружие хранится списком копий
 
 let names = {};          // ключ -> {name, element, weapon, stars, cons?}
 let displayToKey = {};
-let state = { version: VERSION, characters: {}, weapons: {} };
+let state = { version: VERSION, characters: {}, weapons: [] };
 const listeners = new Set();
 
 /** Минимальная конста: у персонажей с "cons":1 в names.json C1 — это база, ниже не опускаем. */
@@ -53,32 +53,52 @@ function read() {
 }
 
 function migrateLegacy() {
-  // ownedSelection — массив отображаемых имён, созвездий там не было
+  // В ownedSelection раньше лежали отображаемые имена («Hu Tao»), теперь ключи
+  // («hutao»). Принимаем оба формата, чтобы старый выбор не потерялся.
   let list;
   try { list = JSON.parse(localStorage.getItem(LEGACY_KEY) || "[]"); } catch { list = []; }
   const characters = {};
   if (Array.isArray(list)) {
-    for (const disp of list) {
-      const k = displayToKey[disp];
+    for (const item of list) {
+      const k = names[item] ? item : displayToKey[item];
       if (k) characters[k] = { cons: minCons(k) };
     }
   }
-  return { version: VERSION, characters, weapons: {} };
+  return { version: VERSION, characters, weapons: [] };
+}
+
+const clampRefine = (r) => {
+  const n = Number(r);
+  return Math.min(5, Math.max(1, Number.isFinite(n) ? Math.round(n) : 1));
+};
+
+let idSeq = 0;
+function newId() {
+  idSeq += 1;
+  return `w${Date.now().toString(36)}${idSeq.toString(36)}`;
 }
 
 function normalize(raw) {
-  const out = { version: VERSION, characters: {}, weapons: {} };
+  const out = { version: VERSION, characters: {}, weapons: [] };
   const chars = (raw && raw.characters) || {};
   for (const k of Object.keys(chars)) {
     if (!names[k]) continue;                     // персонаж пропал из names.json
     const v = chars[k] || {};
     out.characters[k] = { cons: clampCons(k, Number(v.cons)) };
   }
-  const weps = (raw && raw.weapons) || {};
-  for (const k of Object.keys(weps)) {
-    const v = weps[k] || {};
-    const r = Number(v.refine);
-    out.weapons[k] = { refine: Math.min(5, Math.max(1, Number.isFinite(r) ? Math.round(r) : 1)) };
+  // Оружие — список копий, как в игровом инвентаре: одинаковых может быть
+  // несколько, и отряд с двумя одинаковыми легендарками требует две копии.
+  // До версии 2 тут был словарь {ключ: {refine}} — разворачиваем его в копии.
+  const weps = raw && raw.weapons;
+  if (Array.isArray(weps)) {
+    for (const item of weps) {
+      if (!item || !item.key) continue;
+      out.weapons.push({ id: item.id || newId(), key: String(item.key), refine: clampRefine(item.refine) });
+    }
+  } else if (weps && typeof weps === "object") {
+    for (const k of Object.keys(weps)) {
+      out.weapons.push({ id: newId(), key: k, refine: clampRefine((weps[k] || {}).refine) });
+    }
   }
   return out;
 }
@@ -86,9 +106,9 @@ function normalize(raw) {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
-    // Зеркалим список во старый ключ, чтобы существующие вьюхи в app.js,
-    // которые читают ownedSelection по отображаемым именам, продолжали работать.
-    localStorage.setItem(LEGACY_KEY, JSON.stringify(ownedDisplayNames()));
+    // Зеркалим список во старый ключ — app.js читает его при старте.
+    // С 2.2 там лежат ключи персонажей, а не отображаемые имена.
+    localStorage.setItem(LEGACY_KEY, JSON.stringify(ownedCharacters()));
   } catch { /* переполнение или приватный режим — молча живём в памяти */ }
 }
 
@@ -119,17 +139,36 @@ export function consOf(charKey) {
   return rec ? rec.cons : minCons(charKey);
 }
 
+/** Все копии оружия в порядке добавления. */
+export function weaponItems() {
+  return state.weapons.map((w) => ({ ...w }));
+}
+
+/** Ключи оружия без повторов. */
 export function ownedWeapons() {
-  return Object.keys(state.weapons).sort();
+  return [...new Set(state.weapons.map((w) => w.key))].sort();
+}
+
+/** ключ -> рефайны всех копий; нужно фильтру, чтобы учитывать дубликаты. */
+export function weaponCopies() {
+  const out = {};
+  for (const w of state.weapons) (out[w.key] ||= []).push(w.refine);
+  return out;
+}
+
+export function copiesOf(weaponKey) {
+  return state.weapons.filter((w) => w.key === weaponKey).length;
 }
 
 export function hasWeapon(weaponKey) {
-  return Object.prototype.hasOwnProperty.call(state.weapons, weaponKey);
+  return state.weapons.some((w) => w.key === weaponKey);
 }
 
+/** Лучший рефайн среди копий. */
 export function refineOf(weaponKey) {
-  const rec = state.weapons[weaponKey];
-  return rec ? rec.refine : 1;
+  let best = 0;
+  for (const w of state.weapons) if (w.key === weaponKey && w.refine > best) best = w.refine;
+  return best || 1;
 }
 
 export function snapshot() {
@@ -139,7 +178,7 @@ export function snapshot() {
 export function counts() {
   return {
     chars: Object.keys(state.characters).length,
-    weapons: Object.keys(state.weapons).length,
+    weapons: state.weapons.length,
   };
 }
 
@@ -171,23 +210,25 @@ export function bumpCons(charKey, delta) {
   setCons(charKey, consOf(charKey) + delta);
 }
 
-export function setWeapon(weaponKey, owned, refine) {
-  if (owned) {
-    const r = refine === undefined ? refineOf(weaponKey) : refine;
-    state.weapons[weaponKey] = { refine: Math.min(5, Math.max(1, Math.round(Number(r) || 1))) };
-  } else {
-    delete state.weapons[weaponKey];
-  }
+/** Добавляет одну копию оружия. Возвращает её id. */
+export function addWeapon(weaponKey, refine = 1) {
+  const item = { id: newId(), key: String(weaponKey), refine: clampRefine(refine) };
+  state.weapons.push(item);
   changed();
+  return item.id;
 }
 
-export function toggleWeapon(weaponKey) {
-  setWeapon(weaponKey, !hasWeapon(weaponKey));
+export function removeWeapon(id) {
+  const before = state.weapons.length;
+  state.weapons = state.weapons.filter((w) => w.id !== id);
+  if (state.weapons.length !== before) changed();
 }
 
-export function setRefine(weaponKey, refine) {
-  if (!hasWeapon(weaponKey)) return;
-  setWeapon(weaponKey, true, refine);
+export function setItemRefine(id, refine) {
+  const item = state.weapons.find((w) => w.id === id);
+  if (!item) return;
+  item.refine = clampRefine(refine);
+  changed();
 }
 
 /** Заменяет аккаунт целиком (импорт из GOOD). */
@@ -208,7 +249,7 @@ export function setCharacterSet(charKeys) {
 }
 
 export function reset() {
-  state = { version: VERSION, characters: {}, weapons: {} };
+  state = { version: VERSION, characters: {}, weapons: [] };
   changed();
 }
 

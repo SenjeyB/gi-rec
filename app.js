@@ -1,6 +1,7 @@
 import { t } from './js/i18n.js';
 import { charLabel, weaponLabel, setLabel, statLabel } from './js/labels.js';
 import { toggleDetail } from './js/teamdetail.js';
+import { openCharacterWindow } from './js/charwindow.js';
 
 // Имена оружия и сетов для подсказок — заполняются из data/refs.json при старте.
 let WEAPON_NAMES = {};
@@ -13,7 +14,7 @@ function T(key, fallback, vars){
   return s === key ? fallback : s;
 }
 
-// Оружие и сеты персонажа внутри отряда: иконка пушки с рефайном и до двух сетов.
+// Оружие и сеты персонажа внутри отряда: иконка оружия с рефайном и до двух сетов.
 // Данные приходят из data/db.json через js/db.js, поэтому рисуем только если
 // сборка известна (у отрядов, восстановленных из localStorage, её нет).
 function renderLoadout(slot){
@@ -58,7 +59,7 @@ function renderLoadout(slot){
 
 // Ячейка участника отряда: портрет, имя и его сборка (оружие + сеты).
 // idx — позиция в отряде; build в данных выровнен с members, поэтому берём по индексу.
-function appendMemberCell(host, displayName, key, team, idx, pillClass){
+function appendMemberCell(host, key, team, idx, pillClass){
   const slot = (team && team.build) ? team.build[idx] : null;
   // Статус «есть / нет персонажа» раньше красил плашку с именем; теперь он на
   // рамке всей ячейки, а имя идёт обычным текстом — так карточка спокойнее.
@@ -66,7 +67,7 @@ function appendMemberCell(host, displayName, key, team, idx, pillClass){
   if(pillClass) cell.classList.add(pillClass);
 
   const avatarWrap = createEl('div','member-portrait');
-  const img = createAvatarImg(displayName,'member-avatar', key);
+  const img = createAvatarImg(key,'member-avatar');
   if(img) avatarWrap.appendChild(img);
   // созвездие берём из самой сборки, а не из общего признака персонажа:
   // в разных отрядах один и тот же герой может считаться на разных констах
@@ -75,12 +76,58 @@ function appendMemberCell(host, displayName, key, team, idx, pillClass){
   }
   cell.appendChild(avatarWrap);
 
-  cell.appendChild(createEl('div','member-name', charLabel(displayName)));
+  cell.appendChild(createEl('div','member-name', charLabel(key)));
 
   const lo = renderLoadout(slot);
   if(lo) cell.appendChild(lo);
   host.appendChild(cell);
   return cell;
+}
+
+// Фильтры и селекты вида живут в отдельном контейнере, а не внутри списка:
+// на телефоне он целиком переезжает в шторку фильтров (js/mobile.js), и
+// перерисовка вида пишет прямо туда, где он сейчас находится.
+function viewControls(){
+  return document.getElementById('view-controls') || document.createElement('div');
+}
+
+// names.json для функций вне start() (окно персонажа, тир-лист, рекомендации)
+let NAMES = {};
+
+// Строка отряда: участники, DPS, раскрытие подробностей по клику.
+// owned — у кого из участников рамка «есть», остальные помечаются «нет».
+function buildTeamRow(team, owned, extraCls){
+  const row = createEl('div','team-row' + (extraCls ? ' ' + extraCls : ''));
+  const members = createEl('div','members');
+  team.members.forEach((m, mi)=>{
+    appendMemberCell(members, m, team, mi, (owned && !owned.has(m)) ? 'missing' : 'owned');
+  });
+  row.appendChild(members);
+  row.appendChild(createEl('div','team-dps', fmtDps(team.dps)));
+  if(team.build){
+    row.classList.add('expandable');
+    row.title = T('team.details','Team details');
+    row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
+  }
+  return row;
+}
+
+// Списки отрядов рисуем страницами: на каждый отряд — четыре портрета с иконками
+// сборки, и сотни таких строк сразу заметно тормозят.
+function paginate(container, items, pageSize, build){
+  let shown = 0;
+  const more = createEl('button','macro-btn more-btn');
+  more.type = 'button';
+  const page = ()=>{
+    const slice = items.slice(shown, shown + pageSize);
+    for(const it of slice) container.insertBefore(build(it), more);
+    shown += slice.length;
+    if(shown >= items.length) more.remove();
+    else more.textContent = T('views.showMore','Show more ('+(items.length-shown)+')',{n: items.length - shown});
+  };
+  more.addEventListener('click', page);
+  container.appendChild(more);
+  page();
 }
 
 function createEl(tag,cls,txt){
@@ -104,10 +151,14 @@ function createEl(tag,cls,txt){
 export async function start(ctx){
   const names = ctx && ctx.names;
   let teams = (ctx && ctx.teams) || [];
+  // строгий срез под инвентарь — для сборщика и подсказок, где отряд должен
+  // реально собираться на тех созвездиях и оружии, что есть у игрока
+  let strictTeams = [];
   if(!names){
     document.body.prepend(createEl('div','small',T('errors.loadData','Failed to load data. Check that names.json and data/db.json are next to index.html.')))
     return null;
   }
+  NAMES = names;
   if(ctx.refs){
     WEAPON_NAMES = {};
     for(const [k,v] of Object.entries(ctx.refs.weapons||{})) WEAPON_NAMES[k] = v.name;
@@ -116,37 +167,32 @@ export async function start(ctx){
     for(const [k,v] of Object.entries(ctx.refs.sets||{})) SET_NAMES[k] = v.name;
   }
 
-  const keyByDisplay = {};
-  for(const k of Object.keys(names)){
-    const entry = names[k];
-    const disp = (entry && typeof entry === 'object') ? entry.name : entry;
-    keyByDisplay[disp] = k;
-  }
-
-  CONS_BY_DISPLAY = {};
-  for(const entry of Object.values(names)){
-    if(entry && typeof entry === 'object' && entry.cons){
-      CONS_BY_DISPLAY[entry.name] = entry.cons;
-    }
-  }
-
   // Отряды пересобираются при каждом изменении инвентаря или настроек,
   // поэтому держим их в let и умеем перестраивать индекс по участникам.
   let parsedTeams = [];
   let teamsByMember = new Map();
 
-  function rebuildTeams(list){
+  function rebuildTeams(list, strictList){
     teams = list || [];
+    strictTeams = (strictList || list || []).map(t => ({
+      members: t.chars ? t.chars.slice() : [],
+      dps: t.dps != null ? t.dps : 0,
+      build: t.build || null, src: t.src || null, sims: t.sims || 0,
+      kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
+      teamIndex: t.teamIndex, buildIndex: t.buildIndex,
+    }));
     parsedTeams = teams.map(t => ({
-      members: t.display
-        ? t.display.map(normalizeName)
-        : [t.character_1, t.character_2, t.character_3, t.character_4].map(normalizeName),
+      members: t.chars
+        ? t.chars.slice()
+        : (t.display || []).map((d)=> d || d),
       dps: t.dps != null ? t.dps : (t.DPS || 0),
       build: t.build || null,      // оружие и сеты по слотам, выровнены с members
       src: t.src || null,
       sims: t.sims || 0,
       kqmCons: !!t.kqmCons,
       kqmArt: !!t.kqmArt,
+      teamIndex: t.teamIndex,
+      buildIndex: t.buildIndex,
     }));
     teamsByMember = new Map();
     for(const pt of parsedTeams){
@@ -157,11 +203,14 @@ export async function start(ctx){
       }
     }
   }
-  rebuildTeams(teams);
+  rebuildTeams(teams, (ctx && ctx.strictTeams));
 
   const charactersDiv = document.getElementById('characters');
   const ownedFiltersHost = document.getElementById('owned-filters');
-  const displayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v).sort((a,b)=>a.localeCompare(b,'en'));
+  // Идентификатор персонажа — ключ из names.json (он же имя файла картинки).
+  // Отображаемое имя зависит от языка и для опознания не годится.
+  const charKeys = Object.keys(names);
+  const sortedCharKeys = ()=> charKeys.slice().sort((a,b)=> charLabel(a).localeCompare(charLabel(b)));
   const selected = new Set();
   let goodConfigBackup = null;
 
@@ -203,7 +252,7 @@ export async function start(ctx){
     const elOrder = ['anemo','cryo','dendro','electro','geo','hydro','pyro'];
     for(const e of elOrder){
       if(byElement.has(e)){
-        const label = e[0].toUpperCase()+e.slice(1);
+        const label = T('element.'+e, e[0].toUpperCase()+e.slice(1));
         const chip = mkChip('elements', e, label, `filters/Element_${e[0].toUpperCase()+e.slice(1)}.png`);
         host.appendChild(chip);
       }
@@ -216,7 +265,7 @@ export async function start(ctx){
     const wOrder = ['sword','polearm','bow','claymore','catalyst'];
     for(const w of wOrder){
       if(byWeapon.has(w)){
-        const label = w[0].toUpperCase()+w.slice(1);
+        const label = T('weaponType.'+w, w[0].toUpperCase()+w.slice(1));
         const chip = mkChip('weapons', w, label, `filters/Class-${w}.png`);
         host.appendChild(chip);
       }
@@ -258,8 +307,7 @@ export async function start(ctx){
     const els = sets.elements; const ws = sets.weapons;
     const elActive = els.size>0; const wActive = ws.size>0;
     if(!elActive && !wActive) return ()=>true;
-    return (disp)=>{
-      const key = keyByDisplay[disp];
+    return (key)=>{
       const entry = names[key];
       const e = (entry && entry.element)? String(entry.element).toLowerCase():'';
       const w = (entry && entry.weapon)? String(entry.weapon).toLowerCase():'';
@@ -269,20 +317,16 @@ export async function start(ctx){
     };
   }
 
-  function hasTeams(displayName){
-    return teamsByMember.has(displayName);
+  function hasTeams(key){
+    return teamsByMember.has(key);
   }
 
   function getDefaultAutoSelect(){
-    const chars = [];
+    const out = [];
     for(const [key, entry] of Object.entries(names)){
-      const disp = (entry && typeof entry === 'object') ? entry.name : entry;
-      const stars = (entry && entry.stars) ? entry.stars : null;
-      if(stars === 1 && hasTeams(disp)){
-        chars.push(disp);
-      }
+      if((entry && entry.stars) === 1 && hasTeams(key)) out.push(key);
     }
-    return chars;
+    return out;
   }
 
   let usedDefaults = false;
@@ -306,31 +350,30 @@ export async function start(ctx){
     charactersDiv.innerHTML = '';
     const pred = makeFilterPredicate('owned');
     const q = (document.getElementById('char-search')?.value || '').trim().toLowerCase();
-    for(const disp of displayNames){
-      // ищем и по английскому имени, и по подписи текущего языка: иначе на
-      // русском интерфейсе поиск по «Ху Тао» ничего бы не находил
-      if(q && !disp.toLowerCase().includes(q) && !charLabel(disp).toLowerCase().includes(q)) continue;
-      if(!pred(disp)) continue;
+    for(const key of sortedCharKeys()){
+      const label = charLabel(key);
+      // ищем и по подписи текущего языка, и по английскому имени
+      const english = (names[key] && names[key].name) || key;
+      if(q && !label.toLowerCase().includes(q) && !english.toLowerCase().includes(q)) continue;
+      if(!pred(key)) continue;
       const btn = createEl('button','char');
       btn.type = 'button';
-      const key = keyByDisplay[disp];
-      const img = createAvatarImg(disp,'avatar', key);
-      if(img) btn.appendChild(img); else btn.appendChild(createEl('div','pill',disp[0]));
-      const lbl = createEl('div',null,charLabel(disp));
-      btn.appendChild(lbl);
+      const img = createAvatarImg(key,'avatar');
+      if(img) btn.appendChild(img);
+      btn.appendChild(createEl('div',null,label));
 
-      const noTeams = !hasTeams(disp);
+      const noTeams = !hasTeams(key);
       if(noTeams){
         btn.classList.add('no-teams');
         btn.disabled = true;
         btn.title = T('roster.noTeamsForChar','No teams available for this character');
       }
 
-      if(selected.has(disp)) btn.classList.add('selected');
+      if(selected.has(key)) btn.classList.add('selected');
 
       if(!noTeams){
         btn.addEventListener('click',()=>{
-          if(btn.classList.toggle('selected')) selected.add(disp); else selected.delete(disp);
+          if(btn.classList.toggle('selected')) selected.add(key); else selected.delete(key);
           persistSelection();
           renderActiveView();
         });
@@ -349,13 +392,10 @@ export async function start(ctx){
   renderOwnedCharacters();
 
   const modeEl = document.getElementById('mode');
-  const maxShowEl = document.getElementById('maxShow');
   try{
     const savedMode = localStorage.getItem('settingMode'); if(savedMode) modeEl.value = savedMode;
-    const savedMax = localStorage.getItem('settingMaxShow'); if(savedMax) maxShowEl.value = savedMax;
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
-  maxShowEl.addEventListener('change', ()=> { localStorage.setItem('settingMaxShow', maxShowEl.value); renderActiveView(); });
 
   function persistSelection(){
     try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
@@ -377,6 +417,9 @@ export async function start(ctx){
       selected.clear();
       for(const v of next) selected.add(v);
     }
+    // «Вернуть конфиг» откатывает к последнему состоянию инвентаря —
+    // например к тому, что приехало импортом из GOOD
+    goodConfigBackup = new Set(next);
   });
 
   function updateCharacterSelection(){
@@ -386,15 +429,12 @@ export async function start(ctx){
   }
 
   function getCharactersByStars(starsArray){
-    const chars = [];
+    const out = [];
     for(const [key, entry] of Object.entries(names)){
-      const disp = (entry && typeof entry === 'object') ? entry.name : entry;
       const stars = (entry && entry.stars) ? entry.stars : null;
-      if(stars !== null && starsArray.includes(stars) && hasTeams(disp)){
-        chars.push(disp);
-      }
+      if(stars !== null && starsArray.includes(stars) && hasTeams(key)) out.push(key);
     }
-    return chars;
+    return out;
   }
 
   document.getElementById('macro-free')?.addEventListener('click', ()=>{
@@ -416,8 +456,8 @@ export async function start(ctx){
   });
 
   document.getElementById('macro-all')?.addEventListener('click', ()=>{
-    for(const disp of displayNames){
-      if(hasTeams(disp)) selected.add(disp);
+    for(const key of charKeys){
+      if(hasTeams(key)) selected.add(key);
     }
     updateCharacterSelection();
   });
@@ -435,99 +475,17 @@ export async function start(ctx){
     }
   });
 
-  function goodStatus(msg, ok){
-    const el = document.getElementById('good-status'); if(!el) return; el.textContent = msg||''; el.style.color = ok? '#4caf50':'#ccc';
-  }
-  function normalizeGoodCharName(n){
-    if(!n) return '';
-    let s = String(n).trim();
-    s = s.replace(/^Traveler\s*(?:\((Anemo|Geo|Electro|Dendro|Hydro|Pyro)\))?$/i,(m,el)=> el? `MC (${el.charAt(0).toUpperCase()+el.slice(1).toLowerCase()})` : 'MC (Anemo)');
-    s = s.replace(/^Aether\s*(?:\((Anemo|Geo|Electro|Dendro|Hydro|Pyro)\))?$/i,(m,el)=> el? `MC (${el.charAt(0).toUpperCase()+el.slice(1).toLowerCase()})` : 'MC (Anemo)');
-    s = s.replace(/^Lumine\s*(?:\((Anemo|Geo|Electro|Dendro|Hydro|Pyro)\))?$/i,(m,el)=> el? `MC (${el.charAt(0).toUpperCase()+el.slice(1).toLowerCase()})` : 'MC (Anemo)');
-    const mapAlt = {
-      'Kaedehara Kazuha':'Kaedehara Kazuha','Kamisato Ayaka':'Kamisato Ayaka','Kamisato Ayato':'Kamisato Ayato','Kujou Sara':'Kujou Sara','Raiden Shogun':'Raiden Shogun','Sangonomiya Kokomi':'Sangonomiya Kokomi','Yae Miko':'Yae Miko','Yun Jin':'Yun Jin','Hu Tao':'Hu Tao'
-    };
-    if(mapAlt[s]) return mapAlt[s];
-    return s;
-  }
-  function importGoodData(obj){
-    if(!obj) return {added:0, removed:0, total: selected.size};
-    goodConfigBackup = new Set(selected);
-    const displaySet = new Set(Object.values(names).map(v=> (v && typeof v==='object')? v.name : v));
-    const collapsedMap = (function(){
-      const m = {};
-      for(const disp of displaySet){
-        const key = disp.toLowerCase().replace(/[^a-z0-9]+/g,'');
-        if(!m[key]) m[key] = disp;
-      }
-      return m;
-    })();
-    const before = new Set(selected);
-    const imported = new Set();
-    function consider(raw){
-      if(!raw) return;
-      let d = normalizeGoodCharName(raw);
-      if(displaySet.has(d)){ imported.add(d); return; }
-      const collapsed = String(raw).toLowerCase().replace(/[^a-z0-9]+/g,'');
-      if(collapsedMap[collapsed]) imported.add(collapsedMap[collapsed]);
-    }
-    if(Array.isArray(obj.characters)){
-      for(const ch of obj.characters){
-        if(!ch) continue;
-        consider(ch.name || ch.key || ch.characterName || ch.displayName);
-      }
-    }
-    if(obj.charactersByKey && typeof obj.charactersByKey==='object'){
-      for(const k of Object.keys(obj.charactersByKey)){
-        const ch = obj.charactersByKey[k];
-        consider(ch?.name || k);
-      }
-    }
-    if(Array.isArray(obj.avatarInfoList)){
-      for(const ch of obj.avatarInfoList){
-        consider(ch?.name || ch?.characterName || ch?.key);
-      }
-    }
-    selected.clear();
-    for(const v of imported) selected.add(v);
-    goodConfigBackup = new Set(imported);
-    const added = [...selected].filter(x=> !before.has(x)).length;
-    const removed = [...before].filter(x=> !selected.has(x)).length;
-    persistSelection();
-    renderOwnedCharacters();
-    renderActiveView();
-    return {added, removed, total: selected.size};
-  }
-  async function handleGoodText(text){
-    if(!text || !text.trim().length){ goodStatus(T('import.empty','Empty input')); return; }
-    try{
-      const obj = JSON.parse(text);
-      const res = importGoodData(obj);
-      if(res.total===0){ goodStatus(T('import.none','No recognized characters')); return; }
-      goodStatus(T('import.doneLegacy','Imported '+res.total+' (added '+res.added+', removed '+res.removed+')',{total:res.total,added:res.added,removed:res.removed}), res.total>0);
-    }catch(e){ goodStatus(T('import.invalidJson','Invalid JSON')); }
-  }
+  // Импорт GOOD живёт в js/good.js + js/main.js: он понимает созвездия и 5* оружие,
+  // а прежняя версия здесь умела только список имён и дублировала обработчики.
+
   const openImport = document.getElementById('open-import');
   const importModal = document.getElementById('import-modal');
   const importClose = document.getElementById('import-close');
-  const importFile = document.getElementById('good-file');
-  const importText = document.getElementById('good-text');
-  const importPasteBtn = document.getElementById('import-paste');
-  const importClipboardBtn = document.getElementById('import-clipboard');
   function showImport(){ if(importModal){ importModal.hidden = false; importModal.querySelector('.close-btn')?.focus(); } }
   function hideImport(){ if(importModal) importModal.hidden = true; }
   openImport?.addEventListener('click', showImport);
   importClose?.addEventListener('click', hideImport);
   importModal?.querySelector('.modal-backdrop')?.addEventListener('click', hideImport);
-  importFile?.addEventListener('change', ()=>{
-    const f = importFile.files && importFile.files[0]; if(!f){ goodStatus(T('import.noFile','No file')); return; }
-    const reader = new FileReader();
-    reader.onload = ()=> handleGoodText(String(reader.result||''));
-    reader.onerror = ()=> goodStatus(T('import.readError','Read error'));
-    reader.readAsText(f);
-  });
-  importPasteBtn?.addEventListener('click', ()=>{ handleGoodText(importText?.value||''); });
-  importClipboardBtn?.addEventListener('click', async ()=>{ try{ const txt = await navigator.clipboard.readText(); if(importText) importText.value = txt; await handleGoodText(txt); }catch{ goodStatus(T('import.clipboardDenied','Clipboard denied')); } });
 
   const navLinks = Array.from(document.querySelectorAll('.nav-link'));
   function setActiveLink(hash){
@@ -538,12 +496,12 @@ export async function start(ctx){
   function getOwned(){ return new Set([...selected]); }
 
   function renderRecommendations(){
+    viewControls().innerHTML = '';
     const owned = getOwned();
     const mode = parseInt(modeEl.value||'1',10);
-    const maxShow = parseInt(maxShowEl.value||'3',10);
     const pred = makeFilterPredicate('main');
     const active = filterActive('main');
-    const base = computeSuggestions(parsedTeams, owned, mode, maxShow);
+    const base = computeSuggestions(parsedTeams, owned, mode);
     const suggestions = active
       ? base.map(item => {
           const missingAllMatch = item.missing.every(pred);
@@ -558,23 +516,22 @@ export async function start(ctx){
       : base;
     const content = document.getElementById('view-content');
     content.innerHTML = '';
-    content.appendChild(createInlineHint());
     const filtersDiv = createEl('div','filter-bar');
     filtersDiv.setAttribute('aria-label', T('filters.currentView','Filter current view'));
-    content.appendChild(filtersDiv);
+    viewControls().appendChild(filtersDiv);
     renderFilters(filtersDiv, 'main');
     const wrap = createEl('div');
     const list = createEl('div'); list.id = 'suggestions';
     wrap.appendChild(list);
     content.appendChild(wrap);
-    renderSuggestions(suggestions, keyByDisplay, maxShow);
+    renderSuggestions(suggestions, getOwned());
   }
 
   function renderTeamBuilder(){
+    viewControls().innerHTML = '';
     const owned = getOwned();
     const content = document.getElementById('view-content');
     content.innerHTML = '';
-    content.appendChild(createInlineHint());
     const wrap = createEl('div');
 
     const toggleWrap = createEl('div','best-teams-toggle');
@@ -664,7 +621,7 @@ export async function start(ctx){
       }
       const availOwned = new Set([...owned].filter(n=> !used.has(n)));
 
-      const baseCandidates = parsedTeams
+      const baseCandidates = strictTeams
         .filter(s=> s.members.every(m=> availOwned.has(m)))
         .slice()
         .sort((a,b)=> b.dps - a.dps);
@@ -691,7 +648,7 @@ export async function start(ctx){
           const eligible = inAnchor || (!used.has(name) && addable.has(name));
           if(inAnchor) chip.classList.add('active');
           if(!eligible) chip.classList.add('disabled');
-          const key = keyByDisplay[name];
+          const key = name;
           const avatar = createAvatarImg(name,'avatar', key); if(avatar) chip.appendChild(avatar);
           chip.appendChild(createEl('div','pill',name));
           if(eligible){
@@ -720,7 +677,7 @@ export async function start(ctx){
             const chip = createEl('button','anchor-chip');
             chip.type = 'button';
             chip.title = T('roster.removeFromSelection','Remove from selection');
-            const img = createAvatarImg(a,'member-avatar', keyByDisplay[a]); if(img) chip.appendChild(img);
+            const img = createAvatarImg(a,'member-avatar'); if(img) chip.appendChild(img);
             chip.appendChild(createEl('span','member-pill',a));
             chip.appendChild(createEl('span','anchor-x','✕'));
             chip.addEventListener('click',()=>{ anchors.delete(a); refreshRoster(); renderList(); });
@@ -737,7 +694,7 @@ export async function start(ctx){
           const row = createEl('div','team-row clickable');
           const members = createEl('div','members');
           team.members.forEach((m, mi)=>{
-            appendMemberCell(members, m, keyByDisplay[m], team, mi, anchors.has(m) ? 'owned' : null);
+            appendMemberCell(members, m, team, mi, anchors.has(m) ? 'owned' : null);
           });
           row.appendChild(members);
           row.appendChild(createEl('div','team-dps', fmtDps(team.dps)));
@@ -783,7 +740,7 @@ export async function start(ctx){
         const row = createEl('div','team-row');
         const members = createEl('div','members');
         sel.members.forEach((m, mi)=>{
-          appendMemberCell(members, m, keyByDisplay[m], sel, mi, null);
+          appendMemberCell(members, m, sel, mi, null);
         });
         row.appendChild(members);
         row.appendChild(createEl('div','team-dps', fmtDps(sel.dps)));
@@ -797,12 +754,11 @@ export async function start(ctx){
   }
 
   function renderTier(){
+    viewControls().innerHTML = '';
     const owned = getOwned();
-    const maxShow = parseInt(maxShowEl.value||'3',10);
     const mode = parseInt(modeEl.value||'1',10);
     const content = document.getElementById('view-content');
     content.innerHTML = '';
-    content.appendChild(createInlineHint());
 
     const toggleWrap = createEl('div','best-teams-toggle');
 
@@ -859,32 +815,31 @@ export async function start(ctx){
 
     label.appendChild(select);
     toggleWrap.appendChild(label);
-    content.appendChild(toggleWrap);
+    viewControls().appendChild(toggleWrap);
 
     const filtersDiv = createEl('div','filter-bar');
     filtersDiv.setAttribute('aria-label', T('filters.currentView','Filter current view'));
-    content.appendChild(filtersDiv);
+    viewControls().appendChild(filtersDiv);
     renderFilters(filtersDiv, 'main');
 
     const sortMode = select.value || 'best';
     const displayMode = displaySelect.value || 'not-owned';
     const pred = makeFilterPredicate('main');
-    const tierData = buildTierlist(names, parsedTeams, teamsByMember, owned, maxShow, mode, sortMode, displayMode).filter(item=> pred(item.name));
+    const tierData = buildTierlist(names, parsedTeams, teamsByMember, owned, mode, sortMode, displayMode).filter(item=> pred(item.name));
 
     const wrap = createEl('div');
     const area = createEl('div'); area.id = 'tierlist'; area.className = 'tier-grid';
     wrap.appendChild(area);
     content.appendChild(wrap);
-    renderTierlist(tierData, keyByDisplay, maxShow, owned);
+    renderTierlist(tierData, owned);
   }
 
   function renderBestTeams(){
+    viewControls().innerHTML = '';
     const owned = getOwned();
-    const maxShow = parseInt(maxShowEl.value||'3',10);
     const mode = parseInt(modeEl.value||'1',10);
     const content = document.getElementById('view-content');
     content.innerHTML = '';
-    content.appendChild(createInlineHint());
 
     const toggleWrap = createEl('div','best-teams-toggle');
     const label = createEl('label', 'toggle-label');
@@ -911,11 +866,11 @@ export async function start(ctx){
 
     label.appendChild(select);
     toggleWrap.appendChild(label);
-    content.appendChild(toggleWrap);
+    viewControls().appendChild(toggleWrap);
 
     const filtersDiv = createEl('div','filter-bar');
     filtersDiv.setAttribute('aria-label', T('filters.byElementWeapon','Filter teams by element and weapon'));
-    content.appendChild(filtersDiv);
+    viewControls().appendChild(filtersDiv);
     renderFilters(filtersDiv, 'bestTeams');
 
     const wrap = createEl('div');
@@ -925,10 +880,10 @@ export async function start(ctx){
     content.appendChild(wrap);
 
     const showMode = select.value || 'all';
-    renderBestTeamsList(showMode, maxShow, mode);
+    renderBestTeamsList(showMode, mode);
   }
 
-  function renderBestTeamsList(showMode, maxShow, mode){
+  function renderBestTeamsList(showMode, mode){
     const container = document.getElementById('best-teams-list');
     if(!container) return;
     container.innerHTML = '';
@@ -946,6 +901,7 @@ export async function start(ctx){
         dps: t.dps,
         build: t.build, src: t.src, sims: t.sims,
         kqmCons: t.kqmCons, kqmArt: t.kqmArt,
+        teamIndex: t.teamIndex, buildIndex: t.buildIndex,
         missingCount
       };
     });
@@ -962,7 +918,7 @@ export async function start(ctx){
       allTeams = allTeams.filter(team => {
         const teamElements = new Set();
         for(const m of team.members){
-          const key = keyByDisplay[m];
+          const key = m;
           const entry = names[key];
           const element = (entry && entry.element) ? String(entry.element).toLowerCase() : '';
           if(element) teamElements.add(element);
@@ -978,7 +934,7 @@ export async function start(ctx){
       allTeams = allTeams.filter(team => {
         const teamWeapons = new Set();
         for(const m of team.members){
-          const key = keyByDisplay[m];
+          const key = m;
           const entry = names[key];
           const weapon = (entry && entry.weapon) ? String(entry.weapon).toLowerCase() : '';
           if(weapon) teamWeapons.add(weapon);
@@ -991,37 +947,21 @@ export async function start(ctx){
     }
 
     allTeams.sort((a, b) => b.dps - a.dps);
-    const topTeams = allTeams.slice(0, maxShow);
-
-    if(topTeams.length === 0){
+    if(allTeams.length === 0){
       container.appendChild(createEl('div','small',T('views.noTeamsFiltered','No teams found matching the current filters.')));
       return;
     }
 
-    container.appendChild(createEl('div','small muted',T('views.showingTop','Showing top '+topTeams.length+' team(s) by DPS',{n:topTeams.length})));
-
-    for(const team of topTeams){
-      const row = createEl('div','team-row best-team-row');
-      const members = createEl('div','members');
-      team.members.forEach((m, mi)=>{
-        appendMemberCell(members, m, keyByDisplay[m], team, mi,
-          (showMode === 'all' && !owned.has(m)) ? 'missing' : 'owned');
-      });
-      row.appendChild(members);
-      const dpsEl = createEl('div','team-dps', fmtDps(team.dps));
-      row.appendChild(dpsEl);
-      if(team.build){
-        row.classList.add('expandable');
-        row.title = T('team.details','Team details');
-        row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
-      }
-      container.appendChild(row);
-    }
+    container.appendChild(createEl('div','small muted',T('views.showingTop','Showing top '+allTeams.length+' team(s) by DPS',{n:allTeams.length})));
+    // в режиме «все отряды» рамкой подсвечиваем тех, кого у игрока нет
+    const markOwned = showMode === 'all' ? owned : null;
+    paginate(container, allTeams, 25, (team)=> buildTeamRow(team, markOwned, 'best-team-row'));
   }
 
   function renderActiveView(){
     const hash = location.hash || '#recommendations';
     setActiveLink(hash);
+    viewControls().innerHTML = '';
     // «Инвентарь» рисует js/inventory.js в своей секции — здесь ничего не делаем,
     // иначе в скрытый #view-content зря уедут рекомендации.
     if(hash === '#inventory') return;
@@ -1048,8 +988,15 @@ export async function start(ctx){
     updatesModal.hidden = false;
     updatesModal.querySelector('.close-btn')?.focus();
     try{
-      const resp = await fetch('Updates.md');
-      const text = await resp.text();
+      // перевод списка обновлений лежит отдельным файлом на язык;
+      // если его нет — откатываемся на английский оригинал
+      const lang = document.documentElement.lang || 'en';
+      let text = null;
+      if(lang !== 'en'){
+        const loc = await fetch(`Updates.${lang}.md`);
+        if(loc.ok) text = await loc.text();
+      }
+      if(text === null) text = await (await fetch('Updates.md')).text();
       updatesContent.innerHTML = renderMarkdownBasic(text);
     }catch(e){
       updatesContent.textContent = T('errors.loadUpdates','Failed to load updates.');
@@ -1083,9 +1030,9 @@ export async function start(ctx){
 
   return {
     // новый список отрядов (сменился инвентарь или настройки фильтра)
-    refreshTeams(list){
+    refreshTeams(list, strictList){
       keepScroll(()=>{
-        rebuildTeams(list);
+        rebuildTeams(list, strictList);
         renderOwnedCharacters();
         renderActiveView();
       });
@@ -1099,17 +1046,11 @@ export async function start(ctx){
   };
 }
 
-function normalizeName(name){
-  return String(name).trim();
-}
-
-let CONS_BY_DISPLAY = {};
-
 function fmtDps(n){
   return Math.round(n||0).toLocaleString('en-US').replace(/,/g,' ');
 }
 
-function computeSuggestions(parsedTeams, ownedDisplaySet, mode, maxShow=3){
+function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
   const byMissingSet = new Map();
   for(const s of parsedTeams){
     const missing = [];
@@ -1120,7 +1061,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode, maxShow=3){
       const sortedMissing = missing.slice().sort();
       const key = sortedMissing.join('||');
       const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
-      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt});
+      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex});
       byMissingSet.set(key, list);
     }
   }
@@ -1139,7 +1080,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode, maxShow=3){
       missing: obj.missing,
       count: obj.teams.length,
       median,
-      topteams: list.slice(0, Math.max(1, Math.min(maxShow || 3, list.length)))
+      topteams: list            // все отряды набора — окно покажет их страницами
     });
   }
 
@@ -1147,20 +1088,23 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode, maxShow=3){
   return results;
 }
 
-function renderSuggestions(list, keyByDisplay, maxShow){
+// Рекомендаций бывает несколько сотен, и каждая тянет за собой четыре портрета
+// с иконками сборки. Рисуем страницами, остальное — по кнопке.
+const SUGGESTION_PAGE = 25;
+
+function renderSuggestions(list, owned){
   const container = document.getElementById('suggestions');
   container.innerHTML = '';
   if(list.length === 0){
     container.appendChild(createEl('div','small',T('views.emptyRecommendations','No recommendations: either too few characters are selected or no teams fit the current rules.')));
     return;
   }
-  for(const item of list){
+  function buildCard(item){
     const card = createEl('div','squad clickable');
     const left = createEl('div','left');
     const group = createEl('div','missing-group');
     for(const missingName of item.missing){
-      const key = keyByDisplay[missingName];
-      const img = createAvatarImg(missingName,'avatar-sm', key);
+      const img = createAvatarImg(missingName,'avatar-sm');
       if(img) group.appendChild(img);
       group.appendChild(createEl('div','pill',charLabel(missingName)));
     }
@@ -1176,7 +1120,7 @@ function renderSuggestions(list, keyByDisplay, maxShow){
       const preview = createEl('div','team-row preview');
       const members = createEl('div','members');
       best.members.forEach((m, mi)=>{
-        appendMemberCell(members, m, keyByDisplay[m], best, mi,
+        appendMemberCell(members, m, best, mi,
           item.missing.includes(m) ? 'missing' : 'owned');
       });
       preview.appendChild(members);
@@ -1187,14 +1131,21 @@ function renderSuggestions(list, keyByDisplay, maxShow){
 
     card.appendChild(left);
     card.appendChild(right);
-    card.addEventListener('click',()=> togglePanel(card, item, keyByDisplay, null));
-    container.appendChild(card);
+    card.addEventListener('click',()=> openCharacterWindow({
+      chars: item.missing,
+      teams: item.topteams || [],
+      names: NAMES,
+      teamRow: (team)=> buildTeamRow(team, owned),
+    }));
+    return card;
   }
+
+  paginate(container, list, SUGGESTION_PAGE, buildCard);
 }
 
-function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxShow=3, mode=1, sortMode='best', displayMode='not-owned'){
+function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, mode=1, sortMode='best', displayMode='not-owned'){
   const results = [];
-  const allDisplayNames = Object.values(names).map(v=> (v && typeof v==='object')? v.name : v);
+  const allKeys = Object.keys(names);
 
   let globalDpsThreshold = 0;
   if(sortMode === 'average'){
@@ -1202,7 +1153,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxSh
     globalDpsThreshold = allDps[Math.floor(allDps.length * 0.5)] || 0;
   }
 
-  for(const disp of allDisplayNames){
+  for(const disp of allKeys){
     const isOwned = ownedDisplaySet && ownedDisplaySet.has(disp);
     const candidates = [];
     for(const s of (teamsByMember.get(disp) || [])){
@@ -1211,7 +1162,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxSh
       const missingOthers = others.length - ownedCount;
       const totalMissing = isOwned ? missingOthers : (1 + missingOthers);
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, ownedCount});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount});
       }
     }
     if(candidates.length===0){ continue; }
@@ -1239,11 +1190,11 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxSh
         const bestDps = uniqueTeams[0]?.dps || 0;
         const flexBonus = 1 + 0.05 * (uniqueTeams.length - 1);
         score = bestDps * flexBonus;
-        showteams = uniqueTeams.slice(0, Math.max(1, Math.min(maxShow, uniqueTeams.length)));
+        showteams = uniqueTeams;
       }
     } else {
       score = candidates[0]?.dps || 0;
-      showteams = candidates.slice(0, Math.max(1, Math.min(maxShow, candidates.length)));
+      showteams = candidates;
     }
     results.push({name:disp, score: score, teams: showteams, isOwned});
   }
@@ -1284,7 +1235,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, maxSh
   return tiered;
 }
 
-function renderTierlist(tierData, keyByDisplay, maxShow, ownedSet){
+function renderTierlist(tierData, ownedSet){
   const container = document.getElementById('tierlist');
   container.innerHTML = '';
   const tiersOrder = ['ss','s','A','B','C','D'];
@@ -1307,12 +1258,17 @@ function renderTierlist(tierData, keyByDisplay, maxShow, ownedSet){
 
     const membersTd = document.createElement('td'); membersTd.className = 'tier-members';
     for(const member of grouped[t]){
-      const key = keyByDisplay[member.name];
+      const key = member.name;   // в тир-листе name хранит ключ персонажа
       const chip = createEl('div','tier-member');
-      const avatar = createAvatarImg(member.name,'avatar', key);
+      const avatar = createAvatarImg(key,'avatar');
       if(avatar) chip.appendChild(avatar);
       chip.appendChild(createEl('div','pill',charLabel(member.name)));
-      chip.addEventListener('click', ()=> togglePanel(chip, {missing:[member.name], topteams:member.teams}, keyByDisplay, ownedSet));
+      chip.addEventListener('click', ()=> openCharacterWindow({
+        chars: [key],
+        teams: member.teams || [],
+        names: NAMES,
+        teamRow: (team)=> buildTeamRow(team, ownedSet),
+      }));
       membersTd.appendChild(chip);
     }
     row.appendChild(membersTd);
@@ -1320,71 +1276,19 @@ function renderTierlist(tierData, keyByDisplay, maxShow, ownedSet){
   }
   container.appendChild(table);
 }
-function togglePanel(card, item, keyByDisplay, ownedSet){
-  const next = card.nextElementSibling;
-  if(next && next.classList && next.classList.contains('panel')){
-    next.remove();
-    return;
-  }
-  const panel = createEl('div','panel');
-  const title = createEl('div','small',T('views.bestTeamsFor','Best teams for: '+item.missing.join(', '),{list:item.missing.join(', ')}));
-  panel.appendChild(title);
-  if(!item.topteams || item.topteams.length===0){
-    panel.appendChild(createEl('div','small',T('views.noTopTeams','No top teams found.')));
-  } else {
-    for(const team of item.topteams){
-      const row = createEl('div','team-row');
-      const members = createEl('div','members');
-      team.members.forEach((m, mi)=>{
-        appendMemberCell(members, m, findKeyForDisplay(m, keyByDisplay), team, mi,
-          (ownedSet && !ownedSet.has(m)) ? 'missing' : 'owned');
-      });
-      row.appendChild(members);
-      const dpsEl = createEl('div','team-dps', fmtDps(team.dps));
-      row.appendChild(dpsEl);
-      if(team.build){
-        row.classList.add('expandable');
-        row.title = T('team.details','Team details');
-        row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
-      }
-      panel.appendChild(row);
-    }
-  }
-  card.insertAdjacentElement('afterend', panel);
-}
-
-function findKeyForDisplay(displayName, keyByDisplay){
-  return keyByDisplay ? keyByDisplay[displayName] : null;
-}
-
-function sanitizeFileName(name){
-  return name.toLowerCase().replace(/\s+/g,'').replace(/[^a-z0-9_\-]/g,'') + '.png';
-}
-
-function createAvatarImg(displayName, cls, key){
-  const file = key ? (key.toLowerCase() + '.png') : sanitizeFileName(displayName);
+function createAvatarImg(key, cls){
   const img = new Image();
   img.loading = 'lazy';
   img.decoding = 'async';
-  img.src = `characters/${file}`;
+  img.src = `characters/${String(key).toLowerCase()}.png`;
   img.className = cls;
-  img.alt = charLabel(displayName);
+  img.alt = charLabel(key);
   img.onerror = ()=>{ img.style.display = 'none'; };
   // Общий бейдж «C1» на персонаже убран: созвездие теперь показывается у каждой
   // сборки отдельно, из её собственных данных, и не висит там, где неуместен.
   return img;
 }
 
-
-function createInlineHint(){
-  const hintWrap = document.createElement('div');
-  hintWrap.className = 'view-hint-inline';
-  const hint = document.createElement('div');
-  hint.className = 'small muted';
-  hint.textContent = T('views.recommendationsHint','The list updates when you change selection or settings');
-  hintWrap.appendChild(hint);
-  return hintWrap;
-}
 
 function renderMarkdownBasic(md){
   const lines = md.split(/\r?\n/);

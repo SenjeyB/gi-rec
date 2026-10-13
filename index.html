@@ -68,7 +68,7 @@
                 <a href="#inventory" class="nav-link" role="tab" data-i18n="nav.inventory">Inventory</a>
               </div>
             </div>
-            <div class="side-card">
+            <div class="side-card" id="settings-card">
               <h2 class="side-title" data-i18n="settings.title">Settings</h2>
               <label for="mode" class="side-label" data-i18n="settings.willingToObtain">Willing to obtain:</label>
               <select id="mode" class="side-input">
@@ -78,8 +78,6 @@
                 <option value="3" data-i18n="settings.characters_3">3 characters</option>
                 <option value="4" data-i18n="settings.characters_4">4 characters</option>
               </select>
-              <label for="maxShow" class="side-label" data-i18n="settings.squadsOnExpand">Squads to show on expand:</label>
-              <input id="maxShow" class="side-input" type="number" min="1" max="10" value="3" />
 
               <label class="side-check">
                 <input id="allow-five-star" type="checkbox" />
@@ -89,7 +87,7 @@
                 <input id="only-my-weapons" type="checkbox" />
                 <span data-i18n="settings.onlyMyWeapons">Only my 5★ weapons</span>
               </label>
-              <div id="five-star-hint" class="side-note small"></div>
+              
 
               <details id="advanced-filters" class="adv-filters">
                 <summary data-i18n="filters.advanced">Advanced</summary>
@@ -101,11 +99,8 @@
                   <input id="kqm-art" type="checkbox" />
                   <span data-i18n="filters.kqmArtOnly">KQM artifacts only</span>
                 </label>
-                <div class="side-note small" data-i18n="team.kqmConsHint">5★ at C0 (or forced C1), 4★ at C6</div>
                 <button id="reset-filters" type="button" class="macro-btn" data-i18n="filters.reset">Reset filters</button>
               </details>
-
-              <div class="side-note small" data-i18n="settings.autoApply">Changes apply automatically.</div>
             </div>
           </div>
 
@@ -139,7 +134,6 @@
                 <li data-i18n="about.step2">Pick a view in Mode.</li>
                 <li data-i18n="about.step3">Adjust Settings to control how many new characters you're willing to obtain.</li>
                 <li data-i18n="about.step4">Use DPS numbers as reference.</li>
-                <li data-i18n="about.step5">Characters marked with a C1 badge are calculated using their C1 versions.</li>
               </ol>
               <div><span data-i18n="about.developedBy">Developed by</span> <strong>SenjeyB</strong>.</div>
             </div>
@@ -150,9 +144,11 @@
           <section id="view-container">
             <div id="view-header" class="view-header">
               <h1 id="view-title" data-i18n="nav.recommendations">Recommendations</h1>
-              <div id="view-hint" class="small muted" data-i18n="views.recommendationsHint">The list updates when you change selection or settings</div>
             </div>
-            <div id="view-content" class="view-content"></div>
+            <div class="view-content view-box">
+              <div id="view-controls" class="view-controls"></div>
+              <div id="view-content"></div>
+            </div>
           </section>
 
           <section id="inventory-view" hidden>
@@ -166,6 +162,10 @@
     </div>
   </div>
 
+  <button id="filters-fab" class="filters-fab" type="button">
+    <span data-i18n="filters.title">Filters</span>
+    <span class="filters-fab-count" hidden></span>
+  </button>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Views"></nav>
 
   <!-- app.js подключается как модуль из js/main.js, когда готовы язык, инвентарь и база -->

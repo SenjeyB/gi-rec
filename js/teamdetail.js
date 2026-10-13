@@ -3,6 +3,20 @@
 
 import { t } from "./i18n.js";
 import { charLabel, weaponLabel, setLabel, statLabel } from "./labels.js";
+import { loadDetails } from "./db.js";
+
+// Цена одного ролла сабстата по стандарту KQM (5★ артефакт). В базе хранится
+// число роллов, реальное значение — роллы × цена ролла.
+const ROLL_VALUE = {
+  "hp": 253.94, "hp%": 0.0496, "atk": 16.54, "atk%": 0.0496, "def": 19.68,
+  "def%": 0.062, "er": 0.0551, "em": 19.82, "cr": 0.0331, "cd": 0.0662,
+};
+const PERCENT = new Set(["hp%", "atk%", "def%", "er", "cr", "cd"]);
+
+function subValue(stat, rolls) {
+  const v = (ROLL_VALUE[stat] || 0) * rolls;
+  return PERCENT.has(stat) ? `${(v * 100).toFixed(1)}%` : String(Math.round(v));
+}
 
 const SIM_URL = "https://db.kqm.gg/db/";
 
@@ -39,7 +53,7 @@ function kqmBadge(okCons, okArt) {
   return wrap;
 }
 
-function memberBlock(slot, keyByDisplay) {
+function memberBlock(slot, stats) {
   const card = el("div", "td-member");
 
   const head = el("div", "td-member-head");
@@ -81,17 +95,17 @@ function memberBlock(slot, keyByDisplay) {
   }
 
   // мейн-статы: песок, кубок, корона
-  if (slot.main && slot.main.length) {
+  if (stats && stats.main && stats.main.length) {
     const box = el("div", "td-stats");
     box.appendChild(el("div", "td-stats-title", t("team.mainStats")));
     const line = el("div", "td-mains");
-    for (const st of slot.main) line.appendChild(el("span", "td-main", statLabel(st)));
+    for (const st of stats.main) line.appendChild(el("span", "td-main", statLabel(st)));
     box.appendChild(line);
     card.appendChild(box);
   }
 
   // сабстаты — показываем только то, что реально прокачано сверх базовых двух роллов
-  const subs = (slot.subs || []).filter((s) => s.rolls > 0);
+  const subs = ((stats && stats.subs) || []).filter((s) => s.rolls > 0);
   if (subs.length) {
     const box = el("div", "td-stats");
     box.appendChild(el("div", "td-stats-title", t("team.substats")));
@@ -99,7 +113,10 @@ function memberBlock(slot, keyByDisplay) {
     for (const s of subs.slice().sort((a, b) => b.rolls - a.rolls)) {
       const row = el("div", "td-sub" + (s.rolls > 2 ? " is-rolled" : ""));
       row.appendChild(el("span", "td-sub-name", statLabel(s.stat)));
-      row.appendChild(el("span", "td-sub-rolls", String(s.rolls)));
+      // значение стата, а число роллов — в скобках рядом
+      const val = el("span", "td-sub-rolls", subValue(s.stat, s.rolls));
+      val.appendChild(el("span", "td-sub-count", ` (${s.rolls})`));
+      row.appendChild(val);
       grid.appendChild(row);
     }
     box.appendChild(grid);
@@ -113,7 +130,7 @@ function memberBlock(slot, keyByDisplay) {
  * Собирает панель подробностей.
  * @param {object} team запись из js/db.js (нужны build, dps, sims, src, kqm*)
  */
-export function buildPanel(team) {
+export async function buildPanel(team) {
   const panel = el("div", "team-detail");
 
   const head = el("div", "td-head");
@@ -133,14 +150,19 @@ export function buildPanel(team) {
   panel.appendChild(head);
 
   const grid = el("div", "td-members");
-  for (const slot of team.build || []) grid.appendChild(memberBlock(slot));
   panel.appendChild(grid);
+
+  // статы артефактов лежат отдельными файлами и качаются только сейчас
+  const stats = await loadDetails(team.teamIndex, team.buildIndex);
+  (team.build || []).forEach((slot, i) => {
+    grid.appendChild(memberBlock(slot, stats && stats[i]));
+  });
 
   return panel;
 }
 
 /** Переключает панель под строкой отряда. */
-export function toggleDetail(row, team) {
+export async function toggleDetail(row, team) {
   const existing = row.nextElementSibling;
   if (existing && existing.classList.contains("team-detail")) {
     existing.remove();
@@ -151,8 +173,10 @@ export function toggleDetail(row, team) {
   for (const open of document.querySelectorAll(".team-detail")) open.remove();
   for (const r of document.querySelectorAll(".team-row.is-open")) r.classList.remove("is-open");
 
-  const panel = buildPanel(team);
-  row.after(panel);
   row.classList.add("is-open");
+  const panel = await buildPanel(team);
+  // пока качались статы, строку могли закрыть или перерисовать
+  if (!row.isConnected || !row.classList.contains("is-open")) return false;
+  row.after(panel);
   return true;
 }

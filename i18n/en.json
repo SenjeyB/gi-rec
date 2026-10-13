@@ -28,10 +28,7 @@
     "characters_2": "2 characters",
     "characters_3": "3 characters",
     "characters_4": "4 characters",
-    "squadsOnExpand": "Squads to show on expand:",
-    "autoApply": "Changes apply automatically.",
     "allowFiveStar": "Allow 5★ weapons",
-    "allowFiveStarHint": "Show teams whose builds use 5★ weapons at R1. Off by default — the baseline assumes 4★ weapons only.",
     "onlyMyWeapons": "Only my 5★ weapons",
     "onlyMyWeaponsHint": "Restrict 5★ weapon teams to the ones you marked as owned in Account."
   },
@@ -58,21 +55,18 @@
     "step2": "Pick a view in Mode: Recommendations, Tier List, or Team Suggestions.",
     "step3": "Adjust Settings to control how many new characters you're willing to obtain.",
     "step4": "Use DPS numbers as reference. You most probably will have different DPS values in your account.",
-    "step5": "Characters marked with a C1 badge are calculated using their C1 versions. All other 5★ characters are C0, 4★ characters are C6.",
     "developedBy": "Developed by"
   },
   "views": {
-    "recommendationsHint": "The list updates when you change selection or settings",
     "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",
     "emptyTierlist": "Tier list is empty: no characters have teams that include any of your selected characters.",
     "noTeamsSelection": "No teams available with this selection.",
     "noTeamsFiltered": "No teams found matching the current filters.",
-    "noTopTeams": "No top teams found.",
     "showingOf": "Showing {shown} of {total} team(s) by DPS",
-    "showingTop": "Showing top {n} team(s) by DPS",
-    "bestTeamsFor": "Best teams for: {list}",
+    "showingTop": "{n} teams found",
     "medianDps": "Median DPS: {value}",
-    "teamsMatchSet": "{n} team(s) match this set"
+    "teamsMatchSet": "{n} team(s) match this set",
+    "showMore": "Show more ({n})"
   },
   "inventory": {
     "title": "Inventory",
@@ -82,7 +76,7 @@
     "charactersTitle": "Your characters",
     "charactersHint": "Click a character to own them. For 5★ characters set the constellation with − and +.",
     "weaponsTitle": "Your 5★ weapons",
-    "weaponsHint": "Mark the 5★ weapons you own. Teams that need a 5★ weapon you don't have can then be hidden.",
+    "weaponsHint": "Add your 5★ weapons one copy at a time, like the in-game inventory: if you own two of the same weapon, add both.",
     "weaponsNotInDb": "Not used by any team in the database yet",
     "owned": "Owned",
     "notOwned": "Not owned",
@@ -98,7 +92,15 @@
     "resetConfirm": "Clear all owned characters and weapons?",
     "importGood": "Import from GOOD",
     "exportJson": "Export",
-    "empty": "Nothing selected yet."
+    "empty": "Nothing selected yet.",
+    "addWeapon": "Add weapon",
+    "remove": "Remove",
+    "copies": "Copies in inventory: {n}",
+    "added": "Added: {name}",
+    "inTeamsOnly": "Used in teams",
+    "noWeaponsYet": "No weapons yet. Press “Add weapon” to fill your inventory.",
+    "done": "Done",
+    "notFound": "Nothing found"
   },
   "import": {
     "title": "Import Characters",
@@ -214,5 +216,29 @@
     "anemoPct": "Anemo DMG",
     "geoPct": "Geo DMG",
     "dendroPct": "Dendro DMG"
+  },
+  "element": {
+    "anemo": "Anemo",
+    "cryo": "Cryo",
+    "dendro": "Dendro",
+    "electro": "Electro",
+    "geo": "Geo",
+    "hydro": "Hydro",
+    "pyro": "Pyro"
+  },
+  "weaponType": {
+    "sword": "Sword",
+    "claymore": "Claymore",
+    "polearm": "Polearm",
+    "bow": "Bow",
+    "catalyst": "Catalyst"
+  },
+  "char": {
+    "teams": "Teams ({n})",
+    "owned": "In your inventory",
+    "ownedCons": "In your inventory · C{n}",
+    "notOwned": "Not in your inventory",
+    "bestDps": "Best DPS: {value}",
+    "noTeams": "No teams for the current settings"
   }
 }
