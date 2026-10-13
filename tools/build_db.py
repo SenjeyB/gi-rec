@@ -357,6 +357,10 @@ def load_refs() -> Tuple[Dict[str, dict], Dict[str, dict], Dict[str, str]]:
     """Оружие и сеты из игровых данных + алиасы персонажей из gcsim."""
     weapons = {}
     for v in fetch_json(f"{YATTA}/weapon")["data"]["items"].values():
+        # скины оружия (Serpent Devourer - Sublimation и т.п.) — не оружие из
+        # инвентаря, в каталоге им делать нечего
+        if v.get("isWeaponSkin"):
+            continue
         wtype = (v.get("type") or "").replace("WEAPON_", "").replace("_ONE_HAND", "").lower()
         if wtype == "pole":          # в names.json тип копейщиков называется polearm
             wtype = "polearm"

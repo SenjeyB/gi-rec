@@ -1073,13 +1073,6 @@
    "icon": "UI_EquipIcon_Sword_Falcon",
    "inDb": true
   },
-  "ardentstormsublimation": {
-   "name": "Ardent Storm - Sublimation",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_MorphGravitas_Great_Wind",
-   "inDb": false
-  },
   "astralvulturescrimsonplumage": {
    "name": "Astral Vulture's Crimson Plumage",
    "rarity": 5,
@@ -1150,13 +1143,6 @@
    "icon": "UI_EquipIcon_Pole_BloodMoon",
    "inDb": true
   },
-  "dawnstarofshaharsublimation": {
-   "name": "Dawnstar of Shahar - Sublimation",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_MorphShahar_Great_Wind",
-   "inDb": false
-  },
   "disasterandremorse": {
    "name": "Disaster and Remorse",
    "rarity": 5,
@@ -1184,6 +1170,13 @@
    "type": "catalyst",
    "icon": "UI_EquipIcon_Catalyst_Kaleido",
    "inDb": true
+  },
+  "exaiphanesblade": {
+   "name": "Exaiphanes Blade",
+   "rarity": 5,
+   "type": "sword",
+   "icon": "UI_EquipIcon_Sword_WeaponQuestSnezhnaya",
+   "inDb": false
   },
   "fangofthemountainking": {
    "name": "Fang of the Mountain King",
@@ -1213,25 +1206,11 @@
    "icon": "UI_EquipIcon_Claymore_EnsisAquilonis",
    "inDb": true
   },
-  "goldenboughofnemorensissublimation": {
-   "name": "Golden Bough of Nemorensis - Sublimation",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_MorphNemorensis_Great_Wind",
-   "inDb": false
-  },
   "goldenfrostboundoath": {
    "name": "Golden Frostbound Oath",
    "rarity": 5,
    "type": "bow",
    "icon": "UI_EquipIcon_Bow_Alkonost",
-   "inDb": false
-  },
-  "hallowedfetterssublimation": {
-   "name": "Hallowed Fetters - Sublimation",
-   "rarity": 5,
-   "type": "catalyst",
-   "icon": "UI_EquipIcon_Catalyst_MorphIlia_Great_Wind",
    "inDb": false
   },
   "harangeppakufutsu": {
@@ -1374,27 +1353,6 @@
    "icon": "UI_EquipIcon_Catalyst_Sistrum",
    "inDb": true
   },
-  "serpentdevourersublimation": {
-   "name": "Serpent Devourer - Sublimation",
-   "rarity": 5,
-   "type": "sword",
-   "icon": "UI_EquipIcon_Sword_MorphVinces_Great_Wind",
-   "inDb": false
-  },
-  "shatteredmoonsublimation": {
-   "name": "Shattered Moon - Sublimation",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_MorphSpinifer_Great_Wind",
-   "inDb": false
-  },
-  "silverradianceofgradlonsublimation": {
-   "name": "Silver Radiance of Gradlon - Sublimation",
-   "rarity": 5,
-   "type": "claymore",
-   "icon": "UI_EquipIcon_Claymore_MorphGradlon_Great_Wind",
-   "inDb": false
-  },
   "silvershowerheartstrings": {
    "name": "Silvershower Heartstrings",
    "rarity": 5,
@@ -1471,20 +1429,6 @@
    "type": "catalyst",
    "icon": "UI_EquipIcon_Catalyst_Figurines",
    "inDb": true
-  },
-  "starlightoffylkirsublimation": {
-   "name": "Starlight of Fylkir - Sublimation",
-   "rarity": 5,
-   "type": "polearm",
-   "icon": "UI_EquipIcon_Pole_MorphFylkir_Great_Wind",
-   "inDb": false
-  },
-  "starpiercersublimation": {
-   "name": "Starpiercer - Sublimation",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_MorphChrod_Great_Wind",
-   "inDb": false
   },
   "summitshaper": {
    "name": "Summit Shaper",
@@ -1597,13 +1541,6 @@
    "type": "claymore",
    "icon": "UI_EquipIcon_Claymore_Wolfmound",
    "inDb": true
-  },
-  "yayusublimation": {
-   "name": "Yayu - Sublimation",
-   "rarity": 5,
-   "type": "bow",
-   "icon": "UI_EquipIcon_Bow_MorphYayu_Great_Wind",
-   "inDb": false
   }
  },
  "sets": {
