@@ -2,7 +2,7 @@
 - Saving your own teams
 
 ## 2.0.0 (2026/10/13)
-A big update: a new team database, an inventory, team details, a team builder for the Abyss and the Onslaught, Russian language and a phone layout.
+A big update: a new team database, an inventory, team details, Russian language and a phone layout.
 
 ### Teams and data
 - **Weapons and artifact sets** for every character in a team, with the weapon refinement and the constellation from that build.
