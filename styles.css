@@ -405,7 +405,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 
 .td-stats{margin-top:8px;padding-top:7px;border-top:1px solid var(--line)}
 .td-stats-title{font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);margin-bottom:4px}
-.td-stats-note{margin:6px 0 8px;font-size:10px;line-height:1.35;color:var(--muted)}
 .td-mains{display:flex;flex-wrap:wrap;gap:4px}
 .td-main{padding:2px 7px;border-radius:4px;background:rgba(96,165,250,0.16);
   border:1px solid rgba(96,165,250,0.30);font-size:10px;font-weight:600}
@@ -704,3 +703,5 @@ body.sheet-open{overflow:hidden}
   .seg-btn{flex:1;padding:8px 6px}
 }
 .slot-team .team-dps{display:none}
+.side-credit{font-size:12px;color:var(--muted);text-align:center;padding:2px 0 4px}
+.side-credit strong{color:#cbd5e1;font-weight:600}

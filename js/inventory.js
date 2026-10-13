@@ -213,7 +213,6 @@ function renderCharacters(container) {
     ui.charWeapon, (v) => { ui.charWeapon = v; rebuild(); }));
 
   container.appendChild(controls);
-  container.appendChild(el("p", "inv-hint small", t("inventory.charactersHint")));
   container.appendChild(grid);
   refill();
 }
@@ -286,7 +285,6 @@ function renderWeapons(container) {
     ui.weaponType, (v) => { ui.weaponType = v; rebuild(); }));
 
   container.appendChild(controls);
-  container.appendChild(el("p", "inv-hint small", t("inventory.weaponsHint")));
   container.appendChild(summary);
   container.appendChild(grid);
   refill();
@@ -369,7 +367,6 @@ function render() {
   host.innerHTML = "";
 
   const head = el("div", "inv-head");
-  head.appendChild(el("p", "inv-hint small", t("inventory.hint")));
 
   const c = store.counts();
   const tabs = el("div", "inv-tabs");

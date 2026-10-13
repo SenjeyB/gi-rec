@@ -225,10 +225,6 @@ async function fillPanel(panel, team) {
 
   // статы артефактов лежат отдельными файлами и качаются только сейчас
   const stats = await loadDetails(team.teamIndex, team.buildIndex);
-  // пояснение к «сумме» — одно на панель, а не под каждым персонажем
-  if (stats && stats.some((s) => s && s.total)) {
-    panel.insertBefore(el("div", "td-stats-note", t("team.artTotalsHint")), grid);
-  }
   (team.build || []).forEach((slot, i) => {
     grid.appendChild(memberBlock(slot, stats && stats[i]));
   });

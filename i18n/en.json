@@ -55,13 +55,7 @@
     "removeFromSelection": "Remove from selection"
   },
   "about": {
-    "title": "About",
-    "howTo": "How to use:",
-    "step1": "Select the characters you own in the list below.",
-    "step2": "Pick a view in Mode: Recommendations, Tier List, or Team Suggestions.",
-    "step3": "Adjust Settings to control how many new characters you're willing to obtain.",
-    "step4": "Use DPS numbers as reference. You most probably will have different DPS values in your account.",
-    "developedBy": "Developed by"
+    "developedBy": "Made by"
   },
   "views": {
     "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",
@@ -76,13 +70,10 @@
   },
   "inventory": {
     "title": "Inventory",
-    "hint": "Mark the characters and 5★ weapons you own. Everything is stored in this browser only — nothing is uploaded.",
     "tabCharacters": "Characters",
     "tabWeapons": "5★ Weapons",
     "charactersTitle": "Your characters",
-    "charactersHint": "Tap a character to mark them as owned. For 5★ characters set the constellation with − and +; those whose C1 is free start at C1 and can't go lower.",
     "weaponsTitle": "Your 5★ weapons",
-    "weaponsHint": "Add your 5★ weapons one copy at a time, like the in-game inventory: if you own two of the same weapon, add both.",
     "weaponsNotInDb": "Not used by any team in the database yet",
     "owned": "Owned",
     "notOwned": "Not owned",
@@ -104,13 +95,13 @@
     "copies": "Copies in inventory: {n}",
     "added": "Added: {name}",
     "inTeamsOnly": "Used in teams",
-    "noWeaponsYet": "No weapons yet. Press “Add weapon” to fill your inventory.",
+    "noWeaponsYet": "No weapons yet.",
     "done": "Done",
     "notFound": "Nothing found"
   },
   "import": {
     "title": "Import Characters",
-    "hint": "Upload a GOOD JSON file or paste its contents below. Import replaces your current account.",
+    "hint": "Importing replaces your current inventory.",
     "fromText": "Import From Text",
     "readClipboard": "Read Clipboard",
     "placeholder": "Paste GOOD JSON here",
@@ -127,7 +118,6 @@
   },
   "picker": {
     "title": "Pick team",
-    "hint": "Click up to 4 owned characters to narrow down the team — suggestions on the right update with every pick. Click a selected character to remove them, then pick one of the suggested teams.",
     "yourCharacters": "Your characters",
     "suggested": "Suggested teams",
     "rosterFilter": "Filter team picker roster",
@@ -157,8 +147,7 @@
     "variants": "Builds of this team ({n})",
     "shown": "shown",
     "aboveStd": "above standard",
-    "artTotals": "Artifact stats (total)",
-    "artTotalsHint": "This sim lists artifact stats only as a total, without splitting them into main stats and substats."
+    "artTotals": "Artifact stats (total)"
   },
   "feedback": {
     "title": "Leave feedback",
@@ -201,7 +190,7 @@
     "remove": "Remove",
     "clearAll": "Clear all",
     "cycle": "{start} – {end}",
-    "cycleOver": "The cycle ended on {end}; the data will refresh with the next site update",
+    "cycleOver": "The cycle ended on {end}",
     "source": "Wiki",
     "legend": "Local Legend",
     "disorder": "Ley Line Disorder",

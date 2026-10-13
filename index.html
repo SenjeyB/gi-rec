@@ -17,7 +17,9 @@
   <meta property="twitter:description" content="Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!">
   <meta property="twitter:image" content="https://senjeyb.github.io/gi-rec/preview.png">
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon.png" type="image/png" sizes="64x64">
+  <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
   <link rel="preload" href="tiers/ss.png" as="image">
   <link rel="preload" href="tiers/s.png" as="image">
   <link rel="preload" href="tiers/A.png" as="image">
@@ -34,7 +36,7 @@
         <button id="drawer-toggle" class="drawer-toggle" type="button"
                 aria-expanded="false" data-i18n-attr="aria-label:filters.title">☰</button>
         <div class="brand">
-          <img src="assets/logo.svg" alt="GI-Rec" class="logo-img" width="32" height="32" />
+          <img src="assets/logo.png" alt="GI-Rec" class="logo-img" width="32" height="32" />
           <div class="titles">
             <div class="app-title" data-i18n="app.title">GI-Rec</div>
             <div class="app-subtitle" data-i18n="app.subtitle">recommendations &amp; tier list</div>
@@ -130,19 +132,7 @@
             <div id="characters" class="characters-grid" aria-live="polite"></div>
           </div>
 
-          <div class="side-card">
-            <h2 class="side-title" data-i18n="about.title">About</h2>
-            <div class="small">
-              <span data-i18n="about.howTo">How to use:</span>
-              <ol class="small">
-                <li data-i18n="about.step1">Select the characters you own in the list below.</li>
-                <li data-i18n="about.step2">Pick a view in Mode.</li>
-                <li data-i18n="about.step3">Adjust Settings to control how many new characters you're willing to obtain.</li>
-                <li data-i18n="about.step4">Use DPS numbers as reference.</li>
-              </ol>
-              <div><span data-i18n="about.developedBy">Developed by</span> <strong>SenjeyB</strong>.</div>
-            </div>
-          </div>
+          <div class="side-credit"><span data-i18n="about.developedBy">Made by</span> <strong>SenjeyB</strong></div>
         </aside>
 
         <main id="main" class="maincol" role="main">
@@ -233,7 +223,6 @@
         <button id="team-picker-close" class="close-btn" type="button" data-i18n-attr="aria-label:common.close">✕</button>
       </div>
       <div class="modal-body">
-        <div class="small muted" style="margin-bottom:8px" data-i18n="picker.hint">Click up to 4 owned characters to narrow down the team.</div>
         <div class="team-picker-layout">
           <div>
             <div class="picker-title" data-i18n="picker.yourCharacters">Your characters</div>
@@ -257,7 +246,7 @@
         <button id="import-close" class="close-btn" type="button" data-i18n-attr="aria-label:common.close">✕</button>
       </div>
       <div class="modal-body">
-        <div class="small" style="margin-bottom:8px" data-i18n="import.hint">Upload a GOOD JSON file or paste its contents below.</div>
+        <div class="small" style="margin-bottom:8px" data-i18n="import.hint">Importing replaces your current inventory.</div>
         <input id="good-file" type="file" accept=".json" style="margin-bottom:8px" />
         <textarea id="good-text" data-i18n-attr="placeholder:import.placeholder"
                   style="width:100%;height:120px;resize:vertical;margin-bottom:8px"></textarea>
