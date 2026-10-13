@@ -200,7 +200,9 @@
     "problemChars": "Нет в инвентаре: {list}",
     "problemDup": "Уже в другом отряде: {list}",
     "problemWeapons": "Не хватает копий: {list}",
-    "inOtherTeam": "В другом отряде"
+    "inOtherTeam": "В другом отряде",
+    "timeLimit": "{n} с",
+    "rules": "Условия уровня"
   },
   "tier": {
     "show": "Показывать: ",

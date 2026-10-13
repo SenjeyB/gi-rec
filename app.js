@@ -1465,27 +1465,139 @@ function abyssHalf(info, enemies, half){
   return box;
 }
 
-/** Босс поля боя в Натиске и его преимущества. */
+const elementIcon = (el)=>{
+  const img = new Image();
+  img.src = `filters/Element_${el.charAt(0).toUpperCase() + el.slice(1)}.png`;
+  img.alt = T('element.' + el, el);
+  img.title = img.alt;
+  img.className = 'ctx-element';
+  return img;
+};
+
+/** Босс поля боя в Натиске и его преимущества. По клику раскрываются уровни
+ *  сложности из игровых данных: форма босса, механики и правила уровня. */
 function onslaughtBoss(info, enemies, i){
   const boss = info && info.bosses && info.bosses[i];
   if(!boss) return null;
   const box = createEl('div','slot-context is-boss');
-  box.appendChild(enemyChip(enemies, boss, true));
+  const head = createEl('div','ctx-boss-head');
+  head.appendChild(enemyChip(enemies, boss, true));
   if((boss.elements && boss.elements.length) || (boss.tags && boss.tags.length)){
     const adv = createEl('div','ctx-advantage');
     adv.appendChild(createEl('span','ctx-disorder-label', T('builder.advantage','Advantage')));
-    for(const el of boss.elements || []){
-      const img = new Image();
-      img.src = `filters/Element_${el.charAt(0).toUpperCase() + el.slice(1)}.png`;
-      img.alt = T('element.' + el, el);
-      img.title = img.alt;
-      img.className = 'ctx-element';
-      adv.appendChild(img);
-    }
+    for(const el of boss.elements || []) adv.appendChild(elementIcon(el));
     for(const tag of boss.tags || []) adv.appendChild(createEl('span','ctx-tag', isRu() ? tag.ru : tag.en));
-    box.appendChild(adv);
+    head.appendChild(adv);
+  }
+  box.appendChild(head);
+
+  const details = info.details && info.details.difficulties;
+  if(details && details.length){
+    head.classList.add('is-toggle');
+    head.setAttribute('role','button');
+    head.tabIndex = 0;
+    head.setAttribute('aria-expanded','false');
+    head.appendChild(createEl('span','ctx-chevron','▾'));
+    let panel = null;
+    const toggle = ()=>{
+      if(panel){
+        onsPanels.delete(panel);
+        panel.remove(); panel = null;
+        head.setAttribute('aria-expanded','false');
+        box.classList.remove('is-open');
+        return;
+      }
+      panel = createEl('div','ons-details');
+      panel._render = ()=> renderOnsDetails(panel, details, i);
+      panel._render();
+      onsPanels.add(panel);
+      box.appendChild(panel);
+      head.setAttribute('aria-expanded','true');
+      box.classList.add('is-open');
+    };
+    head.addEventListener('click', toggle);
+    head.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); } });
   }
   return box;
+}
+
+// Выбранная сложность общая для всех трёх полей боя и запоминается.
+const ONS_KEY = 'girec.onsDifficulty';
+let onsDifficulty = 6;
+try{ const v = Number(localStorage.getItem(ONS_KEY)); if(v >= 1 && v <= 6) onsDifficulty = v; }catch{}
+const onsPanels = new Set();
+
+function setOnsDifficulty(n){
+  onsDifficulty = n;
+  try{ localStorage.setItem(ONS_KEY, String(n)); }catch{}
+  for(const p of [...onsPanels]){
+    if(p.isConnected) p._render(); else onsPanels.delete(p);
+  }
+}
+
+/** Текст из игры: {hl}..{/hl} — выделение, {el:pyro} — иконка стихии,
+ *  перенос строки — новый абзац. Собирается узлами, без innerHTML. */
+function gameText(str, cls){
+  const wrap = createEl('div', cls || 'game-text');
+  for(const para of String(str || '').split('\n')){
+    if(!para.trim()) continue;
+    const p = createEl('p');
+    let hl = false;
+    for(const part of para.split(/(\{hl\}|\{\/hl\}|\{el:[a-z]+\})/)){
+      if(!part) continue;
+      if(part === '{hl}'){ hl = true; continue; }
+      if(part === '{/hl}'){ hl = false; continue; }
+      const el = part.match(/^\{el:([a-z]+)\}$/);
+      if(el){ p.appendChild(elementIcon(el[1])); continue; }
+      p.appendChild(hl ? createEl('span','game-hl', part) : document.createTextNode(part));
+    }
+    wrap.appendChild(p);
+  }
+  return wrap;
+}
+
+function renderOnsDetails(panel, details, i){
+  panel.innerHTML = '';
+  const pick = (x)=> x ? (isRu() ? x.ru : x.en) : '';
+  const tabs = createEl('div','ons-tabs');
+  for(const d of details){
+    const b = createEl('button','ons-tab' + (d.id === onsDifficulty ? ' is-active' : ''), pick(d.name) || String(d.id));
+    b.type = 'button';
+    b.addEventListener('click', (e)=>{ e.stopPropagation(); setOnsDifficulty(d.id); });
+    tabs.appendChild(b);
+  }
+  panel.appendChild(tabs);
+
+  const d = details.find(x => x.id === onsDifficulty) || details[details.length - 1];
+  const boss = d.bosses && d.bosses[i];
+  if(!boss) return;
+
+  const meta = createEl('div','ons-meta');
+  if(boss.form) meta.appendChild(createEl('span','ons-form', pick(boss.form)));
+  const facts = [];
+  if(d.level) facts.push(T('builder.level','Lv. {n}',{n: d.level}));
+  if(d.timeLimit) facts.push(T('builder.timeLimit','{n} s',{n: d.timeLimit}));
+  if(facts.length) meta.appendChild(createEl('span','ons-facts', facts.join(' · ')));
+  panel.appendChild(meta);
+
+  if(boss.advantage){
+    const adv = createEl('div','ons-adv');
+    adv.appendChild(createEl('span','ctx-disorder-label', T('builder.advantage','Advantage')));
+    adv.appendChild(gameText(pick(boss.advantage), 'game-text is-inline'));
+    panel.appendChild(adv);
+  }
+  for(const m of boss.mechanics || []){
+    const block = createEl('div','ons-mech');
+    block.appendChild(createEl('div','ons-mech-title', pick(m.title)));
+    block.appendChild(gameText(pick(m.text)));
+    panel.appendChild(block);
+  }
+  if(d.rules && d.rules.length){
+    const rules = createEl('div','ons-rules');
+    rules.appendChild(createEl('div','ctx-disorder-label', T('builder.rules','Difficulty rules')));
+    for(const r of d.rules) rules.appendChild(gameText(pick(r)));
+    panel.appendChild(rules);
+  }
 }
 
 

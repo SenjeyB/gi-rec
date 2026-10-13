@@ -200,7 +200,9 @@
     "problemChars": "Not in your inventory: {list}",
     "problemDup": "Already in another team: {list}",
     "problemWeapons": "Not enough copies: {list}",
-    "inOtherTeam": "In another team"
+    "inOtherTeam": "In another team",
+    "timeLimit": "{n} s",
+    "rules": "Difficulty rules"
   },
   "tier": {
     "show": "Show: ",

@@ -6,6 +6,7 @@ Genshin Impact Recommendations service.
 - Constellations are filters: by default 5★ at C0 (or a free C1), 4★ at C6; your inventory or the "Any" setting can raise them
 - Builds are checked against KQM Standards (constellations and artifacts)
 - Current Spiral Abyss and Stygian Onslaught enemies come from the Genshin Impact wiki: https://genshin-impact.fandom.com
+- Stygian Onslaught difficulty details (boss forms, mechanics, rules) come from the game data mirror: https://github.com/DimbreathBot/AnimeGameData
 
 Current link: https://senjeyb.github.io/gi-rec/
 

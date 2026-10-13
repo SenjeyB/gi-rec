@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-13T17:29:12Z",
+ "generated": "2026-10-13T20:26:38Z",
  "abyss": {
   "start": "2026-09-16",
   "end": "2026-10-15",
@@ -131,7 +131,650 @@
      }
     ]
    }
-  ]
+  ],
+  "details": {
+   "key": "2026-09-30 10:00:00|101201,101202,101203,101204,101205,101206",
+   "difficulties": [
+    {
+     "id": 1,
+     "name": {
+      "en": "Normal",
+      "ru": "Обычная"
+     },
+     "level": 40,
+     "timeLimit": null,
+     "rules": [
+      {
+       "en": "Exalted Ones will receive an Eminent Boon",
+       "ru": "Вознесённые получают Сиятельное усиление"
+      }
+     ],
+     "bosses": [
+      {
+       "form": {
+        "en": "Battle-Hardened Domovoy Sculptor: Normal",
+        "ru": "Бывалый домовой-ваятель: Обычная форма"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer Characters",
+        "ru": "Персонажи реакции Звёздного блеска"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Big-Mouthed Jack Frost",
+          "ru": "Большеротый ледовик"
+         },
+         "text": {
+          "en": "During battle, the Nemesis will periodically harness Anemo energy to create Prime Ice sculptures. After a short delay, the sculptures will transform into Big-Mouthed Jack Frosts that continuously launch snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculptures to interrupt the process and turn the ice sculptures into a harmless animal statues instead.",
+          "ru": "Во время боя сильный противник через определённые промежутки времени использует силу Анемо, чтобы создать скульптуру из вечного льда. После завершения создания она превратится в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Secret Source Automaton: Overseer Device - Normal",
+        "ru": "Автоматон таинственного источника: Обычная форма"
+       },
+       "advantage": {
+        "en": "{el:cryo} characters",
+        "ru": "Персонажи {el:cryo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Sweeper Mode",
+          "ru": "Режим зачистки"
+         },
+         "text": {
+          "en": "Will enter Sweeper Mode while in combat: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
+          "ru": "В бою переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+         }
+        },
+        {
+         "title": {
+          "en": "Counterstrike Mode",
+          "ru": "Режим контрудара"
+         },
+         "text": {
+          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
+          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Guardian Blade of Drifting Snow: Normal",
+        "ru": "Разящая вьюга: Обычная форма"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Ice Coffin",
+          "ru": "Ледяной гроб"
+         },
+         "text": {
+          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
+          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": 2,
+     "name": {
+      "en": "Advancing",
+      "ru": "Продвинутая"
+     },
+     "level": 70,
+     "timeLimit": null,
+     "rules": [
+      {
+       "en": "Exalted Ones will receive an Eminent Boon",
+       "ru": "Вознесённые получают Сиятельное усиление"
+      }
+     ],
+     "bosses": [
+      {
+       "form": {
+        "en": "Battle-Hardened Domovoy Sculptor: Normal",
+        "ru": "Бывалый домовой-ваятель: Обычная форма"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer Characters",
+        "ru": "Персонажи реакции Звёздного блеска"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Big-Mouthed Jack Frost",
+          "ru": "Большеротый ледовик"
+         },
+         "text": {
+          "en": "During battle, the Nemesis will periodically harness Anemo energy to create Prime Ice sculptures. After a short delay, the sculptures will transform into Big-Mouthed Jack Frosts that continuously launch snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculptures to interrupt the process and turn the ice sculptures into a harmless animal statues instead.",
+          "ru": "Во время боя сильный противник через определённые промежутки времени использует силу Анемо, чтобы создать скульптуру из вечного льда. После завершения создания она превратится в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Secret Source Automaton: Overseer Device - Normal",
+        "ru": "Автоматон таинственного источника: Обычная форма"
+       },
+       "advantage": {
+        "en": "{el:cryo} characters",
+        "ru": "Персонажи {el:cryo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Sweeper Mode",
+          "ru": "Режим зачистки"
+         },
+         "text": {
+          "en": "Will enter Sweeper Mode while in combat: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
+          "ru": "В бою переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+         }
+        },
+        {
+         "title": {
+          "en": "Counterstrike Mode",
+          "ru": "Режим контрудара"
+         },
+         "text": {
+          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
+          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Guardian Blade of Drifting Snow: Normal",
+        "ru": "Разящая вьюга: Обычная форма"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Ice Coffin",
+          "ru": "Ледяной гроб"
+         },
+         "text": {
+          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
+          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": 3,
+     "name": {
+      "en": "Hard",
+      "ru": "Тяжёлая"
+     },
+     "level": 90,
+     "timeLimit": null,
+     "rules": [
+      {
+       "en": "Exalted Ones will receive an Eminent Boon",
+       "ru": "Вознесённые получают Сиятельное усиление"
+      }
+     ],
+     "bosses": [
+      {
+       "form": {
+        "en": "Battle-Hardened Domovoy Sculptor: Normal",
+        "ru": "Бывалый домовой-ваятель: Обычная форма"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer Characters",
+        "ru": "Персонажи реакции Звёздного блеска"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Big-Mouthed Jack Frost",
+          "ru": "Большеротый ледовик"
+         },
+         "text": {
+          "en": "During battle, the Nemesis will periodically harness Anemo energy to create Prime Ice sculptures. After a short delay, the sculptures will transform into Big-Mouthed Jack Frosts that continuously launch snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculptures to interrupt the process and turn the ice sculptures into a harmless animal statues instead.",
+          "ru": "Во время боя сильный противник через определённые промежутки времени использует силу Анемо, чтобы создать скульптуру из вечного льда. После завершения создания она превратится в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Secret Source Automaton: Overseer Device - Normal",
+        "ru": "Автоматон таинственного источника: Обычная форма"
+       },
+       "advantage": {
+        "en": "{el:cryo} characters",
+        "ru": "Персонажи {el:cryo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Sweeper Mode",
+          "ru": "Режим зачистки"
+         },
+         "text": {
+          "en": "Will enter Sweeper Mode while in combat: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
+          "ru": "В бою переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+         }
+        },
+        {
+         "title": {
+          "en": "Counterstrike Mode",
+          "ru": "Режим контрудара"
+         },
+         "text": {
+          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
+          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Guardian Blade of Drifting Snow: Normal",
+        "ru": "Разящая вьюга: Обычная форма"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Ice Coffin",
+          "ru": "Ледяной гроб"
+         },
+         "text": {
+          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
+          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": 4,
+     "name": {
+      "en": "Menacing",
+      "ru": "Зловещая"
+     },
+     "level": 100,
+     "timeLimit": null,
+     "rules": [
+      {
+       "en": "Affected by the Ley Line Disturbance, {hl}characters cannot be deployed multiple times{/hl}",
+       "ru": "{hl}Персонаж не может быть повторно размещён{/hl} из-за воздействия флуктуации артерий земли."
+      },
+      {
+       "en": "Exalted Ones will receive an Eminent Boon",
+       "ru": "Вознесённые получают Сиятельное усиление"
+      }
+     ],
+     "bosses": [
+      {
+       "form": {
+        "en": "Battle-Hardened Domovoy Sculptor: Hammer-and-Chisel",
+        "ru": "Бывалый домовой-ваятель: Резчик"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer Characters",
+        "ru": "Персонажи реакции Звёздного блеска"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Big-Mouthed Jack Frost",
+          "ru": "Большеротый ледовик"
+         },
+         "text": {
+          "en": "When battle begins, the Nemesis will harness Anemo energy to create a Prime Ice sculpture. After a short delay, the sculpture will transform into a Big-Mouthed Jack Frost that continuously launches snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculpture to interrupt the process and turn the ice sculpture into a harmless animal statue instead.",
+          "ru": "В начале боя сильный противник силой Анемо создаёт скульптуру из вечного льда. Через некоторое время она превращается в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Secret Source Automaton: Overseer Device - Swift Strike",
+        "ru": "Автоматон таинственного источника: Стремительный удар"
+       },
+       "advantage": {
+        "en": "{el:cryo} characters",
+        "ru": "Персонажи {el:cryo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Preemptive Sweeper Mode",
+          "ru": "Упреждающий режим зачистки"
+         },
+         "text": {
+          "en": "Will immediately enter Sweeper Mode when combat starts: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
+          "ru": "В начале боя сразу переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+         }
+        },
+        {
+         "title": {
+          "en": "Counterstrike Mode",
+          "ru": "Режим контрудара"
+         },
+         "text": {
+          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
+          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Guardian Blade of Drifting Snow: Reprise",
+        "ru": "Разящая вьюга: На бис"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Ice Coffin",
+          "ru": "Ледяной гроб"
+         },
+         "text": {
+          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
+          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": 5,
+     "name": {
+      "en": "Fearless",
+      "ru": "Бесстрашная"
+     },
+     "level": 105,
+     "timeLimit": null,
+     "rules": [
+      {
+       "en": "{hl}Opponents are affected by the Ley Line Disturbance and are greatly enhanced{/hl}",
+       "ru": "{hl}Противники получают значительное усиление от флуктуации артерий земли{/hl}"
+      },
+      {
+       "en": "Affected by the Ley Line Disturbance, {hl}characters cannot be deployed multiple times{/hl}",
+       "ru": "{hl}Персонаж не может быть повторно размещён{/hl} из-за воздействия флуктуации артерий земли."
+      },
+      {
+       "en": "Exalted Ones will receive an Eminent Boon",
+       "ru": "Вознесённые получают Сиятельное усиление"
+      }
+     ],
+     "bosses": [
+      {
+       "form": {
+        "en": "Battle-Hardened Domovoy Sculptor: Gale Hewing",
+        "ru": "Бывалый домовой-ваятель: Топор ветра"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:anemo} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:anemo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Big-Mouthed Jack Frost",
+          "ru": "Большеротый ледовик"
+         },
+         "text": {
+          "en": "When battle begins, the Nemesis will harness Anemo energy to create a Prime Ice sculpture. After a short delay, the sculpture will transform into a Big-Mouthed Jack Frost that continuously launches snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculpture to interrupt the process and turn the ice sculpture into a harmless animal statue instead.",
+          "ru": "В начале боя сильный противник силой Анемо создаёт скульптуру из вечного льда. Через некоторое время она превращается в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+         }
+        },
+        {
+         "title": {
+          "en": "Creative Frenzy",
+          "ru": "Неиссякаемое вдохновение"
+         },
+         "text": {
+          "en": "Due to the effects of the Ley Line disturbance, the Nemesis will {hl}start the battle with greatly increased All Elemental RES and Physical RES{/hl} and will create Prime Ice sculptures more frequently.\nAfter an ice sculpture is transformed into a small animal statue, it will explode following a brief delay, dealing damage to the Nemesis and {hl}reducing its All Elemental RES and Physical RES, while further reducing its Anemo RES{/hl}. This effect can {hl}stack up to 3 times{/hl}.",
+          "ru": "Под воздействием флуктуации артерий земли сильный противник {hl}в начале битвы получит повышенное сопротивление всем элементам и физ. сопротивление{/hl}, а также будет чаще создавать скульптуры из вечного льда.\nКогда ледяная скульптура превратится в фигурку животного, она вскоре взорвётся, нанося сильному противнику определённый урон и {hl}понижая его сопротивление всем элементам и физ. сопротивление, а также дополнительно понижая его Анемо сопротивление{/hl}. Этот эффект {hl}складывается до 3 раз{/hl}."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Secret Source Automaton: Overseer Device - Obliterator Panoply",
+        "ru": "Автоматон таинственного источника: Опустошающее оружие"
+       },
+       "advantage": {
+        "en": "{el:cryo} characters",
+        "ru": "Персонажи {el:cryo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Preemptive Sweeper Mode",
+          "ru": "Упреждающий режим зачистки"
+         },
+         "text": {
+          "en": "Will immediately enter Sweeper Mode when combat starts: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.\nEach time it enters Sweeper Mode, it will produce additional Elemental Orbs the first time its rotating attacks are stopped.",
+          "ru": "В начале боя сразу переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление.\nКаждый раз, когда он впервые прекращает вращаться и атаковать в режиме зачистки, будут выпадать дополнительные элементальные сферы."
+         }
+        },
+        {
+         "title": {
+          "en": "Forced Counterstrike Mode",
+          "ru": "Режим форсированного контрудара"
+         },
+         "text": {
+          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Forced Counterstrike Mode and switch to attacking with powerful tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
+          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим форсированного контрудара и атакует с помощью мощных наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+         }
+        },
+        {
+         "title": {
+          "en": "Damage-Resistant Structure",
+          "ru": "Устойчивая к повреждению конструкция"
+         },
+         "text": {
+          "en": "Affected by the Ley Line disturbance, this great foe has its All RES further increased, and it loses less Flow Momentum when struck by Cryo DMG. It will also lose less RES when in Forced Counterstrike Mode.",
+          "ru": "Под воздействием флуктуации артерий земли сопротивление всем элементам этого могучего врага повышается ещё больше, а при получении Крио урона он теряет меньше импульса потока. В режиме форсированного контрудара его снижение сопротивления уменьшается."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Guardian Blade of Drifting Snow: Endless Reverberation",
+        "ru": "Разящая вьюга: Благозвучие струн"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:pyro} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:pyro}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Ice Coffin: Twinned Crystal Lattice",
+          "ru": "Ледяной гроб: Двойная кристаллическая решётка"
+         },
+         "text": {
+          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself.\nWhile the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. Due to the Ley Line disturbance, {hl}the Ice Coffin will be more durable{/hl}. A short time after it is destroyed for the first time, the Nemesis will {hl}encase itself in another Ice Coffin{/hl}.",
+          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого порога, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты.\nПока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Под воздействием флуктуации артерий земли {hl}ледяной гроб становится прочнее{/hl}. Кроме того, спустя некоторое время после первого разрушения ледяного гроба сильный противник {hl}снова запечатывает себя в ледяном гробу{/hl}."
+         }
+        },
+        {
+         "title": {
+          "en": "Ice Coffin: Warped Crystal Lattice",
+          "ru": "Ледяной гроб: Искажённая кристаллическая решётка"
+         },
+         "text": {
+          "en": "While the {hl}Ice Coffin is active{/hl}, if the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}the Ice Coffin's Cryo Ward will transform into a shield that absorbs DMG{/hl}. Once the shield is destroyed, the Nemesis will take a large amount of backlash DMG.",
+          "ru": "Пока {hl}ледяной гроб существует{/hl}, если сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Крио барьер ледяного гроба превращается в щит{/hl}, поглощающий урон. После разрушения щита сильный противник получит высокий урон от отдачи."
+         }
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": 6,
+     "name": {
+      "en": "Dire",
+      "ru": "Безнадёжная"
+     },
+     "level": 110,
+     "timeLimit": 180,
+     "rules": [
+      {
+       "en": "{hl}A powerful opponent has re-emerged from the Ley Lines, and the battle is sure to be very difficult{/hl}",
+       "ru": "{hl}В артериях земли вновь появился сильный противник. Бой будет сложным.{/hl}"
+      },
+      {
+       "en": "Affected by the Ley Line Disturbance, {hl}characters cannot be deployed multiple times{/hl}",
+       "ru": "{hl}Персонаж не может быть повторно размещён{/hl} из-за воздействия флуктуации артерий земли."
+      },
+      {
+       "en": "You have reached the final defensive line of the Domain. The level of disturbance here is at its highest, interfering with even the Exalted Ones and rendering their Eminent Boons ineffective. After completing the current challenge in Single-Player Mode, characters in your party will be granted Eminence or Enduring Eminence based on your performance.",
+       "ru": "Вы дошли до последней линии обороны подземелья, уровень флуктуации достиг максимума. Он мешает даже Вознесённым и делает их Сиятельные усиления неэффективными. После завершения текущего испытания в одиночном режиме персонажи в вашем отряде получат Сияние или Вечное сияние в зависимости от ваших результатов."
+      }
+     ],
+     "bosses": [
+      {
+       "form": {
+        "en": "Battle-Hardened Domovoy Sculptor: Gale Hewing",
+        "ru": "Бывалый домовой-ваятель: Топор ветра"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:anemo} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:anemo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Big-Mouthed Jack Frost",
+          "ru": "Большеротый ледовик"
+         },
+         "text": {
+          "en": "When battle begins, the Nemesis will harness Anemo energy to create a Prime Ice sculpture. After a short delay, the sculpture will transform into a Big-Mouthed Jack Frost that continuously launches snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculpture to interrupt the process and turn the ice sculpture into a harmless animal statue instead.",
+          "ru": "В начале боя сильный противник силой Анемо создаёт скульптуру из вечного льда. Через некоторое время она превращается в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+         }
+        },
+        {
+         "title": {
+          "en": "Creative Frenzy",
+          "ru": "Неиссякаемое вдохновение"
+         },
+         "text": {
+          "en": "Due to the effects of the Ley Line disturbance, the Nemesis will {hl}start the battle with greatly increased All Elemental RES and Physical RES{/hl} and will create Prime Ice sculptures more frequently.\nAfter an ice sculpture is transformed into a small animal statue, it will explode following a brief delay, dealing damage to the Nemesis and {hl}reducing its All Elemental RES and Physical RES, while further reducing its Anemo RES{/hl}. This effect can {hl}stack up to 3 times{/hl}.",
+          "ru": "Под воздействием флуктуации артерий земли сильный противник {hl}в начале битвы получит повышенное сопротивление всем элементам и физ. сопротивление{/hl}, а также будет чаще создавать скульптуры из вечного льда.\nКогда ледяная скульптура превратится в фигурку животного, она вскоре взорвётся, нанося сильному противнику определённый урон и {hl}понижая его сопротивление всем элементам и физ. сопротивление, а также дополнительно понижая его Анемо сопротивление{/hl}. Этот эффект {hl}складывается до 3 раз{/hl}."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Secret Source Automaton: Overseer Device - Obliterator Panoply",
+        "ru": "Автоматон таинственного источника: Опустошающее оружие"
+       },
+       "advantage": {
+        "en": "{el:cryo} characters",
+        "ru": "Персонажи {el:cryo}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Preemptive Sweeper Mode",
+          "ru": "Упреждающий режим зачистки"
+         },
+         "text": {
+          "en": "Will immediately enter Sweeper Mode when combat starts: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.\nEach time it enters Sweeper Mode, it will produce additional Elemental Orbs the first time its rotating attacks are stopped.",
+          "ru": "В начале боя сразу переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление.\nКаждый раз, когда он впервые прекращает вращаться и атаковать в режиме зачистки, будут выпадать дополнительные элементальные сферы."
+         }
+        },
+        {
+         "title": {
+          "en": "Forced Counterstrike Mode",
+          "ru": "Режим форсированного контрудара"
+         },
+         "text": {
+          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Forced Counterstrike Mode and switch to attacking with powerful tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
+          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим форсированного контрудара и атакует с помощью мощных наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+         }
+        },
+        {
+         "title": {
+          "en": "Damage-Resistant Structure",
+          "ru": "Устойчивая к повреждению конструкция"
+         },
+         "text": {
+          "en": "Affected by the Ley Line disturbance, this great foe has its All RES further increased, and it loses less Flow Momentum when struck by Cryo DMG. It will also lose less RES when in Forced Counterstrike Mode.",
+          "ru": "Под воздействием флуктуации артерий земли сопротивление всем элементам этого могучего врага повышается ещё больше, а при получении Крио урона он теряет меньше импульса потока. В режиме форсированного контрудара его снижение сопротивления уменьшается."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Guardian Blade of Drifting Snow: Endless Reverberation",
+        "ru": "Разящая вьюга: Благозвучие струн"
+       },
+       "advantage": {
+        "en": "Stellar Glimmer characters | {el:pyro} characters",
+        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:pyro}"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Ice Coffin: Twinned Crystal Lattice",
+          "ru": "Ледяной гроб: Двойная кристаллическая решётка"
+         },
+         "text": {
+          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself.\nWhile the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. Due to the Ley Line disturbance, {hl}the Ice Coffin will be more durable{/hl}. A short time after it is destroyed for the first time, the Nemesis will {hl}encase itself in another Ice Coffin{/hl}.",
+          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого порога, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты.\nПока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Под воздействием флуктуации артерий земли {hl}ледяной гроб становится прочнее{/hl}. Кроме того, спустя некоторое время после первого разрушения ледяного гроба сильный противник {hl}снова запечатывает себя в ледяном гробу{/hl}."
+         }
+        },
+        {
+         "title": {
+          "en": "Ice Coffin: Warped Crystal Lattice",
+          "ru": "Ледяной гроб: Искажённая кристаллическая решётка"
+         },
+         "text": {
+          "en": "While the {hl}Ice Coffin is active{/hl}, if the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}the Ice Coffin's Cryo Ward will transform into a shield that absorbs DMG{/hl}. Once the shield is destroyed, the Nemesis will take a large amount of backlash DMG.",
+          "ru": "Пока {hl}ледяной гроб существует{/hl}, если сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Крио барьер ледяного гроба превращается в щит{/hl}, поглощающий урон. После разрушения щита сильный противник получит высокий урон от отдачи."
+         }
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
  },
  "enemies": {
   "battle-hardened-chimeric-burrowbeast": {

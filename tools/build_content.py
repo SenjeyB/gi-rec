@@ -75,6 +75,21 @@ TAG_RU = {
     "Stellar Glimmer": "Звёздный блеск",
 }
 
+# Игровые данные (выгрузка AnimeGameData): описания уровней сложности Натиска
+# на английском и русском — ровно те тексты, что показывает игра.
+AGD = "https://raw.githubusercontent.com/DimbreathBot/AnimeGameData/main"
+TEXTMAPS = {
+    "en": ["TextMapEN", "TextMap_MediumEN"],
+    "ru": ["TextMapRU_0", "TextMapRU_1", "TextMap_MediumRU_0", "TextMap_MediumRU_1"],
+}
+# {SPRITE_PRESET#N} в текстах — иконки стихий; сверено с вики по прошлым циклам
+SPRITE_ELEMENT = {
+    "11001": "cryo", "11002": "hydro", "11003": "pyro", "11004": "electro",
+    "11005": "anemo", "11006": "geo", "11007": "dendro",
+}
+# строка про награды за Всплеск флуктуаций — не усложнение, её не показываем
+SKIP_RULES = {"UI_ACTIVITY_LEYLINEC_CHALLENGE_LIMIT_FLOWER"}
+
 warnings: List[str] = []
 
 
@@ -428,6 +443,175 @@ def build_onslaught(today: datetime.date, enemies: Enemies) -> Optional[dict]:
     }
 
 
+# ------------------------------------------- Натиск: уровни сложности из игры
+
+DATE_RE = re.compile(r"^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$")
+
+
+def agd_json(path: str):
+    return json.loads(http(f"{AGD}/{path}").decode("utf-8"))
+
+
+def game_text(raw: str, sprites_ok: List[bool]) -> str:
+    """Игровая разметка -> упрощённая для сайта: {hl}..{/hl} — выделенный
+    текст, {el:pyro} — иконка стихии, перенос строки — \\n. Неизвестный
+    спрайт (иконка реакции и т.п.) помечает текст как непригодный."""
+    def sprite(m):
+        el = SPRITE_ELEMENT.get(m.group(1))
+        if not el:
+            sprites_ok[0] = False
+            return ""
+        return "{el:" + el + "}"
+    t = raw.replace("\\n", "\n")
+    t = re.sub(r"\{SPRITE_PRESET#(\d+)\}", sprite, t)
+    # золотой и красный — выделение в игре; прочие цвета (серый разделитель) — обычный текст
+    t = re.sub(r"<color=#(?:FFD780|FF5E41)\w*>(.*?)</color>", r"{hl}\1{/hl}", t, flags=re.I | re.S)
+    t = re.sub(r"</?[a-zA-Z][^>]*>", "", t)
+    return re.sub(r"[ \t]+", " ", t).strip()
+
+
+class TextMaps:
+    """Только нужные строки из огромных TextMap: файлы читаются по одному."""
+
+    def __init__(self, hashes):
+        self.want = {str(h) for h in hashes if h}
+        self.text = {"en": {}, "ru": {}}
+
+    def load(self):
+        for lang, files in TEXTMAPS.items():
+            for name in files:
+                data = agd_json(f"TextMap/{name}.json")
+                for h in self.want:
+                    if h in data and h not in self.text[lang]:
+                        self.text[lang][h] = data[h]
+                del data
+
+    def get(self, h) -> Optional[dict]:
+        en, ru = self.text["en"].get(str(h)), self.text["ru"].get(str(h))
+        if not en:
+            return None
+        return {"en": en, "ru": ru or en}
+
+
+def build_onslaught_details(onslaught: dict, enemies: Enemies, old: Optional[dict]) -> Optional[dict]:
+    """Шесть уровней сложности: правила уровня, уровень врагов, лимит времени
+    и для каждого босса — форма, преимущества и механики. Поля в выгрузке
+    обфусцированы и переименовываются от версии к версии, поэтому ищем их
+    по содержимому, а не по именам."""
+    chal = agd_json("ExcelBinOutput/LeyLineChallengeExcelConfigData.json")
+    cur = None
+    for c in chal:
+        dates = sorted(v for v in c.values() if isinstance(v, str) and DATE_RE.match(v))
+        if len(dates) >= 2 and dates[0][:10] == onslaught.get("start"):
+            cur = (c, dates)
+    if not cur:
+        warn("в игровых данных нет текущего цикла Натиска (выгрузка ещё не обновилась?)")
+        return None
+    c, dates = cur
+    level_ids = c.get("levelIdList") or next(
+        (v for v in c.values() if isinstance(v, list) and len(v) == 6 and all(isinstance(x, int) for x in v)), None)
+    key = f"{dates[0]}|{','.join(map(str, level_ids or []))}"
+    if old and old.get("key") == key:
+        return old                                   # цикл тот же — тяжёлые TextMap не качаем
+
+    levels = {x["id"]: x for x in agd_json("ExcelBinOutput/LeyLineLevelExcelConfigData.json")}
+    configs = {x["id"]: x for x in agd_json("ExcelBinOutput/LeyLineLevelConfigExcelConfigData.json")}
+    diffs = agd_json("ExcelBinOutput/LeyLineDifficultyExcelConfigData.json")
+    manual = {m["textMapId"]: m["textMapContentTextMapHash"]
+              for m in agd_json("ExcelBinOutput/ManualTextMapConfigData.json") if "textMapId" in m}
+
+    def int_lists(obj):
+        return [v for v in obj.values() if isinstance(v, list) and v and all(isinstance(x, int) for x in v)]
+
+    plan = []
+    hashes = set()
+    for n, lid in enumerate(level_ids, start=1):
+        lv = levels.get(lid) or {}
+        cfg_ids = next((v for v in int_lists(lv) if all(x in configs for x in v)), [])
+        timers = [v for v in int_lists(lv) if len(v) == 1 and v is not cfg_ids and v[0] <= 1000]
+        diff = next((d for d in diffs if d.get("id") == n), {})
+        # строковых списков два: id текстов правил и имена иконок медалей —
+        # правила те, что находятся в ManualTextMap
+        rule_ids = next((v for v in diff.values() if isinstance(v, list)
+                         and any(isinstance(x, str) and x in manual for x in v)), [])
+        rules = [r for r in rule_ids if r and r in manual and r not in SKIP_RULES]
+        plan.append((n, lv, cfg_ids, timers, diff, rules))
+        hashes.add(diff.get("nameTextMapHash"))
+        hashes.update(manual.get(r) for r in rules)
+        for cid in cfg_ids:
+            cfg = configs[cid]
+            hashes.add(cfg.get("levelNameTextMapHash"))
+            for arr in int_lists(cfg):
+                hashes.update(arr)
+    print(f"  Натиск: скачиваю тексты игры ({len(hashes)} строк)...")
+    tm = TextMaps(hashes)
+    tm.load()
+
+    def classify(cfg):
+        """Массивы хэшей в конфиге поля боя: 3 — преимущества, 5 — названия
+        механик (короткие), их полные описания (длинные) и краткие пересказы."""
+        adv, fives = None, []
+        for arr in int_lists(cfg):
+            texts = [tm.get(h) for h in arr]
+            if not any(texts):
+                continue
+            if len(arr) == 3:
+                adv = texts
+            elif len(arr) == 5:
+                lens = [len(t["en"]) for t in texts if t]
+                fives.append((sum(lens) / len(lens), texts))
+        fives.sort(key=lambda x: x[0])
+        titles = fives[0][1] if fives else []
+        full = fives[-1][1] if len(fives) >= 2 else []
+        return adv, titles, full
+
+    def both(t, ok):
+        return {"en": game_text(t["en"], ok), "ru": game_text(t["ru"], ok)}
+
+    out = []
+    bosses = onslaught.get("bosses") or []
+    for n, lv, cfg_ids, timers, diff, rules in plan:
+        name = tm.get(diff.get("nameTextMapHash"))
+        entry = {
+            "id": n,
+            "name": name and {"en": name["en"], "ru": name["ru"]},
+            # в игре показывается уровень на 1 больше reviseLevel (40/70/.../110)
+            "level": (lv.get("reviseLevel") + 1) if isinstance(lv.get("reviseLevel"), int) else None,
+            "timeLimit": (timers[0][0] or None) if timers else None,
+            "rules": [],
+            "bosses": [],
+        }
+        for r in rules:
+            t = tm.get(manual.get(r))
+            if t:
+                entry["rules"].append(both(t, [True]))
+        for i, cid in enumerate(cfg_ids):
+            cfg = configs[cid]
+            form = tm.get(cfg.get("levelNameTextMapHash"))
+            wiki_en = enemies.items.get(bosses[i]["id"], {}).get("en", "") if i < len(bosses) else ""
+            if form and wiki_en and slug(wiki_en) not in slug(form["en"]):
+                warn(f"Натиск: босс {i + 1} в игре «{form['en']}», на вики «{wiki_en}» — пропускаю детали")
+                return None
+            adv, titles, full = classify(cfg)
+            ok = [True]
+            advantage = both(adv[0], ok) if adv and adv[0] else None
+            if not ok[0]:
+                warn(f"Натиск: в преимуществах «{form and form['en']}» неизвестная иконка — оставляю общие")
+                advantage = None
+            mech = []
+            for k, title in enumerate(titles):
+                if not title or k >= len(full) or not full[k]:
+                    continue
+                mech.append({"title": both(title, [True]), "text": both(full[k], [True])})
+            entry["bosses"].append({
+                "form": form and {"en": form["en"].strip(), "ru": form["ru"].strip()},
+                "advantage": advantage,
+                "mechanics": mech,
+            })
+        out.append(entry)
+    return {"key": key, "difficulties": out}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", help="считать сегодняшней эту дату (YYYY-MM-DD)")
@@ -458,10 +642,23 @@ def main() -> int:
             for ref in _refs(old[key]):
                 if ref in (old.get("enemies") or {}):
                     items.setdefault(ref, old["enemies"][ref])
+    # Уровни сложности Натиска из игровых данных. Сбой здесь не должен ломать
+    # остальное: тогда остаются детали прошлого запуска (если цикл тот же).
+    old_ons = (old or {}).get("onslaught") or {}
+    if onslaught is not None:
+        old_details = old_ons.get("details") if old_ons.get("start") == onslaught.get("start") else None
+        try:
+            details = build_onslaught_details(onslaught, enemies, old_details)
+        except Exception as e:  # noqa: BLE001
+            warn(f"Натиск: не удалось собрать уровни сложности: {e}")
+            details = old_details
+        if details:
+            onslaught["details"] = details
+
     data = {
         "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "abyss": abyss if abyss is not None else (old or {}).get("abyss"),
-        "onslaught": onslaught if onslaught is not None else (old or {}).get("onslaught"),
+        "onslaught": onslaught if onslaught is not None else old_ons or None,
         "enemies": items,
     }
     # Цикл не сменился — файл не трогаем, иначе автообновление коммитило бы
