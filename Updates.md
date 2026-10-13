@@ -1,76 +1,38 @@
 ## Upcoming features:
 - Saving your own teams
 
-## 2.5.0 (2026/10/13)
-- **5★ weapons are one choice instead of two.** The “Only my 5★ weapons” checkbox contradicted “R1 only” and “Any refinement”, so it became a fourth option of the same choice: “Only mine (inventory)”. In this mode a weapon must be in your inventory, you need enough copies, and the refinement can't be higher than your copy's. “R1 only” and “Any refinement” no longer look at the inventory.
-- **The team builder accounts for 5★ weapons.** It only uses 5★ weapons from your inventory, by number of copies and refinement, whatever the setting says. Copies are shared between teams: if you have one Key of Khaj-Nisut and it is used in the first half, teams that need it are not offered for the second. If an inventory change leaves a team short of copies, it is highlighted.
-- **Redesigned team builder.** A Spiral Abyss / Stygian Onslaught switch, a card per team with DPS plus Change and Remove buttons, and a summary of the characters and 5★ weapons in use.
-- **Current cycle enemies.** For the Abyss, each half of Floor 12 shows its enemies by chamber with icons, counts and waves, plus chamber level and Ley Line Disorder. For the Onslaught, each battlefield shows its boss and advantages. The cycle dates and a link to the source (the Genshin Impact wiki) are in the tab header.
-- Team picker: characters are listed by name instead of internal keys, and suggested teams are paginated.
-
-## 2.4.0 (2026/10/13)
-- **5★ weapons at any refinement.** The “Allow 5★ weapons” checkbox is replaced by a “5★ weapons” choice: “None”, “R1 only” and “Any refinement”. This brings in C6R5 builds — for example, teams with C6 Mavuika: the database only has them with R5 weapons, so they never showed up, even with “Any” constellations. “Any” constellations together with “Any refinement” unlock all 4223 teams in the database.
-- The refinement of your own 5★ weapons now counts: if you have an R5 copy, R5 builds show up in “R1 only” mode and in the team builder.
-- **Fixed artifact stats in team details.** Some sims list artifact stats as a single total, main stats and substats combined. These used to show up as a long list of “main stats” with no substats; they are now shown as total stats with values.
-- Fixed the HP% main stat being labelled ATK% — this affected about 6000 artifacts.
-- Fixed stats missing entirely for about 1000 characters whose rotation used a short name (yoi, bina).
-- Substats from builds taken from real accounts show exact values: rolls can be fractional, e.g. “CRIT DMG 71.5% (10.8)”.
-- With the stats fixed, there are now 4303 fully KQMS-compliant builds instead of 3563.
-- “Any, up to C6” renamed to “Any”.
-- Team stats can no longer come from a stale browser cache after a database update.
-
-## 2.3.0 (2026/10/13)
-- **Teams at any constellation.** A new “Constellations” setting offers “Standard (5★ C0, 4★ C6)”, “With my constellations” (the previous behaviour) and “Any, up to C6”. “Any” unlocks teams that only exist at high constellations: +111 teams, +150 with 5★ weapons.
-- **Every build of a team.** An expanded team now lists all of its builds from the database, with constellations, weapons and DPS. Builds above the standard are marked, and any of them can be opened to see its stats. 819 teams have more than one build.
-- Fixed “All teams” in Best Teams still showing only your characters at your constellations. It now really shows every team, with missing characters highlighted.
-- Fixed the inventory cards on phones: the constellation and refinement buttons no longer spill out of the card, the remove button no longer covers the icon, and rows line up.
-
-## 2.2.1 (2026/10/13)
-- KQM renamed to **KQMS** (KQM Standards).
-- The “constellations” badge is replaced by **“full compliance”**: it turns green only when both constellations and artifacts follow the standard. The filter under Advanced works the same way.
-- A character whose C1 is free but who sits at C0 in a team now counts as standard. Such teams used to be wrongly flagged — there are now 2.3× more fully compliant teams.
-- Fixed filter labels under “Your characters” not switching language.
-
-## 2.2.0 (2026/10/13)
-- **Character window.** Clicking a character in the tier list, or a card in recommendations, opens a window with a large portrait, rarity, element, weapon type, whether you own them, their best DPS, and all of their teams page by page.
-- **5★ weapons are tracked as copies, like the in-game inventory.** Instead of ticking a weapon, you add it one copy at a time from a picker. A team that needs two of the same 5★ weapon needs two copies. GOOD import carries over every copy too.
-- **Search and filters in the inventory**: characters can be narrowed by ownership, rarity, element and weapon type, and search works in either language. Weapons have their own search and type filter.
-- **Filter sheet on phones.** Filters and settings moved off the page into a sheet behind a “Filters” button, which shows how many filters are active.
-- **Substats show real values**: “CRIT DMG 66.2% (10)”, with the number of rolls in brackets.
-- **Team builder and suggestions follow your inventory strictly**: only teams that actually come together on your constellations are shown, and you must own every 5★ weapon they use.
-- **Pagination** in recommendations, best teams and the character window. The “Squads to show on expand” setting is no longer needed and was removed.
-- **Team details load on demand.** Artifact stats no longer ship with the main database — they are fetched when you expand a team. The initial download is about a third smaller.
-- Characters are identified by an internal key rather than their name, so your saved selection no longer depends on the interface language.
-- Filter labels are translated: elements and weapon types.
-- Removed redundant explanatory text from the interface.
-- The update list is translated and kept as a separate file per language.
-
-## 2.1.0 (2026/10/13)
-- **Russian character, weapon and artifact names.** The whole interface now switches language, not just the labels around it. Search accepts either language.
-- **Team details.** Click a team to expand a panel with large portraits, weapons, artifact sets, artifact main stats and substat rolls, plus a link to the source simulation.
-- **KQM standard.** Every build is checked against the [KQM calculation standard](https://compendium.keqingmains.com/): constellations (5★ at C0 or a forced C1, 4★ at C6) and artifacts (40 substat rolls, at least 2 of each). Both are shown on the team panel and can be used as filters under Advanced.
-- Constellations are now shown per team from that team's own build, instead of a fixed C1 badge on the character everywhere.
-- Character names in team cards are no longer boxed — the owned/missing colour moved to the card frame itself.
-- Weapon refinement is shown for R1 too, not only R2+.
-- **Phone layout.** Settings and your roster moved into a drawer behind the ☰ button, views moved to a bottom bar, and the content now gets the whole screen.
-- Fixed the inventory jumping back to the top on every click.
-- Fixed the page and roster losing their scroll position when switching language.
-
-## 2.0.1 (2026/10/13)
-- Fixed the layout on phones: the page no longer scrolls sideways. The header now wraps, the sidebar stops forcing its own width, and recommendation cards stack instead of sitting side by side.
-- Buttons, chips and filters are now at least 38px tall on touch devices, and the interface is no longer scaled down to 90% there.
-
 ## 2.0.0 (2026/10/13)
-- **Inventory** — a new section where you mark the characters you own, set their constellations, and list your 5★ weapons. Everything is stored in your browser only.
-- **Weapons and artifact sets** are now shown for every character in a team. Characters running a 2+2 split show both sets; characters with no set show only the weapon.
-- **5★ weapon teams** can be enabled with a toggle. Only R1 is allowed, since that is what a single banner pull gives you (+26 teams). "Only my 5★ weapons" narrows them down to the ones you actually have.
-- **English / Russian interface** with a language switcher in the header. The language is picked from your browser on the first visit and remembered afterwards.
-- **Feedback button** linking to GitHub Issues.
-- Import from GOOD now reads constellations and 5★ weapons, not just the character list.
-- Moved to the new KQM sim database — the old host went offline. Teams are rebuilt from 5606 simulations (3989 teams, 4015 with 5★ weapons enabled).
-- Team data reworked into a proper database: every team now keeps all of its known builds, so constellations and weapons are filters rather than a fixed assumption. Each build links back to its source simulation.
+A big update: a new team database, an inventory, team details, a team builder for the Abyss and the Onslaught, Russian language and a phone layout.
+
+### Teams and data
+- **New KQM sim database** (db.kqm.gg) — the old host went offline. It holds 4223 teams, many with several builds at different constellations and weapons. DPS is averaged only across sims with the same build, and every build links to its source sim.
+- **Weapons and artifact sets** for every character in a team, with the weapon refinement and the constellation from that build.
+- **Team details** on click: large portraits, weapons, sets, main stats and substats with real values and roll counts, and a link to the sim. They also list every build of the team, so you can see how much stronger it is at C2 or C6. Stats load only when a team is expanded.
+- **KQM Standards**: every build is checked for “full compliance” (constellations and artifacts) and separately for artifacts (40 rolls, at least 2 of each). Both are also available as filters.
+- Data updates automatically: the Abyss and the Onslaught daily, the team database weekly.
 - Fixed teams with the Traveler being listed twice, once per gender.
-- Removed `teams.json`. The site reads `data/db.json` now; the old flat file carried no build information and is no longer generated by default.
+- Removed `teams.json` — the site reads `data/db.json`.
+
+### Settings
+- **Constellations**: “Standard (5★ C0, 4★ C6)”, “With my constellations” and “Any”. “Any” unlocks teams that only exist at high constellations in the database.
+- **5★ weapons**: “None”, “R1 only”, “Any refinement” and “Only mine (inventory)” — by number of copies and their refinement.
+
+### Inventory
+- A new section for your characters with their constellations and your 5★ weapons — tracked as copies, like in the game, with a refinement per copy. Everything is stored in your browser only.
+- GOOD import brings in characters, constellations and every 5★ weapon.
+- Search and filters by ownership, rarity, element and weapon type.
+
+### Team builder
+- Spiral Abyss (2 teams) and Stygian Onslaught (3 teams). Each half of Floor 12 shows the current cycle's enemies by chamber, with icons, and the Ley Line Disorder; each Onslaught battlefield shows its boss and advantages.
+- Teams are built strictly from your inventory: your constellations and only your own 5★ weapons. Characters and weapon copies are shared between teams, so one copy can't go into two teams at once.
+
+### Interface
+- **Russian language**, including character, weapon and set names. The language follows your browser and can be switched in the header.
+- **Character window** on click in the tier list and recommendations: portrait, element, weapon, best DPS and all of their teams.
+- **Phone layout**: views in a bottom bar, settings and your roster behind the ☰ menu, filters in a sheet.
+- Team lists are paginated.
+- A feedback button that opens GitHub Issues.
+- The update list is translated.
 
 ## 1.7.3 (2026/09/23)
 - Jahoda added

@@ -280,6 +280,11 @@ class Enemies:
         eid = slug(full_name)
         if eid in self.items:
             return {"id": eid}
+        # В начале цикла у нового врага на вики бывает заглушка вместо иконки.
+        # Её не сохраняем: без файла следующий ежедневный запуск попробует снова.
+        if icon_url and re.search(r"unknown|placeholder|no[_ ]?image", icon_url, re.I):
+            warn(f"у «{full_name}» на вики пока заглушка вместо иконки")
+            icon_url = None
         ru = self.resolve_ru(full_name, base)
         if not ru:
             warn(f"нет русского названия для «{full_name}» — останется английское")
