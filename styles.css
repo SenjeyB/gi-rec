@@ -277,3 +277,81 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .member-cell{padding:4px 7px 4px 4px}
   .member-cell .member-avatar{width:32px;height:32px}
 }
+
+/* --------------------------------------------------------------- мобильные */
+/* Грид-колонка 1fr не ужимается ниже min-content своего содержимого, поэтому на
+   телефоне сайдбар распирал страницу. min-width:0 снимает этот порог. */
+.app-container, .sidebar, .maincol, .view-content, .side-card{min-width:0}
+.app-container > *{min-width:0}
+.characters-grid, .picker-grid, .inv-grid{min-width:0}
+/* Шапка и так была плотной, а в 2.0 в неё добавились переключатель языка и
+   кнопка отзыва — на телефоне ряд переставал помещаться и уводил страницу вбок. */
+.app-header{flex-wrap:wrap}
+.app-nav{flex-wrap:wrap;justify-content:flex-end}
+
+@media (max-width:640px){
+  /* на десктопе интерфейс ужат до 0.9 ради плотности; на телефоне это только
+     мельчит текст и тач-цели, поэтому возвращаем масштаб 1:1 */
+  :root{--ui-scale:1}
+  .app-header{gap:10px;padding:10px 12px}
+  .app-nav{width:100%;justify-content:flex-start;gap:6px}
+  .nav-link{padding:7px 10px;font-size:13px}
+  .app-container{padding:12px;gap:12px}
+  .sidebar{padding:8px;gap:10px}
+  .side-card{padding:10px}
+  .side-row{grid-template-columns:1fr}
+  .view-content{padding:10px}
+
+  /* списки и сетки не должны распирать экран */
+  .characters-grid{max-height:340px}
+  .inv-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));max-height:56vh;gap:8px}
+  .inv-portrait{width:44px;height:44px}
+  .inv-card-weapon .inv-portrait{width:48px;height:48px}
+  .inv-controls{gap:8px}
+  .inv-search{flex-basis:100%}
+  .inv-tabs{width:100%}
+  .inv-tab{flex:1 1 0;justify-content:center}
+
+  /* карточка рекомендации — две колонки рядом; на телефоне кладём их друг под друга */
+  .squad{flex-direction:column;align-items:stretch;gap:8px}
+  .squad .right{align-items:stretch}
+  .squad .left{flex-wrap:wrap}
+  .dps-badge{align-self:flex-start}
+  .team-row .members{flex-wrap:wrap}
+
+  .members{gap:6px}
+  .member-cell{padding:3px 6px 3px 3px;column-gap:5px}
+  .member-cell .member-avatar{width:30px;height:30px}
+  .loadout-weapon,.loadout-set{width:20px;height:20px}
+  .team-row{flex-wrap:wrap;gap:6px}
+  .team-dps{width:100%;text-align:right}
+
+  /* пальцем в 29-пиксельную цель не попасть — поднимаем мелкие кнопки до 36px */
+  .filter-chip,.macro-btn,.lang-btn,.inv-chip{min-height:36px}
+  .filter-chip,.inv-chip{padding:7px 12px}
+  .macro-btn{padding:8px 12px}
+  .lang-btn{padding:9px 12px}
+  .side-check{min-height:36px}
+
+  .modal-dialog{margin:2vh auto 0;width:96vw;padding:12px}
+  .two-col{grid-template-columns:1fr}
+  .toggle-select{min-width:0;width:100%}
+}
+
+/* на совсем узких экранах подзаголовок только отнимает место */
+@media (max-width:380px){
+  .app-subtitle{display:none}
+  .inv-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
+}
+
+/* Планшеты шире 640px, но палец у них тот же. Ориентируемся на тип указателя,
+   а не на ширину: убираем уплотнение интерфейса и поднимаем мелкие цели. */
+@media (pointer: coarse){
+  :root{--ui-scale:1}
+  .filter-chip,.macro-btn,.lang-btn,.inv-chip,.inv-btn{min-height:38px}
+  .filter-chip,.inv-chip{padding:8px 12px}
+  .macro-btn,.inv-btn{padding:9px 12px}
+  .nav-link{min-height:38px}
+  .side-check{min-height:38px}
+  .inv-step{width:26px;height:26px}
+}

@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.0.1 (2026/10/13)
+- Fixed the layout on phones: the page no longer scrolls sideways. The header now wraps, the sidebar stops forcing its own width, and recommendation cards stack instead of sitting side by side.
+- Buttons, chips and filters are now at least 38px tall on touch devices, and the interface is no longer scaled down to 90% there.
+
 ## 2.0.0 (2026/10/13)
 - **Inventory** — a new section where you mark the characters you own, set their constellations, and list your 5★ weapons. Everything is stored in your browser only.
 - **Weapons and artifact sets** are now shown for every character in a team. Characters running a 2+2 split show both sets; characters with no set show only the weapon.
