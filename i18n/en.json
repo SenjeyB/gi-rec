@@ -28,13 +28,16 @@
     "characters_2": "2 characters",
     "characters_3": "3 characters",
     "characters_4": "4 characters",
-    "allowFiveStar": "Allow 5★ weapons",
+    "fiveMode": "5★ weapons:",
+    "fiveNone": "None",
+    "fiveR1": "R1 only",
+    "fiveAny": "Any refinement",
     "onlyMyWeapons": "Only my 5★ weapons",
     "onlyMyWeaponsHint": "Restrict 5★ weapon teams to the ones you marked as owned in Account.",
     "consMode": "Constellations:",
     "consStandard": "Standard (5★ C0, 4★ C6)",
     "consMine": "With my constellations",
-    "consAny": "Any, up to C6"
+    "consAny": "Any"
   },
   "roster": {
     "title": "Your characters",
@@ -153,7 +156,9 @@
     "kqmFullHint": "Constellations and artifacts both follow the standard: 5★ at C0 (up to C1 when C1 is free), 4★ at C6",
     "variants": "Builds of this team ({n})",
     "shown": "shown",
-    "aboveStd": "above standard"
+    "aboveStd": "above standard",
+    "artTotals": "Artifact stats (total)",
+    "artTotalsHint": "This sim lists artifact stats only as a total, without splitting them into main stats and substats."
   },
   "feedback": {
     "title": "Leave feedback",

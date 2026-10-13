@@ -1,6 +1,17 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.4.0 (2026/10/13)
+- **5★ weapons at any refinement.** The “Allow 5★ weapons” checkbox is replaced by a “5★ weapons” choice: “None”, “R1 only” and “Any refinement”. This brings in C6R5 builds — for example, teams with C6 Mavuika: the database only has them with R5 weapons, so they never showed up, even with “Any” constellations. “Any” constellations together with “Any refinement” unlock all 4223 teams in the database.
+- The refinement of your own 5★ weapons now counts: if you have an R5 copy, R5 builds show up in “R1 only” mode and in the team builder.
+- **Fixed artifact stats in team details.** Some sims list artifact stats as a single total, main stats and substats combined. These used to show up as a long list of “main stats” with no substats; they are now shown as total stats with values.
+- Fixed the HP% main stat being labelled ATK% — this affected about 6000 artifacts.
+- Fixed stats missing entirely for about 1000 characters whose rotation used a short name (yoi, bina).
+- Substats from builds taken from real accounts show exact values: rolls can be fractional, e.g. “CRIT DMG 71.5% (10.8)”.
+- With the stats fixed, there are now 4303 fully KQMS-compliant builds instead of 3563.
+- “Any, up to C6” renamed to “Any”.
+- Team stats can no longer come from a stale browser cache after a database update.
+
 ## 2.3.0 (2026/10/13)
 - **Teams at any constellation.** A new “Constellations” setting offers “Standard (5★ C0, 4★ C6)”, “With my constellations” (the previous behaviour) and “Any, up to C6”. “Any” unlocks teams that only exist at high constellations: +111 teams, +150 with 5★ weapons.
 - **Every build of a team.** An expanded team now lists all of its builds from the database, with constellations, weapons and DPS. Builds above the standard are marked, and any of them can be opened to see its stats. 819 teams have more than one build.

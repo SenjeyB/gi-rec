@@ -9,9 +9,10 @@
 //               4★ без ограничений, они в симах обычно C6). Если персонаж есть в
 //               инвентаре и его созвездие выше потолка, потолок поднимается — свои
 //               созвездия только открывают сборки, но никогда не отнимают.
-//   5★ оружие — по умолчанию сборки с ним отбрасываются целиком; тогл разрешает
-//               их на R1; «только мои» дополнительно требует, чтобы оружие лежало
-//               в инвентаре с рефайном не ниже, чем в симе.
+//   5★ оружие — режим none отбрасывает такие сборки целиком, r1 пускает их на R1,
+//               any — на любом пробуждении. Свои копии поднимают потолок до их
+//               пробуждения. «Только мои» дополнительно требует, чтобы оружие
+//               лежало в инвентаре с рефайном не ниже, чем в симе.
 
 let db = null;
 let refs = null;
@@ -71,7 +72,8 @@ function expandBuild(team, build) {
  * @param {object} opts
  *  - cons:        {charKey: число} созвездия из инвентаря
  *  - weapons:     {weaponKey: [рефайн каждой копии]} своё 5★ оружие
- *  - allowFiveStar: пускать сборки с 5★ оружием (только R1)
+ *  - fiveStar:    "none" | "r1" | "any" — сборки с 5★ оружием (allowFiveStar: true
+ *                 — старое имя для "r1")
  *  - onlyMyWeapons: из них оставлять лишь те, где всё 5★ оружие есть у игрока
  * @returns {Array} отряды с выбранной сборкой, отсортированные по DPS
  */
@@ -79,8 +81,16 @@ export function query(opts = {}) {
   if (!db) return [];
   const invCons = opts.cons || {};
   const invWeapons = opts.weapons || {};
-  const allowFive = !!opts.allowFiveStar;
+  const fiveMode = opts.fiveStar || (opts.allowFiveStar ? "r1" : "none");
+  const allowFive = fiveMode !== "none";
   const onlyMine = !!opts.onlyMyWeapons;
+  // Потолок пробуждения 5★: R1 или R5 по режиму, а своя копия поднимает его до
+  // своего пробуждения — у кого R5 Сияющая жатва, тому R5-сборки и нужны.
+  const refineCap = (key) => {
+    const cap = fiveMode === "any" ? 5 : 1;
+    const own = ownedRefines(invWeapons[key]);
+    return own.length ? Math.max(cap, ...own) : cap;
+  };
   // «Полное соответствие» KQMS = созвездия и артефакты по стандарту одновременно
   const needFull = !!opts.kqmFull;
   const needArt = !!opts.kqmArt;
@@ -123,8 +133,9 @@ export function query(opts = {}) {
         const m = build.members[i];
         if (m.cons > capFor(charKeys[i])) { ok = false; break; }
         if (isFiveStar(m.weapon)) {
-          if (!allowFive || m.refine !== 1) { ok = false; break; }
-          if (needed) (needed[weaponKey(m.weapon)] ||= []).push(m.refine);
+          const key = weaponKey(m.weapon);
+          if (!allowFive || m.refine > refineCap(key)) { ok = false; break; }
+          if (needed) (needed[key] ||= []).push(m.refine);
         }
       }
       if (ok && needed && !haveCopies(needed, invWeapons)) ok = false;
@@ -160,25 +171,23 @@ export function query(opts = {}) {
  * не ниже требуемого; сопоставляем жадно — старшие требования к старшим копиям.
  * owned: ключ -> массив рефайнов копий (или число копий — старый формат).
  */
+function ownedRefines(have) {
+  if (have == null) return [];
+  if (typeof have === "number") return Array(have).fill(5);
+  if (!Array.isArray(have)) return [Number(have.refine) || 1];
+  return have;
+}
+
 export function haveCopies(needed, owned) {
   for (const [key, refines] of Object.entries(needed)) {
-    let have = owned[key];
-    if (have == null) return false;
-    if (typeof have === "number") have = Array(have).fill(5);
-    if (!Array.isArray(have)) have = [Number(have.refine) || 1];
+    const have = ownedRefines(owned[key]);
+    if (!have.length) return false;
     if (have.length < refines.length) return false;
     const need = refines.slice().sort((a, b) => b - a);
     const got = have.slice().sort((a, b) => b - a);
     for (let i = 0; i < need.length; i++) if (got[i] < need[i]) return false;
   }
   return true;
-}
-
-/** Сколько отрядов добавит включение 5★ оружия — для подсказки в настройках. */
-export function countWithFiveStar(opts = {}) {
-  const base = query({ ...opts, allowFiveStar: false }).length;
-  const withR1 = query({ ...opts, allowFiveStar: true }).length;
-  return { base, withR1, extra: withR1 - base };
 }
 
 // ------------------------------------------------- подробные статы артефактов
@@ -189,7 +198,10 @@ const shardPending = new Map();    // чтобы не качать один фа
 async function loadShard(n) {
   if (shardCache.has(n)) return shardCache.get(n);
   if (shardPending.has(n)) return shardPending.get(n);
-  const task = fetch(`data/details/${n}.json`, { cache: "force-cache" })
+  // Шард привязан к версии базы: после пересборки индексы отрядов сдвигаются, и
+  // закэшированный старый шард показал бы статы чужого отряда.
+  const v = encodeURIComponent(db.generated || "");
+  const task = fetch(`data/details/${n}.json?v=${v}`, { cache: "force-cache" })
     .then((r) => (r.ok ? r.json() : {}))
     .catch(() => ({}))
     .then((data) => { shardCache.set(n, data); shardPending.delete(n); return data; });
@@ -199,7 +211,9 @@ async function loadShard(n) {
 
 /**
  * Догружает мейн-статы и роллы сабстатов для конкретной сборки отряда.
- * @returns {Promise<Array|null>} по слоту: {main:[...], subs:[{stat,rolls}]}
+ * @returns {Promise<Array|null>} по слоту: {main:[...], subs:[{stat,rolls}], total}
+ *   rolls у живых аккаунтов дробные; total — [{stat,value}], если сим дал только
+ *   сумму статов артефактов без разбивки на основные и дополнительные.
  */
 export async function loadDetails(teamIndex, buildIndex) {
   if (!db || teamIndex == null || buildIndex == null || buildIndex < 0) return null;
@@ -212,6 +226,7 @@ export async function loadDetails(teamIndex, buildIndex) {
   return entry.members.map((m) => ({
     main: (m.main || []).map((si) => db.dict.stats[si]),
     subs: order.map((stat, k) => ({ stat, rolls: (m.subs || [])[k] || 0 })),
+    total: m.tot ? m.tot.map(([si, value]) => ({ stat: db.dict.stats[si], value })) : null,
   }));
 }
 

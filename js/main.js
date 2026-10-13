@@ -19,7 +19,8 @@ let refs = null;
 let app = null;
 let syncing = false;
 
-const settings = { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false, consMode: "mine" };
+const DEFAULTS = { fiveStar: "none", onlyMyWeapons: false, kqmFull: false, kqmArt: false, consMode: "mine" };
+const settings = { ...DEFAULTS };
 
 async function loadJSON(path) {
   const resp = await fetch(path, { cache: "no-cache" });
@@ -32,7 +33,9 @@ async function loadJSON(path) {
 function loadSettings() {
   try {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    settings.allowFiveStar = !!raw.allowFiveStar;
+    // до 2.4.0 был тогл allowFiveStar (только R1)
+    settings.fiveStar = ["none", "r1", "any"].includes(raw.fiveStar) ? raw.fiveStar
+      : (raw.allowFiveStar ? "r1" : "none");
     settings.onlyMyWeapons = !!raw.onlyMyWeapons;
     // до 2.2.1 фильтр назывался kqmCons и проверял только созвездия
     settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
@@ -54,7 +57,7 @@ function currentTeams() {
     cons,
     weapons,
     consMode: settings.consMode,
-    allowFiveStar: settings.allowFiveStar,
+    fiveStar: settings.fiveStar,
     onlyMyWeapons: settings.onlyMyWeapons,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
@@ -71,7 +74,7 @@ function strictTeams() {
   const weapons = store.weaponCopies();   // ключ -> рефайны всех копий
   return db.query({
     cons, weapons, strictCons: true,
-    allowFiveStar: settings.allowFiveStar,
+    fiveStar: settings.fiveStar,
     onlyMyWeapons: true,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
@@ -82,9 +85,9 @@ function strictTeams() {
  *  настроек (5★, KQMS, «только моё оружие») при этом действуют. */
 function baseTeams() {
   return db.query({
-    weapons: store.weaponCopies(),
+    weapons: settings.onlyMyWeapons ? store.weaponCopies() : {},
     consMode: settings.consMode === "any" ? "any" : "standard",
-    allowFiveStar: settings.allowFiveStar,
+    fiveStar: settings.fiveStar,
     onlyMyWeapons: settings.onlyMyWeapons,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
@@ -102,13 +105,13 @@ function updateFilterHint() {
 }
 
 function wireSettings() {
-  const five = document.getElementById("allow-five-star");
+  const five = document.getElementById("five-mode");
   const mine = document.getElementById("only-my-weapons");
   if (five) {
-    five.checked = settings.allowFiveStar;
+    five.value = settings.fiveStar;
     five.addEventListener("change", () => {
-      settings.allowFiveStar = five.checked;
-      if (mine) mine.disabled = !settings.allowFiveStar;
+      settings.fiveStar = five.value;
+      if (mine) mine.disabled = settings.fiveStar === "none";
       saveSettings();
       refresh();
     });
@@ -135,11 +138,13 @@ function wireSettings() {
   const reset = document.getElementById("reset-filters");
   if (reset) {
     reset.addEventListener("click", () => {
-      Object.assign(settings, { allowFiveStar: false, onlyMyWeapons: false, kqmFull: false, kqmArt: false, consMode: "mine" });
+      Object.assign(settings, DEFAULTS);
       const cm = document.getElementById("cons-mode");
-      if (cm) cm.value = "mine";
+      if (cm) cm.value = settings.consMode;
+      const fm = document.getElementById("five-mode");
+      if (fm) fm.value = settings.fiveStar;
       saveSettings();
-      for (const [id, key] of [["allow-five-star", "allowFiveStar"], ["only-my-weapons", "onlyMyWeapons"],
+      for (const [id, key] of [["only-my-weapons", "onlyMyWeapons"],
                                ["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
         const box = document.getElementById(id);
         if (box) box.checked = settings[key];
@@ -151,7 +156,7 @@ function wireSettings() {
   }
   if (mine) {
     mine.checked = settings.onlyMyWeapons;
-    mine.disabled = !settings.allowFiveStar;
+    mine.disabled = settings.fiveStar === "none";
     mine.addEventListener("change", () => {
       settings.onlyMyWeapons = mine.checked;
       saveSettings();

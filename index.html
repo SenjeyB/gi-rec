@@ -85,10 +85,12 @@
                 <option value="any" data-i18n="settings.consAny">Any</option>
               </select>
 
-              <label class="side-check">
-                <input id="allow-five-star" type="checkbox" />
-                <span data-i18n="settings.allowFiveStar">Allow 5★ weapons</span>
-              </label>
+              <label for="five-mode" class="side-label" data-i18n="settings.fiveMode">5★ weapons:</label>
+              <select id="five-mode" class="side-input" data-default="none">
+                <option value="none" data-i18n="settings.fiveNone">None</option>
+                <option value="r1" data-i18n="settings.fiveR1">R1 only</option>
+                <option value="any" data-i18n="settings.fiveAny">Any</option>
+              </select>
               <label class="side-check">
                 <input id="only-my-weapons" type="checkbox" />
                 <span data-i18n="settings.onlyMyWeapons">Only my 5★ weapons</span>

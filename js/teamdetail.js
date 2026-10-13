@@ -11,12 +11,25 @@ const ROLL_VALUE = {
   "hp": 253.94, "hp%": 0.0496, "atk": 16.54, "atk%": 0.0496, "def": 19.68,
   "def%": 0.062, "er": 0.0551, "em": 19.82, "cr": 0.0331, "cd": 0.0662,
 };
-const PERCENT = new Set(["hp%", "atk%", "def%", "er", "cr", "cd"]);
+const isPercent = (stat) => stat.endsWith("%") || ["er", "cr", "cd", "heal"].includes(stat);
+
+function statValue(stat, v) {
+  return isPercent(stat) ? `${(v * 100).toFixed(1)}%` : String(Math.round(v));
+}
 
 function subValue(stat, rolls) {
-  const v = (ROLL_VALUE[stat] || 0) * rolls;
-  return PERCENT.has(stat) ? `${(v * 100).toFixed(1)}%` : String(Math.round(v));
+  return statValue(stat, (ROLL_VALUE[stat] || 0) * rolls);
 }
+
+// у живых аккаунтов роллы не ровные: 10.8 вместо 10
+const fmtRolls = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
+
+// порядок строк в итоговых статах: криты, атака, HP, защита, остальное
+const TOTAL_ORDER = ["cr", "cd", "atk%", "atk", "hp%", "hp", "def%", "def", "em", "er", "heal"];
+const totalRank = (stat) => {
+  const i = TOTAL_ORDER.indexOf(stat);
+  return i < 0 ? TOTAL_ORDER.length : i;
+};
 
 const SIM_URL = "https://db.kqm.gg/db/";
 
@@ -97,6 +110,23 @@ function memberBlock(slot, stats) {
     card.appendChild(el("div", "td-row td-muted", t("team.noSet")));
   }
 
+  // сим дал только сумму статов артефактов — показываем её как есть
+  if (stats && stats.total && stats.total.length) {
+    const box = el("div", "td-stats");
+    box.appendChild(el("div", "td-stats-title", t("team.artTotals")));
+    const grid = el("div", "td-subs");
+    const rows = stats.total.slice().sort((a, b) => totalRank(a.stat) - totalRank(b.stat));
+    for (const s of rows) {
+      const row = el("div", "td-sub");
+      row.appendChild(el("span", "td-sub-name", statLabel(s.stat)));
+      row.appendChild(el("span", "td-sub-rolls", statValue(s.stat, s.value)));
+      grid.appendChild(row);
+    }
+    box.appendChild(grid);
+    card.appendChild(box);
+    return card;
+  }
+
   // мейн-статы: песок, кубок, корона
   if (stats && stats.main && stats.main.length) {
     const box = el("div", "td-stats");
@@ -118,7 +148,7 @@ function memberBlock(slot, stats) {
       row.appendChild(el("span", "td-sub-name", statLabel(s.stat)));
       // значение стата, а число роллов — в скобках рядом
       const val = el("span", "td-sub-rolls", subValue(s.stat, s.rolls));
-      val.appendChild(el("span", "td-sub-count", ` (${s.rolls})`));
+      val.appendChild(el("span", "td-sub-count", ` (${fmtRolls(s.rolls)})`));
       row.appendChild(val);
       grid.appendChild(row);
     }
@@ -195,6 +225,10 @@ async function fillPanel(panel, team) {
 
   // статы артефактов лежат отдельными файлами и качаются только сейчас
   const stats = await loadDetails(team.teamIndex, team.buildIndex);
+  // пояснение к «сумме» — одно на панель, а не под каждым персонажем
+  if (stats && stats.some((s) => s && s.total)) {
+    panel.insertBefore(el("div", "td-stats-note", t("team.artTotalsHint")), grid);
+  }
   (team.build || []).forEach((slot, i) => {
     grid.appendChild(memberBlock(slot, stats && stats[i]));
   });
