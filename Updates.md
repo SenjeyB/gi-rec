@@ -5,36 +5,24 @@
 A big update: a new team database, an inventory, team details, a team builder for the Abyss and the Onslaught, Russian language and a phone layout.
 
 ### Teams and data
-- **New KQM sim database** (db.kqm.gg) — the old host went offline. It holds 4223 teams, many with several builds at different constellations and weapons. DPS is averaged only across sims with the same build, and every build links to its source sim.
 - **Weapons and artifact sets** for every character in a team, with the weapon refinement and the constellation from that build.
-- **Team details** on click: large portraits, weapons, sets, main stats and substats with real values and roll counts, and a link to the sim. They also list every build of the team, so you can see how much stronger it is at C2 or C6. Stats load only when a team is expanded.
-- **KQM Standards**: every build is checked for “full compliance” (constellations and artifacts) and separately for artifacts (40 rolls, at least 2 of each). Both are also available as filters.
-- Data updates automatically: the Abyss and the Onslaught daily, the team database weekly.
-- Fixed teams with the Traveler being listed twice, once per gender.
-- Removed `teams.json` — the site reads `data/db.json`.
+- **Team details** - large portraits, weapons, sets, main stats and substats with real values and roll counts, and a link to the sim.
+- **KQM Standards**: every build is checked for compliance with the standards.
 
 ### Settings
-- **Constellations**: “Standard (5★ C0, 4★ C6)”, “With my constellations” and “Any”. “Any” unlocks teams that only exist at high constellations in the database.
-- **5★ weapons**: “None”, “R1 only”, “Any refinement” and “Only mine (inventory)” — by number of copies and their refinement.
+- **Constellations**: "Standard (5★ C0, 4★ C6)", "With my constellations" and "Any". "Any" unlocks teams that only exist at high constellations in the database.
+- **5★ weapons**: "None", "R1 only", "Any refinement" and "Only mine (inventory)" - by number of copies and their refinement.
 
 ### Inventory
-- A new section for your characters with their constellations and your 5★ weapons — tracked as copies, like in the game, with a refinement per copy. Everything is stored in your browser only.
+- A new section: your characters with their constellations and your 5★ weapons - as copies, like in the game, with a refinement per copy. Everything is stored in your browser only.
 - GOOD import brings in characters, constellations and every 5★ weapon.
 - Search and filters by ownership, rarity, element and weapon type.
 
-### Team builder
-- Spiral Abyss (2 teams) and Stygian Onslaught (3 teams). Each half of Floor 12 shows the current cycle's enemies by chamber, with icons, and the Ley Line Disorder; each Onslaught battlefield shows its boss and advantages.
-- Teams are built strictly from your inventory: your constellations and only your own 5★ weapons. Characters and weapon copies are shared between teams, so one copy can't go into two teams at once.
-
 ### Interface
-- **Russian language**, including character, weapon and set names. The language follows your browser and can be switched in the header.
+- **Russian language**
 - **Character window** on click in the tier list and recommendations: portrait, element, weapon, best DPS and all of their teams.
-- **Phone layout**: views in a bottom bar, settings and your roster behind the ☰ menu, filters in a sheet.
-- Team lists are paginated.
-- A feedback button that opens GitHub Issues.
-- The update list is translated.
-- New site icon — an Intertwined Fate.
-- Removed redundant explanatory text and the About block.
+- **Phone layout**: views in a bottom bar, settings and your roster in a menu, filters.
+- A "Leave feedback" button that opens GitHub Issues.
 
 ## 1.7.3 (2026/09/23)
 - Jahoda added
