@@ -200,7 +200,6 @@
     "problemChars": "Not in your inventory: {list}",
     "problemDup": "Already in another team: {list}",
     "problemWeapons": "Not enough copies: {list}",
-    "weaponsTaken": "5★ weapons used by other teams: {list}",
     "inOtherTeam": "In another team"
   },
   "tier": {

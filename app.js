@@ -606,16 +606,13 @@ export async function start(ctx){
     function takenExcept(skip){
       let weapons = ownedCopies;
       const chars = new Set();
-      const weaponKeys = [];
       state.selections.forEach((s, j)=>{
         if(j === skip || !s) return;
         s.members.forEach(m => chars.add(m));
-        const need = copiesNeeded(s.build);
-        weaponKeys.push(...Object.keys(need));
-        const left = subtractCopies(weapons, need);
+        const left = subtractCopies(weapons, copiesNeeded(s.build));
         if(left) weapons = left;
       });
-      return { chars, weapons, weaponKeys };
+      return { chars, weapons };
     }
 
     // Проверяем слоты по порядку: каждый забирает своих персонажей и копии.
@@ -782,12 +779,6 @@ export async function start(ctx){
 
       function renderList(){
         list.innerHTML = '';
-        if(taken.weaponKeys.length){
-          const uniq = [...new Set(taken.weaponKeys)];
-          list.appendChild(createEl('div','small muted picker-note', T('builder.weaponsTaken','5★ weapons used by other teams: {list}',{
-            list: uniq.map(k => weaponLabel(k) || k).join(', ')
-          })));
-        }
         if(anchors.size > 0){
           const selHead = createEl('div','picker-selected-head');
           const clearBtn = createEl('button','small-btn', T('picker.clear','Clear'));

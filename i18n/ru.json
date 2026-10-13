@@ -200,7 +200,6 @@
     "problemChars": "Нет в инвентаре: {list}",
     "problemDup": "Уже в другом отряде: {list}",
     "problemWeapons": "Не хватает копий: {list}",
-    "weaponsTaken": "Занято другими отрядами: {list}",
     "inOtherTeam": "В другом отряде"
   },
   "tier": {

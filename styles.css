@@ -693,7 +693,6 @@ body.sheet-open{overflow:hidden}
 .builder-used:empty{display:none}
 .builder-used-line{display:flex;flex-wrap:wrap;gap:6px}
 .builder-used-sep{opacity:.5}
-.picker-note{margin-bottom:6px}
 @media (max-width:640px){
   .slot-card{padding:10px}
   .slot-dps{font-size:16px}
