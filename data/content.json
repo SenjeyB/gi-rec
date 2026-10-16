@@ -1,22 +1,22 @@
 {
- "generated": "2026-10-13T20:26:38Z",
+ "generated": "2026-10-16T09:56:16Z",
  "abyss": {
-  "start": "2026-09-16",
-  "end": "2026-10-15",
+  "start": "2026-10-16",
+  "end": "2026-11-15",
   "floor": 12,
-  "source": "https://genshin-impact.fandom.com/wiki/Spiral_Abyss/Floors/2026-09-16",
+  "source": "https://genshin-impact.fandom.com/wiki/Spiral_Abyss/Floors/2026-10-16",
   "disorder": {
    "all": [],
    "first": [
     {
-     "en": "Characters' Swirl DMG increased by 200% and Stellar-Swirl DMG increased by 75%.",
-     "ru": "Рассеивание: урон +200%; Звёздное рассеивание: урон +75%"
+     "en": "Characters' Stellar Glimmer reaction DMG increased by 75%.",
+     "ru": "Characters' Stellar Glimmer reaction DMG increased by 75%."
     }
    ],
    "second": [
     {
-     "en": "Characters' Electro-Charged DMG increased by 200% and Lunar-Charged DMG increased by 75%.",
-     "ru": "Заряжен: урон +200%; Лунный заряд: урон +75%"
+     "en": "All party members gain a 75% Cryo DMG Bonus.",
+     "ru": "Бонус Крио урона +75% всему отряду"
     }
    ]
   },
@@ -27,7 +27,7 @@
     "first": [
      [
       {
-       "id": "battle-hardened-chimeric-burrowbeast",
+       "id": "battle-hardened-chimeric-volkodlak-archer",
        "count": 1
       }
      ]
@@ -35,13 +35,17 @@
     "second": [
      [
       {
-       "id": "wilderness-exile",
-       "count": 9
+       "id": "iniquitous-baptist-caller-of-flood-flame-and-fulmination",
+       "count": 1
       }
      ],
      [
       {
-       "id": "battle-hardened-fireblade-shock-trooper",
+       "id": "shadowy-husk-standard-bearer",
+       "count": 1
+      },
+      {
+       "id": "shadowy-husk-defender",
        "count": 1
       }
      ]
@@ -53,7 +57,7 @@
     "first": [
      [
       {
-       "id": "immortal-construct",
+       "id": "radiant-moonfly",
        "count": 1
       }
      ]
@@ -61,13 +65,7 @@
     "second": [
      [
       {
-       "id": "fisher-of-hidden-depths",
-       "count": 4
-      }
-     ],
-     [
-      {
-       "id": "lord-of-the-hidden-depths-whisperer-of-nightmares",
+       "id": "battle-hardened-elite-treasure-hoarder",
        "count": 1
       }
      ]
@@ -79,7 +77,7 @@
     "first": [
      [
       {
-       "id": "battle-hardened-domovoy-sculptor",
+       "id": "chimeric-winged-lion",
        "count": 1
       }
      ]
@@ -87,7 +85,7 @@
     "second": [
      [
       {
-       "id": "battle-hardened-lightkeeper",
+       "id": "secret-source-automaton-overseer-device",
        "count": 1
       }
      ]
@@ -777,59 +775,59 @@
   }
  },
  "enemies": {
-  "battle-hardened-chimeric-burrowbeast": {
-   "en": "Battle-Hardened Chimeric Burrowbeast",
-   "ru": "Химера-землерой",
+  "battle-hardened-chimeric-volkodlak-archer": {
+   "en": "Battle-Hardened Chimeric Volkodlak Archer",
+   "ru": "Ловчий воющих волков",
    "legend": true,
-   "icon": "enemies/battle-hardened-chimeric-burrowbeast.png"
+   "icon": "enemies/battle-hardened-chimeric-volkodlak-archer.png"
   },
-  "wilderness-exile": {
-   "en": "Wilderness Exile",
-   "ru": "Изгнанник пустошей",
+  "iniquitous-baptist-caller-of-flood-flame-and-fulmination": {
+   "en": "Iniquitous Baptist - Caller of Flood, Flame, and Fulmination",
+   "ru": "Чудовищный креститель",
    "legend": false,
-   "icon": "enemies/wilderness-exile.png"
+   "icon": "enemies/iniquitous-baptist-caller-of-flood-flame-and-fulmination.png"
   },
-  "battle-hardened-fireblade-shock-trooper": {
-   "en": "Battle-Hardened Fireblade Shock Trooper",
-   "ru": "Опричник: Штурмовик огненного клинка",
+  "shadowy-husk-standard-bearer": {
+   "en": "Shadowy Husk: Standard Bearer",
+   "ru": "Чёрный доспех: Знаменосец",
+   "legend": false,
+   "icon": "enemies/shadowy-husk-standard-bearer.png"
+  },
+  "shadowy-husk-defender": {
+   "en": "Shadowy Husk: Defender",
+   "ru": "Чёрный доспех: Гвардеец",
+   "legend": false,
+   "icon": "enemies/shadowy-husk-defender.png"
+  },
+  "radiant-moonfly": {
+   "en": "Radiant Moonfly",
+   "ru": "Лучезарный мотылёк-призрак",
+   "legend": false,
+   "icon": "enemies/radiant-moonfly.png"
+  },
+  "battle-hardened-elite-treasure-hoarder": {
+   "en": "Battle-Hardened Elite Treasure Hoarder",
+   "ru": "Хильетта",
    "legend": true,
-   "icon": "enemies/battle-hardened-fireblade-shock-trooper.png"
+   "icon": "enemies/battle-hardened-elite-treasure-hoarder.png"
   },
-  "immortal-construct": {
-   "en": "Immortal Construct",
-   "ru": "Бессмертный конструкт",
+  "chimeric-winged-lion": {
+   "en": "Chimeric Winged Lion",
+   "ru": "Крылатая химера-лев",
    "legend": false,
-   "icon": "enemies/immortal-construct.png"
-  },
-  "fisher-of-hidden-depths": {
-   "en": "Fisher of Hidden Depths",
-   "ru": "Рыболов скрытых глубин",
-   "legend": false,
-   "icon": "enemies/fisher-of-hidden-depths.png"
-  },
-  "lord-of-the-hidden-depths-whisperer-of-nightmares": {
-   "en": "Lord of the Hidden Depths: Whisperer of Nightmares",
-   "ru": "Повелитель скрытых глубин: Шёпот кошмаров",
-   "legend": false,
-   "icon": "enemies/lord-of-the-hidden-depths-whisperer-of-nightmares.png"
-  },
-  "battle-hardened-domovoy-sculptor": {
-   "en": "Battle-Hardened Domovoy Sculptor",
-   "ru": "Чурин",
-   "legend": true,
-   "icon": "enemies/battle-hardened-domovoy-sculptor.png"
-  },
-  "battle-hardened-lightkeeper": {
-   "en": "Battle-Hardened Lightkeeper",
-   "ru": "Сигурд",
-   "legend": true,
-   "icon": "enemies/battle-hardened-lightkeeper.png"
+   "icon": "enemies/chimeric-winged-lion.png"
   },
   "secret-source-automaton-overseer-device": {
    "en": "Secret Source Automaton: Overseer Device",
    "ru": "Автоматон таинственного источника: Надсмотрщик",
    "legend": false,
    "icon": "enemies/secret-source-automaton-overseer-device.png"
+  },
+  "battle-hardened-domovoy-sculptor": {
+   "en": "Battle-Hardened Domovoy Sculptor",
+   "ru": "Чурин",
+   "legend": true,
+   "icon": "enemies/battle-hardened-domovoy-sculptor.png"
   },
   "guardian-blade-of-drifting-snow": {
    "en": "Guardian Blade of Drifting Snow",
