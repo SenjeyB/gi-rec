@@ -22,6 +22,7 @@ build_content.py
 """
 
 import os
+import html
 import re
 import sys
 import json
@@ -231,13 +232,59 @@ RES_KEYS = {"pyro": "pyro", "hydro": "hydro", "dendro": "dendro", "electro": "el
             "anemo": "anemo", "cryo": "cryo", "geo": "geo", "phys": "phys", "physical": "phys"}
 
 
+RES_TYPES = ("pyro", "hydro", "dendro", "electro", "anemo", "cryo", "geo", "phys")
+
+# Подписи состояний на вики. Игровые термины — официальный перевод из игры
+# (режимы автоматона, куувяки, импульс потока, элементальные кольца); названия
+# вроде «Stunned» придумала вики — их переводим описательно.
+STATE_RU = {
+    "Stunned": "Оглушён",
+    "Paralyzed": "Парализован",
+    "Beginning of Fight": "В начале боя",
+    "Sweeper Mode": "Режим зачистки",
+    "Counterstrike Mode": "Режим контрудара",
+    "During Entrance Animation or Elemental Rings": "Во время появления и элементальных колец",
+    "During kuuvahki connection": "Во время связи с куувяки",
+}
+
+
+def state_ru(label: str) -> Optional[str]:
+    if label in STATE_RU:
+        return STATE_RU[label]
+    m = re.fullmatch(r"<\s*(\d+) Flow Momentum", label)
+    if m:
+        return f"Импульс потока < {m.group(1)}"
+    return None
+
+
+def _num(v: str):
+    v = clean(html.unescape(v)).replace("\u2212", "-").lower()
+    if v.startswith("immune") or v in ("∞", "inf"):
+        return "immune"
+    m = re.match(r"^(-?\d+(?:\.\d+)?)\s*%?$", v)
+    if not m:
+        return None
+    f = float(m.group(1))
+    return int(f) if f == int(f) else f
+
+
+def _compact(values: dict) -> dict:
+    """{все: X, кроме: {...}} — так состояние читается одной строкой."""
+    counts: Dict[str, int] = {}
+    for v in values.values():
+        counts[str(v)] = counts.get(str(v), 0) + 1
+    common = max(counts, key=counts.get)
+    mode = next(v for v in values.values() if str(v) == common)
+    return {"all": mode, "diff": {k: v for k, v in values.items() if str(v) != common}}
+
+
 def parse_res(text: str, legend: bool):
-    """Базовые сопротивления из {{Enemy Stats}} на странице врага: только то,
-    что отличается от обычных 10%. Условные состояния (res2, res3 — «когда
-    парализован» и т.п.) не берём: их подписи есть только по-английски.
-    У «Бывалых» статы лежат в отдельном разделе — сначала ищем там."""
+    """Сопротивления из {{Enemy Stats}} на странице врага.
+    Возвращает (базовые, состояния): базовые — только отличные от обычных 10%;
+    состояния (res2, res3… — «оглушён», «режим зачистки» и т.п.) — как меняются
+    сопротивления в них. У «Бывалых» статы лежат в отдельном разделе."""
     if not text:
-        return {}
+        return {}, []
     block = text
     if legend:
         m = re.search(r"==+\s*Battle-Hardened\s*==+([\s\S]*?)(?=\n==[^=]|\Z)", text)
@@ -245,27 +292,32 @@ def parse_res(text: str, legend: bool):
             block = m.group(1)
     params = template_params(block, "Enemy Stats")
     if not params:
-        return {}
+        return {}, []
 
-    def value(v: str):
-        v = clean(v).lower()
-        if v.startswith("immune") or v in ("∞", "inf"):
-            return "immune"
-        m = re.match(r"^(-?\d+(?:\.\d+)?)\s*%?$", v)
-        return float(m.group(1)) if m else None
+    def values(suffix: str, fallback: dict) -> dict:
+        g = _num(params.get("resglobal" + suffix, "")) if params.get("resglobal" + suffix) else None
+        out = {el: (g if g is not None else fallback[el]) for el in RES_TYPES}
+        for k, v in params.items():
+            m = re.fullmatch(r"([a-z]+)_res" + suffix, k)
+            if m and m.group(1) in RES_KEYS:
+                val = _num(v)
+                if val is not None:
+                    out[RES_KEYS[m.group(1)]] = val
+        return out
 
-    base = value(params.get("resglobal", "")) if params.get("resglobal") else None
-    out = {}
-    for el in ("pyro", "hydro", "dendro", "electro", "anemo", "cryo", "geo", "phys"):
-        out[el] = base if base is not None else 10.0
-    for k, v in params.items():
-        m = re.fullmatch(r"([a-z]+)_res", k)
-        if m and m.group(1) in RES_KEYS:
-            val = value(v)
-            if val is not None:
-                out[RES_KEYS[m.group(1)]] = val
-    return {k: (int(v) if isinstance(v, float) and v == int(v) else v)
-            for k, v in out.items() if v != 10.0}
+    base = values("", {el: 10 for el in RES_TYPES})
+    states = []
+    for n in range(2, 7):
+        label = params.get(f"res{n}")
+        if not label:
+            continue
+        en = re.sub(r"\s+", " ", clean(html.unescape(label.replace("<br>", " ").replace("<br/>", " ")))).strip()
+        en = en.replace("<nowiki><</nowiki>", "<")
+        ru = state_ru(en)
+        if ru is None:
+            warn(f"подпись состояния без перевода: {en}")
+        states.append({"label": {"en": en, "ru": ru or en}, "res": _compact(values(str(n), base))})
+    return {k: v for k, v in base.items() if v != 10}, states
 
 
 class Enemies:
@@ -359,10 +411,10 @@ class Enemies:
         # нет, вместо него сайт ставит метку «Местная легенда»
         item = {"en": full_name, "ru": ru or base, "legend": legend, "src": icon_url}
         cached = self.cache.get(eid) or {}
-        if "res" in cached:
-            item["res"] = cached["res"]
+        if "res" in cached and "resStates" in cached:
+            item["res"], item["resStates"] = cached["res"], cached["resStates"]
         else:
-            item["res"] = parse_res(self.page(full_name)[0], legend)
+            item["res"], item["resStates"] = parse_res(self.page(full_name)[0], legend)
         if "tip" in cached:
             item["tip"] = cached["tip"]
         # варианты имени для поиска подсказки в игровых данных (служебное поле)

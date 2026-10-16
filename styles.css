@@ -751,4 +751,8 @@ body.sheet-open{overflow:hidden}
 .res-chip.is-high{color:#fca5a5;border-color:rgba(248,113,113,0.35);background:rgba(248,113,113,0.08)}
 .res-chip.is-low{color:#86efac;border-color:rgba(74,222,128,0.35);background:rgba(74,222,128,0.08)}
 .res-phys{font-size:10px;font-weight:700;padding-left:3px}
-.enemy-tip{padding:2px 10px 10px}
+.enemy-more{display:flex;flex-direction:column;gap:8px;padding:2px 10px 10px}
+.res-states{display:flex;flex-direction:column;gap:5px}
+.res-state{display:flex;flex-direction:column;gap:3px}
+.res-state-label{font-size:11px;font-weight:600;color:#cbd5e1}
+.res-chip.is-base{color:#cbd5e1;border-color:var(--line);background:rgba(255,255,255,0.04)}

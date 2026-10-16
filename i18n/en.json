@@ -206,7 +206,9 @@
     "then": "then",
     "phys": "Phys.",
     "immune": "immune",
-    "resTitle": "Elemental and Physical RES"
+    "resTitle": "Elemental and Physical RES",
+    "resStates": "RES by state",
+    "all": "all"
   },
   "tier": {
     "show": "Show: ",

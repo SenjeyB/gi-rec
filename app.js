@@ -1424,8 +1424,7 @@ function enemyChip(enemies, ref, big){
   }
   const text = createEl('span','enemy-text');
   text.appendChild(createEl('span','enemy-name', isRu() ? e.ru : e.en));
-  // по-английски «Battle-Hardened» уже в названии, по-русски — отдельной меткой
-  if(e.legend && isRu()) text.appendChild(createEl('span','enemy-legend', T('builder.legend','Local Legend')));
+  if(e.legend) text.appendChild(createEl('span','enemy-legend', T('builder.legend','Local Legend')));
   chip.appendChild(text);
   if(ref.count > 1) chip.appendChild(createEl('span','enemy-count', `×${ref.count}`));
   return chip;
@@ -1441,30 +1440,55 @@ function disorderLine(items){
 
 /** Сопротивления врага, отличные от обычных 10%: выше — красным (стихию лучше
  *  не нести), ниже — зелёным (уязвим). */
+const resClass = (v)=> 'res-chip ' + (v === 'immune' || v > 10 ? 'is-high' : v < 10 ? 'is-low' : 'is-base');
+const resText = (v)=> v === 'immune' ? T('builder.immune','immune') : `${v}%`;
+
+function resChip(el, v){
+  const chip = createEl('span', resClass(v));
+  if(el === 'phys') chip.appendChild(createEl('span','res-phys', T('builder.phys','Phys.')));
+  else chip.appendChild(elementIcon(el));
+  chip.appendChild(createEl('span', null, resText(v)));
+  return chip;
+}
+
 function resChips(res){
   const entries = Object.entries(res || {});
   if(!entries.length) return null;
   const wrap = createEl('div','enemy-res');
   wrap.title = T('builder.resTitle','RES');
-  for(const [el, v] of entries){
-    const high = v === 'immune' || v > 10;
-    const chip = createEl('span','res-chip ' + (high ? 'is-high' : 'is-low'));
-    if(el === 'phys') chip.appendChild(createEl('span','res-phys', T('builder.phys','Phys.')));
-    else chip.appendChild(elementIcon(el));
-    chip.appendChild(createEl('span', null, v === 'immune' ? T('builder.immune','immune') : `${v}%`));
-    wrap.appendChild(chip);
-  }
+  for(const [el, v] of entries) wrap.appendChild(resChip(el, v));
   return wrap;
 }
 
-/** Карточка врага в зале: иконка, имя, количество, сопротивления. Если у врага
- *  есть официальная подсказка из игры — карточка раскрывает её по клику. */
+/** Как меняются сопротивления в особых состояниях: «все X» и исключения. */
+function resStatesBlock(states){
+  if(!states || !states.length) return null;
+  const box = createEl('div','res-states');
+  box.appendChild(createEl('div','ctx-disorder-label', T('builder.resStates','RES by state')));
+  for(const s of states){
+    const row = createEl('div','res-state');
+    row.appendChild(createEl('span','res-state-label', isRu() ? s.label.ru : s.label.en));
+    const chips = createEl('span','enemy-res');
+    const all = createEl('span', resClass(s.res.all));
+    all.appendChild(createEl('span','res-phys', T('builder.all','all')));
+    all.appendChild(createEl('span', null, resText(s.res.all)));
+    chips.appendChild(all);
+    for(const [el, v] of Object.entries(s.res.diff || {})) chips.appendChild(resChip(el, v));
+    row.appendChild(chips);
+    box.appendChild(row);
+  }
+  return box;
+}
+
+/** Карточка врага в зале: иконка, имя, количество, сопротивления. По клику
+ *  раскрываются сопротивления по состояниям и официальная подсказка из игры. */
 function enemyTile(enemies, ref){
   const e = enemies[ref.id] || { en: ref.id, ru: ref.id };
   const tipText = e.tip ? (isRu() ? e.tip.ru : e.tip.en) : '';
+  const expandable = !!(tipText || (e.resStates && e.resStates.length));
   const wrap = createEl('div','enemy-item');
-  const tile = createEl(tipText ? 'button' : 'div', 'enemy-tile' + (tipText ? ' has-tip' : ''));
-  if(tipText){ tile.type = 'button'; tile.setAttribute('aria-expanded','false'); }
+  const tile = createEl(expandable ? 'button' : 'div', 'enemy-tile' + (expandable ? ' has-tip' : ''));
+  if(expandable){ tile.type = 'button'; tile.setAttribute('aria-expanded','false'); }
   const pic = createEl('div','enemy-pic');
   if(e.icon){
     const img = new Image();
@@ -1477,18 +1501,21 @@ function enemyTile(enemies, ref){
   tile.appendChild(pic);
   const body = createEl('div','enemy-tile-body');
   body.appendChild(createEl('div','enemy-tile-name', isRu() ? e.ru : e.en));
-  if(e.legend && isRu()) body.appendChild(createEl('div','enemy-legend', T('builder.legend','Local Legend')));
+  if(e.legend) body.appendChild(createEl('div','enemy-legend', T('builder.legend','Local Legend')));
   const res = resChips(e.res);
   if(res) body.appendChild(res);
   tile.appendChild(body);
-  if(tipText) tile.appendChild(createEl('span','enemy-tile-more','▾'));
+  if(expandable) tile.appendChild(createEl('span','enemy-tile-more','▾'));
   wrap.appendChild(tile);
-  if(tipText){
-    let tip = null;
+  if(expandable){
+    let more = null;
     tile.addEventListener('click', ()=>{
-      if(tip){ tip.remove(); tip = null; tile.setAttribute('aria-expanded','false'); wrap.classList.remove('is-open'); return; }
-      tip = gameText(tipText, 'game-text enemy-tip');
-      wrap.appendChild(tip);
+      if(more){ more.remove(); more = null; tile.setAttribute('aria-expanded','false'); wrap.classList.remove('is-open'); return; }
+      more = createEl('div','enemy-more');
+      const states = resStatesBlock(e.resStates);
+      if(states) more.appendChild(states);
+      if(tipText) more.appendChild(gameText(tipText, 'game-text enemy-tip'));
+      wrap.appendChild(more);
       tile.setAttribute('aria-expanded','true');
       wrap.classList.add('is-open');
     });
