@@ -202,7 +202,11 @@
     "problemWeapons": "Not enough copies: {list}",
     "inOtherTeam": "In another team",
     "timeLimit": "{n} s",
-    "rules": "Difficulty rules"
+    "rules": "Difficulty rules",
+    "then": "then",
+    "phys": "Phys.",
+    "immune": "immune",
+    "resTitle": "Elemental and Physical RES"
   },
   "tier": {
     "show": "Show: ",

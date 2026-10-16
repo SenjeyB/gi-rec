@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-16T09:56:16Z",
+ "generated": "2026-10-16T10:37:51Z",
  "abyss": {
   "start": "2026-10-16",
   "end": "2026-11-15",
@@ -10,13 +10,15 @@
    "first": [
     {
      "en": "Characters' Stellar Glimmer reaction DMG increased by 75%.",
-     "ru": "Characters' Stellar Glimmer reaction DMG increased by 75%."
+     "ru": "Урон от реакции Звёздного блеска персонажа увеличен на 75%.",
+     "src": "game"
     }
    ],
    "second": [
     {
      "en": "All party members gain a 75% Cryo DMG Bonus.",
-     "ru": "Бонус Крио урона +75% всему отряду"
+     "ru": "Все члены отряда получают 75% бонус Крио урона.",
+     "src": "game"
     }
    ]
   },
@@ -779,60 +781,123 @@
    "en": "Battle-Hardened Chimeric Volkodlak Archer",
    "ru": "Ловчий воющих волков",
    "legend": true,
+   "res": {
+    "pyro": -20,
+    "dendro": 40,
+    "cryo": 40,
+    "geo": 40
+   },
+   "tip": null,
    "icon": "enemies/battle-hardened-chimeric-volkodlak-archer.png"
   },
   "iniquitous-baptist-caller-of-flood-flame-and-fulmination": {
    "en": "Iniquitous Baptist - Caller of Flood, Flame, and Fulmination",
    "ru": "Чудовищный креститель",
    "legend": false,
+   "res": {},
+   "tip": {
+    "en": "A creature of the Abyss Order that can manipulate multiple elements at once and use Wards of the corresponding elements to defend against damage. In battle, it will create Elemental Rings, through which it will channel a powerful attack. Use Reactions to destroy all the Rings to prevent the oncoming catastrophe.",
+    "ru": "Существо Бездны, которое может управлять несколькими стихиями одновременно и защищается от урона барьерами соответствующих элементов. В бою оно создаёт элементальные кольца, через которые направляет мощные атаки. Используйте элементальные реакции, чтобы уничтожить все кольца и предотвратить катастрофу."
+   },
    "icon": "enemies/iniquitous-baptist-caller-of-flood-flame-and-fulmination.png"
   },
   "shadowy-husk-standard-bearer": {
    "en": "Shadowy Husk: Standard Bearer",
    "ru": "Чёрный доспех: Знаменосец",
    "legend": false,
+   "res": {
+    "pyro": 30,
+    "phys": 30
+   },
+   "tip": {
+    "en": "An enigmatic, pitch-black standard-bearer. Its attacks will create Wards for itself, nearby Shadowy Husks, and Black Serpent Knights at the cost of its HP after they {hl}hit characters defended by Shields{/hl}.",
+    "ru": "Таинственный знаменосец, чёрный как смоль. {hl}Поразив персонажа со щитом{/hl}, он ценой собственного HP создаёт барьеры для себя, Чёрных доспехов и Рыцарей Чёрного Змея поблизости."
+   },
    "icon": "enemies/shadowy-husk-standard-bearer.png"
   },
   "shadowy-husk-defender": {
    "en": "Shadowy Husk: Defender",
    "ru": "Чёрный доспех: Гвардеец",
    "legend": false,
+   "res": {
+    "cryo": 30,
+    "phys": 30
+   },
+   "tip": {
+    "en": "An enigmatic, pitch-black archer. It will switch weapons for a certain amount of time, deploying a shield that blocks DMG if its attacks {hl}hit characters defended by shields{/hl}. It will gain an ATK increase during this period at the cost of its HP. The ATK increase that Shadowy Husk: Defender gains in this way can be stacked multiple times.",
+    "ru": "Таинственный лучник, чёрный как смоль. {hl}Поразив персонажа со щитом{/hl}, он на некоторое время сменяет оружие и поднимает поглощающий урон щит. Также в это время ценой собственного HP он увеличивает силу своих атак. Эффект усиления атак, который таким образом получает Чёрный доспех: Гвардеец, может многократно складываться."
+   },
    "icon": "enemies/shadowy-husk-defender.png"
   },
   "radiant-moonfly": {
    "en": "Radiant Moonfly",
    "ru": "Лучезарный мотылёк-призрак",
    "legend": false,
+   "res": {
+    "pyro": 70,
+    "dendro": 70
+   },
+   "tip": {
+    "en": "The strongest species, even among radiant beasts, whose \"Radiant Cocoon\" displays still more obvious effects. Quickly {hl}heal your HP to its maximum{/hl} to escape from a Radiant Cocoon. Radiant beasts possess many mysterious characteristics — rumors even circle that they can change their Elemental Type under the right conditions...",
+    "ru": "Сильнейший вид лучезарных зверей. Эффект его сияющего кокона выражен намного ярче, чем у других лучезарных зверей. Своевременно {hl}восстановите ваше HP до максимума{/hl}, чтобы вырваться из сияющего кокона. У лучезарных зверей множество загадочных способностей. Говорят даже, что они при определённых обстоятельствах могут менять свой элементальный тип..."
+   },
    "icon": "enemies/radiant-moonfly.png"
   },
   "battle-hardened-elite-treasure-hoarder": {
    "en": "Battle-Hardened Elite Treasure Hoarder",
    "ru": "Хильетта",
    "legend": true,
+   "res": {},
+   "tip": null,
    "icon": "enemies/battle-hardened-elite-treasure-hoarder.png"
   },
   "chimeric-winged-lion": {
    "en": "Chimeric Winged Lion",
    "ru": "Крылатая химера-лев",
    "legend": false,
+   "res": {
+    "electro": 50,
+    "anemo": 50
+   },
+   "tip": {
+    "en": "The Chimeric Winged Lion will oscillate between two enhanced states: \"Thundercall\" and \"Galeforce.\"\nWhen it is in the Thundercall state, it will become weakened when its Elemental Ward is broken. Additionally, any attempts by it to spread its thunder blades can be disrupted by the Stellar Glimmer reaction.\nWhen it is in the Galeforce state, it will attempt to absorb any Anemo Orbs that are on the field to charge its attack. At this time, destroying the orbs or using the Stellar Glimmer reaction can stop its charging and weaken it.",
+    "ru": "Крылатая химера-лев переключается между двумя усиленными состояниями: Глас грома и Повелитель ветра.\nВ состоянии Глас грома разрушение его Электро барьера ослабляет противника. Кроме того, его попытку произвести расходящиеся атаки громовым мечом можно прервать реакцией Звёздного блеска...\nВ состоянии Повелитель ветра он пытается поглотить Анемо сферы на поле боя, чтобы зарядить свою атаку. В это время уничтожайте сферы или используйте реакцию Звёздного блеска, чтобы остановить зарядку и ослабить его."
+   },
    "icon": "enemies/chimeric-winged-lion.png"
   },
   "secret-source-automaton-overseer-device": {
    "en": "Secret Source Automaton: Overseer Device",
    "ru": "Автоматон таинственного источника: Надсмотрщик",
    "legend": false,
+   "res": {},
+   "tip": {
+    "en": "A civilization whose magnificence once marked distant eons built this overseer device to control multiple Secret Source machines. After it enters Sweeper Mode, it will start attacking while generating Flow Momentum. The higher its Flow Momentum, the greater the DMG it will inflict. During this time, you might be able to obstruct the buildup of Flow Momentum by {hl}using consecutive Cryo attacks{/hl}...\nIt is said that after characters enter and maintain the Nightsoul's Blessing state for some time when fighting against it, the Secret Source Automaton: Overseer Device will enter a special \"Counterstrike Mode\" and change its offensive strategy...",
+    "ru": "Устройство, созданное величественной древней цивилизацией для управления множеством автоматонов таинственного источника. После перехода в режим зачистки он начинает атаковать, генерируя импульс потока. Чем выше импульс потока, тем больше урона он наносит. Накопление импульса потока можно остановить {hl}постоянными атаками Крио{/hl}...\nГоворят, если персонажи в бою с ним перейдут в состояние Благословения Ночного духа и будут некоторое время поддерживать его, то Надсмотрщик переключится в особый режим контрудара и изменит режим атаки..."
+   },
    "icon": "enemies/secret-source-automaton-overseer-device.png"
   },
   "battle-hardened-domovoy-sculptor": {
    "en": "Battle-Hardened Domovoy Sculptor",
    "ru": "Чурин",
    "legend": true,
+   "res": {
+    "anemo": 30,
+    "cryo": 30
+   },
+   "tip": null,
    "icon": "enemies/battle-hardened-domovoy-sculptor.png"
   },
   "guardian-blade-of-drifting-snow": {
    "en": "Guardian Blade of Drifting Snow",
    "ru": "Разящая вьюга",
    "legend": false,
+   "res": {
+    "cryo": 50
+   },
+   "tip": {
+    "en": "When the Guardian Blade of Drifting Snow's HP falls below a certain level, it will ensconce itself in an ice coffin and periodically deal AoE Cryo DMG to nearby opponents.\nIce coffins can become fragile from {hl}Stellar Glimmer reactions{/hl}. When this happens, they are especially vulnerable to Electro and Anemo attacks.\nIf the ice coffin hasn't taken damage, she will recover some HP and forge an ice blade to counterattack. However, if the ice coffin has taken damage, she becomes weakened for some time...",
+    "ru": "Когда HP Разящей вьюги опускается ниже определённого значения, она заключает себя в ледяной гроб и периодически наносит Крио урон по площади врагам поблизости.\nЛедяной гроб можно ослабить {hl}реакциями Звёздного блеска{/hl}, после чего его будет легче разрушить Электро или Анемо атаками.\nЕсли ледяной гроб остался цел, она восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб удалось разбить, Разящая вьюга на некоторое время ослабнет."
+   },
    "icon": "enemies/guardian-blade-of-drifting-snow.png"
   }
  }

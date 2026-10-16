@@ -1439,27 +1439,86 @@ function disorderLine(items){
   return line;
 }
 
-/** Враги половины 12 этажа по залам: волны через стрелку. */
+/** Сопротивления врага, отличные от обычных 10%: выше — красным (стихию лучше
+ *  не нести), ниже — зелёным (уязвим). */
+function resChips(res){
+  const entries = Object.entries(res || {});
+  if(!entries.length) return null;
+  const wrap = createEl('div','enemy-res');
+  wrap.title = T('builder.resTitle','RES');
+  for(const [el, v] of entries){
+    const high = v === 'immune' || v > 10;
+    const chip = createEl('span','res-chip ' + (high ? 'is-high' : 'is-low'));
+    if(el === 'phys') chip.appendChild(createEl('span','res-phys', T('builder.phys','Phys.')));
+    else chip.appendChild(elementIcon(el));
+    chip.appendChild(createEl('span', null, v === 'immune' ? T('builder.immune','immune') : `${v}%`));
+    wrap.appendChild(chip);
+  }
+  return wrap;
+}
+
+/** Карточка врага в зале: иконка, имя, количество, сопротивления. Если у врага
+ *  есть официальная подсказка из игры — карточка раскрывает её по клику. */
+function enemyTile(enemies, ref){
+  const e = enemies[ref.id] || { en: ref.id, ru: ref.id };
+  const tipText = e.tip ? (isRu() ? e.tip.ru : e.tip.en) : '';
+  const wrap = createEl('div','enemy-item');
+  const tile = createEl(tipText ? 'button' : 'div', 'enemy-tile' + (tipText ? ' has-tip' : ''));
+  if(tipText){ tile.type = 'button'; tile.setAttribute('aria-expanded','false'); }
+  const pic = createEl('div','enemy-pic');
+  if(e.icon){
+    const img = new Image();
+    img.loading = 'lazy'; img.decoding = 'async';
+    img.src = e.icon; img.alt = '';
+    img.onerror = ()=>{ img.style.visibility = 'hidden'; };
+    pic.appendChild(img);
+  }
+  if(ref.count > 1) pic.appendChild(createEl('span','enemy-tile-count', `×${ref.count}`));
+  tile.appendChild(pic);
+  const body = createEl('div','enemy-tile-body');
+  body.appendChild(createEl('div','enemy-tile-name', isRu() ? e.ru : e.en));
+  if(e.legend && isRu()) body.appendChild(createEl('div','enemy-legend', T('builder.legend','Local Legend')));
+  const res = resChips(e.res);
+  if(res) body.appendChild(res);
+  tile.appendChild(body);
+  if(tipText) tile.appendChild(createEl('span','enemy-tile-more','▾'));
+  wrap.appendChild(tile);
+  if(tipText){
+    let tip = null;
+    tile.addEventListener('click', ()=>{
+      if(tip){ tip.remove(); tip = null; tile.setAttribute('aria-expanded','false'); wrap.classList.remove('is-open'); return; }
+      tip = gameText(tipText, 'game-text enemy-tip');
+      wrap.appendChild(tip);
+      tile.setAttribute('aria-expanded','true');
+      wrap.classList.add('is-open');
+    });
+  }
+  return wrap;
+}
+
+/** Враги половины 12 этажа: залы колонками, внутри — волны по порядку. */
 function abyssHalf(info, enemies, half){
   if(!info || !info.chambers) return null;
   const key = half === 0 ? 'first' : 'second';
   const box = createEl('div','slot-context');
+  const grid = createEl('div','abyss-grid');
   for(const ch of info.chambers){
     const waves = ch[key] || [];
     if(!waves.length) continue;
-    const row = createEl('div','ctx-chamber');
-    const label = createEl('div','ctx-label');
-    label.appendChild(createEl('span','ctx-room', `${info.floor || 12}-${ch.n}`));
-    if(ch.level) label.appendChild(createEl('span','ctx-level', T('builder.level','Lv. {n}',{n: ch.level})));
-    row.appendChild(label);
-    const list = createEl('div','ctx-enemies');
+    const room = createEl('section','abyss-room');
+    const head = createEl('div','abyss-room-head');
+    head.appendChild(createEl('span','abyss-room-name', `${info.floor || 12}-${ch.n}`));
+    if(ch.level) head.appendChild(createEl('span','abyss-room-level', T('builder.level','Lv. {n}',{n: ch.level})));
+    room.appendChild(head);
     waves.forEach((wave, wi)=>{
-      if(wi > 0) list.appendChild(createEl('span','ctx-wave','→'));
-      for(const ref of wave) list.appendChild(enemyChip(enemies, ref, false));
+      if(wi > 0) room.appendChild(createEl('div','abyss-then', T('builder.then','then')));
+      const w = createEl('div','abyss-wave');
+      for(const ref of wave) w.appendChild(enemyTile(enemies, ref));
+      room.appendChild(w);
     });
-    row.appendChild(list);
-    box.appendChild(row);
+    grid.appendChild(room);
   }
+  box.appendChild(grid);
   const dis = disorderLine([...((info.disorder || {}).all || []), ...((info.disorder || {})[key] || [])]);
   if(dis) box.appendChild(dis);
   return box;

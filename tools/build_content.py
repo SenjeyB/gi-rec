@@ -227,13 +227,66 @@ def disorder_ru(text: str) -> Optional[str]:
 
 # ------------------------------------------------------------- враги
 
+RES_KEYS = {"pyro": "pyro", "hydro": "hydro", "dendro": "dendro", "electro": "electro",
+            "anemo": "anemo", "cryo": "cryo", "geo": "geo", "phys": "phys", "physical": "phys"}
+
+
+def parse_res(text: str, legend: bool):
+    """Базовые сопротивления из {{Enemy Stats}} на странице врага: только то,
+    что отличается от обычных 10%. Условные состояния (res2, res3 — «когда
+    парализован» и т.п.) не берём: их подписи есть только по-английски.
+    У «Бывалых» статы лежат в отдельном разделе — сначала ищем там."""
+    if not text:
+        return {}
+    block = text
+    if legend:
+        m = re.search(r"==+\s*Battle-Hardened\s*==+([\s\S]*?)(?=\n==[^=]|\Z)", text)
+        if m and "{{Enemy Stats" in m.group(1):
+            block = m.group(1)
+    params = template_params(block, "Enemy Stats")
+    if not params:
+        return {}
+
+    def value(v: str):
+        v = clean(v).lower()
+        if v.startswith("immune") or v in ("∞", "inf"):
+            return "immune"
+        m = re.match(r"^(-?\d+(?:\.\d+)?)\s*%?$", v)
+        return float(m.group(1)) if m else None
+
+    base = value(params.get("resglobal", "")) if params.get("resglobal") else None
+    out = {}
+    for el in ("pyro", "hydro", "dendro", "electro", "anemo", "cryo", "geo", "phys"):
+        out[el] = base if base is not None else 10.0
+    for k, v in params.items():
+        m = re.fullmatch(r"([a-z]+)_res", k)
+        if m and m.group(1) in RES_KEYS:
+            val = value(v)
+            if val is not None:
+                out[RES_KEYS[m.group(1)]] = val
+    return {k: (int(v) if isinstance(v, float) and v == int(v) else v)
+            for k, v in out.items() if v != 10.0}
+
+
 class Enemies:
     """Реестр врагов: id -> названия и иконка. Русские названия — из yatta
     (игровые данные), иначе из Other Languages на вики."""
 
-    def __init__(self):
+    def __init__(self, cache: Optional[Dict[str, dict]] = None):
         self.items: Dict[str, dict] = {}
         self._yatta_ru: Optional[Dict[str, str]] = None
+        # враги из прошлого запуска: сопротивления и подсказки не пересчитываем
+        self.cache = cache or {}
+        self._pages: Dict[str, Tuple[str, str]] = {}
+
+    def page(self, name: str) -> Tuple[str, str]:
+        """Страница вики (с редиректами), по одной загрузке на запуск."""
+        if name not in self._pages:
+            try:
+                self._pages[name] = wikitext(name)
+            except Exception:  # noqa: BLE001
+                self._pages[name] = ("", name)
+        return self._pages[name]
 
     def yatta_ru(self) -> Dict[str, str]:
         if self._yatta_ru is None:
@@ -255,9 +308,8 @@ class Enemies:
             return y[full]
         if base in y:
             return y[base]
-        try:
-            text, title = wikitext(full)
-        except Exception:
+        text, title = self.page(full)
+        if not text:
             return None
         plain = re.sub(r"\s*\(Local Legend\)$", "", title)
         if title in y or plain in y:
@@ -305,7 +357,19 @@ class Enemies:
             warn(f"нет русского названия для «{full_name}» — останется английское")
         # en — точное игровое название (с Battle-Hardened); в русском префикса
         # нет, вместо него сайт ставит метку «Местная легенда»
-        self.items[eid] = {"en": full_name, "ru": ru or base, "legend": legend, "src": icon_url}
+        item = {"en": full_name, "ru": ru or base, "legend": legend, "src": icon_url}
+        cached = self.cache.get(eid) or {}
+        if "res" in cached:
+            item["res"] = cached["res"]
+        else:
+            item["res"] = parse_res(self.page(full_name)[0], legend)
+        if "tip" in cached:
+            item["tip"] = cached["tip"]
+        # варианты имени для поиска подсказки в игровых данных (служебное поле)
+        title = self.page(full_name)[1] if "tip" not in cached else full_name
+        item["_names"] = list(dict.fromkeys([
+            full_name, base, title, re.sub(r"\s*\(Local Legend\)$", "", title)]))
+        self.items[eid] = item
         if not icon_url:
             warn(f"нет иконки для «{full_name}»")
         return {"id": eid}
@@ -313,6 +377,7 @@ class Enemies:
     def download_icons(self, force: bool) -> None:
         os.makedirs(ICONS, exist_ok=True)
         for eid, e in self.items.items():
+            e.pop("_names", None)
             src = e.pop("src", None)
             path = os.path.join(ICONS, eid + ".png")
             e["icon"] = f"enemies/{eid}.png" if (src or os.path.exists(path)) else None
@@ -374,10 +439,9 @@ def build_abyss(today: datetime.date, enemies: Enemies) -> Optional[dict]:
             half = "second"
         en = clean(re.sub(r"^\{\{Color\|[^}]*\}\}\s*:?\s*", "", line))
         en = re.sub(r"^(First|Second) Half\s*:\s*", "", en)
-        ru = disorder_ru(en)
-        if ru is None:
-            warn(f"аномалия без перевода: {en}")
-        disorder[half].append({"en": en, "ru": ru or en})
+        # русский текст потом берётся из игры (plan_disorder); шаблонный
+        # перевод — запасной вариант, если игровой строки не нашлось
+        disorder[half].append({"en": en, "ru": disorder_ru(en) or en})
 
     params = template_params(body, "Domain Enemies")
     chambers = []
@@ -464,8 +528,9 @@ def game_text(raw: str, sprites_ok: List[bool]) -> str:
         return "{el:" + el + "}"
     t = raw.replace("\\n", "\n")
     t = re.sub(r"\{SPRITE_PRESET#(\d+)\}", sprite, t)
-    # золотой и красный — выделение в игре; прочие цвета (серый разделитель) — обычный текст
-    t = re.sub(r"<color=#(?:FFD780|FF5E41)\w*>(.*?)</color>", r"{hl}\1{/hl}", t, flags=re.I | re.S)
+    # золотой, жёлтый (подсказки) и красный — выделение в игре; прочие цвета
+    # (серый разделитель) — обычный текст
+    t = re.sub(r"<color=#(?:FFD780|FFE14B|FF5E41)\w*>(.*?)</color>", r"{hl}\1{/hl}", t, flags=re.I | re.S)
     t = re.sub(r"</?[a-zA-Z][^>]*>", "", t)
     return re.sub(r"[ \t]+", " ", t).strip()
 
@@ -493,7 +558,27 @@ class TextMaps:
         return {"en": en, "ru": ru or en}
 
 
-def build_onslaught_details(onslaught: dict, enemies: Enemies, old: Optional[dict]) -> Optional[dict]:
+class GameText:
+    """Общий загрузчик игровых текстов: всё нужное регистрируется заранее,
+    а ~190 МБ TextMap качаются один раз — при первом обращении."""
+
+    def __init__(self):
+        self.want = set()
+        self.tm: Optional[TextMaps] = None
+
+    def need(self, hashes) -> None:
+        self.want.update(str(h) for h in hashes if h)
+
+    def get(self, h) -> Optional[dict]:
+        if self.tm is None:
+            print(f"  Скачиваю тексты игры ({len(self.want)} строк)...")
+            self.tm = TextMaps(self.want)
+            self.tm.load()
+        return self.tm.get(h)
+
+
+def build_onslaught_details(onslaught: dict, enemies: Enemies, old: Optional[dict],
+                            gt: "GameText") -> Optional[dict]:
     """Шесть уровней сложности: правила уровня, уровень врагов, лимит времени
     и для каждого босса — форма, преимущества и механики. Поля в выгрузке
     обфусцированы и переименовываются от версии к версии, поэтому ищем их
@@ -543,9 +628,8 @@ def build_onslaught_details(onslaught: dict, enemies: Enemies, old: Optional[dic
             hashes.add(cfg.get("levelNameTextMapHash"))
             for arr in int_lists(cfg):
                 hashes.update(arr)
-    print(f"  Натиск: скачиваю тексты игры ({len(hashes)} строк)...")
-    tm = TextMaps(hashes)
-    tm.load()
+    gt.need(hashes)
+    tm = gt
 
     def classify(cfg):
         """Массивы хэшей в конфиге поля боя: 3 — преимущества, 5 — названия
@@ -612,6 +696,92 @@ def build_onslaught_details(onslaught: dict, enemies: Enemies, old: Optional[dic
     return {"key": key, "difficulties": out}
 
 
+# ------------------------------------- подсказки о врагах и аномалии из игры
+
+def plan_tips(enemies: Enemies, gt: GameText):
+    """Официальные подсказки о врагах из игрового архива (CODEX_ENEMY): там
+    механики врага и чем их ломать — стихии, барьеры, реакции. Ищем по
+    английскому названию; уже найденные (или точно отсутствующие) берутся
+    из прошлого запуска."""
+    todo = [e for e in enemies.items.values() if "tip" not in e]
+    if not todo:
+        return None
+    tips = [t for t in agd_json("ExcelBinOutput/PushTipsConfigData.json") if t.get("codexType") == "CODEX_ENEMY"]
+    tut = {x["id"]: x for x in agd_json("ExcelBinOutput/TutorialExcelConfigData.json")}
+    det = {x["id"]: x for x in agd_json("ExcelBinOutput/TutorialDetailExcelConfigData.json")}
+
+    entries = []
+    for t in tips:
+        tu = tut.get(t.get("tutorialId")) or {}
+        ids = tu.get("detailIdList") or next(
+            (v for v in tu.values() if isinstance(v, list) and v and all(x in det for x in v)), [])
+        descs = []
+        for i in ids:
+            d = det.get(i) or {}
+            h = d.get("descriptTextMapHash") or next(
+                (v for k, v in d.items() if k.endswith("TextMapHash") and isinstance(v, int)), None)
+            if h:
+                descs.append(h)
+        entries.append((t.get("titleTextMapHash"), descs))
+        gt.need([t.get("titleTextMapHash")] + descs)
+
+    def finish():
+        by_title = {}
+        for th, descs in entries:
+            title = gt.get(th)
+            if title and descs:
+                by_title.setdefault(title["en"].strip(), descs)
+        for e in todo:
+            descs = next((by_title[n] for n in e.get("_names", []) if n in by_title), None)
+            texts = [x for x in (gt.get(d) for d in descs or []) if x]
+            if not texts:
+                e["tip"] = None
+                continue
+            ok = [True]
+            e["tip"] = {"en": game_text("\n".join(x["en"] for x in texts), ok),
+                        "ru": game_text("\n".join(x["ru"] for x in texts), ok)}
+    return finish
+
+
+def plan_disorder(abyss: Optional[dict], old_abyss: Optional[dict], gt: GameText):
+    """Русский текст аномалий — официальный из игры: строку ищем по точному
+    английскому тексту с вики. Тот же цикл — переводы прошлого запуска."""
+    if not abyss:
+        return None
+    lines = [d for half in abyss["disorder"].values() for d in half]
+    if old_abyss and old_abyss.get("start") == abyss.get("start"):
+        prev = {d["en"]: d for half in (old_abyss.get("disorder") or {}).values() for d in half}
+        for d in lines:
+            o = prev.get(d["en"])
+            if o and o.get("src"):
+                d["ru"], d["src"] = o["ru"], o["src"]
+    todo = [d for d in lines if not d.get("src")]
+    if not todo:
+        return None
+    ents = [e for e in agd_json("ExcelBinOutput/DungeonLevelEntityConfigData.json") if e.get("descTextMapHash")]
+    gt.need(e["descTextMapHash"] for e in ents)
+
+    def norm(s: str) -> str:
+        return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", s)).strip().rstrip(".").lower()
+
+    def finish():
+        table = {}
+        for e in ents:
+            t = gt.get(e["descTextMapHash"])
+            if t:
+                table.setdefault(norm(t["en"]), t["ru"])
+        for d in todo:
+            ru = table.get(norm(d["en"]))
+            if ru:
+                d["ru"] = re.sub(r"\{/?hl\}", "", game_text(ru, [True]))
+                d["src"] = "game"
+            else:
+                d["src"] = "pattern"
+                if disorder_ru(d["en"]) is None:
+                    warn(f"аномалия без перевода: {d['en']}")
+    return finish
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", help="считать сегодняшней эту дату (YYYY-MM-DD)")
@@ -620,11 +790,6 @@ def main() -> int:
     today = (datetime.date.fromisoformat(args.date) if args.date
              else datetime.datetime.now(datetime.timezone.utc).date())
 
-    enemies = Enemies()
-    abyss = build_abyss(today, enemies)
-    onslaught = build_onslaught(today, enemies)
-    enemies.download_icons(args.force_icons)
-
     old = None
     if os.path.exists(OUT):
         try:
@@ -632,6 +797,25 @@ def main() -> int:
                 old = json.load(f)
         except Exception:  # noqa: BLE001
             old = None
+
+    enemies = Enemies(cache=(old or {}).get("enemies"))
+    abyss = build_abyss(today, enemies)
+    onslaught = build_onslaught(today, enemies)
+
+    # Игровые тексты (подсказки о врагах, аномалии, уровни Натиска): каждый
+    # этап регистрирует нужные строки, а TextMap качаются один раз и только
+    # если хоть что-то новое. Сбой этапа не ломает остальное — он повторится
+    # при следующем запуске.
+    gt = GameText()
+    finishers = []
+    for name, plan in (("аномалии", lambda: plan_disorder(abyss, (old or {}).get("abyss"), gt)),
+                       ("подсказки", lambda: plan_tips(enemies, gt))):
+        try:
+            f = plan()
+            if f:
+                finishers.append((name, f))
+        except Exception as e:  # noqa: BLE001
+            warn(f"{name}: не удалось подготовить: {e}")
 
     # Если раздел не разобрался (вики недоступна, страница нового цикла ещё
     # пустая), оставляем прежний — лучше старый цикл, чем пустая вкладка.
@@ -648,12 +832,19 @@ def main() -> int:
     if onslaught is not None:
         old_details = old_ons.get("details") if old_ons.get("start") == onslaught.get("start") else None
         try:
-            details = build_onslaught_details(onslaught, enemies, old_details)
+            details = build_onslaught_details(onslaught, enemies, old_details, gt)
         except Exception as e:  # noqa: BLE001
             warn(f"Натиск: не удалось собрать уровни сложности: {e}")
             details = old_details
         if details:
             onslaught["details"] = details
+    for name, f in finishers:
+        try:
+            f()
+        except Exception as e:  # noqa: BLE001
+            warn(f"{name}: не удалось получить тексты игры: {e}")
+    enemies.download_icons(args.force_icons)
+    items.update({k: v for k, v in enemies.items.items()})
 
     data = {
         "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
