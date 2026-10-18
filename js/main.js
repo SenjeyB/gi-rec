@@ -4,6 +4,7 @@
 
 import * as i18n from "./i18n.js";
 import * as store from "./store.js";
+import * as draft from "./draft.js";
 import * as db from "./db.js";
 import * as labels from "./labels.js";
 import { mount as mountInventory } from "./inventory.js";
@@ -17,7 +18,6 @@ const SETTINGS_KEY = "girec.filters";
 let names = {};
 let refs = null;
 let app = null;
-let syncing = false;
 
 const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine" };
 const settings = { ...DEFAULTS };
@@ -53,9 +53,10 @@ function saveSettings() {
   try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* не критично */ }
 }
 
+/** Персонажи и созвездия из быстрых настроек (черновика над инвентарём). */
 function ownedCons() {
   const cons = {};
-  for (const k of store.ownedCharacters()) cons[k] = store.consOf(k);
+  for (const k of draft.characters()) cons[k] = draft.consOf(k);
   return cons;
 }
 
@@ -79,7 +80,9 @@ function strictTeams(weapons) {
   return db.query({
     cons: ownedCons(),
     weapons: weapons || store.weaponCopies(),
-    strictCons: true,
+    // поиск для сборщика всегда «С учётом моих» + «Только моё», что бы ни
+    // стояло в общих настройках
+    consMode: "mine",
     fiveStar: "mine",
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
@@ -215,34 +218,19 @@ function wireInventoryView() {
 // --------------------------------------------------- синхронизация с app.js
 
 function bridge() {
-  // инвентарь поменялся здесь -> app.js перечитывает выбор, отряды пересобираются
-  store.onChange(() => {
-    if (syncing) return;
-    syncing = true;
-    try {
-      window.dispatchEvent(new CustomEvent("girec:inventory-changed"));
-      refresh();
-    } finally { syncing = false; }
-  });
-
-  // выбор поменялся в сайдбаре app.js -> подтягиваем в инвентарь, созвездия не теряем
-  window.addEventListener("girec:owned-changed", syncFromLegacy);
+  // быстрые настройки или сам инвентарь поменялись -> отряды пересобираются
+  // (черновик слушает инвентарь и сообщает и о его изменениях)
+  draft.onChange(() => refresh());
 }
 
-function syncFromLegacy() {
-  if (syncing) return;
-  syncing = true;
+/** Первый визит: отмечаем бесплатных персонажей, чтобы рекомендации не были пустыми. */
+function seedDefaults() {
   try {
-    let list = [];
-    try { list = JSON.parse(localStorage.getItem("ownedSelection") || "[]"); } catch { list = []; }
-    // app.js с 2.2 кладёт сюда ключи; на всякий случай принимаем и старые имена
-    const keys = [];
-    for (const item of Array.isArray(list) ? list : []) {
-      keys.push(store.keyOfDisplay(item) || item);
-    }
-    store.setCharacterSet(keys);
-    if (app) app.refreshTeams(currentTeams(), strictTeams(), baseTeams());
-  } finally { syncing = false; }
+    if (localStorage.getItem("girec.seeded")) return;
+    localStorage.setItem("girec.seeded", "1");
+  } catch { return; }
+  if (store.counts().chars > 0) return;
+  store.setCharacterSet(Object.keys(names).filter((k) => (names[k] || {}).stars === 1));
 }
 
 // ------------------------------------------------------------- импорт GOOD
@@ -299,10 +287,8 @@ async function boot() {
 
   await labels.init(names);
   store.init(names);
-
-  // Мост поднимаем до старта вьюх: app.js при первом запуске сам проставляет
-  // набор по умолчанию и сразу шлёт girec:owned-changed — если слушателя ещё нет,
-  // инвентарь останется пустым, пока пользователь что-нибудь не тронет.
+  seedDefaults();
+  draft.init(names);
   bridge();
   try { content = await loadJSON("data/content.json"); } catch { content = null; }
   app = await startApp({
@@ -313,8 +299,6 @@ async function boot() {
     weaponCopies: () => store.weaponCopies(),
   });
 
-  // и подтягиваем то, что app.js успел записать до появления слушателя
-  syncFromLegacy();
   buildLangSwitcher();
   wireSettings();
   wireFeedback();

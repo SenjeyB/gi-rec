@@ -93,11 +93,10 @@ function searchBox(value, onInput) {
   return input;
 }
 
-function stepper(value, min, max, onChange, fmt, minNote) {
+function stepper(value, min, max, onChange, fmt) {
   const box = el("div", "inv-stepper");
   const dec = button("inv-step", "−");
   dec.disabled = value <= min;
-  if (dec.disabled && minNote) dec.title = minNote;
   dec.addEventListener("click", (e) => { e.stopPropagation(); onChange(value - 1); });
   const out = el("span", "inv-step-value", fmt(value));
   const inc = button("inv-step", "+");
@@ -173,17 +172,13 @@ function characterCard(key) {
   card.appendChild(top);
 
   if (owned && store.isFiveStar(key)) {
-    const min = store.minCons(key);
     const row = el("div", "inv-card-foot");
-    // минимум (бесплатный C1) виден по заблокированной «−»; отдельный бейдж
-    // рядом со степпером на телефоне не помещался в карточку
-    row.appendChild(stepper(store.consOf(key), min, 6,
+    row.appendChild(stepper(store.consOf(key), 0, 6,
       (v) => {
         local(() => store.setCons(key, v));
         card.replaceWith(characterCard(key));
       },
-      (v) => `${t("inventory.consShort")}${v}`,
-      min > 0 ? t("inventory.minC1Note") : ""));
+      (v) => `${t("inventory.consShort")}${v}`));
     card.appendChild(row);
   }
   return card;
@@ -211,6 +206,20 @@ function renderCharacters(container) {
   controls.appendChild(chipRow(
     WEAPON_TYPES.map((w) => ({ value: w, clearable: true, icon: typeIcon(w), title: t(`weaponType.${w}`) })),
     ui.charWeapon, (v) => { ui.charWeapon = v; rebuild(); }));
+
+  // быстрые кнопки, как в быстрых настройках: добавляют группу к отмеченным
+  const macros = el("div", "inv-macros");
+  const apply = (keys) => { local(() => store.setCharacterSet(keys)); refill(); updateCounts(); };
+  for (const [group, label] of [["free", "roster.allFree"], ["four", "roster.all4star"],
+                                ["standard", "roster.allStandard"], ["all", "roster.all"]]) {
+    const b = button("macro-btn", t(label));
+    b.addEventListener("click", () => apply([...new Set([...store.ownedCharacters(), ...store.groupKeys(group)])]));
+    macros.appendChild(b);
+  }
+  const clear = button("macro-btn", t("roster.clearAll"));
+  clear.addEventListener("click", () => apply([]));
+  macros.appendChild(clear);
+  controls.appendChild(macros);
 
   container.appendChild(controls);
   container.appendChild(grid);

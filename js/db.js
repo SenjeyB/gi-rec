@@ -5,8 +5,8 @@
 // отряд и отдаём список в том виде, который понимает app.js.
 //
 // Правила отбора:
-//   созвездия — потолок по умолчанию (5★ на C0, или C1 если в names.json cons:1;
-//               4★ без ограничений, они в симах обычно C6). Если персонаж есть в
+//   созвездия — потолок по умолчанию (5★ на C0, 4★ без ограничений — в симах
+//               они обычно C6). Если персонаж есть в
 //               инвентаре и его созвездие выше потолка, потолок поднимается — свои
 //               созвездия только открывают сборки, но никогда не отнимают.
 //   5★ оружие — режим none отбрасывает такие сборки целиком, r1 пускает их на R1,
@@ -29,7 +29,7 @@ export async function init(namesJson) {
   baseCap = {};
   for (const k of Object.keys(names)) {
     const e = names[k] || {};
-    baseCap[k] = (e.stars || 0) >= 3 ? (e.cons ? e.cons : 0) : 6;
+    baseCap[k] = (e.stars || 0) >= 3 ? 0 : 6;
   }
   [db, refs] = await Promise.all([
     loadJSON("data/db.json"),
@@ -41,6 +41,14 @@ export async function init(namesJson) {
 export function ready() { return !!db; }
 export function meta() { return db ? { ...db.stats, generated: db.generated } : null; }
 export function references() { return refs; }
+
+/** Персонажи, у которых в базе есть хоть один отряд. */
+export function charactersInDb() {
+  const out = new Set();
+  if (!db) return out;
+  for (const t of db.teams) for (const i of t.chars) out.add(db.dict.chars[i]);
+  return out;
+}
 
 /** Ключ оружия по индексу в словаре базы. */
 export function weaponKey(idx) {
@@ -90,7 +98,7 @@ export function query(opts = {}) {
   const needFull = !!opts.kqmFull;
   const needArt = !!opts.kqmArt;
   const strict = !!opts.strictCons;
-  // Потолок созвездий: standard — у всех стандарт (5★ C0 или бесплатный C1, 4★ C6),
+  // Потолок созвездий: standard — у всех стандарт (5★ C0, 4★ C6),
   // инвентарь не учитывается; mine — свои созвездия поднимают потолок; any — любые
   // сборки до C6. Сборки на повышенных созвездиях в базе есть всегда, вопрос
   // только в том, какую из них показывать.

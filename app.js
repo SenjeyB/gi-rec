@@ -1,7 +1,9 @@
 import { t, lang } from './js/i18n.js';
 import { charLabel, weaponLabel, setLabel, statLabel } from './js/labels.js';
 import { toggleDetail } from './js/teamdetail.js';
-import { copiesNeeded, subtractCopies, haveCopies, meta as dbMeta } from './js/db.js';
+import { copiesNeeded, subtractCopies, haveCopies, charactersInDb, meta as dbMeta } from './js/db.js';
+import * as draft from './js/draft.js';
+import { groupKeys } from './js/store.js';
 import { openCharacterWindow } from './js/charwindow.js';
 
 // Имена оружия и сетов для подсказок — заполняются из data/refs.json при старте.
@@ -218,8 +220,6 @@ export async function start(ctx){
   // Отображаемое имя зависит от языка и для опознания не годится.
   const charKeys = Object.keys(names);
   const sortedCharKeys = ()=> charKeys.slice().sort((a,b)=> charLabel(a).localeCompare(charLabel(b)));
-  const selected = new Set();
-  let goodConfigBackup = null;
 
   const byWeapon = new Map();
   const byElement = new Map();
@@ -324,69 +324,63 @@ export async function start(ctx){
     };
   }
 
-  function hasTeams(key){
-    return teamsByMember.has(key);
-  }
+  // ------------------------------------------------ быстрые настройки инвентаря
+  // Левый блок правит черновик (js/draft.js): по нему считаются отряды на всех
+  // вкладках. «Сохранить» переносит его в инвентарь, «Откатить» — сбрасывает.
 
-  function getDefaultAutoSelect(){
-    const out = [];
-    for(const [key, entry] of Object.entries(names)){
-      if((entry && entry.stars) === 1 && hasTeams(key)) out.push(key);
-    }
-    return out;
-  }
+  const isFive = (key)=> ((names[key] || {}).stars || 0) >= 3;
 
-  let usedDefaults = false;
-  try{
-    const saved = JSON.parse(localStorage.getItem('ownedSelection')||'[]');
-    const defaultAutoSelect = getDefaultAutoSelect();
-    usedDefaults = !saved.length;
-    for(const n of (saved.length? saved : defaultAutoSelect)) selected.add(n);
-  }catch{
-    const defaultAutoSelect = getDefaultAutoSelect();
-    usedDefaults = true;
-    for(const n of defaultAutoSelect) selected.add(n);
-  }
-  // Автовыбор по умолчанию раньше жил только в памяти, и инвентарь (js/store.js),
-  // который читает ownedSelection, видел пустой список. Закрепляем сразу.
-  if(usedDefaults){
-    try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
+  function updateDraftBar(){
+    const dirty = draft.isDirty();
+    const save = document.getElementById('draft-save');
+    const back = document.getElementById('draft-rollback');
+    if(save){ save.disabled = !dirty; save.classList.toggle('is-dirty', dirty); }
+    if(back) back.disabled = !dirty;
   }
 
   function renderOwnedCharacters(){
     charactersDiv.innerHTML = '';
     const pred = makeFilterPredicate('owned');
     const q = (document.getElementById('char-search')?.value || '').trim().toLowerCase();
+    const inDb = charactersInDb();
     for(const key of sortedCharKeys()){
       const label = charLabel(key);
       // ищем и по подписи текущего языка, и по английскому имени
       const english = (names[key] && names[key].name) || key;
       if(q && !label.toLowerCase().includes(q) && !english.toLowerCase().includes(q)) continue;
       if(!pred(key)) continue;
-      const btn = createEl('button','char');
-      btn.type = 'button';
+      const on = draft.has(key);
+      const chip = createEl('div','char' + (on ? ' selected' : ''));
+      const main = createEl('button','char-main');
+      main.type = 'button';
+      const pic = createEl('span','char-pic');
       const img = createAvatarImg(key,'avatar');
-      if(img) btn.appendChild(img);
-      btn.appendChild(createEl('div',null,label));
-
-      const noTeams = !hasTeams(key);
-      if(noTeams){
-        btn.classList.add('no-teams');
-        btn.disabled = true;
-        btn.title = T('roster.noTeamsForChar','No teams available for this character');
+      if(img) pic.appendChild(img);
+      // персонажа без отрядов в базе можно отметить — просто помечаем значком
+      if(!inDb.has(key)){
+        const mark = createEl('span','char-noteams','∅');
+        mark.title = T('roster.noTeamsForChar','No teams in the database for this character');
+        pic.appendChild(mark);
       }
-
-      if(selected.has(key)) btn.classList.add('selected');
-
-      if(!noTeams){
-        btn.addEventListener('click',()=>{
-          if(btn.classList.toggle('selected')) selected.add(key); else selected.delete(key);
-          persistSelection();
-          renderActiveView();
-        });
+      main.appendChild(pic);
+      main.appendChild(createEl('span','char-name',label));
+      main.addEventListener('click', ()=> draft.toggle(key));
+      chip.appendChild(main);
+      if(on && isFive(key)){
+        const sel = createEl('select','char-cons');
+        sel.setAttribute('aria-label', T('roster.consLabel','Constellation'));
+        for(let c = 0; c <= 6; c++){
+          const o = createEl('option', null, 'C' + c);
+          o.value = String(c);
+          sel.appendChild(o);
+        }
+        sel.value = String(draft.consOf(key));
+        sel.addEventListener('change', ()=> draft.setCons(key, Number(sel.value)));
+        chip.appendChild(sel);
       }
-      charactersDiv.appendChild(btn);
+      charactersDiv.appendChild(chip);
     }
+    updateDraftBar();
   }
 
   let searchTimer = null;
@@ -404,83 +398,14 @@ export async function start(ctx){
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
 
-  function persistSelection(){
-    try{ localStorage.setItem('ownedSelection', JSON.stringify([...selected])); }catch{}
-    // Сообщаем новому коду (js/main.js), что выбор изменился здесь, чтобы он
-    // подтянул его в инвентарь, не потеряв выставленные созвездия.
-    try{ window.dispatchEvent(new CustomEvent('girec:owned-changed')); }catch{}
+  // быстрые кнопки добавляют группу к отмеченным; перерисовку запускает
+  // js/main.js, который слушает черновик
+  for(const [id, group] of [['macro-free','free'], ['macro-4star','four'], ['macro-standard','standard'], ['macro-all','all']]){
+    document.getElementById(id)?.addEventListener('click', ()=> draft.addAll(groupKeys(group)));
   }
-
-  // Инвентарь поменялся снаружи (раздел «Инвентарь» или смена языка) —
-  // перечитываем выбор. Перерисовку инициирует js/main.js через refreshTeams().
-  window.addEventListener('girec:inventory-changed', ()=>{
-    let list = [];
-    try{ list = JSON.parse(localStorage.getItem('ownedSelection')||'[]'); }catch{ list = []; }
-    if(!Array.isArray(list)) list = [];
-    const next = new Set(list);
-    let same = next.size === selected.size;
-    if(same){ for(const v of next){ if(!selected.has(v)){ same = false; break; } } }
-    if(!same){
-      selected.clear();
-      for(const v of next) selected.add(v);
-    }
-    // «Вернуть конфиг» откатывает к последнему состоянию инвентаря —
-    // например к тому, что приехало импортом из GOOD
-    goodConfigBackup = new Set(next);
-  });
-
-  function updateCharacterSelection(){
-    renderOwnedCharacters();
-    persistSelection();
-    renderActiveView();
-  }
-
-  function getCharactersByStars(starsArray){
-    const out = [];
-    for(const [key, entry] of Object.entries(names)){
-      const stars = (entry && entry.stars) ? entry.stars : null;
-      if(stars !== null && starsArray.includes(stars) && hasTeams(key)) out.push(key);
-    }
-    return out;
-  }
-
-  document.getElementById('macro-free')?.addEventListener('click', ()=>{
-    const freeChars = getCharactersByStars([1]);
-    for(const char of freeChars) selected.add(char);
-    updateCharacterSelection();
-  });
-
-  document.getElementById('macro-4star')?.addEventListener('click', ()=>{
-    const chars = getCharactersByStars([1, 2]);
-    for(const char of chars) selected.add(char);
-    updateCharacterSelection();
-  });
-
-  document.getElementById('macro-standard')?.addEventListener('click', ()=>{
-    const standardChars = getCharactersByStars([3]);
-    for(const char of standardChars) selected.add(char);
-    updateCharacterSelection();
-  });
-
-  document.getElementById('macro-all')?.addEventListener('click', ()=>{
-    for(const key of charKeys){
-      if(hasTeams(key)) selected.add(key);
-    }
-    updateCharacterSelection();
-  });
-
-  document.getElementById('macro-clear')?.addEventListener('click', ()=>{
-    selected.clear();
-    updateCharacterSelection();
-  });
-
-  document.getElementById('macro-restore')?.addEventListener('click', ()=>{
-    if(goodConfigBackup && goodConfigBackup.size > 0){
-      selected.clear();
-      for(const char of goodConfigBackup) selected.add(char);
-      updateCharacterSelection();
-    }
-  });
+  document.getElementById('macro-clear')?.addEventListener('click', ()=> draft.clear());
+  document.getElementById('draft-rollback')?.addEventListener('click', ()=> draft.rollback());
+  document.getElementById('draft-save')?.addEventListener('click', ()=> draft.save());
 
   // Импорт GOOD живёт в js/good.js + js/main.js: он понимает созвездия и 5* оружие,
   // а прежняя версия здесь умела только список имён и дублировала обработчики.
@@ -500,7 +425,7 @@ export async function start(ctx){
       if(a.getAttribute('href') === hash) a.classList.add('active'); else a.classList.remove('active');
     });
   }
-  function getOwned(){ return new Set([...selected]); }
+  function getOwned(){ return new Set(draft.characters()); }
 
   function renderRecommendations(){
     viewControls().innerHTML = '';
@@ -959,6 +884,7 @@ export async function start(ctx){
     filtersDiv.setAttribute('aria-label', T('filters.byElementWeapon','Filter teams by element and weapon'));
     viewControls().appendChild(filtersDiv);
     renderFilters(filtersDiv, 'bestTeams');
+    viewControls().appendChild(bestTeamsCharFilter(()=> renderBestTeamsList(select.value || 'all', mode)));
 
     const wrap = createEl('div');
     const list = createEl('div');
@@ -968,6 +894,75 @@ export async function start(ctx){
 
     const showMode = select.value || 'all';
     renderBestTeamsList(showMode, mode);
+  }
+
+  // Поиск по персонажам: до четырёх, остаются отряды, где есть все выбранные.
+  const bestTeamsChars = [];
+  const MAX_CHARS = 4;
+
+  function bestTeamsCharFilter(onChange){
+    const box = createEl('div','char-filter');
+    const chosen = createEl('div','char-filter-chosen');
+    const input = createEl('input','side-input char-filter-input');
+    input.type = 'search';
+    input.autocomplete = 'off';
+    const results = createEl('div','char-filter-results');
+    const inDb = charactersInDb();
+
+    function renderChosen(){
+      chosen.innerHTML = '';
+      for(const key of bestTeamsChars){
+        const chip = createEl('button','anchor-chip');
+        chip.type = 'button';
+        chip.title = T('roster.removeFromSelection','Remove from selection');
+        const img = createAvatarImg(key,'member-avatar'); if(img) chip.appendChild(img);
+        chip.appendChild(createEl('span','member-pill', charLabel(key)));
+        chip.appendChild(createEl('span','anchor-x','✕'));
+        chip.addEventListener('click', ()=>{
+          bestTeamsChars.splice(bestTeamsChars.indexOf(key), 1);
+          renderChosen(); onChange();
+        });
+        chosen.appendChild(chip);
+      }
+      const full = bestTeamsChars.length >= MAX_CHARS;
+      input.disabled = full;
+      input.placeholder = full
+        ? T('views.charFilterFull','Up to 4 characters')
+        : T('views.charFilter','Find teams with characters');
+    }
+
+    function renderResults(){
+      results.innerHTML = '';
+      const q = input.value.trim().toLowerCase();
+      if(!q) return;
+      const hits = sortedCharKeys().filter(k => inDb.has(k) && !bestTeamsChars.includes(k) && (
+        charLabel(k).toLowerCase().includes(q) || ((names[k] || {}).name || k).toLowerCase().includes(q)
+      )).slice(0, 8);
+      for(const key of hits){
+        const b = createEl('button','char-filter-hit');
+        b.type = 'button';
+        const img = createAvatarImg(key,'member-avatar'); if(img) b.appendChild(img);
+        b.appendChild(createEl('span', null, charLabel(key)));
+        b.addEventListener('click', ()=>{
+          if(bestTeamsChars.length >= MAX_CHARS) return;
+          bestTeamsChars.push(key);
+          input.value = '';
+          results.innerHTML = '';
+          renderChosen(); onChange();
+          if(!input.disabled) input.focus();
+        });
+        results.appendChild(b);
+      }
+      if(!hits.length) results.appendChild(createEl('div','small muted', T('views.noTeamsSelection','No teams available with this selection.')));
+    }
+
+    input.addEventListener('input', renderResults);
+    input.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){ results.querySelector('.char-filter-hit')?.click(); e.preventDefault(); }
+    });
+    box.append(input, results, chosen);
+    renderChosen();
+    return box;
   }
 
   function renderBestTeamsList(showMode, mode){
@@ -1002,6 +997,10 @@ export async function start(ctx){
       allTeams = allTeams.filter(team => {
         return team.members.every(m => owned.has(m));
       });
+    }
+
+    if(bestTeamsChars.length){
+      allTeams = allTeams.filter(team => bestTeamsChars.every(k => team.members.includes(k)));
     }
 
     if(hasElementFilter){

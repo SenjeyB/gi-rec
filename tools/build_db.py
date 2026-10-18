@@ -438,11 +438,10 @@ def build_char_index(names: Dict[str, dict], alias: Dict[str, str]) -> Dict[str,
 # ----------------------------------------------------------------- сборка
 
 def cons_cap(names: Dict[str, dict]) -> Dict[str, int]:
-    """Базовый потолок созвездий: 5* — C0, или C1 если в names.json стоит cons:1.
-    4* не ограничены (в симах они обычно C6)."""
+    """Базовый потолок созвездий: 5* — C0, 4* не ограничены (в симах они обычно C6)."""
     cap = {}
     for short, v in names.items():
-        cap[short] = (1 if v.get("cons") else 0) if (v.get("stars") or 0) >= 3 else 6
+        cap[short] = 0 if (v.get("stars") or 0) >= 3 else 6
     return cap
 
 
@@ -516,12 +515,10 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
     ch_i, w_i, s_i, st_i = Interner(), Interner(), Interner(), Interner()
 
     def kqm_cons_ok(char_key: str, cons: int) -> bool:
-        """Созвездия по стандарту KQMS: 5* на C0, 4* на C6. Персонажам, у которых
-        C1 выдаётся бесплатно (поле cons в names.json), C1 тоже засчитывается —
-        но и C0 у них остаётся в стандарте: бесплатное созвездие можно не брать."""
+        """Созвездия по стандарту KQMS: 5* на C0, 4* на C6."""
         entry = (names or {}).get(char_key) or {}
         if (entry.get("stars") or 0) >= 3:
-            return cons <= (entry.get("cons") or 0)
+            return cons == 0
         return cons == 6
     teams = []
     stats_by_team = []

@@ -1,6 +1,14 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.2.0 (2026/10/19)
+- Removed the automatic C1 for all characters
+- Character search in Best Teams
+- Other QoL improvements
+
+## 2.1.0 (2026/10/17)
+- Added some info about enemies in the abyss (including elemental resists)
+
 ## 2.0.0 (2026/10/13)
 A big update: a new team database, an inventory, team details, Russian language and a phone layout.
 

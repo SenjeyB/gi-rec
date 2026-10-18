@@ -32,14 +32,14 @@
     "fiveNone": "None",
     "fiveR1": "R1 only",
     "fiveAny": "Any refinement",
-    "fiveMine": "Only mine (inventory)",
+    "fiveMine": "Only mine",
     "consMode": "Constellations:",
     "consStandard": "Standard (5★ C0, 4★ C6)",
     "consMine": "With my constellations",
     "consAny": "Any"
   },
   "roster": {
-    "title": "Your characters",
+    "title": "Quick inventory settings",
     "import": "Import Characters",
     "search": "Search characters...",
     "searchLabel": "Search characters",
@@ -49,10 +49,12 @@
     "allStandard": "All Standard 5★",
     "all": "All",
     "clearAll": "Clear all",
-    "restore": "Return to config",
     "openInventory": "Open full Inventory editor",
-    "noTeamsForChar": "No teams available for this character",
-    "removeFromSelection": "Remove from selection"
+    "noTeamsForChar": "No teams with this character in the database",
+    "removeFromSelection": "Remove from selection",
+    "rollback": "Revert",
+    "save": "Save to inventory",
+    "consLabel": "Constellation"
   },
   "about": {
     "developedBy": "Made by"
@@ -66,7 +68,9 @@
     "showingTop": "{n} teams found",
     "medianDps": "Median DPS: {value}",
     "teamsMatchSet": "{n} team(s) match this set",
-    "showMore": "Show more ({n})"
+    "showMore": "Show more ({n})",
+    "charFilter": "Find teams with characters",
+    "charFilterFull": "Up to 4 characters"
   },
   "inventory": {
     "title": "Inventory",
@@ -79,7 +83,6 @@
     "notOwned": "Not owned",
     "constellation": "Constellation",
     "consShort": "C",
-    "minC1Note": "This character is simulated at C1, so C1 is the minimum.",
     "search": "Search...",
     "filterAll": "All",
     "filterOwned": "Owned",
@@ -143,7 +146,7 @@
     "level": "Level",
     "talents": "Talents",
     "kqmFull": "KQMS: full compliance",
-    "kqmFullHint": "Constellations and artifacts both follow the standard: 5★ at C0 (up to C1 when C1 is free), 4★ at C6",
+    "kqmFullHint": "Constellations and artifacts follow the standard: 5★ at C0, 4★ at C6",
     "variants": "Builds of this team ({n})",
     "shown": "shown",
     "aboveStd": "above standard",

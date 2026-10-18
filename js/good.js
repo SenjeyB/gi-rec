@@ -45,17 +45,11 @@ export function parseGood(good, names, refs) {
   const unknownChars = new Set();
   const unknownWeapons = new Set();
 
-  const minCons = (key) => {
-    const e = names[key];
-    return e && e.cons ? e.cons : 0;
-  };
-
   function addCharacter(rawKey, cons) {
     const id = charIndex[slug(rawKey)];
     if (!id) { if (rawKey) unknownChars.add(String(rawKey)); return; }
-    const floor = minCons(id);
     const n = Number(cons);
-    const value = Math.min(6, Math.max(floor, Number.isFinite(n) ? Math.round(n) : floor));
+    const value = Math.min(6, Math.max(0, Number.isFinite(n) ? Math.round(n) : 0));
     // ГГ разных элементов мапятся в один ключ — берём максимальную консту
     const prev = characters[id];
     characters[id] = { cons: prev ? Math.max(prev.cons, value) : value };

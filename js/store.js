@@ -9,21 +9,22 @@ const KEY = "girec.inventory";
 const LEGACY_KEY = "ownedSelection";
 const VERSION = 2;          // 2: оружие хранится списком копий
 
-let names = {};          // ключ -> {name, element, weapon, stars, cons?}
+let names = {};          // ключ -> {name, element, weapon, stars}
 let displayToKey = {};
 let state = { version: VERSION, characters: {}, weapons: [] };
 const listeners = new Set();
-
-/** Минимальная конста: у персонажей с "cons":1 в names.json C1 — это база, ниже не опускаем. */
-export function minCons(charKey) {
-  const entry = names[charKey];
-  return entry && entry.cons ? entry.cons : 0;
-}
 
 /** 5★ персонаж (включая стандартных) — только им имеет смысл крутить созвездия. */
 export function isFiveStar(charKey) {
   const entry = names[charKey];
   return !!entry && (entry.stars || 0) >= 3;
+}
+
+/** Группы для быстрых кнопок: free — бесплатные, four — все 4★ (с бесплатными),
+ *  standard — стандартные 5★, all — все. Признак — поле stars в names.json. */
+export function groupKeys(group) {
+  const want = { free: [1], four: [1, 2], standard: [3] }[group];
+  return Object.keys(names).filter((k) => !want || want.includes((names[k] || {}).stars));
 }
 
 export function displayName(charKey) {
@@ -35,11 +36,9 @@ export function keyOfDisplay(display) {
   return displayToKey[display];
 }
 
-function clampCons(charKey, value) {
-  const lo = minCons(charKey);
-  const hi = isFiveStar(charKey) ? 6 : 6;
-  const n = Number.isFinite(value) ? Math.round(value) : lo;
-  return Math.min(hi, Math.max(lo, n));
+function clampCons(value) {
+  const n = Number.isFinite(value) ? Math.round(value) : 0;
+  return Math.min(6, Math.max(0, n));
 }
 
 function read() {
@@ -61,7 +60,7 @@ function migrateLegacy() {
   if (Array.isArray(list)) {
     for (const item of list) {
       const k = names[item] ? item : displayToKey[item];
-      if (k) characters[k] = { cons: minCons(k) };
+      if (k) characters[k] = { cons: 0 };
     }
   }
   return { version: VERSION, characters, weapons: [] };
@@ -84,7 +83,7 @@ function normalize(raw) {
   for (const k of Object.keys(chars)) {
     if (!names[k]) continue;                     // персонаж пропал из names.json
     const v = chars[k] || {};
-    out.characters[k] = { cons: clampCons(k, Number(v.cons)) };
+    out.characters[k] = { cons: clampCons(Number(v.cons)) };
   }
   // Оружие — список копий, как в игровом инвентаре: одинаковых может быть
   // несколько, и отряд с двумя одинаковыми легендарками требует две копии.
@@ -136,7 +135,7 @@ export function hasCharacter(charKey) {
 
 export function consOf(charKey) {
   const rec = state.characters[charKey];
-  return rec ? rec.cons : minCons(charKey);
+  return rec ? rec.cons : 0;
 }
 
 /** Все копии оружия в порядке добавления. */
@@ -188,7 +187,7 @@ export function setCharacter(charKey, owned, cons) {
   if (!names[charKey]) return;
   if (owned) {
     const next = cons === undefined ? consOf(charKey) : cons;
-    state.characters[charKey] = { cons: clampCons(charKey, Number(next)) };
+    state.characters[charKey] = { cons: clampCons(Number(next)) };
   } else {
     delete state.characters[charKey];
   }
@@ -201,7 +200,7 @@ export function toggleCharacter(charKey) {
 
 export function setCons(charKey, cons) {
   if (!hasCharacter(charKey)) return;
-  state.characters[charKey] = { cons: clampCons(charKey, Number(cons)) };
+  state.characters[charKey] = { cons: clampCons(Number(cons)) };
   changed();
 }
 
@@ -237,12 +236,24 @@ export function replace(next) {
   changed();
 }
 
-/** Массово выставить список персонажей (макро-кнопки), созвездия — минимальные. */
+/** Массово выставить список персонажей (быстрые кнопки): у уже отмеченных
+ *  созвездия сохраняются, новые — с C0. */
 export function setCharacterSet(charKeys) {
   const chars = {};
   for (const k of charKeys) {
     if (!names[k]) continue;
-    chars[k] = { cons: hasCharacter(k) ? consOf(k) : minCons(k) };
+    chars[k] = { cons: hasCharacter(k) ? consOf(k) : 0 };
+  }
+  state.characters = chars;
+  changed();
+}
+
+/** Персонажи с созвездиями одним изменением (сохранение быстрых настроек);
+ *  оружие не трогается. charMap: ключ -> созвездие. */
+export function setCharacters(charMap) {
+  const chars = {};
+  for (const [k, c] of Object.entries(charMap || {})) {
+    if (names[k]) chars[k] = { cons: clampCons(Number(c)) };
   }
   state.characters = chars;
   changed();

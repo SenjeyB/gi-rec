@@ -123,8 +123,6 @@ button:hover{opacity:0.95}
 .macro-btn{padding:6px 10px;font-size:12px;background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:6px;cursor:pointer;color:#e6eef8}
 .macro-btn:hover{background:rgba(255,255,255,0.08)}
 
-.char.no-teams{opacity:0.3;filter:grayscale(0.8);cursor:not-allowed;pointer-events:none}
-.char.no-teams:hover{background:rgba(255,255,255,0.03)}
 
 @media (max-width: 1280px){
 	.app-container{grid-template-columns:minmax(360px, 600px) 1fr}
@@ -167,7 +165,7 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 
 .team-dps,.dps-badge{font-variant-numeric:tabular-nums}
 
-.char:hover:not(.selected):not(.no-teams){background:rgba(255,255,255,0.08)}
+.char:hover:not(.selected){background:rgba(255,255,255,0.08)}
 .tier-member:hover:not(.disabled){background:rgba(255,255,255,0.07)}
 .squad{border:1px solid transparent}
 .squad.clickable:hover{border-color:rgba(96,165,250,0.35);background:rgba(0,0,0,0.28)}
@@ -756,3 +754,24 @@ body.sheet-open{overflow:hidden}
 .res-state{display:flex;flex-direction:column;gap:3px}
 .res-state-label{font-size:11px;font-weight:600;color:#cbd5e1}
 .res-chip.is-base{color:#cbd5e1;border-color:var(--line);background:rgba(255,255,255,0.04)}
+
+/* ---------- быстрые настройки инвентаря: созвездия, «нет отрядов», черновик */
+.char-main{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;text-align:left}
+.char-pic{position:relative;display:inline-flex;flex:none}
+.char-noteams{position:absolute;right:-5px;bottom:-5px;min-width:16px;height:16px;padding:0 3px;border-radius:999px;background:#0b1220;border:1px solid rgba(251,191,36,0.6);color:#fbbf24;font-size:10px;font-weight:700;line-height:14px;text-align:center}
+.char-cons{margin-left:2px;border-radius:6px;border:1px solid rgba(4,32,51,0.35);background:rgba(255,255,255,0.6);color:#042033;font-size:11px;font-weight:800;padding:2px 2px;cursor:pointer}
+.draft-actions{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
+.macro-btn:disabled{opacity:.45;cursor:default}
+.draft-save.is-dirty{background:var(--accent);color:#042033;border-color:transparent;font-weight:700}
+.inv-macros{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---------- лучшие отряды: поиск по персонажам */
+.char-filter{display:flex;flex-direction:column;gap:6px;margin:8px 0 4px;max-width:420px}
+.char-filter-input:disabled{opacity:.6}
+.char-filter-results{display:flex;flex-wrap:wrap;gap:6px}
+.char-filter-results:empty{display:none}
+.char-filter-hit{display:inline-flex;align-items:center;gap:6px;padding:3px 10px 3px 3px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,0.04);color:#e6eef8;cursor:pointer;font-size:12px}
+.char-filter-hit:hover{background:rgba(96,165,250,0.14);border-color:rgba(96,165,250,0.45)}
+.char-filter-hit .member-avatar,.char-filter-chosen .member-avatar{width:24px;height:24px;border-radius:50%}
+.char-filter-chosen{display:flex;flex-wrap:wrap;gap:6px}
+.char-filter-chosen:empty{display:none}

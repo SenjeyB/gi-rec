@@ -112,7 +112,7 @@
           </div>
 
           <div class="side-card">
-            <h2 class="side-title" data-i18n="roster.title">Your characters</h2>
+            <h2 class="side-title" data-i18n="roster.title">Quick inventory settings</h2>
             <div class="side-actions" style="margin-bottom:8px">
               <button id="open-import" type="button" data-i18n="roster.import">Import Characters</button>
               <a class="macro-btn" href="#inventory" data-i18n="roster.openInventory">Open full Inventory editor</a>
@@ -127,7 +127,10 @@
               <button id="macro-standard" type="button" class="macro-btn" data-i18n="roster.allStandard">All Standard 5★</button>
               <button id="macro-all" type="button" class="macro-btn" data-i18n="roster.all">All</button>
               <button id="macro-clear" type="button" class="macro-btn" data-i18n="roster.clearAll">Clear all</button>
-              <button id="macro-restore" type="button" class="macro-btn" data-i18n="roster.restore">Return to config</button>
+            </div>
+            <div class="draft-actions">
+              <button id="draft-rollback" type="button" class="macro-btn" data-i18n="roster.rollback" disabled>Revert</button>
+              <button id="draft-save" type="button" class="macro-btn draft-save" data-i18n="roster.save" disabled>Save to inventory</button>
             </div>
             <div id="characters" class="characters-grid" aria-live="polite"></div>
           </div>
