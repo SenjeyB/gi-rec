@@ -16,6 +16,14 @@ let current = FALLBACK;
 const listeners = new Set();
 
 function detect() {
+  // ?lang=ru в адресе — ссылка со статической страницы на нужном языке
+  try {
+    const q = new URLSearchParams(location.search).get("lang");
+    if (q && SUPPORTED.includes(q)) {
+      try { localStorage.setItem(STORAGE_KEY, q); } catch { /* не критично */ }
+      return q;
+    }
+  } catch { /* нет location — тесты */ }
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved && SUPPORTED.includes(saved)) return saved;
@@ -93,6 +101,9 @@ export function apply(root = document) {
     document.documentElement.lang = current;
     const title = t("app.pageTitle");
     if (title !== "app.pageTitle") document.title = title;
+    const desc = t("app.metaDescription");
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta && desc !== "app.metaDescription") meta.setAttribute("content", desc);
   }
 }
 

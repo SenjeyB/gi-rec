@@ -76,9 +76,16 @@ jobs:
         continue-on-error: true
         run: python tools/build_db.py --icons
 
+      # Статические страницы для поисковиков пересобираются из свежих данных;
+      # без изменений данных они остаются байт-в-байт теми же
+      - name: Страницы для поиска
+        id: pages
+        continue-on-error: true
+        run: python tools/build_pages.py
+
       - name: Коммит изменений
         run: |
-          git add data enemies weapons sets
+          git add data enemies weapons sets en ru sitemap.xml
           if git diff --cached --quiet; then
             echo "Данные не изменились — коммитить нечего"
             exit 0
@@ -95,7 +102,7 @@ jobs:
           git push origin HEAD:main
 
       - name: Итог
-        if: steps.content.outcome == 'failure' || steps.teams.outcome == 'failure'
+        if: steps.content.outcome == 'failure' || steps.teams.outcome == 'failure' || steps.pages.outcome == 'failure'
         run: |
-          echo "::error::Шаг обновления упал: content=${{ steps.content.outcome }}, teams=${{ steps.teams.outcome }}"
+          echo "::error::Шаг обновления упал: content=${{ steps.content.outcome }}, teams=${{ steps.teams.outcome }}, pages=${{ steps.pages.outcome }}"
           exit 1

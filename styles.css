@@ -692,7 +692,9 @@ body.sheet-open{overflow:hidden}
   .seg-btn{flex:1;padding:8px 6px}
 }
 .slot-team .team-dps{display:none}
-.side-credit{font-size:12px;color:var(--muted);text-align:center;padding:2px 0 4px}
+.side-credit{font-size:12px;color:var(--muted);text-align:center;padding:2px 0 4px;display:flex;flex-direction:column;gap:2px}
+.side-credit a{color:var(--accent);text-decoration:none}
+.side-credit a:hover{text-decoration:underline}
 .side-credit strong{color:#cbd5e1;font-weight:600}
 
 /* ---------- Натиск: уровни сложности по клику на босса */

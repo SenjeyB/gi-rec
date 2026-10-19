@@ -1069,6 +1069,19 @@ export async function start(ctx){
   if(!location.hash) location.hash = '#recommendations';
   renderActiveView();
 
+  // ?char=furina — ссылка со страницы персонажа: сразу открываем его окно
+  try{
+    const deep = new URLSearchParams(location.search).get('char');
+    if(deep && names[deep]){
+      openCharacterWindow({
+        chars: [deep],
+        teams: teamsByMember.get(deep) || [],
+        names: NAMES,
+        teamRow: (team)=> buildTeamRow(team, getOwned()),
+      });
+    }
+  }catch{}
+
   const updatesBtn = document.getElementById('open-updates');
   const updatesModal = document.getElementById('updates-modal');
   const updatesClose = document.getElementById('close-updates');

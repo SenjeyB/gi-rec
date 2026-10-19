@@ -19,6 +19,8 @@ Data is refreshed by GitHub Actions (`.github/workflows/update-data.yml`):
 - daily — Spiral Abyss and Stygian Onslaught (`tools/build_content.py`)
 - weekly — the team database (`tools/build_db.py`)
 
+After that, `tools/build_pages.py` rebuilds static pages for search engines (`en/`, `ru/`: a catalog, a page per character, best teams, the current Abyss and Onslaught) and `sitemap.xml`.
+
 A commit is made only when the data actually changes. To run it by hand: Actions → Update data → Run workflow.
 Locally: `python tools/build_content.py`, `python tools/build_db.py --icons` (needs Pillow for icons).
 

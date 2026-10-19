@@ -10,7 +10,9 @@
     "subtitle": "recommendations & tier list",
     "updates": "Updates",
     "github": "GitHub repository",
-    "feedback": "Leave feedback"
+    "feedback": "Leave feedback",
+    "pageTitle": "GI-Rec - Genshin Impact Character Pulling Recommendations & Tier Lists",
+    "metaDescription": "Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!"
   },
   "nav": {
     "mode": "Mode",
@@ -57,7 +59,10 @@
     "consLabel": "Constellation"
   },
   "about": {
-    "developedBy": "Made by"
+    "developedBy": "Made by",
+    "teamsFrom": "All teams are taken from",
+    "catalog": "Best teams for every character",
+    "catalogHref": "en/"
   },
   "views": {
     "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",
