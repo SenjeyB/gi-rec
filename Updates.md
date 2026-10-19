@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.2.1 (2026/10/19)
+- New teams (4278 in total)
+- Full KQMS compliance now allows 4★ weapons only
+
 ## 2.2.0 (2026/10/19)
 - Removed the automatic C1 for all characters
 - Character search in Best Teams

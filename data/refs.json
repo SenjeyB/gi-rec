@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-18T23:41:21Z",
+ "generated": "2026-10-19T00:08:09Z",
  "weapons": {
   "absolution": {
    "name": "Absolution",
@@ -384,6 +384,12 @@
    "rarity": 3,
    "type": "sword",
    "icon": "UI_EquipIcon_Sword_Dawn"
+  },
+  "huntersbow": {
+   "name": "Hunter's Bow",
+   "rarity": 1,
+   "type": "bow",
+   "icon": "UI_EquipIcon_Bow_Hunters"
   },
   "hunterspath": {
    "name": "Hunter's Path",
@@ -1544,13 +1550,25 @@
   }
  },
  "sets": {
-  "adaycarvedfromrisingwinds": {
-   "name": "A Day Carved From Rising Winds",
-   "icon": "UI_RelicIcon_15044_4"
+  "nightoftheskysunveiling": {
+   "name": "Night of the Sky's Unveiling",
+   "icon": "UI_RelicIcon_15041_4"
+  },
+  "aubadeofmorningstarandmoon": {
+   "name": "Aubade of Morningstar and Moon",
+   "icon": "UI_RelicIcon_15043_4"
+  },
+  "silkenmoonsserenade": {
+   "name": "Silken Moon's Serenade",
+   "icon": "UI_RelicIcon_15042_4"
   },
   "viridescentvenerer": {
    "name": "Viridescent Venerer",
    "icon": "UI_RelicIcon_15002_4"
+  },
+  "adaycarvedfromrisingwinds": {
+   "name": "A Day Carved From Rising Winds",
+   "icon": "UI_RelicIcon_15044_4"
   },
   "celestialgift": {
    "name": "Celestial Gift",
@@ -1575,18 +1593,6 @@
   "noblesseoblige": {
    "name": "Noblesse Oblige",
    "icon": "UI_RelicIcon_15007_4"
-  },
-  "nightoftheskysunveiling": {
-   "name": "Night of the Sky's Unveiling",
-   "icon": "UI_RelicIcon_15041_4"
-  },
-  "aubadeofmorningstarandmoon": {
-   "name": "Aubade of Morningstar and Moon",
-   "icon": "UI_RelicIcon_15043_4"
-  },
-  "silkenmoonsserenade": {
-   "name": "Silken Moon's Serenade",
-   "icon": "UI_RelicIcon_15042_4"
   },
   "tenacityofthemillelith": {
    "name": "Tenacity of the Millelith",

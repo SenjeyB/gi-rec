@@ -334,9 +334,10 @@ def normalize_sim(s: dict) -> dict:
 
 
 def fetch_all_sims(alias: Optional[Dict[str, str]] = None, pause: float = 0.12) -> List[dict]:
-    # только TTK-симы (mode==2) против одной цели; размер отряда отфильтруем локально,
-    # потому что $size новый API не принимает
-    query = {"summary.mode": 2, "summary.target_count": 1}
+    # симы против одной цели; размер отряда отфильтруем локально, потому что
+    # $size новый API не принимает. Режимов два: старые симы — TTK (mode 2),
+    # новые KQM пишет в mode 0 (с середины октября 2026, id вида kqm-<uuid>)
+    query = {"summary.mode": {"$in": [0, 2]}, "summary.target_count": 1}
     out: List[dict] = []
     skip = 0
     while True:
@@ -520,6 +521,11 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
         if (entry.get("stars") or 0) >= 3:
             return cons == 0
         return cons == 6
+
+    def kqm_weapon_ok(weapon_key: str) -> bool:
+        """Оружие по стандарту KQMS: только 4* (и ниже), 5* не допускается."""
+        rarity = (weapons.get(weapon_key) or {}).get("rarity")
+        return not rarity or rarity <= 4
     teams = []
     stats_by_team = []
     n_builds = 0
@@ -553,8 +559,10 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 "dps": int(round(sum(vals) / len(vals))),
                 "sims": len(vals),
                 "src": agg["ids"][0],
-                # стандарт KQM: созвездия и артефакты проверяются независимо
-                "kqmCons": all(kqm_cons_ok(m["char"], m["cons"]) for m in agg["members"]),
+                # стандарт KQMS: kqmCons — созвездия и оружие (5* на C0, 4* на C6,
+                # оружие не выше 4*), kqmArt — артефакты; проверяются независимо
+                "kqmCons": all(kqm_cons_ok(m["char"], m["cons"]) and kqm_weapon_ok(m["weapon"])
+                               for m in agg["members"]),
                 "kqmArt": all(m["kqmArt"] for m in agg["members"]),
                 "members": mem,
             })
