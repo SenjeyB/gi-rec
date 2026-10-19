@@ -74,6 +74,9 @@ UI = {
         "data_from": "Data from {date}",
         "home": "Home",
         "other_lang": "Русский",
+        "search": "Search by name",
+        "nothing": "No characters match the filters.",
+        "filters": "Filters",
         "dps": "DPS",
     },
     "ru": {
@@ -114,6 +117,9 @@ UI = {
         "data_from": "Данные от {date}",
         "home": "Главная",
         "other_lang": "English",
+        "search": "Поиск по имени",
+        "nothing": "Под фильтры никто не подошёл.",
+        "filters": "Фильтры",
         "dps": "DPS",
     },
 }
@@ -167,6 +173,13 @@ class Data:
 
     def five_star(self, key: str) -> bool:
         return (self.names.get(key) or {}).get("stars", 0) >= 3
+
+    def rarity(self, key: str) -> int:
+        """Редкость для показа. stars в names.json — категория (1 — бесплатные),
+        и Путешественник там среди бесплатных, хотя в игре он 5★."""
+        if key.startswith(("lumine", "aether")):
+            return 5
+        return 5 if self.five_star(key) else 4
 
     def pick_teams(self) -> List[dict]:
         """Как в приложении по умолчанию: первая (самая сильная) сборка, где 5★
@@ -224,7 +237,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
         ld = ('\n  <script type="application/ld+json">' +
               json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList",
                           "itemListElement": items}, ensure_ascii=False) + "</script>")
-    nav = (f'<a href="{up}{lang}/">{esc(ui["catalog"])}</a>'
+    nav = (f'<a href="{up}{lang}/characters/">{esc(ui["catalog"])}</a>'
            f'<a href="{up}{lang}/best-teams/">{esc(ui["best"])}</a>'
            f'<a href="{up}{lang}/abyss/">{esc(ui["abyss"])}</a>'
            f'<a class="pg-lang" href="{up}{other}/{path}" hreflang="{other}">{esc(ui["other_lang"])}</a>')
@@ -250,7 +263,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
 </head>
 <body>
   <header class="pg-header">
-    <a class="pg-brand" href="{up}{lang}/"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
+    <a class="pg-brand" href="{up}{lang}/characters/"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
     <nav class="pg-nav">{nav}</nav>
     <a class="pg-cta" href="{up}?lang={lang}">{esc(ui["open_app"])}</a>
   </header>
@@ -303,7 +316,7 @@ def char_page(data: Data, lang: str, key: str) -> str:
     teams = data.by_char[key]
     entry = data.names.get(key) or {}
     name = data.char(lang, key)
-    stars = 5 if data.five_star(key) else 4
+    stars = data.rarity(key)
     top = teams[0]
     meta = ui["char_meta"].format(stars=stars, element=data.element(lang, entry.get("element", "")),
                                   weapon=data.weapon_type(lang, entry.get("weapon", "")),
@@ -319,9 +332,9 @@ def char_page(data: Data, lang: str, key: str) -> str:
     el = entry.get("element", "")
     same = sorted((k for k in data.by_char if k != key and (data.names.get(k) or {}).get("element") == el),
                   key=lambda k: data.char(lang, k))
-    same_html = "".join(f'<a href="{up}{lang}/characters/{k}/">{esc(data.char(lang, k))}</a>' for k in same)
+    same_html = "".join(char_card(data, lang, k, up, small=True) for k in same)
 
-    body = f"""    <nav class="pg-crumbs"><a href="{up}{lang}/">{esc(ui["catalog"])}</a> / <span>{esc(name)}</span></nav>
+    body = f"""    <nav class="pg-crumbs"><a href="{up}{lang}/characters/">{esc(ui["catalog"])}</a> / <span>{esc(name)}</span></nav>
     <div class="pg-hero">
       <img src="{up}characters/{key}.png" alt="{esc(name)}" width="96" height="96">
       <div>
@@ -338,11 +351,11 @@ def char_page(data: Data, lang: str, key: str) -> str:
     <h2>{esc(ui["teammates"])}</h2>
     <ul class="pg-mates">{mates_html}</ul>
     <h2>{esc(ui["same_element"].format(element=data.element(lang, el)))}</h2>
-    <p class="pg-links">{same_html}</p>"""
+    <div class="pg-grid pg-grid-small">{same_html}</div>"""
     title = ui["char_title"].format(name=name)
     desc = ui["char_desc"].format(n=min(TOP_PER_CHAR, len(teams)), name=name,
                                   top=team_names(data, lang, top), dps=fmt_dps(top["dps"]))
-    crumbs = [(ui["catalog"], f"{BASE_URL}{lang}/"), (name, f"{BASE_URL}{lang}/characters/{key}/")]
+    crumbs = [(ui["catalog"], f"{BASE_URL}{lang}/characters/"), (name, f"{BASE_URL}{lang}/characters/{key}/")]
     return page(data, lang, f"characters/{key}/", 3, title, desc, body, crumbs)
 
 
@@ -435,8 +448,57 @@ def abyss_page(data: Data, lang: str) -> Optional[str]:
     return page(data, lang, "abyss/", 2, title, ui["abyss_desc"], "\n".join(out))
 
 
+WEAPON_ORDER = ["sword", "claymore", "polearm", "bow", "catalyst"]
+
+
+def cap(s: str) -> str:
+    return s[:1].upper() + s[1:]
+
+
+def char_card(data: Data, lang: str, key: str, up: str, small: bool = False) -> str:
+    """Карточка: портрет на фоне цвета редкости, в углах — стихия и тип оружия."""
+    entry = data.names.get(key) or {}
+    el, wt = entry.get("element", ""), entry.get("weapon", "")
+    rarity = data.rarity(key)
+    name = data.char(lang, key)
+    other = data.char("en" if lang == "ru" else "ru", key)
+    size = 48 if small else 64
+    icons = ""
+    if el:
+        icons += (f'<img class="pg-char-el" src="{up}filters/Element_{cap(el)}.png" '
+                  f'alt="{esc(data.element(lang, el))}" title="{esc(data.element(lang, el))}" width="20" height="20">')
+    if wt:
+        icons += (f'<img class="pg-char-wt" src="{up}filters/Class-{wt}.png" '
+                  f'alt="{esc(data.weapon_type(lang, wt))}" title="{esc(data.weapon_type(lang, wt))}" width="20" height="20">')
+    return (f'<a class="pg-char r{rarity}{" is-small" if small else ""}" href="{up}{lang}/characters/{key}/" '
+            f'data-el="{esc(el)}" data-wt="{esc(wt)}" data-r="{rarity}" data-q="{esc((name + " " + other + " " + key).lower())}">'
+            f'<span class="pg-char-pic"><img src="{up}characters/{key}.png" alt="" width="{size}" height="{size}" loading="lazy">{icons}</span>'
+            f'<span class="pg-char-name">{esc(name)}</span><span class="pg-stars">{"★" * rarity}</span></a>')
+
+
+def filter_bar(data: Data, lang: str, up: str) -> str:
+    ui = UI[lang]
+    els = "".join(
+        f'<button type="button" class="pg-chip" data-group="el" data-value="{el}" title="{esc(data.element(lang, el))}">'
+        f'<img src="{up}filters/Element_{cap(el)}.png" alt="" width="18" height="18">{esc(data.element(lang, el))}</button>'
+        for el in ELEMENT_ORDER)
+    wts = "".join(
+        f'<button type="button" class="pg-chip" data-group="wt" data-value="{wt}" title="{esc(data.weapon_type(lang, wt))}">'
+        f'<img src="{up}filters/Class-{wt}.png" alt="" width="18" height="18">{esc(data.weapon_type(lang, wt))}</button>'
+        for wt in WEAPON_ORDER)
+    rs = "".join(f'<button type="button" class="pg-chip pg-chip-r{r}" data-group="r" data-value="{r}">{r}★</button>'
+                 for r in (5, 4))
+    return f"""    <div class="pg-filters" aria-label="{esc(ui["filters"])}">
+      <input class="pg-search" type="search" placeholder="{esc(ui["search"])}" aria-label="{esc(ui["search"])}" autocomplete="off">
+      <div class="pg-chips">{els}</div>
+      <div class="pg-chips">{wts}{rs}</div>
+    </div>
+    <p class="pg-empty" hidden>{esc(ui["nothing"])}</p>"""
+
+
 def hub_page(data: Data, lang: str) -> str:
-    ui, up = UI[lang], "../"
+    """Каталог персонажей: {lang}/characters/."""
+    ui, up = UI[lang], "../../"
     groups = defaultdict(list)
     for k in data.by_char:
         groups[(data.names.get(k) or {}).get("element", "")].append(k)
@@ -445,17 +507,35 @@ def hub_page(data: Data, lang: str) -> str:
         keys = sorted(groups.get(el) or [], key=lambda k: data.char(lang, k))
         if not keys:
             continue
-        cards = "".join(
-            f'<a class="pg-char" href="{up}{lang}/characters/{k}/"><img src="{up}characters/{k}.png" alt="" width="56" height="56" loading="lazy">'
-            f'<span>{esc(data.char(lang, k))}</span></a>' for k in keys)
-        sections.append(f'    <h2>{esc(data.element(lang, el))}</h2>\n    <div class="pg-grid">{cards}</div>')
+        cards = "".join(char_card(data, lang, k, up) for k in keys)
+        sections.append(f'    <section class="pg-section"><h2>{esc(data.element(lang, el))}</h2>\n'
+                        f'    <div class="pg-grid">{cards}</div></section>')
     body = f"""    <h1>{esc(ui["site"])} — {esc(ui["tagline"])}</h1>
     <p class="pg-sub">{esc(ui["hub_intro"])}</p>
     <p class="pg-actions"><a class="pg-btn" href="{up}?lang={lang}">{esc(ui["open_app"])}</a>
       <a class="pg-btn pg-btn-ghost" href="{up}{lang}/best-teams/">{esc(ui["best"])}</a>
       <a class="pg-btn pg-btn-ghost" href="{up}{lang}/abyss/">{esc(ui["abyss"])}</a></p>
-{chr(10).join(sections)}"""
-    return page(data, lang, "", 1, ui["hub_title"], ui["hub_desc"], body)
+{filter_bar(data, lang, up)}
+{chr(10).join(sections)}
+    <script src="{up}pages.js" defer></script>"""
+    return page(data, lang, "characters/", 2, ui["hub_title"], ui["hub_desc"], body)
+
+
+def redirect_page(lang: str) -> str:
+    """{lang}/ — старый адрес каталога: отправляем на {lang}/characters/."""
+    target = f"{BASE_URL}{lang}/characters/"
+    return f"""<!doctype html>
+<html lang="{lang}">
+<head>
+  <meta charset="utf-8">
+  <title>GI-Rec</title>
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="{target}">
+  <meta http-equiv="refresh" content="0; url=characters/">
+</head>
+<body><a href="characters/">{target}</a></body>
+</html>
+"""
 
 
 # ------------------------------------------------------------- sitemap
@@ -482,14 +562,15 @@ def main() -> int:
     abyss_date = max(filter(None, [((data.content or {}).get("abyss") or {}).get("start"),
                                    ((data.content or {}).get("onslaught") or {}).get("start")]),
                      default=data.updated)
-    paths = [("", data.updated), ("best-teams/", data.updated)]
+    paths = [("characters/", data.updated), ("best-teams/", data.updated)]
     if (data.content or {}).get("abyss"):
         paths.append(("abyss/", abyss_date))
     chars = sorted(k for k, ts in data.by_char.items() if ts and k in data.names)
     paths += [(f"characters/{k}/", data.updated) for k in chars]
 
     for lang in LANGS:
-        pages = {"": hub_page(data, lang), "best-teams/": best_page(data, lang)}
+        pages = {"": redirect_page(lang), "characters/": hub_page(data, lang),
+                 "best-teams/": best_page(data, lang)}
         ab = abyss_page(data, lang)
         if ab:
             pages["abyss/"] = ab
@@ -503,7 +584,7 @@ def main() -> int:
         cdir = os.path.join(SITE, lang, "characters")
         if os.path.isdir(cdir):
             for k in os.listdir(cdir):
-                if k not in chars:
+                if k not in chars and os.path.isdir(os.path.join(cdir, k)):
                     shutil.rmtree(os.path.join(cdir, k))
                     changed += 1
     changed += write("sitemap.xml", sitemap(data, paths))

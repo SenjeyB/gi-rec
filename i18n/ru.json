@@ -62,7 +62,7 @@
     "developedBy": "Сделал",
     "teamsFrom": "Все отряды взяты из",
     "catalog": "Лучшие отряды для каждого персонажа",
-    "catalogHref": "ru/"
+    "catalogHref": "ru/characters/"
   },
   "views": {
     "emptyRecommendations": "Рекомендаций нет: выбрано слишком мало персонажей или ни один отряд не подходит под текущие правила.",

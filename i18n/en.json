@@ -62,7 +62,7 @@
     "developedBy": "Made by",
     "teamsFrom": "All teams are taken from",
     "catalog": "Best teams for every character",
-    "catalogHref": "en/"
+    "catalogHref": "en/characters/"
   },
   "views": {
     "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",

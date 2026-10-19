@@ -3,6 +3,7 @@
 
 ## 2.2.1 (2026/10/19)
 - New teams (4278 in total)
+- Character previews
 - Full KQMS compliance now allows 4★ weapons only
 
 ## 2.2.0 (2026/10/19)
