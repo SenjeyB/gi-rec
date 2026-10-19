@@ -1,7 +1,3 @@
-// Точка входа. Поднимает локализацию, инвентарь и базу отрядов, затем запускает
-// вьюхи из app.js. Всё асинхронное закончено до первого рендера, поэтому страница
-// сразу рисуется на нужном языке и с отрядами под текущий инвентарь.
-
 import * as i18n from "./i18n.js";
 import * as store from "./store.js";
 import * as draft from "./draft.js";
@@ -23,7 +19,6 @@ const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "m
 const settings = { ...DEFAULTS };
 const FIVE_MODES = ["none", "r1", "any", "mine"];
 
-// Бездна и Натиск для сборщика: необязательный файл, без него сборщик работает
 let content = null;
 
 async function loadJSON(path) {
@@ -32,39 +27,32 @@ async function loadJSON(path) {
   return resp.json();
 }
 
-// ------------------------------------------------------------------ настройки
-
 function loadSettings() {
   try {
     const raw = JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}");
-    // до 2.4.0 был тогл allowFiveStar (только R1), до 2.5.0 — отдельная галочка
-    // onlyMyWeapons; теперь всё это один выбор
     let five = FIVE_MODES.includes(raw.fiveStar) ? raw.fiveStar : (raw.allowFiveStar ? "r1" : "none");
     if (raw.onlyMyWeapons && five !== "none") five = "mine";
     settings.fiveStar = five;
-    // до 2.2.1 фильтр назывался kqmCons и проверял только созвездия
     settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
     settings.kqmArt = !!raw.kqmArt;
     settings.consMode = ["standard", "mine", "any"].includes(raw.consMode) ? raw.consMode : "mine";
-  } catch { /* нет сохранённых — остаются значения по умолчанию */ }
+  } catch {}
 }
 
 function saveSettings() {
-  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch { /* не критично */ }
+  try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch {}
 }
 
-/** Персонажи и созвездия из быстрых настроек (черновика над инвентарём). */
 function ownedCons() {
   const cons = {};
   for (const k of draft.characters()) cons[k] = draft.consOf(k);
   return cons;
 }
 
-/** Текущий срез отрядов под инвентарь и настройки. */
 function currentTeams() {
   return db.query({
     cons: ownedCons(),
-    weapons: store.weaponCopies(),   // ключ -> рефайны всех копий
+    weapons: store.weaponCopies(),
     consMode: settings.consMode,
     fiveStar: settings.fiveStar,
     kqmFull: settings.kqmFull,
@@ -72,16 +60,10 @@ function currentTeams() {
   });
 }
 
-/** Строгий срез для сборщика и подсказок: отряд должен реально собираться на
- *  том, что есть у игрока. Созвездия берём как выставлено, а 5* оружие — только
- *  из инвентаря, по числу копий и их пробуждению, что бы ни стояло в настройках.
- *  weapons — копии, если часть уже занята другими отрядами сборщика. */
 function strictTeams(weapons) {
   return db.query({
     cons: ownedCons(),
     weapons: weapons || store.weaponCopies(),
-    // поиск для сборщика всегда «С учётом моих» + «Только моё», что бы ни
-    // стояло в общих настройках
     consMode: "mine",
     fiveStar: "mine",
     kqmFull: settings.kqmFull,
@@ -89,8 +71,6 @@ function strictTeams(weapons) {
   });
 }
 
-/** Срез без учёта инвентаря: у всех стандартные созвездия. Явные фильтры из
- *  настроек (5★, KQMS) при этом действуют; копии нужны только режиму «моё». */
 function baseTeams() {
   return db.query({
     weapons: settings.fiveStar === "mine" ? store.weaponCopies() : {},
@@ -108,7 +88,6 @@ function refresh() {
 }
 
 function updateFilterHint() {
-  // пояснение под тоглом 5★ убрано по просьбе: оно дублировало подпись
 }
 
 function wireSettings() {
@@ -158,8 +137,6 @@ function wireSettings() {
   }
 }
 
-// ------------------------------------------------------------ переключатель языка
-
 function buildLangSwitcher() {
   const host = document.getElementById("lang-switch");
   if (!host) return;
@@ -176,8 +153,6 @@ function buildLangSwitcher() {
   }
 }
 
-// ------------------------------------------------------------------ фидбек
-
 function wireFeedback() {
   const open = document.getElementById("open-feedback");
   const modal = document.getElementById("feedback-modal");
@@ -192,8 +167,6 @@ function wireFeedback() {
     close();
   });
 }
-
-// ------------------------------------------------------------- вид «Инвентарь»
 
 function wireInventoryView() {
   const section = document.getElementById("inventory-view");
@@ -215,15 +188,10 @@ function wireInventoryView() {
   sync();
 }
 
-// --------------------------------------------------- синхронизация с app.js
-
 function bridge() {
-  // быстрые настройки или сам инвентарь поменялись -> отряды пересобираются
-  // (черновик слушает инвентарь и сообщает и о его изменениях)
   draft.onChange(() => refresh());
 }
 
-/** Первый визит: отмечаем бесплатных персонажей, чтобы рекомендации не были пустыми. */
 function seedDefaults() {
   try {
     if (localStorage.getItem("girec.seeded")) return;
@@ -232,8 +200,6 @@ function seedDefaults() {
   if (store.counts().chars > 0) return;
   store.setCharacterSet(Object.keys(names).filter((k) => (names[k] || {}).stars === 1));
 }
-
-// ------------------------------------------------------------- импорт GOOD
 
 function wireImport() {
   const statusEl = document.getElementById("good-status");
@@ -274,8 +240,6 @@ function wireImport() {
   });
 }
 
-// --------------------------------------------------------------------- старт
-
 async function boot() {
   await i18n.init();
   loadSettings();
@@ -294,7 +258,6 @@ async function boot() {
   app = await startApp({
     names, refs, content,
     teams: currentTeams(), strictTeams: strictTeams(), baseTeams: baseTeams(),
-    // сборщик: отряды под остаток копий 5★ после других слотов
     strictWith: (weapons) => strictTeams(weapons),
     weaponCopies: () => store.weaponCopies(),
   });

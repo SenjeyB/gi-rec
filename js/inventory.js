@@ -1,10 +1,3 @@
-// Раздел «Инвентарь»: персонажи с созвездиями и своё 5★ оружие.
-//
-// Оружие хранится копиями, как в игровом инвентаре: одинаковых может быть
-// несколько, и отряд, где два персонажа держат одну и ту же легендарку,
-// требует двух копий. Поэтому оружие не «отмечается», а добавляется по одному
-// экземпляру через окно выбора.
-
 import * as store from "./store.js";
 import { t, onChange as onLangChange } from "./i18n.js";
 import { charLabel, weaponLabel } from "./labels.js";
@@ -23,8 +16,8 @@ let host = null;
 const ui = {
   tab: "characters",
   charSearch: "",
-  charOwned: "all",        // all | owned | missing
-  charRarity: null,        // 5 | 4
+  charOwned: "all",
+  charRarity: null,
   charElement: null,
   charWeapon: null,
   weaponSearch: "",
@@ -34,8 +27,6 @@ const ui = {
   pickInTeams: false,
 };
 
-// Изменения, сделанные прямо здесь, применяем точечно, а не полной перерисовкой:
-// иначе список прыгал наверх при каждом клике.
 let localEdit = false;
 function local(fn) {
   localEdit = true;
@@ -66,7 +57,6 @@ function button(cls, text) {
   return b;
 }
 
-/** Ряд чипов-переключателей. Повторный клик по активному снимает выбор, если clearable. */
 function chipRow(items, active, onPick, label) {
   const row = el("div", "inv-chips");
   if (label) row.setAttribute("aria-label", label);
@@ -106,7 +96,6 @@ function stepper(value, min, max, onChange, fmt) {
   return box;
 }
 
-/** Перерисовывает сетку, не теряя прокрутку. */
 function fillGrid(grid, nodes, emptyText) {
   const keep = grid.scrollTop;
   grid.innerHTML = "";
@@ -125,8 +114,6 @@ function updateCounts() {
 
 const matches = (q, ...hay) => !q || hay.some((h) => String(h || "").toLowerCase().includes(q));
 
-// ------------------------------------------------------------- персонажи
-
 function characterList() {
   const q = ui.charSearch.trim().toLowerCase();
   return Object.keys(names)
@@ -141,13 +128,12 @@ function characterList() {
       if (ui.charRarity === 4 && five) return false;
       if (ui.charElement && e.element !== ui.charElement) return false;
       if (ui.charWeapon && e.weapon !== ui.charWeapon) return false;
-      // ищем по подписи текущего языка и по английскому имени
       return matches(q, charLabel(k), e.name, k);
     })
     .sort((a, b) => {
       const sa = (names[a].stars || 0) >= 3 ? 1 : 0;
       const sb = (names[b].stars || 0) >= 3 ? 1 : 0;
-      if (sa !== sb) return sb - sa;                        // сначала 5★
+      if (sa !== sb) return sb - sa;
       return charLabel(a).localeCompare(charLabel(b));
     });
 }
@@ -207,7 +193,6 @@ function renderCharacters(container) {
     WEAPON_TYPES.map((w) => ({ value: w, clearable: true, icon: typeIcon(w), title: t(`weaponType.${w}`) })),
     ui.charWeapon, (v) => { ui.charWeapon = v; rebuild(); }));
 
-  // быстрые кнопки, как в быстрых настройках: добавляют группу к отмеченным
   const macros = el("div", "inv-macros");
   const apply = (keys) => { local(() => store.setCharacterSet(keys)); refill(); updateCounts(); };
   for (const [group, label] of [["free", "roster.allFree"], ["four", "roster.all4star"],
@@ -226,8 +211,6 @@ function renderCharacters(container) {
   refill();
 }
 
-// ---------------------------------------------------------------- оружие
-
 const catalog = () => refs.fiveStars || {};
 const wName = (key) => weaponLabel(key) || (catalog()[key] || {}).name || key;
 
@@ -239,7 +222,6 @@ function ownedCopies() {
       if (ui.weaponType && meta.type !== ui.weaponType) return false;
       return matches(q, wName(item.key), meta.name, item.key);
     })
-    // одинаковые копии держим рядом, как в игровом инвентаре
     .sort((a, b) => wName(a.key).localeCompare(wName(b.key)) || b.refine - a.refine);
 }
 
@@ -299,8 +281,6 @@ function renderWeapons(container) {
   refill();
 }
 
-/** Окно выбора: весь каталог 5★, клик добавляет одну копию. Окно не закрывается,
- *  чтобы можно было накидать несколько штук подряд. */
 function openPicker(onAdded) {
   const sheet = openSheet({ title: t("inventory.addWeapon"), className: "sheet-wide" });
   const controls = el("div", "inv-controls");
@@ -368,8 +348,6 @@ function openPicker(onAdded) {
   sheet.footer.appendChild(done);
 }
 
-// ------------------------------------------------------------------ каркас
-
 function render() {
   if (!host) return;
   const keepScroll = host.querySelector(".inv-grid")?.scrollTop || 0;
@@ -418,11 +396,6 @@ function render() {
   if (grid && keepScroll) grid.scrollTop = keepScroll;
 }
 
-/**
- * @param {HTMLElement} container куда рендерить
- * @param {object} namesJson     names.json
- * @param {object} refsJson      refs.json
- */
 export function mount(container, namesJson, refsJson) {
   host = container;
   names = namesJson || {};

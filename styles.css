@@ -123,7 +123,6 @@ button:hover{opacity:0.95}
 .macro-btn{padding:6px 10px;font-size:12px;background:rgba(255,255,255,0.04);border:1px solid var(--line);border-radius:6px;cursor:pointer;color:#e6eef8}
 .macro-btn:hover{background:rgba(255,255,255,0.08)}
 
-
 @media (max-width: 1280px){
 	.app-container{grid-template-columns:minmax(360px, 600px) 1fr}
 }
@@ -178,17 +177,14 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 .characters-grid::-webkit-scrollbar-thumb,.picker-grid::-webkit-scrollbar-thumb,.modal-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.14);border-radius:4px}
 .characters-grid::-webkit-scrollbar-thumb:hover,.picker-grid::-webkit-scrollbar-thumb:hover,.modal-body::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.24)}
 
-/* ---------------------------------------------------------------- language */
 .lang-switch{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
 .lang-btn{padding:8px 10px;font-size:12px;font-weight:600;letter-spacing:.3px;background:rgba(255,255,255,0.02);border:0;color:var(--muted);cursor:pointer}
 .lang-btn+.lang-btn{border-left:1px solid var(--line)}
 .lang-btn:hover{background:rgba(255,255,255,0.06);color:#e6eef8}
 .lang-btn.is-active{background:#1f2937;color:#e6eef8}
 
-/* ---------------------------------------------------------------- feedback */
 .feedback-warning{border-left:3px solid #f59e0b;background:rgba(245,158,11,0.08);padding:8px 10px;border-radius:0 6px 6px 0;margin:8px 0}
 
-/* --------------------------------------------------------------- inventory */
 .inv-head{display:flex;flex-direction:column;gap:10px;margin-bottom:12px}
 .inv-hint{color:var(--muted);margin:0}
 .inv-tabs{display:flex;gap:8px}
@@ -241,15 +237,12 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .inv-portrait{width:48px;height:48px}
 }
 
-/* ------------------------------------------------- сборка внутри карточки отряда */
 .side-check{display:flex;align-items:center;gap:8px;margin:8px 0 0;font-size:13px;cursor:pointer}
 .side-check input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer}
 .side-check input:disabled{cursor:default}
 .side-check input:disabled + span{opacity:.45}
 
 .members{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
-/* Ячейка участника: портрет с созвездием, имя обычным текстом и его сборка.
-   Статус «есть/нет» теперь красит рамку ячейки, а не плашку с именем. */
 .member-cell{display:grid;grid-template-columns:auto 1fr;grid-template-rows:auto auto;
   column-gap:8px;row-gap:2px;align-items:center;padding:5px 10px 5px 5px;border-radius:9px;
   border:1px solid var(--line);background:rgba(255,255,255,0.025)}
@@ -267,7 +260,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 .loadout{display:flex;align-items:center;gap:5px}
 .loadout-weapon,.loadout-set{position:relative;width:26px;height:26px;border-radius:5px;
   display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-/* арты оружия и сетов тёмные — кладём на светлую плашку, иначе на тёмном фоне не читаются */
 .loadout-weapon{background:linear-gradient(145deg,rgba(226,232,240,0.34),rgba(148,163,184,0.16))}
 .loadout-weapon.is-five{box-shadow:0 0 0 1.5px rgba(245,158,11,0.75)}
 .loadout-set{background:linear-gradient(145deg,rgba(226,232,240,0.22),rgba(148,163,184,0.10))}
@@ -284,20 +276,13 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .member-cell .member-avatar{width:32px;height:32px}
 }
 
-/* --------------------------------------------------------------- мобильные */
-/* Грид-колонка 1fr не ужимается ниже min-content своего содержимого, поэтому на
-   телефоне сайдбар распирал страницу. min-width:0 снимает этот порог. */
 .app-container, .sidebar, .maincol, .view-content, .side-card{min-width:0}
 .app-container > *{min-width:0}
 .characters-grid, .picker-grid, .inv-grid{min-width:0}
-/* Шапка и так была плотной, а в 2.0 в неё добавились переключатель языка и
-   кнопка отзыва — на телефоне ряд переставал помещаться и уводил страницу вбок. */
 .app-header{flex-wrap:wrap}
 .app-nav{flex-wrap:wrap;justify-content:flex-end}
 
 @media (max-width:640px){
-  /* на десктопе интерфейс ужат до 0.9 ради плотности; на телефоне это только
-     мельчит текст и тач-цели, поэтому возвращаем масштаб 1:1 */
   :root{--ui-scale:1}
   .app-header{gap:10px;padding:10px 12px}
   .app-nav{width:100%;justify-content:flex-start;gap:6px}
@@ -308,7 +293,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .side-row{grid-template-columns:1fr}
   .view-content{padding:10px}
 
-  /* списки и сетки не должны распирать экран */
   .characters-grid{max-height:340px}
   .inv-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));max-height:56vh;gap:8px}
   .inv-portrait{width:44px;height:44px}
@@ -318,7 +302,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .inv-tabs{width:100%}
   .inv-tab{flex:1 1 0;justify-content:center}
 
-  /* карточка рекомендации — две колонки рядом; на телефоне кладём их друг под друга */
   .squad{flex-direction:column;align-items:stretch;gap:8px}
   .squad .right{align-items:stretch}
   .squad .left{flex-wrap:wrap}
@@ -332,7 +315,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .team-row{flex-wrap:wrap;gap:6px}
   .team-dps{width:100%;text-align:right}
 
-  /* пальцем в 29-пиксельную цель не попасть — поднимаем мелкие кнопки до 36px */
   .filter-chip,.macro-btn,.lang-btn,.inv-chip{min-height:36px}
   .filter-chip,.inv-chip{padding:7px 12px}
   .macro-btn{padding:8px 12px}
@@ -344,14 +326,11 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .toggle-select{min-width:0;width:100%}
 }
 
-/* на совсем узких экранах подзаголовок только отнимает место */
 @media (max-width:380px){
   .app-subtitle{display:none}
   .inv-grid{grid-template-columns:repeat(auto-fill,minmax(68px,1fr))}
 }
 
-/* Планшеты шире 640px, но палец у них тот же. Ориентируемся на тип указателя,
-   а не на ширину: убираем уплотнение интерфейса и поднимаем мелкие цели. */
 @media (pointer: coarse){
   :root{--ui-scale:1}
   .filter-chip,.macro-btn,.lang-btn,.inv-chip,.inv-btn{min-height:38px}
@@ -362,7 +341,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .inv-step{width:26px;height:26px}
 }
 
-/* ------------------------------------------- подробная карточка отряда */
 .team-row.expandable{cursor:pointer}
 .team-row.expandable:hover{background:rgba(255,255,255,0.05)}
 .team-row.is-open{background:rgba(96,165,250,0.08);border-radius:8px 8px 0 0}
@@ -427,7 +405,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 .adv-filters > summary:hover{color:#e6eef8}
 .adv-filters .macro-btn{margin-top:8px}
 
-/* ===================== мобильная раскладка: панель + нижняя навигация ===== */
 .drawer-toggle{display:none;width:40px;height:40px;align-items:center;justify-content:center;
   font-size:18px;line-height:1;border:1px solid var(--line);border-radius:8px;
   background:rgba(255,255,255,0.04);color:#e6eef8;cursor:pointer;flex:0 0 auto}
@@ -437,11 +414,7 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 @media (max-width:640px){
   .drawer-toggle{display:inline-flex}
 
-  /* сайдбар уезжает за край и выдвигается поверх контента */
   .app-container{grid-template-columns:1fr;padding-bottom:68px}
-  /* Панель прячем за край без анимации: transition между calc() и 0 в Chrome
-     (fixed-элемент внутри контейнера с zoom) не доезжает — панель оставалась
-     за экраном. Мгновенное открытие надёжнее красивого, но сломанного. */
   .sidebar{position:fixed;top:0;bottom:0;width:min(86vw,360px);z-index:60;
     left:0;display:none;
     overflow-y:auto;border-radius:0;background:#0b1424;
@@ -450,12 +423,9 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .sidebar.is-open{display:flex}
   body.drawer-open{overflow:hidden}
 
-  /* :not([hidden]) обязателен: обычное правило с display перебивало бы
-     атрибут hidden, и подложка оставалась бы висеть поверх контента */
   .drawer-backdrop:not([hidden]){display:block;position:fixed;inset:0;z-index:55;
     background:rgba(2,6,16,.6);backdrop-filter:blur(2px)}
 
-  /* нижняя навигация по видам */
   .mobile-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;
     left:0;right:0;bottom:0;z-index:50;background:rgba(7,17,41,.96);
     backdrop-filter:blur(8px);border-top:1px solid var(--line);
@@ -469,12 +439,10 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
   .mnav-item.is-active{color:#e6eef8;box-shadow:inset 0 2px 0 var(--accent);
     background:rgba(96,165,250,.10)}
 
-  /* боковой список видов внутри панели дублирует нижнюю навигацию — прячем */
   .sidebar .side-nav{display:none}
   .sidebar .side-card:first-child .side-title{display:none}
   .side-row{grid-template-columns:1fr}
 
-  /* контент получает весь экран */
   .maincol{min-height:50vh}
 }
 
@@ -483,7 +451,6 @@ button,.nav-link,.filter-chip,.char,.tier-member,.team-row.clickable,.squad.clic
 .td-sub-count{color:var(--muted);font-weight:400}
 .td-subs{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}
 
-/* ============================================================ шторка / окно */
 .sheet-layer{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center}
 .sheet-backdrop{position:absolute;inset:0;background:rgba(2,6,16,.62);backdrop-filter:blur(2px)}
 .sheet-panel{position:relative;display:flex;flex-direction:column;width:min(760px,94vw);max-height:86vh;
@@ -515,7 +482,6 @@ body.sheet-open{overflow:hidden}
 }
 @keyframes sheet-up{from{transform:translateY(100%)}to{transform:none}}
 
-/* ======================================================= инвентарь: оружие */
 .inv-btn-primary{border-color:rgba(96,165,250,.55);background:rgba(96,165,250,.16);font-weight:600}
 .inv-btn-primary:hover{background:rgba(96,165,250,.26)}
 .inv-summary{margin:0 0 6px}
@@ -535,7 +501,6 @@ body.sheet-open{overflow:hidden}
   opacity:0;pointer-events:none;transition:opacity .15s}
 .inv-toast.is-on{opacity:1}
 
-/* ============================================================ окно персонажа */
 .cw-head{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:12px}
 .cw-char{flex:1 1 300px;display:flex;gap:12px;align-items:center;padding:10px;border-radius:10px;
   border:1px solid var(--line);background:rgba(255,255,255,0.03)}
@@ -562,7 +527,6 @@ body.sheet-open{overflow:hidden}
   .cw-name{font-size:15px}
 }
 
-/* ===================================== контейнер фильтров вида и шторка фильтров */
 .view-controls:empty{display:none}
 .view-controls{margin-bottom:8px}
 .filters-fab{display:none}
@@ -571,7 +535,6 @@ body.sheet-open{overflow:hidden}
 .filters-sheet #settings-card .side-title{display:block}
 
 @media (max-width:640px){
-  /* на телефоне фильтры живут в шторке, а не над списком */
   .view-box > .view-controls{display:none}
   .sidebar #settings-card{display:none}
   .filters-fab{display:inline-flex;align-items:center;gap:8px;position:fixed;right:12px;bottom:66px;z-index:45;
@@ -584,22 +547,17 @@ body.sheet-open{overflow:hidden}
   .filters-fab-count[hidden]{display:none}
 }
 
-/* ===================== карточки инвентаря: ничего не шире самой карточки ===== */
-/* Степпер — три резиновые ячейки на всю ширину карточки, а не набор кнопок
-   фиксированной ширины: на узкой карточке те вылезали за край. */
 .inv-card-main{flex:0 0 auto}
-.inv-card-foot{margin-top:auto;min-width:0}            /* прижат к низу: степперы в ряду на одной линии */
+.inv-card-foot{margin-top:auto;min-width:0}
 .inv-stepper{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;
   gap:3px;width:100%;max-width:132px;min-width:0}
 .inv-step{width:100%;min-width:0;height:24px}
 .inv-step-value{min-width:24px;padding:0 2px}
 .inv-min-badge{display:none}
-/* крестик — в углу карточки; сетка ниже оставляет иконке поля, чтобы он её не перекрывал */
 .inv-remove{top:4px;right:4px;width:20px;height:20px;font-size:10px}
 .inv-grid{grid-template-columns:repeat(auto-fill,minmax(112px,1fr))}
 
 @media (max-width:640px){
-  /* на телефоне три колонки: в четыре (~73px) не помещались ни степпер, ни крестик рядом с иконкой */
   .inv-grid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr))}
   .inv-portrait{width:46px;height:46px}
   .inv-card-weapon .inv-portrait{width:46px;height:46px}
@@ -612,12 +570,10 @@ body.sheet-open{overflow:hidden}
   .inv-grid{grid-template-columns:repeat(auto-fill,minmax(86px,1fr))}
 }
 @media (max-width:380px){
-  /* самые узкие экраны: иконка и крестик чуть меньше, чтобы не сходились */
   .inv-portrait,.inv-card-weapon .inv-portrait{width:42px;height:42px}
   .inv-remove{top:3px;right:3px;width:18px;height:18px}
 }
 
-/* ------------------------------------------- сборки отряда на разных созвездиях */
 .td-variants{margin:0 0 12px;padding:8px 0 0;border-top:1px solid var(--line)}
 .td-variant{display:flex;align-items:center;gap:8px;width:100%;padding:5px 8px;margin-top:4px;border-radius:8px;
   border:1px solid var(--line);background:rgba(255,255,255,.02);color:inherit;cursor:pointer;text-align:left}
@@ -637,7 +593,6 @@ body.sheet-open{overflow:hidden}
   .td-variant-cell,.td-variant-cell img{width:26px;height:26px}
 }
 
-/* ---------- сборка отряда: контент, слоты, враги (2.5.0) */
 .builder{display:flex;flex-direction:column;gap:12px}
 .builder-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .seg{display:inline-flex;padding:3px;border-radius:10px;background:rgba(255,255,255,0.04);border:1px solid var(--line);gap:3px}
@@ -697,7 +652,6 @@ body.sheet-open{overflow:hidden}
 .side-credit a:hover{text-decoration:underline}
 .side-credit strong{color:#cbd5e1;font-weight:600}
 
-/* ---------- Натиск: уровни сложности по клику на босса */
 .ctx-boss-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;border-radius:8px}
 .ctx-boss-head.is-toggle{cursor:pointer}
 .ctx-boss-head.is-toggle:hover{background:rgba(255,255,255,0.03)}
@@ -723,7 +677,6 @@ body.sheet-open{overflow:hidden}
 .game-text .ctx-element{width:16px;height:16px;vertical-align:-3px;margin:0 2px}
 .game-hl{color:#fcd34d}
 
-/* ---------- Бездна: залы колонками, враги карточками */
 .abyss-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
 .abyss-room{display:flex;flex-direction:column;gap:6px;min-width:0}
 .abyss-room-head{display:flex;align-items:baseline;justify-content:space-between;gap:6px;padding:0 2px 4px;border-bottom:1px solid var(--line)}
@@ -757,17 +710,18 @@ body.sheet-open{overflow:hidden}
 .res-state-label{font-size:11px;font-weight:600;color:#cbd5e1}
 .res-chip.is-base{color:#cbd5e1;border-color:var(--line);background:rgba(255,255,255,0.04)}
 
-/* ---------- быстрые настройки инвентаря: созвездия, «нет отрядов», черновик */
 .char-main{display:flex;align-items:center;gap:8px;background:none;border:0;padding:0;margin:0;color:inherit;font:inherit;cursor:pointer;text-align:left}
 .char-pic{position:relative;display:inline-flex;flex:none}
 .char-noteams{position:absolute;right:-5px;bottom:-5px;min-width:16px;height:16px;padding:0 3px;border-radius:999px;background:#0b1220;border:1px solid rgba(251,191,36,0.6);color:#fbbf24;font-size:10px;font-weight:700;line-height:14px;text-align:center}
-.char-cons{margin-left:2px;border-radius:6px;border:1px solid rgba(4,32,51,0.35);background:rgba(255,255,255,0.6);color:#042033;font-size:11px;font-weight:800;padding:2px 2px;cursor:pointer}
+.char-cons{appearance:none;-webkit-appearance:none;margin-left:2px;border:1px solid rgba(4,32,51,0.28);border-radius:999px;background:rgba(4,32,51,0.16) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%278%27 height=%275%27%3E%3Cpath d=%27M0 0h8L4 5z%27 fill=%27%23042033%27/%3E%3C/svg%3E") no-repeat right 7px center;color:#042033;font:inherit;font-size:11px;font-weight:800;line-height:1.2;padding:2px 18px 2px 8px;cursor:pointer}
+.char-cons:hover{background-color:rgba(4,32,51,0.26)}
+.char-cons:focus-visible{outline:2px solid #042033;outline-offset:1px}
+.char-cons option{color:#e6eef8;background:#0b1220}
 .draft-actions{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}
 .macro-btn:disabled{opacity:.45;cursor:default}
 .draft-save.is-dirty{background:var(--accent);color:#042033;border-color:transparent;font-weight:700}
 .inv-macros{display:flex;flex-wrap:wrap;gap:6px}
 
-/* ---------- лучшие отряды: поиск по персонажам */
 .char-filter{display:flex;flex-direction:column;gap:6px;margin:8px 0 4px;max-width:420px}
 .char-filter-input:disabled{opacity:.6}
 .char-filter-results{display:flex;flex-wrap:wrap;gap:6px}

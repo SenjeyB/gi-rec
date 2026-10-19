@@ -23,7 +23,9 @@ Google видит в нём одну страницу почти без текс
 import os
 import json
 import html
+import re
 import shutil
+import hashlib
 from collections import Counter, defaultdict
 from typing import Dict, List, Optional
 
@@ -124,6 +126,13 @@ UI = {
     },
 }
 ELEMENT_ORDER = ["pyro", "hydro", "anemo", "electro", "dendro", "cryo", "geo"]
+
+
+def asset_version(name: str) -> str:
+    """Версия файла по содержимому: ссылки вида pages.css?v=… не дают браузеру
+    взять из кэша старые стили к новой странице."""
+    with open(os.path.join(SITE, name), "rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:10]
 
 
 def esc(s) -> str:
@@ -259,7 +268,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
   <meta name="theme-color" content="#071129">
   <link rel="icon" href="{up}assets/favicon.png" type="image/png" sizes="64x64">
   <link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="{up}pages.css">{ld}
+  <link rel="stylesheet" href="{up}pages.css?v={asset_version("pages.css")}">{ld}
 </head>
 <body>
   <header class="pg-header">
@@ -517,7 +526,7 @@ def hub_page(data: Data, lang: str) -> str:
       <a class="pg-btn pg-btn-ghost" href="{up}{lang}/abyss/">{esc(ui["abyss"])}</a></p>
 {filter_bar(data, lang, up)}
 {chr(10).join(sections)}
-    <script src="{up}pages.js" defer></script>"""
+    <script src="{up}pages.js?v={asset_version("pages.js")}" defer></script>"""
     return page(data, lang, "characters/", 2, ui["hub_title"], ui["hub_desc"], body)
 
 
@@ -555,6 +564,16 @@ def sitemap(data: Data, paths: List[tuple]) -> str:
             'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(rows) + "\n</urlset>\n")
 
 
+def stamp_app_styles() -> int:
+    """Та же версия по содержимому для styles.css основного приложения."""
+    path = os.path.join(SITE, "index.html")
+    with open(path, "r", encoding="utf-8") as f:
+        text = f.read()
+    fresh = re.sub(r'href="styles\.css(\?v=[0-9a-f]+)?"',
+                   f'href="styles.css?v={asset_version("styles.css")}"', text)
+    return int(write("index.html", fresh))
+
+
 def main() -> int:
     data = Data()
     changed = 0
@@ -588,6 +607,7 @@ def main() -> int:
                     shutil.rmtree(os.path.join(cdir, k))
                     changed += 1
     changed += write("sitemap.xml", sitemap(data, paths))
+    changed += stamp_app_styles()
     print(f"Страниц: {len(written)} (+ sitemap.xml), изменено файлов: {changed}")
     return 0
 

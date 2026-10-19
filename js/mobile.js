@@ -1,7 +1,3 @@
-// Мобильная раскладка: на телефоне сайдбар уезжает в выдвижную панель, а под
-// контентом появляется нижняя навигация. На десктопе всё это скрыто и ничего
-// не меняется — разметка одна, различается только CSS.
-
 import { t, onChange as onLangChange } from "./i18n.js";
 import { openSheet } from "./sheet.js";
 
@@ -19,8 +15,6 @@ let drawerOpen = false;
 function setDrawer(open) {
   drawerOpen = open;
   document.body.classList.toggle("drawer-open", open);
-  // класс вешаем и на сам сайдбар: потомковый селектор от body в этой вёрстке
-  // почему-то проигрывал базовому правилу, а так всё однозначно
   document.querySelector(".sidebar")?.classList.toggle("is-open", open);
   const btn = document.getElementById("drawer-toggle");
   if (btn) btn.setAttribute("aria-expanded", String(open));
@@ -55,11 +49,6 @@ function syncActive() {
   }
 }
 
-// ------------------------------------------------------------ шторка фильтров
-// На телефоне фильтры вида (#view-controls) и карточка настроек со страницы
-// убраны, а по кнопке «Фильтры» переезжают в шторку. Переносим сами узлы, а не
-// копии: обработчики остаются на месте, а вид при перерисовке пишет прямо в
-// #view-controls — где бы тот сейчас ни находился.
 let filterSheet = null;
 
 function moveInto(node, target) {
@@ -84,7 +73,6 @@ function updateFab() {
   const badge = fab.querySelector(".filters-fab-count");
   const n = activeFilterCount();
   if (badge) { badge.hidden = n === 0; badge.textContent = String(n); }
-  // в инвентаре свои фильтры — общая кнопка там не нужна
   fab.hidden = location.hash === "#inventory";
 }
 
@@ -121,7 +109,6 @@ export function init() {
     if (e.key === "Escape" && drawerOpen) setDrawer(false);
   });
 
-  // выбор персонажа внутри панели не должен её закрывать, а переход по виду — должен
   window.addEventListener("hashchange", () => {
     setDrawer(false);
     if (filterSheet) filterSheet.close();
@@ -130,14 +117,9 @@ export function init() {
   });
 
   document.getElementById("filters-fab")?.addEventListener("click", openFilters);
-  // Счётчик активных фильтров на кнопке. Слушатель на document срабатывает уже
-  // после обработчика чипа (всплытие), когда вид перерисован, поэтому считаем
-  // сразу. requestAnimationFrame тут не годится: в фоновой вкладке браузер его
-  // придерживает, и счётчик отставал на клик.
   document.addEventListener("click", updateFab);
   document.addEventListener("change", updateFab);
 
-  // при возврате на десктоп панель не должна остаться «открытой»
   const mq = window.matchMedia(MQ);
   const onChange = () => {
     if (!mq.matches) { setDrawer(false); if (filterSheet) filterSheet.close(); }

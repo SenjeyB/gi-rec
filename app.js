@@ -6,20 +6,14 @@ import * as draft from './js/draft.js';
 import { groupKeys } from './js/store.js';
 import { openCharacterWindow } from './js/charwindow.js';
 
-// Имена оружия и сетов для подсказок — заполняются из data/refs.json при старте.
 let WEAPON_NAMES = {};
 let SET_NAMES = {};
 
-// Перевод динамических строк. Второй аргумент — английский текст: он подставится,
-// если ключа нет в словаре, так что вид не развалится из-за опечатки в ключе.
 function T(key, fallback, vars){
   const s = t(key, vars);
   return s === key ? fallback : s;
 }
 
-// Оружие и сеты персонажа внутри отряда: иконка оружия с рефайном и до двух сетов.
-// Данные приходят из data/db.json через js/db.js, поэтому рисуем только если
-// сборка известна (у отрядов, восстановленных из localStorage, её нет).
 function renderLoadout(slot){
   if(!slot) return null;
   const wrap = createEl('div','loadout');
@@ -42,7 +36,6 @@ function renderLoadout(slot){
     none.title = T('team.noSet','No artifact set');
     wrap.appendChild(none);
   } else {
-    // 4 детали одного сета — одна иконка; 2+2 — две
     for(const s of sets.slice(0,2)){
       const node = createEl('div','loadout-set');
       const img = new Image();
@@ -60,20 +53,14 @@ function renderLoadout(slot){
   return wrap;
 }
 
-// Ячейка участника отряда: портрет, имя и его сборка (оружие + сеты).
-// idx — позиция в отряде; build в данных выровнен с members, поэтому берём по индексу.
 function appendMemberCell(host, key, team, idx, pillClass){
   const slot = (team && team.build) ? team.build[idx] : null;
-  // Статус «есть / нет персонажа» раньше красил плашку с именем; теперь он на
-  // рамке всей ячейки, а имя идёт обычным текстом — так карточка спокойнее.
   const cell = createEl('div','member-cell');
   if(pillClass) cell.classList.add(pillClass);
 
   const avatarWrap = createEl('div','member-portrait');
   const img = createAvatarImg(key,'member-avatar');
   if(img) avatarWrap.appendChild(img);
-  // созвездие берём из самой сборки, а не из общего признака персонажа:
-  // в разных отрядах один и тот же герой может считаться на разных констах
   if(slot && Number.isFinite(slot.cons)){
     avatarWrap.appendChild(createEl('span','cons-badge', `C${slot.cons}`));
   }
@@ -87,18 +74,12 @@ function appendMemberCell(host, key, team, idx, pillClass){
   return cell;
 }
 
-// Фильтры и селекты вида живут в отдельном контейнере, а не внутри списка:
-// на телефоне он целиком переезжает в шторку фильтров (js/mobile.js), и
-// перерисовка вида пишет прямо туда, где он сейчас находится.
 function viewControls(){
   return document.getElementById('view-controls') || document.createElement('div');
 }
 
-// names.json для функций вне start() (окно персонажа, тир-лист, рекомендации)
 let NAMES = {};
 
-// Строка отряда: участники, DPS, раскрытие подробностей по клику.
-// owned — у кого из участников рамка «есть», остальные помечаются «нет».
 function buildTeamRow(team, owned, extraCls){
   const row = createEl('div','team-row' + (extraCls ? ' ' + extraCls : ''));
   const members = createEl('div','members');
@@ -115,8 +96,6 @@ function buildTeamRow(team, owned, extraCls){
   return row;
 }
 
-// Списки отрядов рисуем страницами: на каждый отряд — четыре портрета с иконками
-// сборки, и сотни таких строк сразу заметно тормозят.
 function paginate(container, items, pageSize, build){
   let shown = 0;
   const more = createEl('button','macro-btn more-btn');
@@ -140,25 +119,10 @@ function createEl(tag,cls,txt){
   return el;
 }
 
-/**
- * Точка входа. Вызывается из js/main.js, когда уже подняты локализация,
- * инвентарь и база — поэтому первый же рендер уходит сразу переведённым
- * и с отрядами, отфильтрованными под инвентарь.
- *
- * @param {object} ctx
- *   names  — names.json
- *   teams  — отряды из js/db.js (там же лежит build с оружием и сетами)
- *   refs   — data/refs.json, нужен для подписей оружия и сетов
- * @returns {{refreshTeams:Function, rerender:Function}}
- */
 export async function start(ctx){
   const names = ctx && ctx.names;
   let teams = (ctx && ctx.teams) || [];
-  // строгий срез под инвентарь — для сборщика и подсказок, где отряд должен
-  // реально собираться на тех созвездиях и оружии, что есть у игрока
   let strictTeams = [];
-  // общий срез без учёта инвентаря: стандартные созвездия для всех — для
-  // «Все отряды», где рейтинг не должен зависеть от того, что есть у игрока
   let baseTeams = [];
   if(!names){
     document.body.prepend(createEl('div','small',T('errors.loadData','Failed to load data. Check that names.json and data/db.json are next to index.html.')))
@@ -173,8 +137,6 @@ export async function start(ctx){
     for(const [k,v] of Object.entries(ctx.refs.sets||{})) SET_NAMES[k] = v.name;
   }
 
-  // Отряды пересобираются при каждом изменении инвентаря или настроек,
-  // поэтому держим их в let и умеем перестраивать индекс по участникам.
   let parsedTeams = [];
   let teamsByMember = new Map();
 
@@ -195,7 +157,7 @@ export async function start(ctx){
         ? t.chars.slice()
         : (t.display || []).map((d)=> d || d),
       dps: t.dps != null ? t.dps : (t.DPS || 0),
-      build: t.build || null,      // оружие и сеты по слотам, выровнены с members
+      build: t.build || null,
       src: t.src || null,
       sims: t.sims || 0,
       kqmCons: !!t.kqmCons,
@@ -216,8 +178,6 @@ export async function start(ctx){
 
   const charactersDiv = document.getElementById('characters');
   const ownedFiltersHost = document.getElementById('owned-filters');
-  // Идентификатор персонажа — ключ из names.json (он же имя файла картинки).
-  // Отображаемое имя зависит от языка и для опознания не годится.
   const charKeys = Object.keys(names);
   const sortedCharKeys = ()=> charKeys.slice().sort((a,b)=> charLabel(a).localeCompare(charLabel(b)));
 
@@ -324,10 +284,6 @@ export async function start(ctx){
     };
   }
 
-  // ------------------------------------------------ быстрые настройки инвентаря
-  // Левый блок правит черновик (js/draft.js): по нему считаются отряды на всех
-  // вкладках. «Сохранить» переносит его в инвентарь, «Откатить» — сбрасывает.
-
   const isFive = (key)=> ((names[key] || {}).stars || 0) >= 3;
 
   function updateDraftBar(){
@@ -345,7 +301,6 @@ export async function start(ctx){
     const inDb = charactersInDb();
     for(const key of sortedCharKeys()){
       const label = charLabel(key);
-      // ищем и по подписи текущего языка, и по английскому имени
       const english = (names[key] && names[key].name) || key;
       if(q && !label.toLowerCase().includes(q) && !english.toLowerCase().includes(q)) continue;
       if(!pred(key)) continue;
@@ -356,7 +311,6 @@ export async function start(ctx){
       const pic = createEl('span','char-pic');
       const img = createAvatarImg(key,'avatar');
       if(img) pic.appendChild(img);
-      // персонажа без отрядов в базе можно отметить — просто помечаем значком
       if(!inDb.has(key)){
         const mark = createEl('span','char-noteams','∅');
         mark.title = T('roster.noTeamsForChar','No teams in the database for this character');
@@ -398,17 +352,12 @@ export async function start(ctx){
   }catch{}
   modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
 
-  // быстрые кнопки добавляют группу к отмеченным; перерисовку запускает
-  // js/main.js, который слушает черновик
   for(const [id, group] of [['macro-free','free'], ['macro-4star','four'], ['macro-standard','standard'], ['macro-all','all']]){
     document.getElementById(id)?.addEventListener('click', ()=> draft.addAll(groupKeys(group)));
   }
   document.getElementById('macro-clear')?.addEventListener('click', ()=> draft.clear());
   document.getElementById('draft-rollback')?.addEventListener('click', ()=> draft.rollback());
   document.getElementById('draft-save')?.addEventListener('click', ()=> draft.save());
-
-  // Импорт GOOD живёт в js/good.js + js/main.js: он понимает созвездия и 5* оружие,
-  // а прежняя версия здесь умела только список имён и дублировала обработчики.
 
   const openImport = document.getElementById('open-import');
   const importModal = document.getElementById('import-modal');
@@ -459,11 +408,6 @@ export async function start(ctx){
     renderSuggestions(suggestions, getOwned());
   }
 
-  // ------------------------------------------------------------ сборка отряда
-  // Слоты под контент: Бездна — две половины 12 этажа, Натиск — три поля боя.
-  // Персонажи и копии 5★ оружия, занятые одним слотом, остальным недоступны:
-  // если у игрока одна копия, второй отряд с тем же оружием не соберётся.
-
   const BUILDER_KEY = 'builderSelections';
 
   function renderTeamBuilder(){
@@ -481,7 +425,6 @@ export async function start(ctx){
     const gen = (dbMeta() || {}).generated || '';
     const ownedCopies = (ctx && ctx.weaponCopies) ? ctx.weaponCopies() : {};
 
-    // ---------- шапка: контент, цикл, «очистить всё»
     const head = createEl('div','builder-head');
     const seg = createEl('div','seg');
     for(const [key, label] of [['abyss', T('builder.abyssShort','Spiral Abyss')], ['onslaught', T('builder.onslaughtShort','Stygian Onslaught')]]){
@@ -499,7 +442,6 @@ export async function start(ctx){
     if(info) head.appendChild(cycleMeta(info));
     wrap.appendChild(head);
 
-    // ---------- выбранные отряды
     function loadSelections(){
       try{
         const all = JSON.parse(localStorage.getItem(BUILDER_KEY)||'{}');
@@ -527,7 +469,6 @@ export async function start(ctx){
     const sameMembers = (a, b)=> a.length === b.length && a.every(m => b.includes(m));
     const strictFor = (weapons)=> (ctx && ctx.strictWith ? ctx.strictWith(weapons) : []).map(toTeam);
 
-    // Что занято слотами, кроме skip: персонажи и остаток копий 5★.
     function takenExcept(skip){
       let weapons = ownedCopies;
       const chars = new Set();
@@ -540,9 +481,6 @@ export async function start(ctx){
       return { chars, weapons };
     }
 
-    // Проверяем слоты по порядку: каждый забирает своих персонажей и копии.
-    // После пересборки базы индексы отрядов сдвигаются — тогда находим тот же
-    // состав заново, под то, что осталось от предыдущих слотов.
     function checkSlots(){
       let weapons = ownedCopies;
       const chars = new Set();
@@ -664,7 +602,6 @@ export async function start(ctx){
 
       const taken = takenExcept(idx);
       const availOwned = new Set([...owned].filter(n => !taken.chars.has(n)));
-      // отряды под то, что осталось: персонажи не заняты, копий 5★ хватает
       const baseCandidates = strictFor(taken.weapons)
         .filter(s => s.members.every(m => availOwned.has(m)))
         .sort((a,b)=> b.dps - a.dps);
@@ -896,7 +833,6 @@ export async function start(ctx){
     renderBestTeamsList(showMode, mode);
   }
 
-  // Поиск по персонажам: до четырёх, остаются отряды, где есть все выбранные.
   const bestTeamsChars = [];
   const MAX_CHARS = 4;
 
@@ -976,10 +912,6 @@ export async function start(ctx){
     const hasElementFilter = elementsFilter.size > 0;
     const hasWeaponFilter = weaponsFilter.size > 0;
 
-    // «Все отряды» — вся база на стандартных созвездиях, без оглядки на инвентарь.
-    // Раньше обе опции резались настройкой «Готов получить», и при нуле «все»
-    // совпадали с «доступными». «Доступные» — только то, что реально собирается:
-    // ваши персонажи на ваших созвездиях и с вашим 5★ оружием.
     const source = showMode === 'available' ? strictTeams : baseTeams;
     let allTeams = source.map(t => {
       const missingCount = t.members.filter(m => !owned.has(m)).length;
@@ -1042,7 +974,6 @@ export async function start(ctx){
     }
 
     container.appendChild(createEl('div','small muted',T('views.showingTop','Showing top '+allTeams.length+' team(s) by DPS',{n:allTeams.length})));
-    // в режиме «все отряды» рамкой подсвечиваем тех, кого у игрока нет
     const markOwned = showMode === 'all' ? owned : null;
     paginate(container, allTeams, 25, (team)=> buildTeamRow(team, markOwned, 'best-team-row'));
   }
@@ -1051,8 +982,6 @@ export async function start(ctx){
     const hash = location.hash || '#recommendations';
     setActiveLink(hash);
     viewControls().innerHTML = '';
-    // «Инвентарь» рисует js/inventory.js в своей секции — здесь ничего не делаем,
-    // иначе в скрытый #view-content зря уедут рекомендации.
     if(hash === '#inventory') return;
     if(hash === '#tierlist'){
       renderTier();
@@ -1069,7 +998,6 @@ export async function start(ctx){
   if(!location.hash) location.hash = '#recommendations';
   renderActiveView();
 
-  // ?char=furina — ссылка со страницы персонажа: сразу открываем его окно
   try{
     const deep = new URLSearchParams(location.search).get('char');
     if(deep && names[deep]){
@@ -1090,8 +1018,6 @@ export async function start(ctx){
     updatesModal.hidden = false;
     updatesModal.querySelector('.close-btn')?.focus();
     try{
-      // перевод списка обновлений лежит отдельным файлом на язык;
-      // если его нет — откатываемся на английский оригинал
       const lang = document.documentElement.lang || 'en';
       let text = null;
       if(lang !== 'en'){
@@ -1119,9 +1045,6 @@ export async function start(ctx){
     }
   });
 
-  // Перерисовка пересобирает DOM целиком, из-за чего страница и список персонажей
-  // прыгали наверх (особенно заметно при смене языка). Запоминаем позиции и
-  // возвращаем их в том же кадре, чтобы перерисовка была незаметной.
   function keepScroll(fn){
     const page = window.scrollY;
     const roster = charactersDiv ? charactersDiv.scrollTop : 0;
@@ -1131,7 +1054,6 @@ export async function start(ctx){
   }
 
   return {
-    // новый список отрядов (сменился инвентарь или настройки фильтра)
     refreshTeams(list, strictList, baseList){
       keepScroll(()=>{
         rebuildTeams(list, strictList, baseList);
@@ -1141,8 +1063,6 @@ export async function start(ctx){
     },
     rerender(){
       keepScroll(()=>{
-        // чипы фильтра в «Ваших персонажах» рисуются один раз при старте —
-        // при смене языка их тоже нужно пересобрать, иначе подписи остаются старыми
         renderFilters(ownedFiltersHost, 'owned');
         renderOwnedCharacters();
         renderActiveView();
@@ -1185,7 +1105,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
       missing: obj.missing,
       count: obj.teams.length,
       median,
-      topteams: list            // все отряды набора — окно покажет их страницами
+      topteams: list
     });
   }
 
@@ -1193,8 +1113,6 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
   return results;
 }
 
-// Рекомендаций бывает несколько сотен, и каждая тянет за собой четыре портрета
-// с иконками сборки. Рисуем страницами, остальное — по кнопке.
 const SUGGESTION_PAGE = 25;
 
 function renderSuggestions(list, owned){
@@ -1363,7 +1281,7 @@ function renderTierlist(tierData, ownedSet){
 
     const membersTd = document.createElement('td'); membersTd.className = 'tier-members';
     for(const member of grouped[t]){
-      const key = member.name;   // в тир-листе name хранит ключ персонажа
+      const key = member.name;
       const chip = createEl('div','tier-member');
       const avatar = createAvatarImg(key,'avatar');
       if(avatar) chip.appendChild(avatar);
@@ -1389,14 +1307,8 @@ function createAvatarImg(key, cls){
   img.className = cls;
   img.alt = charLabel(key);
   img.onerror = ()=>{ img.style.display = 'none'; };
-  // Общий бейдж «C1» на персонаже убран: созвездие теперь показывается у каждой
-  // сборки отдельно, из её собственных данных, и не висит там, где неуместен.
   return img;
 }
-
-// ------------------------------------------------ Бездна и Натиск в сборщике
-// Данные — data/content.json (собирает build_content.py с вики). Файла может
-// не быть: тогда слоты просто без подсказок о врагах.
 
 const isRu = ()=> lang() === 'ru';
 
@@ -1450,8 +1362,6 @@ function disorderLine(items){
   return line;
 }
 
-/** Сопротивления врага, отличные от обычных 10%: выше — красным (стихию лучше
- *  не нести), ниже — зелёным (уязвим). */
 const resClass = (v)=> 'res-chip ' + (v === 'immune' || v > 10 ? 'is-high' : v < 10 ? 'is-low' : 'is-base');
 const resText = (v)=> v === 'immune' ? T('builder.immune','immune') : `${v}%`;
 
@@ -1472,7 +1382,6 @@ function resChips(res){
   return wrap;
 }
 
-/** Как меняются сопротивления в особых состояниях: «все X» и исключения. */
 function resStatesBlock(states){
   if(!states || !states.length) return null;
   const box = createEl('div','res-states');
@@ -1492,8 +1401,6 @@ function resStatesBlock(states){
   return box;
 }
 
-/** Карточка врага в зале: иконка, имя, количество, сопротивления. По клику
- *  раскрываются сопротивления по состояниям и официальная подсказка из игры. */
 function enemyTile(enemies, ref){
   const e = enemies[ref.id] || { en: ref.id, ru: ref.id };
   const tipText = e.tip ? (isRu() ? e.tip.ru : e.tip.en) : '';
@@ -1535,7 +1442,6 @@ function enemyTile(enemies, ref){
   return wrap;
 }
 
-/** Враги половины 12 этажа: залы колонками, внутри — волны по порядку. */
 function abyssHalf(info, enemies, half){
   if(!info || !info.chambers) return null;
   const key = half === 0 ? 'first' : 'second';
@@ -1572,8 +1478,6 @@ const elementIcon = (el)=>{
   return img;
 };
 
-/** Босс поля боя в Натиске и его преимущества. По клику раскрываются уровни
- *  сложности из игровых данных: форма босса, механики и правила уровня. */
 function onslaughtBoss(info, enemies, i){
   const boss = info && info.bosses && info.bosses[i];
   if(!boss) return null;
@@ -1619,7 +1523,6 @@ function onslaughtBoss(info, enemies, i){
   return box;
 }
 
-// Выбранная сложность общая для всех трёх полей боя и запоминается.
 const ONS_KEY = 'girec.onsDifficulty';
 let onsDifficulty = 6;
 try{ const v = Number(localStorage.getItem(ONS_KEY)); if(v >= 1 && v <= 6) onsDifficulty = v; }catch{}
@@ -1633,8 +1536,6 @@ function setOnsDifficulty(n){
   }
 }
 
-/** Текст из игры: {hl}..{/hl} — выделение, {el:pyro} — иконка стихии,
- *  перенос строки — новый абзац. Собирается узлами, без innerHTML. */
 function gameText(str, cls){
   const wrap = createEl('div', cls || 'game-text');
   for(const para of String(str || '').split('\n')){
@@ -1698,7 +1599,6 @@ function renderOnsDetails(panel, details, i){
   }
 }
 
-
 function renderMarkdownBasic(md){
   const lines = md.split(/\r?\n/);
   const out = [];
@@ -1722,8 +1622,6 @@ function escapeHtml(s){
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
 
-// Жирный текст в списке обновлений. Экранируем сначала, размечаем потом,
-// поэтому разметка из самого файла в HTML не просочится.
 function inlineMd(s){
   return escapeHtml(s).replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
 }

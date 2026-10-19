@@ -1,14 +1,8 @@
-// Локализованные подписи для персонажей, оружия, сетов и статов.
-//
-// Идентификатор персонажа — ключ из names.json (hutao), он не зависит от языка.
-// Здесь только отображаемые подписи поверх этих ключей. Приём английского имени
-// оставлен для совместимости со старыми сохранениями.
-
 import { lang, t } from "./i18n.js";
 
-const cache = new Map();          // lang -> {chars, weapons, sets}
+const cache = new Map();
 let current = { chars: {}, weapons: {}, sets: {} };
-let keyByDisplay = {};            // английское имя -> ключ names.json
+let keyByDisplay = {};
 
 async function loadFor(code) {
   if (cache.has(code)) return cache.get(code);
@@ -25,7 +19,6 @@ async function loadFor(code) {
   }
 }
 
-/** names — names.json; нужен, чтобы находить ключ по английскому имени. */
 export async function init(names) {
   keyByDisplay = {};
   for (const [key, entry] of Object.entries(names || {})) {
@@ -39,7 +32,6 @@ export async function reload() {
   current = await loadFor(lang());
 }
 
-/** Подпись персонажа. Принимает и ключ (hutao), и английское имя (Hu Tao). */
 export function charLabel(keyOrDisplay) {
   if (!keyOrDisplay) return "";
   const key = current.chars[keyOrDisplay] ? keyOrDisplay : keyByDisplay[keyOrDisplay];
@@ -54,7 +46,6 @@ export function setLabel(key) {
   return (key && current.sets[key]) || key || "";
 }
 
-/** Подпись стата артефакта: atk% -> «ATK%» / «Сила атаки %». */
 export function statLabel(stat) {
   if (!stat) return "";
   const key = `stats.${stat.replace("%", "Pct")}`;

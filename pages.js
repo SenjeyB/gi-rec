@@ -1,8 +1,3 @@
-// Фильтры каталога персонажей на статических страницах (tools/build_pages.py).
-// Без скрипта видны все персонажи; со скриптом — стихии, типы оружия, редкость
-// и поиск по имени (на любом из двух языков). Внутри группы — «или», между
-// группами — «и», как в фильтрах основного сайта. Выбор живёт в адресе (#el=…),
-// чтобы отфильтрованный каталог можно было переслать ссылкой.
 (function () {
   const box = document.querySelector(".pg-filters");
   if (!box) return;
@@ -58,7 +53,6 @@
     apply();
   });
   search.addEventListener("input", () => { writeHash(); apply(); });
-  // «назад» или правка адреса руками (replaceState сам hashchange не вызывает)
   window.addEventListener("hashchange", () => { readHash(); apply(); });
 
   readHash();

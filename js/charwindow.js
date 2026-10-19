@@ -1,7 +1,3 @@
-// Окно персонажа: кто это, есть ли он у игрока, и все его отряды под текущие
-// настройки — страницами. Открывается из тир-листа (один персонаж) и из
-// рекомендаций (там персонажей, которых не хватает, может быть несколько).
-
 import { t } from "./i18n.js";
 import { charLabel } from "./labels.js";
 import * as store from "./store.js";
@@ -73,13 +69,6 @@ function infoCard(key, names, teams) {
   return card;
 }
 
-/**
- * @param {object} o
- *   chars   — ключи персонажей, о ком окно
- *   teams   — отряды, уже отсортированные по DPS
- *   names   — names.json
- *   teamRow — (team) => HTMLElement, строка отряда (рисует app.js, чтобы вид совпадал)
- */
 export function openCharacterWindow({ chars, teams, names, teamRow }) {
   const sheet = openSheet({
     title: chars.map((k) => charLabel(k)).join(" + "),

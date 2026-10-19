@@ -1,9 +1,3 @@
-// Всплывающее окно: на десктопе — по центру экрана, на телефоне — шторка снизу.
-// Используется для добавления оружия, фильтров на телефоне и карточки персонажа.
-//
-// Слой вешается прямо на <body>, а не внутрь .ui-scale-inner: у того стоит
-// zoom, и fixed-элементы внутри него позиционируются и анимируются криво.
-
 import { t } from "./i18n.js";
 
 const stack = [];
@@ -22,13 +16,6 @@ function onKey(e) {
   }
 }
 
-/**
- * @param {object} opts
- *   title     — заголовок
- *   className — доп. класс панели (для отдельных стилей)
- *   onClose   — вызывается после закрытия
- * @returns {{layer, panel, body, footer, setTitle, close}}
- */
 export function openSheet({ title = "", className = "", onClose } = {}) {
   const layer = el("div", "sheet-layer");
   const backdrop = el("div", "sheet-backdrop");
@@ -80,7 +67,6 @@ export function openSheet({ title = "", className = "", onClose } = {}) {
   return handle;
 }
 
-/** Закрыть все открытые окна (например, при смене вида). */
 export function closeAll() {
   for (const h of stack.slice().reverse()) h.close();
 }

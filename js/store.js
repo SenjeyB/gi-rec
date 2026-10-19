@@ -1,27 +1,17 @@
-// Аккаунт игрока: персонажи с созвездиями и своё 5★ оружие.
-// Живёт только в localStorage этого браузера, никуда не отправляется.
-//
-// Внутри всё идентифицируется ключами из names.json ("hutao", "kamisatoayaka"
-// тут НЕ используется — только короткий ключ, он же имя файла картинки).
-// Старый формат хранил отображаемые имена ("Hu Tao") — миграция ниже.
-
 const KEY = "girec.inventory";
 const LEGACY_KEY = "ownedSelection";
-const VERSION = 2;          // 2: оружие хранится списком копий
+const VERSION = 2;
 
-let names = {};          // ключ -> {name, element, weapon, stars}
+let names = {};
 let displayToKey = {};
 let state = { version: VERSION, characters: {}, weapons: [] };
 const listeners = new Set();
 
-/** 5★ персонаж (включая стандартных) — только им имеет смысл крутить созвездия. */
 export function isFiveStar(charKey) {
   const entry = names[charKey];
   return !!entry && (entry.stars || 0) >= 3;
 }
 
-/** Группы для быстрых кнопок: free — бесплатные, four — все 4★ (с бесплатными),
- *  standard — стандартные 5★, all — все. Признак — поле stars в names.json. */
 export function groupKeys(group) {
   const want = { free: [1], four: [1, 2], standard: [3] }[group];
   return Object.keys(names).filter((k) => !want || want.includes((names[k] || {}).stars));
@@ -52,8 +42,6 @@ function read() {
 }
 
 function migrateLegacy() {
-  // В ownedSelection раньше лежали отображаемые имена («Hu Tao»), теперь ключи
-  // («hutao»). Принимаем оба формата, чтобы старый выбор не потерялся.
   let list;
   try { list = JSON.parse(localStorage.getItem(LEGACY_KEY) || "[]"); } catch { list = []; }
   const characters = {};
@@ -81,13 +69,10 @@ function normalize(raw) {
   const out = { version: VERSION, characters: {}, weapons: [] };
   const chars = (raw && raw.characters) || {};
   for (const k of Object.keys(chars)) {
-    if (!names[k]) continue;                     // персонаж пропал из names.json
+    if (!names[k]) continue;
     const v = chars[k] || {};
     out.characters[k] = { cons: clampCons(Number(v.cons)) };
   }
-  // Оружие — список копий, как в игровом инвентаре: одинаковых может быть
-  // несколько, и отряд с двумя одинаковыми легендарками требует две копии.
-  // До версии 2 тут был словарь {ключ: {refine}} — разворачиваем его в копии.
   const weps = raw && raw.weapons;
   if (Array.isArray(weps)) {
     for (const item of weps) {
@@ -105,10 +90,8 @@ function normalize(raw) {
 function persist() {
   try {
     localStorage.setItem(KEY, JSON.stringify(state));
-    // Зеркалим список во старый ключ — app.js читает его при старте.
-    // С 2.2 там лежат ключи персонажей, а не отображаемые имена.
     localStorage.setItem(LEGACY_KEY, JSON.stringify(ownedCharacters()));
-  } catch { /* переполнение или приватный режим — молча живём в памяти */ }
+  } catch {}
 }
 
 function emit() {
@@ -118,8 +101,6 @@ function emit() {
 }
 
 function changed() { persist(); emit(); }
-
-// ------------------------------------------------------------------ чтение
 
 export function ownedCharacters() {
   return Object.keys(state.characters).sort();
@@ -138,17 +119,14 @@ export function consOf(charKey) {
   return rec ? rec.cons : 0;
 }
 
-/** Все копии оружия в порядке добавления. */
 export function weaponItems() {
   return state.weapons.map((w) => ({ ...w }));
 }
 
-/** Ключи оружия без повторов. */
 export function ownedWeapons() {
   return [...new Set(state.weapons.map((w) => w.key))].sort();
 }
 
-/** ключ -> рефайны всех копий; нужно фильтру, чтобы учитывать дубликаты. */
 export function weaponCopies() {
   const out = {};
   for (const w of state.weapons) (out[w.key] ||= []).push(w.refine);
@@ -163,7 +141,6 @@ export function hasWeapon(weaponKey) {
   return state.weapons.some((w) => w.key === weaponKey);
 }
 
-/** Лучший рефайн среди копий. */
 export function refineOf(weaponKey) {
   let best = 0;
   for (const w of state.weapons) if (w.key === weaponKey && w.refine > best) best = w.refine;
@@ -180,8 +157,6 @@ export function counts() {
     weapons: state.weapons.length,
   };
 }
-
-// ------------------------------------------------------------------ запись
 
 export function setCharacter(charKey, owned, cons) {
   if (!names[charKey]) return;
@@ -209,7 +184,6 @@ export function bumpCons(charKey, delta) {
   setCons(charKey, consOf(charKey) + delta);
 }
 
-/** Добавляет одну копию оружия. Возвращает её id. */
 export function addWeapon(weaponKey, refine = 1) {
   const item = { id: newId(), key: String(weaponKey), refine: clampRefine(refine) };
   state.weapons.push(item);
@@ -230,14 +204,11 @@ export function setItemRefine(id, refine) {
   changed();
 }
 
-/** Заменяет аккаунт целиком (импорт из GOOD). */
 export function replace(next) {
   state = normalize(next);
   changed();
 }
 
-/** Массово выставить список персонажей (быстрые кнопки): у уже отмеченных
- *  созвездия сохраняются, новые — с C0. */
 export function setCharacterSet(charKeys) {
   const chars = {};
   for (const k of charKeys) {
@@ -248,8 +219,6 @@ export function setCharacterSet(charKeys) {
   changed();
 }
 
-/** Персонажи с созвездиями одним изменением (сохранение быстрых настроек);
- *  оружие не трогается. charMap: ключ -> созвездие. */
 export function setCharacters(charMap) {
   const chars = {};
   for (const [k, c] of Object.entries(charMap || {})) {
@@ -269,9 +238,6 @@ export function onChange(fn) {
   return () => listeners.delete(fn);
 }
 
-// ------------------------------------------------------------------- старт
-
-/** names — разобранный names.json. Вызывать один раз до рендера. */
 export function init(namesJson) {
   names = namesJson || {};
   displayToKey = {};
@@ -282,10 +248,8 @@ export function init(namesJson) {
 
   const stored = read();
   state = stored ? normalize(stored) : migrateLegacy();
-  // Миграцию сразу закрепляем, чтобы второй раз не пересчитывать
   if (!stored) persist();
 
-  // Другая вкладка могла поменять аккаунт
   window.addEventListener("storage", (e) => {
     if (e.key !== KEY) return;
     const fresh = read();

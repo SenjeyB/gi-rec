@@ -1,12 +1,7 @@
-// Подробная карточка отряда: крупные портреты, оружие, сеты, статы артефактов
-// и соответствие стандарту KQM. Раскрывается под строкой отряда по клику.
-
 import { t } from "./i18n.js";
 import { charLabel, weaponLabel, setLabel, statLabel } from "./labels.js";
 import { loadDetails, teamBuilds } from "./db.js";
 
-// Цена одного ролла сабстата по стандарту KQM (5★ артефакт). В базе хранится
-// число роллов, реальное значение — роллы × цена ролла.
 const ROLL_VALUE = {
   "hp": 253.94, "hp%": 0.0496, "atk": 16.54, "atk%": 0.0496, "def": 19.68,
   "def%": 0.062, "er": 0.0551, "em": 19.82, "cr": 0.0331, "cd": 0.0662,
@@ -21,10 +16,8 @@ function subValue(stat, rolls) {
   return statValue(stat, (ROLL_VALUE[stat] || 0) * rolls);
 }
 
-// у живых аккаунтов роллы не ровные: 10.8 вместо 10
 const fmtRolls = (n) => (Number.isInteger(n) ? String(n) : n.toFixed(1));
 
-// порядок строк в итоговых статах: криты, атака, HP, защита, остальное
 const TOTAL_ORDER = ["cr", "cd", "atk%", "atk", "hp%", "hp", "def%", "def", "em", "er", "heal"];
 const totalRank = (stat) => {
   const i = TOTAL_ORDER.indexOf(stat);
@@ -51,8 +44,6 @@ function icon(src, alt, cls) {
   return img;
 }
 
-// Две метки KQMS. «Полное соответствие» требует и созвездий, и артефактов по
-// стандарту, поэтому зелёной бывает только вместе с «артефактами».
 function kqmBadge(okCons, okArt) {
   const okFull = !!(okCons && okArt);
   const wrap = el("div", "td-kqm");
@@ -80,7 +71,6 @@ function memberBlock(slot, stats) {
   head.appendChild(el("div", "td-member-name", charLabel(slot.char)));
   card.appendChild(head);
 
-  // оружие
   if (slot.weapon) {
     const row = el("div", "td-row");
     const w = el("div", `td-icon${slot.fiveStar ? " is-five" : ""}`);
@@ -93,7 +83,6 @@ function memberBlock(slot, stats) {
     card.appendChild(row);
   }
 
-  // сеты
   if (slot.sets && slot.sets.length) {
     for (const s of slot.sets) {
       const row = el("div", "td-row");
@@ -110,7 +99,6 @@ function memberBlock(slot, stats) {
     card.appendChild(el("div", "td-row td-muted", t("team.noSet")));
   }
 
-  // сим дал только сумму статов артефактов — показываем её как есть
   if (stats && stats.total && stats.total.length) {
     const box = el("div", "td-stats");
     box.appendChild(el("div", "td-stats-title", t("team.artTotals")));
@@ -127,7 +115,6 @@ function memberBlock(slot, stats) {
     return card;
   }
 
-  // мейн-статы: песок, кубок, корона
   if (stats && stats.main && stats.main.length) {
     const box = el("div", "td-stats");
     box.appendChild(el("div", "td-stats-title", t("team.mainStats")));
@@ -137,7 +124,6 @@ function memberBlock(slot, stats) {
     card.appendChild(box);
   }
 
-  // сабстаты — показываем только то, что реально прокачано сверх базовых двух роллов
   const subs = ((stats && stats.subs) || []).filter((s) => s.rolls > 0);
   if (subs.length) {
     const box = el("div", "td-stats");
@@ -146,7 +132,6 @@ function memberBlock(slot, stats) {
     for (const s of subs.slice().sort((a, b) => b.rolls - a.rolls)) {
       const row = el("div", "td-sub" + (s.rolls > 2 ? " is-rolled" : ""));
       row.appendChild(el("span", "td-sub-name", statLabel(s.stat)));
-      // значение стата, а число роллов — в скобках рядом
       const val = el("span", "td-sub-rolls", subValue(s.stat, s.rolls));
       val.appendChild(el("span", "td-sub-count", ` (${fmtRolls(s.rolls)})`));
       row.appendChild(val);
@@ -161,11 +146,6 @@ function memberBlock(slot, stats) {
 
 const fmtDps = (n) => Math.round(n || 0).toLocaleString("en-US").replace(/,/g, " ");
 
-/**
- * Сборки этого отряда на разных созвездиях и оружии — чтобы игрок с персонажем
- * на C2 видел, сколько это даёт относительно стандарта. Клик переключает
- * карточку на выбранную сборку.
- */
 function variantsBlock(team, onPick) {
   const builds = teamBuilds(team.teamIndex);
   if (builds.length < 2) return null;
@@ -223,26 +203,19 @@ async function fillPanel(panel, team) {
   const grid = el("div", "td-members");
   panel.appendChild(grid);
 
-  // статы артефактов лежат отдельными файлами и качаются только сейчас
   const stats = await loadDetails(team.teamIndex, team.buildIndex);
   (team.build || []).forEach((slot, i) => {
     grid.appendChild(memberBlock(slot, stats && stats[i]));
   });
 }
 
-/**
- * Собирает панель подробностей.
- * @param {object} team запись из js/db.js (нужны build, dps, sims, src, kqm*, teamIndex, buildIndex)
- */
 export async function buildPanel(team) {
   const panel = el("div", "team-detail");
-  // клики внутри панели не должны всплывать до строки отряда и закрывать её
   panel.addEventListener("click", (e) => e.stopPropagation());
   await fillPanel(panel, team);
   return panel;
 }
 
-/** Переключает панель под строкой отряда. */
 export async function toggleDetail(row, team) {
   const existing = row.nextElementSibling;
   if (existing && existing.classList.contains("team-detail")) {
@@ -250,13 +223,11 @@ export async function toggleDetail(row, team) {
     row.classList.remove("is-open");
     return false;
   }
-  // одновременно открыта только одна панель — так список не разъезжается
   for (const open of document.querySelectorAll(".team-detail")) open.remove();
   for (const r of document.querySelectorAll(".team-row.is-open")) r.classList.remove("is-open");
 
   row.classList.add("is-open");
   const panel = await buildPanel(team);
-  // пока качались статы, строку могли закрыть или перерисовать
   if (!row.isConnected || !row.classList.contains("is-open")) return false;
   row.after(panel);
   return true;
