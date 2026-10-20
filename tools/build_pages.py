@@ -607,6 +607,9 @@ def main() -> int:
                     shutil.rmtree(os.path.join(cdir, k))
                     changed += 1
     changed += write("sitemap.xml", sitemap(data, paths))
+    # запасной sitemap: простой список адресов, его Google тоже принимает
+    urls = [BASE_URL] + [f"{BASE_URL}{lang}/{path}" for path, _ in paths for lang in LANGS]
+    changed += write("sitemap.txt", "\n".join(urls) + "\n")
     changed += stamp_app_styles()
     print(f"Страниц: {len(written)} (+ sitemap.xml), изменено файлов: {changed}")
     return 0

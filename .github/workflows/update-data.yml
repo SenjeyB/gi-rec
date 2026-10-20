@@ -85,7 +85,7 @@ jobs:
 
       - name: Коммит изменений
         run: |
-          git add data enemies weapons sets en ru sitemap.xml
+          git add data enemies weapons sets en ru sitemap.xml sitemap.txt index.html
           if git diff --cached --quiet; then
             echo "Данные не изменились — коммитить нечего"
             exit 0
