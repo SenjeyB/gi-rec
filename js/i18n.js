@@ -5,6 +5,8 @@ const STORAGE_KEY = "girec.lang";
 const dicts = new Map();
 let current = FALLBACK;
 const listeners = new Set();
+const loaders = new Set();
+let switching = 0;
 
 function detect() {
   try {
@@ -65,6 +67,11 @@ export function onChange(fn) {
   return () => listeners.delete(fn);
 }
 
+export function addLoader(fn) {
+  loaders.add(fn);
+  return () => loaders.delete(fn);
+}
+
 export function apply(root = document) {
   for (const el of root.querySelectorAll("[data-i18n]")) {
     let vars;
@@ -95,7 +102,9 @@ export function apply(root = document) {
 
 export async function setLang(next) {
   if (!SUPPORTED.includes(next)) return;
-  await loadDict(next);
+  const ticket = ++switching;
+  await Promise.all([loadDict(next), ...[...loaders].map((fn) => fn(next))]);
+  if (ticket !== switching) return;
   current = next;
   try { localStorage.setItem(STORAGE_KEY, next); } catch {}
   apply();

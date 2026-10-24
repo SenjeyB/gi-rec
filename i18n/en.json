@@ -64,6 +64,44 @@
     "catalog": "Best teams for every character",
     "catalogHref": "en/characters/"
   },
+  "tour": {
+    "open": "Guide",
+    "skip": "Skip",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Got it",
+    "progress": "Step {n} of {total}",
+    "welcome": {
+      "title": "Welcome to GI-Rec",
+      "text": "GI-Rec suggests who to pull and which teams you can build from your characters. All teams come from KQM sims. Here is a quick tour."
+    },
+    "roster": {
+      "title": "Mark your characters",
+      "text": "Click a character to add or remove it. The buttons above mark a whole group at once, like \"All 4★\". When you're done, press \"Save to inventory\".",
+      "textMobile": "Your characters and account import live under ☰. Mark the ones you have and press \"Save to inventory\"."
+    },
+    "import": {
+      "title": "Or import your account",
+      "text": "A GOOD-format JSON (for example, an export from Genshin Optimizer) brings in characters, constellations and 5★ weapons at once. You can fine-tune them in the Inventory."
+    },
+    "modes": {
+      "title": "Modes",
+      "text": "Recommendations: who to pull to unlock new teams. Tier List: characters in tiers based on your roster. Team Builder: teams for the Abyss and Onslaught without shared characters. Best Teams: the strongest teams in the database, searchable by character."
+    },
+    "settings": {
+      "title": "Settings",
+      "text": "\"Willing to obtain\" sets how many new characters to look for. \"Constellations\" and \"5★ weapons\" choose between only yours and any.",
+      "textMobile": "Under \"Filters\": how many new characters to look for, and whether to count only your constellations and 5★ weapons or any."
+    },
+    "results": {
+      "title": "Recommendations",
+      "text": "Each card shows the characters you're missing, how many teams they unlock and their median DPS. Click a card to see the teams, then a team to see weapons, artifacts and stats from the KQM sim."
+    },
+    "done": {
+      "title": "That's it",
+      "text": "You can open this guide again with this button."
+    }
+  },
   "views": {
     "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",
     "emptyTierlist": "Tier list is empty: no characters have teams that include any of your selected characters.",

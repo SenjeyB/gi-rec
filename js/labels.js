@@ -1,10 +1,10 @@
 import { lang, t } from "./i18n.js";
 
+const EMPTY = { chars: {}, weapons: {}, sets: {} };
 const cache = new Map();
-let current = { chars: {}, weapons: {}, sets: {} };
 let keyByDisplay = {};
 
-async function loadFor(code) {
+export async function load(code) {
   if (cache.has(code)) return cache.get(code);
   try {
     const resp = await fetch(`data/names.${code}.json`, { cache: "no-cache" });
@@ -13,11 +13,12 @@ async function loadFor(code) {
     cache.set(code, data);
     return data;
   } catch {
-    const empty = { chars: {}, weapons: {}, sets: {} };
-    cache.set(code, empty);
-    return empty;
+    cache.set(code, EMPTY);
+    return EMPTY;
   }
 }
+
+const current = () => cache.get(lang()) || EMPTY;
 
 export async function init(names) {
   keyByDisplay = {};
@@ -25,25 +26,22 @@ export async function init(names) {
     const disp = (entry && entry.name) || key;
     if (!(disp in keyByDisplay)) keyByDisplay[disp] = key;
   }
-  current = await loadFor(lang());
-}
-
-export async function reload() {
-  current = await loadFor(lang());
+  await load(lang());
 }
 
 export function charLabel(keyOrDisplay) {
   if (!keyOrDisplay) return "";
-  const key = current.chars[keyOrDisplay] ? keyOrDisplay : keyByDisplay[keyOrDisplay];
-  return (key && current.chars[key]) || keyOrDisplay;
+  const { chars } = current();
+  const key = chars[keyOrDisplay] ? keyOrDisplay : keyByDisplay[keyOrDisplay];
+  return (key && chars[key]) || keyOrDisplay;
 }
 
 export function weaponLabel(key) {
-  return (key && current.weapons[key]) || key || "";
+  return (key && current().weapons[key]) || key || "";
 }
 
 export function setLabel(key) {
-  return (key && current.sets[key]) || key || "";
+  return (key && current().sets[key]) || key || "";
 }
 
 export function statLabel(stat) {

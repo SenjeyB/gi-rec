@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.3.0 (2026/10/24)
+- A short guide for new users: skip it or reopen it with the "Guide" button
+- Fixed character names in the Inventory not switching language
+
 ## 2.2.1 (2026/10/19)
 - New teams (4278 in total)
 - Character previews

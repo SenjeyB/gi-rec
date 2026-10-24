@@ -16,7 +16,7 @@
   <meta property="twitter:title" content="GI-Rec - Genshin Impact Character Pulling Recommendations & Tier Lists">
   <meta property="twitter:description" content="Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!">
   <meta property="twitter:image" content="https://senjeyb.github.io/gi-rec/preview.png">
-  <link rel="stylesheet" href="styles.css?v=532335b85a">
+  <link rel="stylesheet" href="styles.css?v=723ffc68f0">
   <link rel="icon" href="assets/favicon.png" type="image/png" sizes="64x64">
   <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -47,6 +47,7 @@
         </div>
         <div class="app-nav">
           <div id="lang-switch" class="lang-switch" role="group"></div>
+          <button id="open-tour" class="nav-link" type="button" data-i18n="tour.open">Guide</button>
           <button id="open-feedback" class="nav-link" type="button" data-i18n="app.feedback">Leave feedback</button>
           <button id="open-updates" class="nav-link" type="button" data-i18n="app.updates">Updates</button>
           <a class="nav-link" href="https://github.com/SenjeyB/gi-rec" target="_blank" rel="noopener"
@@ -78,7 +79,7 @@
               <label for="mode" class="side-label" data-i18n="settings.willingToObtain">Willing to obtain:</label>
               <select id="mode" class="side-input">
                 <option value="0" data-i18n="settings.characters_0">0 characters</option>
-                <option value="1" data-i18n="settings.characters_1">1 character</option>
+                <option value="1" data-i18n="settings.characters_1" selected>1 character</option>
                 <option value="2" data-i18n="settings.characters_2">2 characters</option>
                 <option value="3" data-i18n="settings.characters_3">3 characters</option>
                 <option value="4" data-i18n="settings.characters_4">4 characters</option>
@@ -113,7 +114,7 @@
             </div>
           </div>
 
-          <div class="side-card">
+          <div class="side-card" id="roster-card">
             <h2 class="side-title" data-i18n="roster.title">Quick inventory settings</h2>
             <div class="side-actions" style="margin-bottom:8px">
               <button id="open-import" type="button" data-i18n="roster.import">Import Characters</button>

@@ -6,6 +6,7 @@ import * as labels from "./labels.js";
 import { mount as mountInventory } from "./inventory.js";
 import { parseGood, looksLikeGood } from "./good.js";
 import * as mobile from "./mobile.js";
+import * as tour from "./tour.js";
 import { start as startApp } from "../app.js";
 
 const GITHUB_ISSUES = "https://github.com/SenjeyB/gi-rec/issues/new/choose";
@@ -192,6 +193,13 @@ function bridge() {
   draft.onChange(() => refresh());
 }
 
+function isFirstVisit() {
+  try {
+    if (localStorage.getItem("girec.seeded")) return false;
+  } catch { return false; }
+  return store.counts().chars === 0;
+}
+
 function seedDefaults() {
   try {
     if (localStorage.getItem("girec.seeded")) return;
@@ -199,6 +207,9 @@ function seedDefaults() {
   } catch { return; }
   if (store.counts().chars > 0) return;
   store.setCharacterSet(Object.keys(names).filter((k) => (names[k] || {}).stars === 1));
+  try {
+    if (!localStorage.getItem("settingMode")) localStorage.setItem("settingMode", "2");
+  } catch {}
 }
 
 function wireImport() {
@@ -250,7 +261,9 @@ async function boot() {
   console.info(`gi-rec: база от ${info.generated} — ${info.teams} отрядов, ${info.builds} сборок`);
 
   await labels.init(names);
+  i18n.addLoader(labels.load);
   store.init(names);
+  const firstVisit = isFirstVisit();
   seedDefaults();
   draft.init(names);
   bridge();
@@ -269,9 +282,9 @@ async function boot() {
   wireInventoryView();
   mobile.init();
   updateFilterHint();
+  tour.init({ auto: firstVisit && !new URLSearchParams(location.search).has("char") });
 
-  i18n.onChange(async () => {
-    await labels.reload();
+  i18n.onChange(() => {
     buildLangSwitcher();
     updateFilterHint();
     if (app) app.rerender();
