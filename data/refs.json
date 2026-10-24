@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-19T00:08:09Z",
+ "generated": "2026-10-24T20:53:52Z",
  "weapons": {
   "absolution": {
    "name": "Absolution",
@@ -1550,25 +1550,13 @@
   }
  },
  "sets": {
-  "nightoftheskysunveiling": {
-   "name": "Night of the Sky's Unveiling",
-   "icon": "UI_RelicIcon_15041_4"
-  },
-  "aubadeofmorningstarandmoon": {
-   "name": "Aubade of Morningstar and Moon",
-   "icon": "UI_RelicIcon_15043_4"
-  },
-  "silkenmoonsserenade": {
-   "name": "Silken Moon's Serenade",
-   "icon": "UI_RelicIcon_15042_4"
+  "adaycarvedfromrisingwinds": {
+   "name": "A Day Carved From Rising Winds",
+   "icon": "UI_RelicIcon_15044_4"
   },
   "viridescentvenerer": {
    "name": "Viridescent Venerer",
    "icon": "UI_RelicIcon_15002_4"
-  },
-  "adaycarvedfromrisingwinds": {
-   "name": "A Day Carved From Rising Winds",
-   "icon": "UI_RelicIcon_15044_4"
   },
   "celestialgift": {
    "name": "Celestial Gift",
@@ -1593,6 +1581,18 @@
   "noblesseoblige": {
    "name": "Noblesse Oblige",
    "icon": "UI_RelicIcon_15007_4"
+  },
+  "nightoftheskysunveiling": {
+   "name": "Night of the Sky's Unveiling",
+   "icon": "UI_RelicIcon_15041_4"
+  },
+  "aubadeofmorningstarandmoon": {
+   "name": "Aubade of Morningstar and Moon",
+   "icon": "UI_RelicIcon_15043_4"
+  },
+  "silkenmoonsserenade": {
+   "name": "Silken Moon's Serenade",
+   "icon": "UI_RelicIcon_15042_4"
   },
   "tenacityofthemillelith": {
    "name": "Tenacity of the Millelith",
