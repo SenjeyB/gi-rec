@@ -15,8 +15,8 @@ build_db.py
   операторы: $in $nin $ne $gt $gte $lt $lte $and $or $regex $options
 Запрещены summary.team (и все вложенные), $size, $not, $elemMatch, $exists.
 Поэтому фильтровать по созвездиям и оружию на сервере больше НЕЛЬЗЯ —
-качаем всё и фильтруем локально. Это и к лучшему: для тогла «отряды на R1
-легендарках» и для фильтра по своим пушкам всё равно нужен полный набор.
+качаем всё и фильтруем локально. Это и к лучшему: для тогла "отряды на R1
+легендарках" и для фильтра по своим пушкам всё равно нужен полный набор.
 
 Выход:
   gi-rec/data/db.json    — структурированная база (отряды -> сборки -> персонажи)
@@ -155,7 +155,7 @@ def fetch_page(query: dict, limit: int, skip: int) -> List[dict]:
 
 
 def _stat_values(text: str) -> List[Tuple[str, float]]:
-    """Пары (стат, значение) из «add stats ...»; множители перемножаем."""
+    """Пары (стат, значение) из "add stats ..."; множители перемножаем."""
     out = []
     for stat, expr in STAT_RE.findall(text):
         v = 1.0
@@ -198,7 +198,7 @@ def _rolls(stat: str, value: float) -> float:
 
 
 def _finish_slot(slot: dict) -> None:
-    """Раскладывает строки «add stats» персонажа на мейны, сабы или итог.
+    """Раскладывает строки "add stats" персонажа на мейны, сабы или итог.
 
     Встречаются три записи: мейны и сабы отдельными строками (сабы бывают одной
     строкой KQM base*N, реальными числами или построчно на каждый артефакт), либо
@@ -636,7 +636,7 @@ def download_icons(refs: dict, weapons: Dict[str, dict], sets: Dict[str, dict], 
     from PIL import Image
     import io
 
-    # оружие: то, что встретилось в симах, плюс весь каталог 5* для раздела «Аккаунт»
+    # оружие: то, что встретилось в симах, плюс весь каталог 5* для раздела "Аккаунт"
     want_weapons = sorted(set(refs["weapons"]) | set(refs["fiveStars"]))
     # у оружия ассеты лежат в /assets/UI/, у артефактов — в /assets/UI/reliquary/
     jobs = [
@@ -737,7 +737,7 @@ def main():
     total = sum(os.path.getsize(os.path.join(details, f"{i}.json")) for i in range(shards))
     print(f"Статы артефактов: {shards} файлов, всего {total/1024:.0f} KB")
 
-    # В разделе «Аккаунт» игрок отмечает свои легендарки, поэтому каталог 5*
+    # В разделе "Аккаунт" игрок отмечает свои легендарки, поэтому каталог 5*
     # берём целиком из игровых данных, а не только то, что встретилось в симах.
     used = {k for k in db["dict"]["weapons"] if k}
     five_stars = {
@@ -759,7 +759,7 @@ def main():
 
     print("Локализованные названия...")
     localized = load_localized()
-    # ГГ у yatta одной записью «Traveler», а у нас по одному ключу на стихию
+    # ГГ у yatta одной записью "Traveler", а у нас по одному ключу на стихию
     ELEM_RU = {"anemo": "Анемо", "cryo": "Крио", "geo": "Гео", "electro": "Электро",
                "dendro": "Дендро", "hydro": "Гидро", "pyro": "Пиро"}
     for lang, bucket in localized.items():
@@ -779,12 +779,14 @@ def main():
                 chars[key] = (f"ГГ ({ELEM_RU.get(elem, elem.title())})" if lang == "ru"
                               else entry.get("name") or key)
         bucket["chars"] = chars
+        # на сайте только прямые кавычки, а в игровых названиях бывают ёлочки
+        plain = lambda s: s.replace(chr(0xAB), '"').replace(chr(0xBB), '"')
         # оставляем только то, что реально встречается на сайте
         trimmed = {
-            "chars": {k: v for k, v in sorted(bucket["chars"].items()) if k in names},
-            "weapons": {k: v for k, v in sorted(bucket["weapons"].items())
+            "chars": {k: plain(v) for k, v in sorted(bucket["chars"].items()) if k in names},
+            "weapons": {k: plain(v) for k, v in sorted(bucket["weapons"].items())
                         if k in refs["weapons"] or k in refs["fiveStars"]},
-            "sets": {k: v for k, v in sorted(bucket["sets"].items()) if k in refs["sets"]},
+            "sets": {k: plain(v) for k, v in sorted(bucket["sets"].items()) if k in refs["sets"]},
         }
         path = os.path.join(DATA, f"names.{lang}.json")
         write_json(path, trimmed, indent=1)

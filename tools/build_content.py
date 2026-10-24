@@ -3,8 +3,8 @@
 """
 build_content.py
 
-Текущий цикл Витой Бездны (12 этаж) и Мрачного натиска для вкладки «Сборка
-отряда» в gi-rec. Источник — вики Genshin Impact на Fandom (MediaWiki API):
+Текущий цикл Витой Бездны (12 этаж) и Мрачного натиска для вкладки "Сборка
+отряда" в gi-rec. Источник — вики Genshin Impact на Fandom (MediaWiki API):
   Spiral Abyss/Floors/<дата>      — враги по залам и половинам, аномалии
   Stygian Onslaught/<дата>        — три босса и их преимущества
 Иконки врагов берутся из отрендеренной страницы вики (те же, что видит
@@ -45,7 +45,7 @@ IN_CI = os.environ.get("GITHUB_ACTIONS") == "true"
 OUT = os.path.join(SITE, "data", "content.json")
 ICONS = os.path.join(SITE, "enemies")
 
-# Префиксы усиленных версий «местных легенд» в Бездне и Натиске
+# Префиксы усиленных версий "местных легенд" в Бездне и Натиске
 LEGEND_PREFIXES = ("Battle-Hardened ", "Veteran ")
 
 # Игровые названия реакций на русском. Проверены по русским текстам талантов
@@ -192,7 +192,7 @@ def icon_map(html: str) -> Dict[str, str]:
 
 
 def parse_enemy_list(s: str) -> List[List[dict]]:
-    """«A*9// B; C*2» -> волны -> [{name, count}]."""
+    """"A*9// B; C*2" -> волны -> [{name, count}]."""
     waves = []
     for wave in s.split("//"):
         items = []
@@ -236,7 +236,7 @@ RES_TYPES = ("pyro", "hydro", "dendro", "electro", "anemo", "cryo", "geo", "phys
 
 # Подписи состояний на вики. Игровые термины — официальный перевод из игры
 # (режимы автоматона, куувяки, импульс потока, элементальные кольца); названия
-# вроде «Stunned» придумала вики — их переводим описательно.
+# вроде "Stunned" придумала вики — их переводим описательно.
 STATE_RU = {
     "Stunned": "Оглушён",
     "Paralyzed": "Парализован",
@@ -281,8 +281,8 @@ def _compact(values: dict) -> dict:
 def parse_res(text: str, legend: bool):
     """Сопротивления из {{Enemy Stats}} на странице врага.
     Возвращает (базовые, состояния): базовые — только отличные от обычных 10%;
-    состояния (res2, res3… — «оглушён», «режим зачистки» и т.п.) — как меняются
-    сопротивления в них. У «Бывалых» статы лежат в отдельном разделе."""
+    состояния (res2, res3… — "оглушён", "режим зачистки" и т.п.) — как меняются
+    сопротивления в них. У "Бывалых" статы лежат в отдельном разделе."""
     if not text:
         return {}, []
     block = text
@@ -402,13 +402,13 @@ class Enemies:
         # В начале цикла у нового врага на вики бывает заглушка вместо иконки.
         # Её не сохраняем: без файла следующий ежедневный запуск попробует снова.
         if icon_url and re.search(r"unknown|placeholder|no[_ ]?image", icon_url, re.I):
-            warn(f"у «{full_name}» на вики пока заглушка вместо иконки")
+            warn(f"у \"{full_name}\" на вики пока заглушка вместо иконки")
             icon_url = None
         ru = self.resolve_ru(full_name, base)
         if not ru:
-            warn(f"нет русского названия для «{full_name}» — останется английское")
+            warn(f"нет русского названия для \"{full_name}\" — останется английское")
         # en — точное игровое название (с Battle-Hardened); в русском префикса
-        # нет, вместо него сайт ставит метку «Местная легенда»
+        # нет, вместо него сайт ставит метку "Местная легенда"
         item = {"en": full_name, "ru": ru or base, "legend": legend, "src": icon_url}
         cached = self.cache.get(eid) or {}
         if "res" in cached and "resStates" in cached:
@@ -423,7 +423,7 @@ class Enemies:
             full_name, base, title, re.sub(r"\s*\(Local Legend\)$", "", title)]))
         self.items[eid] = item
         if not icon_url:
-            warn(f"нет иконки для «{full_name}»")
+            warn(f"нет иконки для \"{full_name}\"")
         return {"id": eid}
 
     def download_icons(self, force: bool) -> None:
@@ -443,7 +443,7 @@ class Enemies:
             url += ("&" if "?" in url else "?") + "format=original"
             data = http(url)
             if not data.startswith(b"\x89PNG"):
-                warn(f"иконка «{e['en']}» пришла не PNG — пропускаю")
+                warn(f"иконка \"{e['en']}\" пришла не PNG — пропускаю")
                 e["icon"] = None
                 continue
             with open(path, "wb") as f:
@@ -726,13 +726,13 @@ def build_onslaught_details(onslaught: dict, enemies: Enemies, old: Optional[dic
             form = tm.get(cfg.get("levelNameTextMapHash"))
             wiki_en = enemies.items.get(bosses[i]["id"], {}).get("en", "") if i < len(bosses) else ""
             if form and wiki_en and slug(wiki_en) not in slug(form["en"]):
-                warn(f"Натиск: босс {i + 1} в игре «{form['en']}», на вики «{wiki_en}» — пропускаю детали")
+                warn(f"Натиск: босс {i + 1} в игре \"{form['en']}\", на вики \"{wiki_en}\" — пропускаю детали")
                 return None
             adv, titles, full = classify(cfg)
             ok = [True]
             advantage = both(adv[0], ok) if adv and adv[0] else None
             if not ok[0]:
-                warn(f"Натиск: в преимуществах «{form and form['en']}» неизвестная иконка — оставляю общие")
+                warn(f"Натиск: в преимуществах \"{form and form['en']}\" неизвестная иконка — оставляю общие")
                 advantage = None
             mech = []
             for k, title in enumerate(titles):
