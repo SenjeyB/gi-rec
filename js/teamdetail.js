@@ -26,6 +26,13 @@ const totalRank = (stat) => {
 
 const SIM_URL = "https://db.kqm.gg/db/";
 
+function videoUrl(src) {
+  if (!src) return null;
+  if (src.startsWith("yt:")) return "https://www.youtube.com/watch?v=" + src.slice(3);
+  if (src.startsWith("bb:")) return "https://www.bilibili.com/video/" + src.slice(3);
+  return /^https?:\/\//.test(src) ? src : null;
+}
+
 function el(tag, cls, text) {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -60,7 +67,7 @@ function kqmBadge(okCons, okArt) {
   return wrap;
 }
 
-function memberBlock(slot, stats) {
+function memberBlock(slot, stats, real) {
   const card = el("div", "td-member");
 
   const head = el("div", "td-member-head");
@@ -96,7 +103,7 @@ function memberBlock(slot, stats) {
       card.appendChild(row);
     }
   } else {
-    card.appendChild(el("div", "td-row td-muted", t("team.noSet")));
+    card.appendChild(el("div", "td-row td-muted", t(real ? "team.noArtifacts" : "team.noSet")));
   }
 
   if (stats && stats.total && stats.total.length) {
@@ -171,7 +178,8 @@ function variantsBlock(team, onPick) {
     row.appendChild(who);
     if (v.aboveStandard) row.appendChild(el("span", "td-variant-tag", t("team.aboveStd")));
     if (current) row.appendChild(el("span", "td-variant-tag is-current", t("team.shown")));
-    row.appendChild(el("span", "td-variant-dps", fmtDps(v.dps)));
+    if (v.origin) row.appendChild(el("span", "td-variant-tag is-real", t(`team.origin.${v.origin}`)));
+    row.appendChild(el("span", "td-variant-dps", (v.origin === "clear" ? "~" : "") + fmtDps(v.dps)));
     if (!current) row.addEventListener("click", (e) => { e.stopPropagation(); onPick(v); });
     box.appendChild(row);
   }
@@ -186,10 +194,16 @@ async function fillPanel(panel, team) {
   head.appendChild(kqmBadge(team.kqmCons, team.kqmArt));
 
   const meta = el("div", "td-meta");
-  if (team.sims) meta.appendChild(el("span", "td-meta-item", t("team.sims", { n: team.sims })));
-  if (team.src) {
-    const a = el("a", "td-src", t("team.source"));
-    a.href = SIM_URL + team.src;
+  if (team.origin) {
+    meta.appendChild(el("span", "td-meta-item td-origin", t(`team.originFull.${team.origin}`)));
+    meta.appendChild(el("span", "td-meta-item", t(`team.runs.${team.origin}`, { n: team.sims || 1 })));
+  } else if (team.sims) {
+    meta.appendChild(el("span", "td-meta-item", t("team.sims", { n: team.sims })));
+  }
+  const href = team.origin ? videoUrl(team.src) : team.src ? SIM_URL + team.src : null;
+  if (href) {
+    const a = el("a", "td-src", t(team.origin ? "team.video" : "team.source"));
+    a.href = href;
     a.target = "_blank";
     a.rel = "noopener";
     meta.appendChild(a);
@@ -205,7 +219,7 @@ async function fillPanel(panel, team) {
 
   const stats = await loadDetails(team.teamIndex, team.buildIndex);
   (team.build || []).forEach((slot, i) => {
-    grid.appendChild(memberBlock(slot, stats && stats[i]));
+    grid.appendChild(memberBlock(slot, stats && stats[i], !!team.origin));
   });
 }
 

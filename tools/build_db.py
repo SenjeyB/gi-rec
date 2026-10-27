@@ -53,6 +53,7 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 # скрипт лежит в gi-rec/tools/ — сайт уровнем выше
 SITE = os.environ.get("GIREC_SITE") or os.path.dirname(ROOT)
 DATA = os.path.join(SITE, "data")
+STYGIAN = os.path.join(ROOT, "stygian_snapshot.json")
 IN_CI = os.environ.get("GITHUB_ACTIONS") == "true"
 
 
@@ -408,6 +409,40 @@ def load_localized() -> Dict[str, Dict[str, Dict[str, str]]]:
     return out
 
 
+def load_stygian() -> List[dict]:
+    """Реальные прохождения Мрачного натиска и прогоны на манекене со stygian.moe
+    (разовая выгрузка с разрешения авторов) в том же виде, что и симы. Без
+    артефактов, поэтому стандарт KQMS им недоступен. DPS прохождения — HP формы
+    босса на этой сложности / время, то есть приблизительный."""
+    if not os.path.exists(STYGIAN):
+        return []
+    with open(STYGIAN, "r", encoding="utf-8") as f:
+        snap = json.load(f)
+    out = []
+    for origin, rows in (("clear", snap.get("clears") or []), ("dummy", snap.get("dummy") or [])):
+        for r in rows:
+            out.append({
+                "id": r["u"],
+                "origin": origin,
+                "dps": r["dps"],
+                "chars": list(r["c"]),
+                "team": [{"name": c, "cons": k, "weapon": w, "refine": rf, "sets": {}}
+                         for c, k, w, rf in zip(r["c"], r["k"], r["w"], r["r"])],
+            })
+    return out
+
+
+def short_link(url: str) -> str:
+    """Ссылка на видео покороче: yt:<id> и bb:<BV...>, сайт разворачивает их обратно."""
+    m = re.search(r"(?:youtube\.com/(?:watch\?v=|shorts/|live/)|youtu\.be/)([\w-]{6,})", url or "")
+    if m:
+        return "yt:" + m.group(1)
+    m = re.search(r"bilibili\.com/video/(BV\w+)", url or "")
+    if m:
+        return "bb:" + m.group(1)
+    return url
+
+
 def load_names() -> Dict[str, dict]:
     with open(os.path.join(SITE, "names.json"), "r", encoding="utf-8") as f:
         return json.load(f)
@@ -476,6 +511,9 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
             return api_name
         return k
 
+    def is_five(weapon_key: str) -> bool:
+        return (weapons.get(weapon_key) or {}).get("rarity") == 5
+
     full = [s for s in sims if len(s["chars"]) == 4 and len(s["team"]) == 4]
 
     # состав -> подпись сборки -> агрегат
@@ -506,12 +544,23 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
         ref_order = slot["order"]
         members.sort(key=lambda m: ref_order.index(m["char"]) if m["char"] in ref_order else 99)
 
-        sig = tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
-                     tuple(m["main"]), tuple(sorted(m["subs"].items())),
-                     tuple(sorted(m["total"].items()))) for m in members)
-        agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": []})
+        # реальные прохождения не склеиваются с симами: у них другой смысл DPS.
+        # Внутри них сборку определяют только созвездия и 5* оружие — то, на что
+        # смотрят фильтры; разное 4* оружие склеивается в одну сборку.
+        origin = s.get("origin")
+        if origin:
+            sig = (origin,) + tuple(
+                (m["char"], m["cons"]) + ((m["weapon"], m["refine"]) if is_five(m["weapon"]) else ("", 0))
+                for m in members)
+        else:
+            sig = (None,) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
+                                   tuple(m["main"]), tuple(sorted(m["subs"].items())),
+                                   tuple(sorted(m["total"].items()))) for m in members)
+        agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": [], "origin": origin, "runs": []})
         agg["dps"].append(s["dps"])
         agg["ids"].append(s["id"])
+        if origin:
+            agg["runs"].append((s["dps"], s["id"], members))
 
     ch_i, w_i, s_i, st_i = Interner(), Interner(), Interner(), Interner()
 
@@ -533,8 +582,18 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
         order = slot["order"]
         out_builds = []
         out_stats = []
+        real = []
         for agg in slot["builds"].values():
             vals = agg["dps"]
+            origin = agg["origin"]
+            if origin:
+                # реальные прохождения: DPS — медиана (устойчивее к выбросам),
+                # оружие и видео — лучшего из них
+                ordered = sorted(vals)
+                best = max(agg["runs"], key=lambda r: r[0])
+                real.append({"dps": int(round(ordered[len(ordered) // 2])), "sims": len(vals),
+                             "src": short_link(best[1]), "origin": origin, "members": best[2]})
+                continue
             # члены отряда уже в порядке order
             mem = []
             stats_mem = []
@@ -568,6 +627,26 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
             })
             out_stats.append({"members": stats_mem})
             n_builds += 1
+        # Сборку, у которой в том же источнике есть не менее сильная с не большими
+        # требованиями (созвездия, 5* оружие и его пробуждение), не выберет ни один
+        # фильтр — её не храним.
+        def covers(a: dict, b: dict) -> bool:
+            for ma, mb in zip(a["members"], b["members"]):
+                if ma["cons"] > mb["cons"]:
+                    return False
+                if is_five(ma["weapon"]) and (ma["weapon"] != mb["weapon"] or ma["refine"] > mb["refine"]):
+                    return False
+            return True
+        kept = []
+        for b in sorted(real, key=lambda x: (-x["dps"], -x["sims"])):
+            if not any(k["origin"] == b["origin"] and covers(k, b) for k in kept):
+                kept.append(b)
+        for b in kept:
+            b["members"] = [{"cons": m["cons"], "weapon": w_i(m["weapon"]) if m["weapon"] else None,
+                             "refine": m["refine"]} for m in b["members"]]
+            out_builds.append(b)
+            out_stats.append({"members": []})
+            n_builds += 1
         order_idx = sorted(range(len(out_builds)), key=lambda i: -out_builds[i]["dps"])
         out_builds = [out_builds[i] for i in order_idx]
         out_stats = [out_stats[i] for i in order_idx]
@@ -588,7 +667,9 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
         "version": 2,
         "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "source": {"api": API_URL, "sim": SIM_URL},
-        "stats": {"sims": len(full), "teams": len(teams), "builds": n_builds},
+        "stats": {"sims": sum(1 for s in full if not s.get("origin")),
+                  "real": sum(1 for s in full if s.get("origin")),
+                  "teams": len(teams), "builds": n_builds},
         "dict": {"chars": ch_i.items, "weapons": w_i.items, "sets": s_i.items,
                  "stats": st_i.items, "subOrder": SUB_ORDER},
         "weaponMeta": wmeta,
@@ -698,6 +779,8 @@ def main():
         print("Загрузка симов с", API_URL)
         sims = fetch_all_sims(alias)
     print(f"Симов получено: {len(sims)}")
+    real = load_stygian()
+    print(f"Реальных прохождений (stygian.moe): {len(real)}")
 
     if args.save_cache:
         with open(args.save_cache, "w", encoding="utf-8") as f:
@@ -705,7 +788,7 @@ def main():
                 f.write(json.dumps(s, ensure_ascii=False) + "\n")
         print("Кэш сохранён в", args.save_cache)
 
-    db, stats_by_team, full, unknown_chars, unknown_weapons = build(sims, char_idx, weapons, names)
+    db, stats_by_team, full, unknown_chars, unknown_weapons = build(sims + real, char_idx, weapons, names)
     print(f"Отрядов: {db['stats']['teams']}, сборок: {db['stats']['builds']} (из {len(full)} полных симов)")
 
     os.makedirs(DATA, exist_ok=True)

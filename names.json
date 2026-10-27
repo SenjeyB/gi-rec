@@ -117,6 +117,8 @@
     "yunjin": {"name": "Yun Jin", "element": "geo", "weapon": "polearm", "stars": 2},
     "zibai": {"name": "Zibai", "element": "geo", "weapon": "sword", "stars": 4},
     "zhongli": {"name": "Zhongli", "element": "geo", "weapon": "polearm", "stars": 4},
+    "vesna": {"name": "Vesna", "element": "anemo", "weapon": "sword", "stars": 4},
+    "vodyanitsa": {"name": "Vodyanitsa", "element": "hydro", "weapon": "catalyst", "stars": 4},
     "lumineanemo": {"name": "MC (Anemo)", "element": "anemo", "weapon": "sword", "stars": 1},
     "luminecryo": {"name": "MC (Cryo)", "element": "cryo", "weapon": "sword", "stars": 1},
     "luminegeo": {"name": "MC (Geo)", "element": "geo", "weapon": "sword", "stars": 1},

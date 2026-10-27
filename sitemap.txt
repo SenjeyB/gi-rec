@@ -13,6 +13,8 @@ https://senjeyb.github.io/gi-rec/en/characters/alhaitham/
 https://senjeyb.github.io/gi-rec/ru/characters/alhaitham/
 https://senjeyb.github.io/gi-rec/en/characters/aloy/
 https://senjeyb.github.io/gi-rec/ru/characters/aloy/
+https://senjeyb.github.io/gi-rec/en/characters/alyosha/
+https://senjeyb.github.io/gi-rec/ru/characters/alyosha/
 https://senjeyb.github.io/gi-rec/en/characters/amber/
 https://senjeyb.github.io/gi-rec/ru/characters/amber/
 https://senjeyb.github.io/gi-rec/en/characters/arlecchino/
@@ -89,8 +91,12 @@ https://senjeyb.github.io/gi-rec/en/characters/heizou/
 https://senjeyb.github.io/gi-rec/ru/characters/heizou/
 https://senjeyb.github.io/gi-rec/en/characters/hutao/
 https://senjeyb.github.io/gi-rec/ru/characters/hutao/
+https://senjeyb.github.io/gi-rec/en/characters/iansan/
+https://senjeyb.github.io/gi-rec/ru/characters/iansan/
 https://senjeyb.github.io/gi-rec/en/characters/ifa/
 https://senjeyb.github.io/gi-rec/ru/characters/ifa/
+https://senjeyb.github.io/gi-rec/en/characters/illuga/
+https://senjeyb.github.io/gi-rec/ru/characters/illuga/
 https://senjeyb.github.io/gi-rec/en/characters/ineffa/
 https://senjeyb.github.io/gi-rec/ru/characters/ineffa/
 https://senjeyb.github.io/gi-rec/en/characters/itto/
@@ -99,6 +105,8 @@ https://senjeyb.github.io/gi-rec/en/characters/jahoda/
 https://senjeyb.github.io/gi-rec/ru/characters/jahoda/
 https://senjeyb.github.io/gi-rec/en/characters/jean/
 https://senjeyb.github.io/gi-rec/ru/characters/jean/
+https://senjeyb.github.io/gi-rec/en/characters/kachina/
+https://senjeyb.github.io/gi-rec/ru/characters/kachina/
 https://senjeyb.github.io/gi-rec/en/characters/kaeya/
 https://senjeyb.github.io/gi-rec/ru/characters/kaeya/
 https://senjeyb.github.io/gi-rec/en/characters/kaveh/
@@ -123,10 +131,16 @@ https://senjeyb.github.io/gi-rec/en/characters/lauma/
 https://senjeyb.github.io/gi-rec/ru/characters/lauma/
 https://senjeyb.github.io/gi-rec/en/characters/layla/
 https://senjeyb.github.io/gi-rec/ru/characters/layla/
+https://senjeyb.github.io/gi-rec/en/characters/linnea/
+https://senjeyb.github.io/gi-rec/ru/characters/linnea/
 https://senjeyb.github.io/gi-rec/en/characters/lisa/
 https://senjeyb.github.io/gi-rec/ru/characters/lisa/
+https://senjeyb.github.io/gi-rec/en/characters/lohen/
+https://senjeyb.github.io/gi-rec/ru/characters/lohen/
 https://senjeyb.github.io/gi-rec/en/characters/lumineanemo/
 https://senjeyb.github.io/gi-rec/ru/characters/lumineanemo/
+https://senjeyb.github.io/gi-rec/en/characters/luminecryo/
+https://senjeyb.github.io/gi-rec/ru/characters/luminecryo/
 https://senjeyb.github.io/gi-rec/en/characters/luminedendro/
 https://senjeyb.github.io/gi-rec/ru/characters/luminedendro/
 https://senjeyb.github.io/gi-rec/en/characters/lumineelectro/
@@ -155,6 +169,8 @@ https://senjeyb.github.io/gi-rec/en/characters/nahida/
 https://senjeyb.github.io/gi-rec/ru/characters/nahida/
 https://senjeyb.github.io/gi-rec/en/characters/navia/
 https://senjeyb.github.io/gi-rec/ru/characters/navia/
+https://senjeyb.github.io/gi-rec/en/characters/nefer/
+https://senjeyb.github.io/gi-rec/ru/characters/nefer/
 https://senjeyb.github.io/gi-rec/en/characters/neuvillette/
 https://senjeyb.github.io/gi-rec/ru/characters/neuvillette/
 https://senjeyb.github.io/gi-rec/en/characters/nicole/
@@ -165,6 +181,8 @@ https://senjeyb.github.io/gi-rec/en/characters/ningguang/
 https://senjeyb.github.io/gi-rec/ru/characters/ningguang/
 https://senjeyb.github.io/gi-rec/en/characters/noelle/
 https://senjeyb.github.io/gi-rec/ru/characters/noelle/
+https://senjeyb.github.io/gi-rec/en/characters/odette/
+https://senjeyb.github.io/gi-rec/ru/characters/odette/
 https://senjeyb.github.io/gi-rec/en/characters/ororon/
 https://senjeyb.github.io/gi-rec/ru/characters/ororon/
 https://senjeyb.github.io/gi-rec/en/characters/prune/
@@ -177,6 +195,8 @@ https://senjeyb.github.io/gi-rec/en/characters/razor/
 https://senjeyb.github.io/gi-rec/ru/characters/razor/
 https://senjeyb.github.io/gi-rec/en/characters/rosaria/
 https://senjeyb.github.io/gi-rec/ru/characters/rosaria/
+https://senjeyb.github.io/gi-rec/en/characters/sandrone/
+https://senjeyb.github.io/gi-rec/ru/characters/sandrone/
 https://senjeyb.github.io/gi-rec/en/characters/sara/
 https://senjeyb.github.io/gi-rec/ru/characters/sara/
 https://senjeyb.github.io/gi-rec/en/characters/sayu/
@@ -203,6 +223,10 @@ https://senjeyb.github.io/gi-rec/en/characters/varka/
 https://senjeyb.github.io/gi-rec/ru/characters/varka/
 https://senjeyb.github.io/gi-rec/en/characters/venti/
 https://senjeyb.github.io/gi-rec/ru/characters/venti/
+https://senjeyb.github.io/gi-rec/en/characters/vesna/
+https://senjeyb.github.io/gi-rec/ru/characters/vesna/
+https://senjeyb.github.io/gi-rec/en/characters/vodyanitsa/
+https://senjeyb.github.io/gi-rec/ru/characters/vodyanitsa/
 https://senjeyb.github.io/gi-rec/en/characters/wanderer/
 https://senjeyb.github.io/gi-rec/ru/characters/wanderer/
 https://senjeyb.github.io/gi-rec/en/characters/wriothesley/
@@ -233,3 +257,5 @@ https://senjeyb.github.io/gi-rec/en/characters/yunjin/
 https://senjeyb.github.io/gi-rec/ru/characters/yunjin/
 https://senjeyb.github.io/gi-rec/en/characters/zhongli/
 https://senjeyb.github.io/gi-rec/ru/characters/zhongli/
+https://senjeyb.github.io/gi-rec/en/characters/zibai/
+https://senjeyb.github.io/gi-rec/ru/characters/zibai/

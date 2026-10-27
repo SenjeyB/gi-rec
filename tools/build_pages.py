@@ -48,7 +48,7 @@ UI = {
         "abyss": "Abyss & Onslaught",
         "char_h1": "Best {name} teams",
         "char_title": "Best {name} teams in Genshin Impact by DPS — GI-Rec",
-        "char_desc": "Top {n} {name} teams in Genshin Impact ranked by DPS from KQM simulations, with weapons and artifact sets. Best: {top} — {dps} DPS.",
+        "char_desc": "Top {n} {name} teams in Genshin Impact ranked by DPS from KQM simulations and real Stygian Onslaught clears, with weapons and artifact sets. Best: {top} — {dps} DPS.",
         "char_meta": "{stars}★ · {element} · {weapon} · {n} teams in the database · best DPS {dps}",
         "top_teams": "Top teams",
         "teammates": "Most common teammates",
@@ -58,7 +58,7 @@ UI = {
         "kqms": "KQMS",
         "best_h1": "Best Genshin Impact teams by DPS",
         "best_title": "Best Genshin Impact teams by DPS — GI-Rec",
-        "best_desc": "Top {n} Genshin Impact teams ranked by DPS from KQM simulations, with weapons and artifact sets for every character.",
+        "best_desc": "Top {n} Genshin Impact teams ranked by DPS from KQM simulations and real Stygian Onslaught clears, with weapons and artifact sets.",
         "abyss_h1": "Spiral Abyss Floor 12 and Stygian Onslaught",
         "abyss_title": "Spiral Abyss Floor 12 enemies ({dates}) and Stygian Onslaught bosses — GI-Rec",
         "abyss_desc": "Current Spiral Abyss Floor 12 enemies by chamber, Ley Line Disorder and Stygian Onslaught bosses with their advantages. Build teams for them in GI-Rec.",
@@ -70,8 +70,8 @@ UI = {
         "battlefield": "Battlefield {n}", "advantage": "Advantage",
         "build_teams": "Build teams for this cycle",
         "hub_title": "GI-Rec — best Genshin Impact teams for every character",
-        "hub_desc": "Best teams for every Genshin Impact character by DPS from KQM simulations, the current Spiral Abyss and Stygian Onslaught, and a recommender for your account.",
-        "hub_intro": "Teams for every character, ranked by DPS from KQM simulations. The app also tells you who to pull next based on the characters you own.",
+        "hub_desc": "Best teams for every Genshin Impact character by DPS from KQM simulations and real clears, the current Spiral Abyss and Stygian Onslaught, and a recommender for your account.",
+        "hub_intro": "Teams for every character, ranked by DPS from KQM simulations and real Stygian Onslaught clears (~ marks an estimate: boss HP / clear time). The app also tells you who to pull next based on the characters you own.",
         "made_by": "Made by", "teams_from": "All teams are taken from",
         "data_from": "Data from {date}",
         "home": "Home",
@@ -80,6 +80,7 @@ UI = {
         "nothing": "No characters match the filters.",
         "filters": "Filters",
         "dps": "DPS",
+        "origin_clear": "clears", "origin_dummy": "dummy",
     },
     "ru": {
         "site": "GI-Rec",
@@ -91,7 +92,7 @@ UI = {
         "abyss": "Бездна и Натиск",
         "char_h1": "Лучшие отряды: {name}",
         "char_title": "{name}: лучшие отряды в Genshin Impact по DPS — GI-Rec",
-        "char_desc": "Топ-{n} отрядов с персонажем {name} в Genshin Impact по DPS из симуляций KQM: состав, оружие и сеты артефактов. Лучший: {top} — {dps} DPS.",
+        "char_desc": "Топ-{n} отрядов с персонажем {name} в Genshin Impact по DPS из симуляций KQM и реальных прохождений Мрачного натиска: состав, оружие и сеты артефактов. Лучший: {top} — {dps} DPS.",
         "char_meta": "{stars}★ · {element} · {weapon} · отрядов в базе: {n} · лучший DPS {dps}",
         "top_teams": "Лучшие отряды",
         "teammates": "Чаще всего в отряде с",
@@ -101,7 +102,7 @@ UI = {
         "kqms": "KQMS",
         "best_h1": "Лучшие отряды Genshin Impact по DPS",
         "best_title": "Лучшие отряды Genshin Impact по DPS — GI-Rec",
-        "best_desc": "Топ-{n} отрядов Genshin Impact по DPS из симуляций KQM, с оружием и сетами артефактов для каждого персонажа.",
+        "best_desc": "Топ-{n} отрядов Genshin Impact по DPS из симуляций KQM и реальных прохождений Мрачного натиска, с оружием и сетами артефактов.",
         "abyss_h1": "Витая Бездна, 12 этаж, и Мрачный натиск",
         "abyss_title": "Витая Бездна 12 этаж: враги ({dates}) и боссы Мрачного натиска — GI-Rec",
         "abyss_desc": "Враги текущей Витой Бездны на 12 этаже по залам, аномалии и боссы Мрачного натиска с преимуществами. Соберите под них отряды в GI-Rec.",
@@ -113,8 +114,8 @@ UI = {
         "battlefield": "Поле боя {n}", "advantage": "Преимущество",
         "build_teams": "Собрать отряды на этот цикл",
         "hub_title": "GI-Rec — лучшие отряды Genshin Impact для каждого персонажа",
-        "hub_desc": "Лучшие отряды для каждого персонажа Genshin Impact по DPS из симуляций KQM, текущие Витая Бездна и Мрачный натиск и рекомендации, кого крутить, под ваш аккаунт.",
-        "hub_intro": "Отряды для каждого персонажа по DPS из симуляций KQM. В приложении — ещё и рекомендации, кого крутить, под ваших персонажей.",
+        "hub_desc": "Лучшие отряды для каждого персонажа Genshin Impact по DPS из симуляций KQM и реальных прохождений, текущие Витая Бездна и Мрачный натиск и рекомендации, кого крутить, под ваш аккаунт.",
+        "hub_intro": "Отряды для каждого персонажа по DPS из симуляций KQM и реальных прохождений Мрачного натиска (~ — оценка: HP босса / время прохождения). В приложении — ещё и рекомендации, кого крутить, под ваших персонажей.",
         "made_by": "Сделал", "teams_from": "Все отряды взяты из",
         "data_from": "Данные от {date}",
         "home": "Главная",
@@ -123,6 +124,7 @@ UI = {
         "nothing": "Под фильтры никто не подошёл.",
         "filters": "Фильтры",
         "dps": "DPS",
+        "origin_clear": "натиск", "origin_dummy": "манекен",
     },
 }
 ELEMENT_ORDER = ["pyro", "hydro", "anemo", "electro", "dendro", "cryo", "geo"]
@@ -137,6 +139,11 @@ def asset_version(name: str) -> str:
 
 def esc(s) -> str:
     return html.escape(str(s), quote=True)
+
+
+def dps_text(build: dict) -> str:
+    """DPS сборки; у реальных прохождений Натиска это оценка (HP босса / время)."""
+    return ("~" if build.get("origin") == "clear" else "") + fmt_dps(build["dps"])
 
 
 def fmt_dps(n: float) -> str:
@@ -309,9 +316,10 @@ def team_html(data: Data, lang: str, t: dict, up: str, rank: int) -> str:
     b = t["build"]
     members = "".join(member_html(data, lang, k, m, up) for k, m in zip(t["chars"], b["members"]))
     kqms = f'<span class="pg-badge">{UI[lang]["kqms"]}</span>' if b.get("kqmCons") and b.get("kqmArt") else ""
+    origin = f'<span class="pg-badge is-real">{UI[lang]["origin_" + b["origin"]]}</span>' if b.get("origin") else ""
     return (f'<li class="pg-team"><span class="pg-rank">{rank}</span>'
             f'<div class="pg-members">{members}</div>'
-            f'<div class="pg-dps">{fmt_dps(t["dps"])}<small>{UI[lang]["dps"]}</small>{kqms}</div></li>')
+            f'<div class="pg-dps">{dps_text(b)}<small>{UI[lang]["dps"]}</small>{kqms}{origin}</div></li>')
 
 
 def team_names(data: Data, lang: str, t: dict) -> str:
@@ -329,7 +337,7 @@ def char_page(data: Data, lang: str, key: str) -> str:
     top = teams[0]
     meta = ui["char_meta"].format(stars=stars, element=data.element(lang, entry.get("element", "")),
                                   weapon=data.weapon_type(lang, entry.get("weapon", "")),
-                                  n=len(teams), dps=fmt_dps(top["dps"]))
+                                  n=len(teams), dps=dps_text(top["build"]))
     rows = "\n".join(team_html(data, lang, t, up, i + 1) for i, t in enumerate(teams[:TOP_PER_CHAR]))
 
     mates = Counter(k for t in teams for k in t["chars"] if k != key)
@@ -363,7 +371,7 @@ def char_page(data: Data, lang: str, key: str) -> str:
     <div class="pg-grid pg-grid-small">{same_html}</div>"""
     title = ui["char_title"].format(name=name)
     desc = ui["char_desc"].format(n=min(TOP_PER_CHAR, len(teams)), name=name,
-                                  top=team_names(data, lang, top), dps=fmt_dps(top["dps"]))
+                                  top=team_names(data, lang, top), dps=dps_text(top["build"]))
     crumbs = [(ui["catalog"], f"{BASE_URL}{lang}/characters/"), (name, f"{BASE_URL}{lang}/characters/{key}/")]
     return page(data, lang, f"characters/{key}/", 3, title, desc, body, crumbs)
 

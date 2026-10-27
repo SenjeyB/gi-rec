@@ -23,6 +23,10 @@
     "inventory": "Inventory"
   },
   "settings": {
+    "source": "Teams from:",
+    "sourceAll": "Sims and real clears",
+    "sourceKqm": "KQM sims only",
+    "sourceReal": "Real clears only",
     "title": "Settings",
     "willingToObtain": "Willing to obtain:",
     "characters_0": "0 characters",
@@ -59,8 +63,9 @@
     "consLabel": "Constellation"
   },
   "about": {
+    "realFrom": "Real clears are taken from",
     "developedBy": "Made by",
-    "teamsFrom": "All teams are taken from",
+    "teamsFrom": "Team sims are taken from",
     "catalog": "Best teams for every character",
     "catalogHref": "en/characters/"
   },
@@ -73,7 +78,7 @@
     "progress": "Step {n} of {total}",
     "welcome": {
       "title": "Welcome to GI-Rec",
-      "text": "GI-Rec suggests who to pull and which teams you can build from your characters. All teams come from KQM sims. Here is a quick tour."
+      "text": "GI-Rec suggests who to pull and which teams you can build from your characters. Teams come from KQM sims and real Stygian Onslaught clears from stygian.moe. Here is a quick tour."
     },
     "roster": {
       "title": "Mark your characters",
@@ -173,6 +178,18 @@
     "weapon": "Weapon",
     "sets": "Artifact sets",
     "noSet": "No artifact set",
+    "noArtifacts": "Artifacts not specified",
+    "video": "Watch the video",
+    "origin": { "clear": "clears", "dummy": "dummy" },
+    "originHint": {
+      "clear": "Approximate: boss HP / Stygian Onslaught clear time, median over clears (stygian.moe)",
+      "dummy": "DPS on the training dummy from a real run (stygian.moe)"
+    },
+    "originFull": {
+      "clear": "Stygian Onslaught clears · stygian.moe",
+      "dummy": "Training dummy runs · stygian.moe"
+    },
+    "runs": { "clear": "Clears: {n}", "dummy": "Runs: {n}" },
     "refine": "R{n}",
     "source": "Open source sim",
     "sims": "{n} sims averaged",

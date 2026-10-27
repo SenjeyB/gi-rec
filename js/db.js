@@ -68,6 +68,7 @@ export function query(opts = {}) {
   const needArt = !!opts.kqmArt;
   const strict = !!opts.strictCons;
   const consMode = opts.consMode || "mine";
+  const source = opts.source || "all";
 
   const capFor = (charKey) => {
     const base = baseCap[charKey] === undefined ? 6 : baseCap[charKey];
@@ -89,6 +90,8 @@ export function query(opts = {}) {
 
     for (let bi = 0; bi < team.builds.length; bi++) {
       const build = team.builds[bi];
+      if (source === "kqm" && build.origin) continue;
+      if (source === "real" && !build.origin) continue;
       if (needFull && !(build.kqmCons && build.kqmArt)) continue;
       if (needArt && !build.kqmArt) continue;
       let ok = true;
@@ -118,6 +121,7 @@ export function query(opts = {}) {
       dps: best.dps,
       sims: best.sims,
       src: best.src,
+      origin: best.origin || null,
       kqmCons: !!best.kqmCons,
       kqmArt: !!best.kqmArt,
       build: expandBuild(team, best),
@@ -211,6 +215,7 @@ export function teamBuilds(teamIndex) {
     dps: b.dps,
     sims: b.sims,
     src: b.src,
+    origin: b.origin || null,
     kqmCons: !!b.kqmCons,
     kqmArt: !!b.kqmArt,
     build: expandBuild(team, b),

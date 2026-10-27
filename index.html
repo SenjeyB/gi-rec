@@ -16,7 +16,7 @@
   <meta property="twitter:title" content="GI-Rec - Genshin Impact Character Pulling Recommendations & Tier Lists">
   <meta property="twitter:description" content="Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!">
   <meta property="twitter:image" content="https://senjeyb.github.io/gi-rec/preview.png">
-  <link rel="stylesheet" href="styles.css?v=e00a6eee00">
+  <link rel="stylesheet" href="styles.css?v=9bf190bf58">
   <link rel="icon" href="assets/favicon.png" type="image/png" sizes="64x64">
   <link rel="icon" href="assets/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
@@ -98,6 +98,13 @@
                 <option value="any" data-i18n="settings.fiveAny">Any</option>
                 <option value="mine" data-i18n="settings.fiveMine">Only mine</option>
               </select>
+
+              <label for="source-mode" class="side-label" data-i18n="settings.source">Teams from:</label>
+              <select id="source-mode" class="side-input" data-default="all">
+                <option value="all" data-i18n="settings.sourceAll">Sims and real clears</option>
+                <option value="kqm" data-i18n="settings.sourceKqm">KQM sims only</option>
+                <option value="real" data-i18n="settings.sourceReal">Real clears only</option>
+              </select>
               
               <details id="advanced-filters" class="adv-filters">
                 <summary data-i18n="filters.advanced">Advanced</summary>
@@ -141,6 +148,7 @@
           <div class="side-credit">
             <div><span data-i18n="about.developedBy">Made by</span> <strong>SenjeyB</strong></div>
             <div><span data-i18n="about.teamsFrom">All teams are taken from</span> <a href="https://db.kqm.gg/database" target="_blank" rel="noopener">db.kqm.gg/database</a></div>
+            <div><span data-i18n="about.realFrom">Real clears are taken from</span> <a href="https://www.stygian.moe" target="_blank" rel="noopener">stygian.moe</a></div>
             <div><a href="en/characters/" data-i18n="about.catalog" data-i18n-attr="href:about.catalogHref">Best teams for every character</a></div>
           </div>
         </aside>

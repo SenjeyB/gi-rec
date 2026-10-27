@@ -87,7 +87,7 @@ function buildTeamRow(team, owned, extraCls){
     appendMemberCell(members, m, team, mi, (owned && !owned.has(m)) ? 'missing' : 'owned');
   });
   row.appendChild(members);
-  row.appendChild(createEl('div','team-dps', fmtDps(team.dps)));
+  row.appendChild(dpsCell('team-dps', team));
   if(team.build){
     row.classList.add('expandable');
     row.title = T('team.details','Team details');
@@ -143,7 +143,7 @@ export async function start(ctx){
   const toTeam = (t) => ({
     members: t.chars ? t.chars.slice() : [],
     dps: t.dps != null ? t.dps : 0,
-    build: t.build || null, src: t.src || null, sims: t.sims || 0,
+    build: t.build || null, src: t.src || null, origin: t.origin || null, sims: t.sims || 0,
     kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
     teamIndex: t.teamIndex, buildIndex: t.buildIndex,
   });
@@ -159,6 +159,7 @@ export async function start(ctx){
       dps: t.dps != null ? t.dps : (t.DPS || 0),
       build: t.build || null,
       src: t.src || null,
+      origin: t.origin || null,
       sims: t.sims || 0,
       kqmCons: !!t.kqmCons,
       kqmArt: !!t.kqmArt,
@@ -463,7 +464,7 @@ export async function start(ctx){
 
     const pack = (team)=> ({
       members: team.members.slice(), dps: team.dps || 0, build: team.build || null,
-      src: team.src || null, sims: team.sims || 0, kqmCons: !!team.kqmCons, kqmArt: !!team.kqmArt,
+      src: team.src || null, origin: team.origin || null, sims: team.sims || 0, kqmCons: !!team.kqmCons, kqmArt: !!team.kqmArt,
       teamIndex: team.teamIndex, buildIndex: team.buildIndex, gen,
     });
     const sameMembers = (a, b)=> a.length === b.length && a.every(m => b.includes(m));
@@ -536,7 +537,7 @@ export async function start(ctx){
       titles.appendChild(createEl('div','slot-title', slotTitle(i)));
       if(contentKey === 'abyss') titles.appendChild(createEl('div','slot-sub', T('builder.floor12','Floor 12')));
       head.appendChild(titles);
-      if(sel) head.appendChild(createEl('div','slot-dps', fmtDps(sel.dps)));
+      if(sel) head.appendChild(dpsCell('slot-dps', sel));
       card.appendChild(head);
 
       const context = contentKey === 'abyss' ? abyssHalf(info, enemies, i) : onslaughtBoss(info, enemies, i);
@@ -675,7 +676,7 @@ export async function start(ctx){
           const members = createEl('div','members');
           team.members.forEach((m, mi)=> appendMemberCell(members, m, team, mi, anchors.has(m) ? 'owned' : null));
           row.appendChild(members);
-          row.appendChild(createEl('div','team-dps', fmtDps(team.dps)));
+          row.appendChild(dpsCell('team-dps', team));
           row.addEventListener('click',()=>{
             state.selections[idx] = pack(team);
             saveSelections();
@@ -918,7 +919,7 @@ export async function start(ctx){
       return {
         members: t.members,
         dps: t.dps,
-        build: t.build, src: t.src, sims: t.sims,
+        build: t.build, src: t.src, origin: t.origin, sims: t.sims,
         kqmCons: t.kqmCons, kqmArt: t.kqmArt,
         teamIndex: t.teamIndex, buildIndex: t.buildIndex,
         missingCount
@@ -1071,6 +1072,16 @@ export async function start(ctx){
   };
 }
 
+function dpsCell(cls, team){
+  const cell = createEl('div', cls, (team.origin === 'clear' ? '~' : '') + fmtDps(team.dps));
+  if(team.origin){
+    cell.classList.add('is-real');
+    cell.appendChild(createEl('span','dps-src', T('team.origin.' + team.origin, team.origin)));
+    cell.title = T('team.originHint.' + team.origin, '');
+  }
+  return cell;
+}
+
 function fmtDps(n){
   return Math.round(n||0).toLocaleString('en-US').replace(/,/g,' ');
 }
@@ -1086,7 +1097,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
       const sortedMissing = missing.slice().sort();
       const key = sortedMissing.join('||');
       const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
-      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex});
+      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex});
       byMissingSet.set(key, list);
     }
   }
@@ -1147,7 +1158,7 @@ function renderSuggestions(list, owned){
           item.missing.includes(m) ? 'missing' : 'owned');
       });
       preview.appendChild(members);
-      const dpsEl = createEl('div','team-dps', fmtDps(best.dps));
+      const dpsEl = dpsCell('team-dps', best);
       preview.appendChild(dpsEl);
       right.appendChild(preview);
     }
@@ -1185,7 +1196,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, mode=
       const missingOthers = others.length - ownedCount;
       const totalMissing = isOwned ? missingOthers : (1 + missingOthers);
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount});
       }
     }
     if(candidates.length===0){ continue; }

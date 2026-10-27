@@ -3,6 +3,7 @@
 Genshin Impact Recommendations service.
 
 - Teams come from the KQM sim database: https://db.kqm.gg/database
+- Real Stygian Onslaught clears and training dummy runs come from https://www.stygian.moe (a one-time export, used with the authors' permission; `tools/stygian_snapshot.json`). A clear's DPS is an estimate: boss HP / clear time, shown as ~DPS. Clears made with third-party tools, cheese strategies and teams of fewer than 4 characters are skipped; 4★ characters count as C6
 - Constellations are filters: by default 5★ at C0, 4★ at C6; your inventory or the "Any" setting can raise them
 - Builds are checked against KQM Standards (constellations and artifacts)
 - Current Spiral Abyss and Stygian Onslaught enemies come from the Genshin Impact wiki: https://genshin-impact.fandom.com

@@ -16,7 +16,8 @@ let names = {};
 let refs = null;
 let app = null;
 
-const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine" };
+const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine", source: "all" };
+const SOURCES = ["all", "kqm", "real"];
 const settings = { ...DEFAULTS };
 const FIVE_MODES = ["none", "r1", "any", "mine"];
 
@@ -37,6 +38,7 @@ function loadSettings() {
     settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
     settings.kqmArt = !!raw.kqmArt;
     settings.consMode = ["standard", "mine", "any"].includes(raw.consMode) ? raw.consMode : "mine";
+    settings.source = SOURCES.includes(raw.source) ? raw.source : "all";
   } catch {}
 }
 
@@ -58,6 +60,7 @@ function currentTeams() {
     fiveStar: settings.fiveStar,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
+    source: settings.source,
   });
 }
 
@@ -69,6 +72,7 @@ function strictTeams(weapons) {
     fiveStar: "mine",
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
+    source: settings.source,
   });
 }
 
@@ -79,6 +83,7 @@ function baseTeams() {
     fiveStar: settings.fiveStar,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
+    source: settings.source,
   });
 }
 
@@ -111,6 +116,15 @@ function wireSettings() {
       refresh();
     });
   }
+  const sourceSel = document.getElementById("source-mode");
+  if (sourceSel) {
+    sourceSel.value = settings.source;
+    sourceSel.addEventListener("change", () => {
+      settings.source = sourceSel.value;
+      saveSettings();
+      refresh();
+    });
+  }
   const consSel = document.getElementById("cons-mode");
   if (consSel) {
     consSel.value = settings.consMode;
@@ -128,6 +142,8 @@ function wireSettings() {
       if (cm) cm.value = settings.consMode;
       const fm = document.getElementById("five-mode");
       if (fm) fm.value = settings.fiveStar;
+      const sm = document.getElementById("source-mode");
+      if (sm) sm.value = settings.source;
       for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
         const box = document.getElementById(id);
         if (box) box.checked = settings[key];
