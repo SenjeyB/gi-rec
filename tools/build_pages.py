@@ -389,6 +389,11 @@ def dates(a: Optional[str], b: Optional[str], lang: str) -> str:
     return f"{d(a)} – {d(b)}"
 
 
+def hp_text(value: int, lang: str) -> str:
+    s = f"{value:,}"
+    return (s.replace(",", " ") if lang == "ru" else s) + " HP"
+
+
 def enemy_name(data: Data, lang: str, eid: str) -> str:
     e = ((data.content or {}).get("enemies") or {}).get(eid) or {}
     return e.get(lang) or e.get("en") or eid
@@ -418,7 +423,8 @@ def abyss_page(data: Data, lang: str) -> Optional[str]:
     for half, label in (("first", ui["first_half"]), ("second", ui["second_half"])):
         out.append(f'    <h3>{esc(label)}</h3>\n    <div class="pg-rooms">')
         for ch in ab.get("chambers") or []:
-            waves = []
+            hp = ((ab.get("hp") or {}).get("values") or {})
+            waves, total = [], 0
             for wave in ch.get(half) or []:
                 items = []
                 for ref in wave:
@@ -426,14 +432,19 @@ def abyss_page(data: Data, lang: str) -> Optional[str]:
                     img = (f'<img src="{up}{esc(e["icon"])}" alt="" width="40" height="40" loading="lazy">'
                            if e.get("icon") else "")
                     cnt = f' ×{ref["count"]}' if ref.get("count", 1) > 1 else ""
+                    one = hp.get(f'{ref["id"]}@{ch.get("level")}')
+                    total = total + one * ref.get("count", 1) if one and total is not None else None
+                    hp_html = f'<small>{esc(hp_text(one, lang))}</small>' if one else ""
                     res = res_text(data, lang, e.get("res"))
                     res_html = f'<small>{esc(ui["res"])}: {esc(res)}</small>' if res else ""
-                    items.append(f'<li>{img}<span>{esc(enemy_name(data, lang, ref["id"]))}{cnt}{res_html}</span></li>')
+                    items.append(f'<li>{img}<span>{esc(enemy_name(data, lang, ref["id"]))}{cnt}'
+                                 f'{hp_html}{res_html}</span></li>')
                 waves.append(f'<ul class="pg-enemies">{"".join(items)}</ul>')
             then = f'<div class="pg-then">{esc(ui["then"])}</div>'
             room = ui["chamber"].format(n="12-%s" % ch["n"])
             level = ui["level"].format(n=ch.get("level"))
-            out.append(f'      <section class="pg-room"><h4>{esc(room)} · {esc(level)}</h4>'
+            head = f"{room} · {level}" + (f" · {hp_text(total, lang)}" if total else "")
+            out.append(f'      <section class="pg-room"><h4>{esc(head)}</h4>'
                        f'{then.join(waves)}</section>')
         out.append("    </div>")
         dis = (ab.get("disorder") or {}).get("all", []) + (ab.get("disorder") or {}).get(half, [])

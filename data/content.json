@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-16T23:49:30Z",
+ "generated": "2026-10-27T22:58:05Z",
  "abyss": {
   "start": "2026-10-16",
   "end": "2026-11-15",
@@ -93,7 +93,21 @@
      ]
     ]
    }
-  ]
+  ],
+  "hp": {
+   "key": "2026-10-16|1141",
+   "mult": 5.75,
+   "values": {
+    "battle-hardened-chimeric-volkodlak-archer@95": 6700682,
+    "battle-hardened-elite-treasure-hoarder@98": 7853325,
+    "chimeric-winged-lion@100": 6951913,
+    "iniquitous-baptist-caller-of-flood-flame-and-fulmination@95": 2612148,
+    "radiant-moonfly@98": 4738055,
+    "secret-source-automaton-overseer-device@100": 6888134,
+    "shadowy-husk-defender@95": 1044859,
+    "shadowy-husk-standard-bearer@95": 1306074
+   }
+  }
  },
  "onslaught": {
   "start": "2026-09-30",
