@@ -80,7 +80,7 @@ UI = {
         "nothing": "No characters match the filters.",
         "filters": "Filters",
         "dps": "DPS",
-        "origin_clear": "clears", "origin_dummy": "dummy",
+        "origin_dummy": "dummy",
     },
     "ru": {
         "site": "GI-Rec",
@@ -124,7 +124,7 @@ UI = {
         "nothing": "Под фильтры никто не подошёл.",
         "filters": "Фильтры",
         "dps": "DPS",
-        "origin_clear": "натиск", "origin_dummy": "манекен",
+        "origin_dummy": "манекен",
     },
 }
 ELEMENT_ORDER = ["pyro", "hydro", "anemo", "electro", "dendro", "cryo", "geo"]
@@ -316,7 +316,7 @@ def team_html(data: Data, lang: str, t: dict, up: str, rank: int) -> str:
     b = t["build"]
     members = "".join(member_html(data, lang, k, m, up) for k, m in zip(t["chars"], b["members"]))
     kqms = f'<span class="pg-badge">{UI[lang]["kqms"]}</span>' if b.get("kqmCons") and b.get("kqmArt") else ""
-    origin = f'<span class="pg-badge is-real">{UI[lang]["origin_" + b["origin"]]}</span>' if b.get("origin") else ""
+    origin = f'<span class="pg-badge is-real">{UI[lang]["origin_" + b["origin"]]}</span>' if b.get("origin") == "dummy" else ""
     return (f'<li class="pg-team"><span class="pg-rank">{rank}</span>'
             f'<div class="pg-members">{members}</div>'
             f'<div class="pg-dps">{dps_text(b)}<small>{UI[lang]["dps"]}</small>{kqms}{origin}</div></li>')

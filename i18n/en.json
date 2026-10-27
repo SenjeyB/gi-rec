@@ -180,7 +180,7 @@
     "noSet": "No artifact set",
     "noArtifacts": "Artifacts not specified",
     "video": "Watch the video",
-    "origin": { "clear": "clears", "dummy": "dummy" },
+    "origin": { "dummy": "dummy" },
     "originHint": {
       "clear": "Approximate: boss HP / Stygian Onslaught clear time, median over clears (stygian.moe)",
       "dummy": "DPS on the training dummy from a real run (stygian.moe)"
