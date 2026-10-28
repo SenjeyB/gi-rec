@@ -1411,16 +1411,7 @@ function resStatesBlock(states){
   return box;
 }
 
-const fmtHp = (n)=> new Intl.NumberFormat(isRu() ? 'ru-RU' : 'en-US', { notation: 'compact', maximumSignificantDigits: 3 }).format(n);
-const fmtFull = (n)=> Math.round(n).toLocaleString(isRu() ? 'ru-RU' : 'en-US');
-
-function hpLine(cls, text, value){
-  const line = createEl('div', cls, text);
-  line.title = T('builder.hpTitle','Max HP on floor 12, from game data') + ': ' + fmtFull(value);
-  return line;
-}
-
-function enemyTile(enemies, ref, hp){
+function enemyTile(enemies, ref){
   const e = enemies[ref.id] || { en: ref.id, ru: ref.id };
   const tipText = e.tip ? (isRu() ? e.tip.ru : e.tip.en) : '';
   const expandable = !!(tipText || (e.resStates && e.resStates.length));
@@ -1440,7 +1431,6 @@ function enemyTile(enemies, ref, hp){
   const body = createEl('div','enemy-tile-body');
   body.appendChild(createEl('div','enemy-tile-name', isRu() ? e.ru : e.en));
   if(e.legend) body.appendChild(createEl('div','enemy-legend', T('builder.legend','Local Legend')));
-  if(hp) body.appendChild(hpLine('enemy-hp', T('builder.hp','{v} HP',{v: fmtHp(hp)}), hp));
   const res = resChips(e.res);
   if(res) body.appendChild(res);
   tile.appendChild(body);
@@ -1475,16 +1465,10 @@ function abyssHalf(info, enemies, half){
     head.appendChild(createEl('span','abyss-room-name', `${info.floor || 12}-${ch.n}`));
     if(ch.level) head.appendChild(createEl('span','abyss-room-level', T('builder.level','Lv. {n}',{n: ch.level})));
     room.appendChild(head);
-    const hpOf = (ref)=> ((info.hp || {}).values || {})[`${ref.id}@${ch.level}`];
-    const refs = waves.flat();
-    if(refs.length && refs.every(hpOf)){
-      const total = refs.reduce((s, ref)=> s + hpOf(ref) * (ref.count || 1), 0);
-      room.appendChild(hpLine('abyss-room-hp', T('builder.hpTotal','{v} HP total',{v: fmtHp(total)}), total));
-    }
     waves.forEach((wave, wi)=>{
       if(wi > 0) room.appendChild(createEl('div','abyss-then', T('builder.then','then')));
       const w = createEl('div','abyss-wave');
-      for(const ref of wave) w.appendChild(enemyTile(enemies, ref, hpOf(ref)));
+      for(const ref of wave) w.appendChild(enemyTile(enemies, ref));
       room.appendChild(w);
     });
     grid.appendChild(room);

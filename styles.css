@@ -755,8 +755,6 @@ body.sheet-open{overflow:hidden}
 @media (prefers-reduced-motion: reduce){
   .tour.is-ready .tour-spot,.tour.is-ready .tour-card{transition:none}
 }
-.enemy-hp{font-size:11.5px;font-weight:700;color:#fca5a5;font-variant-numeric:tabular-nums}
-.abyss-room-hp{align-self:flex-start;padding:2px 8px;border-radius:999px;background:rgba(248,113,113,0.12);border:1px solid rgba(248,113,113,0.3);color:#fecaca;font-size:11px;font-weight:700;font-variant-numeric:tabular-nums}
 .team-dps.is-real,.slot-dps.is-real{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;color:#c4b5fd}
 .dps-src{font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
 .td-variant-tag.is-real{background:rgba(167,139,250,.16);color:#ddd6fe}

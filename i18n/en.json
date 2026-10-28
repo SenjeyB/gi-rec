@@ -265,10 +265,7 @@
     "immune": "immune",
     "resTitle": "Elemental and Physical RES",
     "resStates": "RES by state",
-    "all": "all",
-    "hp": "{v} HP",
-    "hpTotal": "{v} HP total",
-    "hpTitle": "Max HP on floor 12, from game data"
+    "all": "all"
   },
   "tier": {
     "show": "Show: ",
