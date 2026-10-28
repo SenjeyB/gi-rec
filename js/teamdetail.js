@@ -194,9 +194,11 @@ async function fillPanel(panel, team) {
   head.appendChild(kqmBadge(team.kqmCons, team.kqmArt));
 
   const meta = el("div", "td-meta");
-  if (team.origin) {
-    meta.appendChild(el("span", "td-meta-item td-origin", t(`team.originFull.${team.origin}`)));
-    meta.appendChild(el("span", "td-meta-item", t(`team.runs.${team.origin}`, { n: team.sims || 1 })));
+  if (team.origin === "clear") {
+    meta.appendChild(el("span", "td-meta-item td-origin", t("team.basedOnClear")));
+  } else if (team.origin === "dummy") {
+    meta.appendChild(el("span", "td-meta-item td-origin", t("team.originFull.dummy")));
+    meta.appendChild(el("span", "td-meta-item", t("team.runs.dummy", { n: team.sims || 1 })));
   } else if (team.sims) {
     meta.appendChild(el("span", "td-meta-item", t("team.sims", { n: team.sims })));
   }

@@ -1077,7 +1077,6 @@ function dpsCell(cls, team){
   if(team.origin){
     cell.classList.add('is-real');
     if(team.origin === 'dummy') cell.appendChild(createEl('span','dps-src', T('team.origin.dummy','dummy')));
-    cell.title = T('team.originHint.' + team.origin, '');
   }
   return cell;
 }

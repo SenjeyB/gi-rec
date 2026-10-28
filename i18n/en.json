@@ -181,15 +181,9 @@
     "noArtifacts": "Artifacts not specified",
     "video": "Watch the video",
     "origin": { "dummy": "dummy" },
-    "originHint": {
-      "clear": "Approximate: boss HP / Stygian Onslaught clear time, median over clears (stygian.moe)",
-      "dummy": "DPS on the training dummy from a real run (stygian.moe)"
-    },
-    "originFull": {
-      "clear": "Stygian Onslaught clears · stygian.moe",
-      "dummy": "Training dummy runs · stygian.moe"
-    },
-    "runs": { "clear": "Clears: {n}", "dummy": "Runs: {n}" },
+    "basedOnClear": "Based on a Stygian Onslaught clear",
+    "originFull": { "dummy": "Training dummy runs · stygian.moe" },
+    "runs": { "dummy": "Runs: {n}" },
     "refine": "R{n}",
     "source": "Open source sim",
     "sims": "{n} sims averaged",
