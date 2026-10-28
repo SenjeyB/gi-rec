@@ -178,7 +178,6 @@ function variantsBlock(team, onPick) {
     row.appendChild(who);
     if (v.aboveStandard) row.appendChild(el("span", "td-variant-tag", t("team.aboveStd")));
     if (current) row.appendChild(el("span", "td-variant-tag is-current", t("team.shown")));
-    if (v.origin === "dummy") row.appendChild(el("span", "td-variant-tag is-real", t("team.origin.dummy")));
     row.appendChild(el("span", "td-variant-dps", (v.origin === "clear" ? "~" : "") + fmtDps(v.dps)));
     if (!current) row.addEventListener("click", (e) => { e.stopPropagation(); onPick(v); });
     box.appendChild(row);

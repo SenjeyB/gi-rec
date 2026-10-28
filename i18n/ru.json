@@ -180,7 +180,6 @@
     "noSet": "Без сета",
     "noArtifacts": "Артефакты не указаны",
     "video": "Смотреть видео",
-    "origin": { "dummy": "манекен" },
     "basedOnClear": "Основано на прохождении Натиска",
     "originFull": { "dummy": "Прогоны на манекене · stygian.moe" },
     "runs": { "dummy": "Прогонов: {n}" },

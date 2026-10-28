@@ -180,7 +180,6 @@
     "noSet": "No artifact set",
     "noArtifacts": "Artifacts not specified",
     "video": "Watch the video",
-    "origin": { "dummy": "dummy" },
     "basedOnClear": "Based on a Stygian Onslaught clear",
     "originFull": { "dummy": "Training dummy runs · stygian.moe" },
     "runs": { "dummy": "Runs: {n}" },

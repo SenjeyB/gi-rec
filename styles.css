@@ -756,6 +756,4 @@ body.sheet-open{overflow:hidden}
   .tour.is-ready .tour-spot,.tour.is-ready .tour-card{transition:none}
 }
 .team-dps.is-real,.slot-dps.is-real{display:flex;flex-direction:column;align-items:flex-end;line-height:1.15;color:#c4b5fd}
-.dps-src{font-size:9.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.3px}
-.td-variant-tag.is-real{background:rgba(167,139,250,.16);color:#ddd6fe}
 .td-origin{color:#ddd6fe}
