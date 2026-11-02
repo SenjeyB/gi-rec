@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-27T23:45:37Z",
+ "generated": "2026-11-02T12:51:18Z",
  "weapons": {
   "absolution": {
    "name": "Absolution",
@@ -1820,13 +1820,49 @@
   }
  },
  "sets": {
-  "adaycarvedfromrisingwinds": {
-   "name": "A Day Carved From Rising Winds",
-   "icon": "UI_RelicIcon_15044_4"
+  "nightoftheskysunveiling": {
+   "name": "Night of the Sky's Unveiling",
+   "icon": "UI_RelicIcon_15041_4"
+  },
+  "deepwoodmemories": {
+   "name": "Deepwood Memories",
+   "icon": "UI_RelicIcon_15025_4"
+  },
+  "silkenmoonsserenade": {
+   "name": "Silken Moon's Serenade",
+   "icon": "UI_RelicIcon_15042_4"
+  },
+  "instructor": {
+   "name": "Instructor",
+   "icon": "UI_RelicIcon_10007_4"
+  },
+  "goldentroupe": {
+   "name": "Golden Troupe",
+   "icon": "UI_RelicIcon_15032_4"
+  },
+  "aubadeofmorningstarandmoon": {
+   "name": "Aubade of Morningstar and Moon",
+   "icon": "UI_RelicIcon_15043_4"
   },
   "viridescentvenerer": {
    "name": "Viridescent Venerer",
    "icon": "UI_RelicIcon_15002_4"
+  },
+  "disenchantmentindeepshadow": {
+   "name": "Disenchantment in Deep Shadow",
+   "icon": "UI_RelicIcon_15046_4"
+  },
+  "heartofthefurnace": {
+   "name": "Heart of the Furnace",
+   "icon": "UI_RelicIcon_15048_4"
+  },
+  "tenacityofthemillelith": {
+   "name": "Tenacity of the Millelith",
+   "icon": "UI_RelicIcon_15017_4"
+  },
+  "adaycarvedfromrisingwinds": {
+   "name": "A Day Carved From Rising Winds",
+   "icon": "UI_RelicIcon_15044_4"
   },
   "celestialgift": {
    "name": "Celestial Gift",
@@ -1835,10 +1871,6 @@
   "marechausseehunter": {
    "name": "Marechaussee Hunter",
    "icon": "UI_RelicIcon_15031_4"
-  },
-  "goldentroupe": {
-   "name": "Golden Troupe",
-   "icon": "UI_RelicIcon_15032_4"
   },
   "scrolloftheheroofcindercity": {
    "name": "Scroll of the Hero of Cinder City",
@@ -1851,22 +1883,6 @@
   "noblesseoblige": {
    "name": "Noblesse Oblige",
    "icon": "UI_RelicIcon_15007_4"
-  },
-  "nightoftheskysunveiling": {
-   "name": "Night of the Sky's Unveiling",
-   "icon": "UI_RelicIcon_15041_4"
-  },
-  "aubadeofmorningstarandmoon": {
-   "name": "Aubade of Morningstar and Moon",
-   "icon": "UI_RelicIcon_15043_4"
-  },
-  "silkenmoonsserenade": {
-   "name": "Silken Moon's Serenade",
-   "icon": "UI_RelicIcon_15042_4"
-  },
-  "tenacityofthemillelith": {
-   "name": "Tenacity of the Millelith",
-   "icon": "UI_RelicIcon_15017_4"
   },
   "longnightsoath": {
    "name": "Long Night's Oath",
@@ -1896,10 +1912,6 @@
    "name": "Gilded Dreams",
    "icon": "UI_RelicIcon_15026_4"
   },
-  "deepwoodmemories": {
-   "name": "Deepwood Memories",
-   "icon": "UI_RelicIcon_15025_4"
-  },
   "oceanhuedclam": {
    "name": "Ocean-Hued Clam",
    "icon": "UI_RelicIcon_15022_4"
@@ -1911,10 +1923,6 @@
   "emblemofseveredfate": {
    "name": "Emblem of Severed Fate",
    "icon": "UI_RelicIcon_15020_4"
-  },
-  "instructor": {
-   "name": "Instructor",
-   "icon": "UI_RelicIcon_10007_4"
   },
   "shimenawasreminiscence": {
    "name": "Shimenawa's Reminiscence",
