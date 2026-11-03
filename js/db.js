@@ -1,10 +1,12 @@
+import { siteURL } from "./paths.js";
+
 let db = null;
 let refs = null;
 let names = {};
 let baseCap = {};
 
 async function loadJSON(path) {
-  const resp = await fetch(path, { cache: "no-cache" });
+  const resp = await fetch(siteURL(path), { cache: "no-cache" });
   if (!resp.ok) throw new Error(`${path}: ${resp.status}`);
   return resp.json();
 }
@@ -181,7 +183,7 @@ async function loadShard(n) {
   if (shardCache.has(n)) return shardCache.get(n);
   if (shardPending.has(n)) return shardPending.get(n);
   const v = encodeURIComponent(db.generated || "");
-  const task = fetch(`data/details/${n}.json?v=${v}`, { cache: "force-cache" })
+  const task = fetch(siteURL(`data/details/${n}.json?v=${v}`), { cache: "force-cache" })
     .then((r) => (r.ok ? r.json() : {}))
     .catch(() => ({}))
     .then((data) => { shardCache.set(n, data); shardPending.delete(n); return data; });

@@ -13,6 +13,7 @@ const GITHUB_ISSUES = "https://github.com/SenjeyB/gi-rec/issues/new/choose";
 const SETTINGS_KEY = "girec.filters";
 
 let names = {};
+let aliases = {};
 let refs = null;
 let app = null;
 
@@ -27,6 +28,17 @@ async function loadJSON(path) {
   const resp = await fetch(path, { cache: "no-cache" });
   if (!resp.ok) throw new Error(`${path}: ${resp.status}`);
   return resp.json();
+}
+
+function updateKeywords() {
+  const meta = document.querySelector('meta[name="keywords"]');
+  if (!meta) return;
+  const code = i18n.lang();
+  const terms = code === "ru"
+    ? ["GI-Rec", "Genshin Impact", "Геншин Импакт", "Геншин", "отряды", "DPS"]
+    : ["GI-Rec", "Genshin Impact", "best teams", "team builder", "DPS"];
+  for (const key of Object.keys(names)) terms.push(labels.charLabel(key), ...(aliases[code]?.[key] || []));
+  meta.content = [...new Set(terms)].join(", ");
 }
 
 function loadSettings() {
@@ -271,12 +283,16 @@ async function boot() {
   await i18n.init();
   loadSettings();
 
-  names = await loadJSON("names.json");
+  [names, aliases] = await Promise.all([
+    loadJSON("names.json"),
+    loadJSON("data/character-aliases.json").catch(() => ({})),
+  ]);
   const info = await db.init(names);
   refs = db.references();
   console.info(`gi-rec: база от ${info.generated} — ${info.teams} отрядов, ${info.builds} сборок`);
 
   await labels.init(names);
+  updateKeywords();
   i18n.addLoader(labels.load);
   store.init(names);
   const firstVisit = isFirstVisit();
@@ -301,6 +317,7 @@ async function boot() {
   tour.init({ auto: firstVisit && !new URLSearchParams(location.search).has("char") });
 
   i18n.onChange(() => {
+    updateKeywords();
     buildLangSwitcher();
     updateFilterHint();
     if (app) app.rerender();

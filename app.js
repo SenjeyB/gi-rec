@@ -1,6 +1,6 @@
 import { t, lang } from './js/i18n.js';
 import { charLabel, weaponLabel, setLabel, statLabel } from './js/labels.js';
-import { toggleDetail } from './js/teamdetail.js';
+import { toggleDetail, sourceLink } from './js/teamdetail.js';
 import { copiesNeeded, subtractCopies, haveCopies, charactersInDb, meta as dbMeta } from './js/db.js';
 import * as draft from './js/draft.js';
 import { groupKeys } from './js/store.js';
@@ -88,10 +88,21 @@ function buildTeamRow(team, owned, extraCls){
   });
   row.appendChild(members);
   row.appendChild(dpsCell('team-dps', team));
+  const source = sourceLink(team, 'team-source');
+  if(source) row.appendChild(source);
   if(team.build){
     row.classList.add('expandable');
     row.title = T('team.details','Team details');
+    row.tabIndex = 0;
+    row.setAttribute('role', 'button');
+    row.setAttribute('aria-expanded', 'false');
     row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
+    row.addEventListener('keydown', (e)=>{
+      if(e.target === row && (e.key === 'Enter' || e.key === ' ')){
+        e.preventDefault();
+        toggleDetail(row, team);
+      }
+    });
   }
   return row;
 }

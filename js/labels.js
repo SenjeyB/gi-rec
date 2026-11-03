@@ -1,4 +1,5 @@
 import { lang, t } from "./i18n.js";
+import { siteURL } from "./paths.js";
 
 const EMPTY = { chars: {}, weapons: {}, sets: {} };
 const cache = new Map();
@@ -7,7 +8,7 @@ let keyByDisplay = {};
 export async function load(code) {
   if (cache.has(code)) return cache.get(code);
   try {
-    const resp = await fetch(`data/names.${code}.json`, { cache: "no-cache" });
+    const resp = await fetch(siteURL(`data/names.${code}.json`), { cache: "no-cache" });
     if (!resp.ok) throw new Error(String(resp.status));
     const data = await resp.json();
     cache.set(code, data);

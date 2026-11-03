@@ -15,6 +15,7 @@
     "metaDescription": "Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!"
   },
   "nav": {
+    "catalog": "Characters",
     "mode": "Mode",
     "recommendations": "Recommendations",
     "tierlist": "Tier List",
@@ -179,12 +180,13 @@
     "sets": "Artifact sets",
     "noSet": "No artifact set",
     "noArtifacts": "Artifacts not specified",
-    "video": "Watch the video",
+    "video": "View Run",
     "basedOnClear": "Based on a Stygian Onslaught clear",
     "originFull": { "dummy": "Training dummy runs · stygian.moe" },
     "runs": { "dummy": "Runs: {n}" },
     "refine": "R{n}",
-    "source": "Open source sim",
+    "source": "View Sim",
+    "loadError": "Could not load team details. Close and reopen the team to retry.",
     "sims": "{n} sims averaged",
     "builds": "{n} builds",
     "showBuilds": "Show builds",

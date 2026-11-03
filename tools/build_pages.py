@@ -26,6 +26,7 @@ import html
 import re
 import shutil
 import hashlib
+import urllib.parse
 from collections import Counter, defaultdict
 from typing import Dict, List, Optional
 
@@ -169,6 +170,7 @@ def write(path: str, text: str) -> bool:
 class Data:
     def __init__(self):
         self.names = load("names.json")
+        self.aliases = load("data/character-aliases.json")
         self.db = load("data/db.json")
         self.labels = {lang: load(f"data/names.{lang}.json") for lang in LANGS}
         self.i18n = {lang: load(f"i18n/{lang}.json") for lang in LANGS}
@@ -200,9 +202,9 @@ class Data:
         на C0, 4★ на C6 (то есть без ограничений) и нет 5★ оружия."""
         meta = self.db.get("weaponMeta") or []
         out = []
-        for t in self.db["teams"]:
+        for ti, t in enumerate(self.db["teams"]):
             keys = [self.chars[i] for i in t["chars"]]
-            for b in t["builds"]:
+            for bi, b in enumerate(t["builds"]):
                 ok = True
                 for k, m in zip(keys, b["members"]):
                     if self.five_star(k) and m["cons"] > 0:
@@ -211,7 +213,8 @@ class Data:
                     if w is not None and w < len(meta) and (meta[w] or {}).get("rarity") == 5:
                         ok = False
                 if ok:
-                    out.append({"chars": keys, "build": b, "dps": b["dps"]})
+                    out.append({"chars": keys, "build": b, "dps": b["dps"],
+                                "teamIndex": ti, "buildIndex": bi})
                     break
         out.sort(key=lambda x: -x["dps"])
         return out
@@ -219,6 +222,14 @@ class Data:
     # подписи
     def char(self, lang: str, key: str) -> str:
         return self.labels[lang]["chars"].get(key) or (self.names.get(key) or {}).get("name") or key
+
+    def search_names(self, lang: str, key: str) -> List[str]:
+        return list(dict.fromkeys([self.char(lang, key)] + self.aliases.get(lang, {}).get(key, [])))
+
+    def keywords(self, lang: str, keys) -> List[str]:
+        base = (["GI-Rec", "Genshin Impact", "Геншин Импакт", "отряды", "DPS"] if lang == "ru"
+                else ["GI-Rec", "Genshin Impact", "best teams", "team compositions", "DPS"])
+        return list(dict.fromkeys(base + [s for k in keys for s in self.search_names(lang, k)]))
 
     def weapon(self, lang: str, key: str) -> str:
         return self.labels[lang]["weapons"].get(key) or key
@@ -236,7 +247,8 @@ class Data:
 # ------------------------------------------------------------- разметка
 
 def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, body: str,
-         crumbs: Optional[List[tuple]] = None) -> str:
+         crumbs: Optional[List[tuple]] = None, keywords: Optional[List[str]] = None,
+         character: Optional[str] = None) -> str:
     """path — адрес страницы от корня сайта без языка ('' | 'characters/x/' | ...)."""
     up = "../" * depth
     ui = UI[lang]
@@ -251,6 +263,18 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
         ld = ('\n  <script type="application/ld+json">' +
               json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList",
                           "itemListElement": items}, ensure_ascii=False) + "</script>")
+    if character:
+        about = {"@context": "https://schema.org", "@type": "WebPage", "url": url,
+                 "name": title, "inLanguage": lang,
+                 "about": {"@type": "Thing", "name": data.char(lang, character),
+                           "alternateName": data.search_names(lang, character)[1:]}}
+        ld += '\n  <script type="application/ld+json">' + json.dumps(about, ensure_ascii=False) + "</script>"
+    keyword_meta = (f'\n  <meta name="keywords" content="{esc(", ".join(keywords))}">'
+                    if keywords else "")
+    team_assets = ""
+    if 'class="pg-team-card"' in body:
+        team_assets = (f'\n  <link rel="stylesheet" href="{up}teamdetail.css?v={asset_version("teamdetail.css")}">'
+                       f'\n  <script type="module" src="{up}js/staticteams.js?v={asset_version("js/staticteams.js")}"></script>')
     nav = (f'<a href="{up}{lang}/characters/">{esc(ui["catalog"])}</a>'
            f'<a href="{up}{lang}/best-teams/">{esc(ui["best"])}</a>'
            f'<a href="{up}{lang}/abyss/">{esc(ui["abyss"])}</a>'
@@ -261,7 +285,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{esc(title)}</title>
-  <meta name="description" content="{esc(desc)}">
+  <meta name="description" content="{esc(desc)}">{keyword_meta}
   <link rel="canonical" href="{url}">{alt}
   <link rel="alternate" hreflang="x-default" href="{BASE_URL}en/{path}">
   <meta property="og:type" content="website">
@@ -271,13 +295,13 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
   <meta property="og:image" content="{BASE_URL}preview.png">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="theme-color" content="#071129">
-  <link rel="icon" href="{up}assets/favicon.png" type="image/png" sizes="64x64">
-  <link rel="apple-touch-icon" href="{up}assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="{up}pages.css?v={asset_version("pages.css")}">{ld}
+  <link rel="icon" href="{BASE_URL}assets/favicon.png" type="image/png" sizes="64x64">
+  <link rel="apple-touch-icon" href="{BASE_URL}assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="{up}pages.css?v={asset_version("pages.css")}">{team_assets}{ld}
 </head>
-<body>
+<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}">
   <header class="pg-header">
-    <a class="pg-brand" href="{up}{lang}/characters/"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
+    <a class="pg-brand" href="{up}?lang={lang}" aria-label="{esc(ui['open_app'])}"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
     <nav class="pg-nav">{nav}</nav>
     <a class="pg-cta" href="{up}?lang={lang}">{esc(ui["open_app"])}</a>
   </header>
@@ -305,18 +329,32 @@ def member_html(data: Data, lang: str, key: str, m: dict, up: str, link: bool = 
     sets_html = f'<span class="pg-sets">{sets}</span>' if sets else ""
     img = f'<img src="{up}characters/{key}.png" alt="{name}" width="44" height="44" loading="lazy">'
     title = (f'<a href="{up}{lang}/characters/{key}/">{name}</a>' if link else name)
-    return (f'<div class="pg-member">{img}<div class="pg-member-text">'
+    return (f'<span class="pg-member">{img}<span class="pg-member-text">'
             f'<span class="pg-member-name">{title} <span class="pg-cons">C{m["cons"]}</span></span>'
-            f'{weapon}{sets_html}</div></div>')
+            f'{weapon}{sets_html}</span></span>')
 
 
 def team_html(data: Data, lang: str, t: dict, up: str, rank: int) -> str:
     b = t["build"]
     members = "".join(member_html(data, lang, k, m, up) for k, m in zip(t["chars"], b["members"]))
     kqms = f'<span class="pg-badge">{UI[lang]["kqms"]}</span>' if b.get("kqmCons") and b.get("kqmArt") else ""
-    return (f'<li class="pg-team"><span class="pg-rank">{rank}</span>'
-            f'<div class="pg-members">{members}</div>'
-            f'<div class="pg-dps">{dps_text(b)}<small>{UI[lang]["dps"]}</small>{kqms}</div></li>')
+    src = b.get("src") or ""
+    if b.get("origin"):
+        href = ("https://www.youtube.com/watch?v=" + urllib.parse.quote(src[3:], safe="") if src.startswith("yt:")
+                else "https://www.bilibili.com/video/" + urllib.parse.quote(src[3:], safe="") if src.startswith("bb:")
+                else src if re.match(r"^https?://", src) else "")
+    else:
+        href = "https://db.kqm.gg/db/" + urllib.parse.quote(src, safe="") if src else ""
+    label = data.i18n[lang]["team"]["video" if b.get("origin") else "source"]
+    source = (f'<a class="pg-source" href="{esc(href)}" target="_blank" rel="noopener noreferrer">{esc(label)}</a>'
+              if href else "")
+    return (f'<li><details class="pg-team-card" data-team-index="{t["teamIndex"]}" '
+            f'data-build-index="{t["buildIndex"]}" data-db-version="{esc(data.db["generated"])}" '
+            f'data-chars="{esc(",".join(t["chars"]))}" data-src="{esc(src)}">'
+            f'<summary class="pg-team"><span class="pg-rank">{rank}</span>'
+            f'<span class="pg-members">{members}</span>'
+            f'<span class="pg-dps">{dps_text(b)}<small>{UI[lang]["dps"]}</small>{kqms}{source}</span></summary>'
+            f'<div class="pg-team-expanded"><div class="pg-team-fallback">{source}</div></div></details></li>')
 
 
 def team_names(data: Data, lang: str, t: dict) -> str:
@@ -370,7 +408,8 @@ def char_page(data: Data, lang: str, key: str) -> str:
     desc = ui["char_desc"].format(n=min(TOP_PER_CHAR, len(teams)), name=name,
                                   top=team_names(data, lang, top), dps=dps_text(top["build"]))
     crumbs = [(ui["catalog"], f"{BASE_URL}{lang}/characters/"), (name, f"{BASE_URL}{lang}/characters/{key}/")]
-    return page(data, lang, f"characters/{key}/", 3, title, desc, body, crumbs)
+    return page(data, lang, f"characters/{key}/", 3, title, desc, body, crumbs,
+                keywords=data.keywords(lang, [key]), character=key)
 
 
 def best_page(data: Data, lang: str) -> str:
@@ -485,7 +524,8 @@ def char_card(data: Data, lang: str, key: str, up: str, small: bool = False) -> 
         icons += (f'<img class="pg-char-wt" src="{up}filters/Class-{wt}.png" '
                   f'alt="{esc(data.weapon_type(lang, wt))}" title="{esc(data.weapon_type(lang, wt))}" width="20" height="20">')
     return (f'<a class="pg-char r{rarity}{" is-small" if small else ""}" href="{up}{lang}/characters/{key}/" '
-            f'data-el="{esc(el)}" data-wt="{esc(wt)}" data-r="{rarity}" data-q="{esc((name + " " + other + " " + key).lower())}">'
+            f'data-el="{esc(el)}" data-wt="{esc(wt)}" data-r="{rarity}" '
+            f'data-q="{esc(" ".join(data.search_names(lang, key) + data.search_names("en" if lang == "ru" else "ru", key) + [key]).lower())}">'
             f'<span class="pg-char-pic"><img src="{up}characters/{key}.png" alt="" width="{size}" height="{size}" loading="lazy">{icons}</span>'
             f'<span class="pg-char-name">{esc(name)}</span><span class="pg-stars">{"★" * rarity}</span></a>')
 
@@ -532,7 +572,8 @@ def hub_page(data: Data, lang: str) -> str:
 {filter_bar(data, lang, up)}
 {chr(10).join(sections)}
     <script src="{up}pages.js?v={asset_version("pages.js")}" defer></script>"""
-    return page(data, lang, "characters/", 2, ui["hub_title"], ui["hub_desc"], body)
+    return page(data, lang, "characters/", 2, ui["hub_title"], ui["hub_desc"], body,
+                keywords=data.keywords(lang, data.by_char))
 
 
 def redirect_page(lang: str) -> str:
@@ -569,13 +610,17 @@ def sitemap(data: Data, paths: List[tuple]) -> str:
             'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(rows) + "\n</urlset>\n")
 
 
-def stamp_app_styles() -> int:
+def stamp_app_styles(data: Data) -> int:
     """Та же версия по содержимому для styles.css основного приложения."""
     path = os.path.join(SITE, "index.html")
     with open(path, "r", encoding="utf-8") as f:
         text = f.read()
-    fresh = re.sub(r'href="styles\.css(\?v=[0-9a-f]+)?"',
-                   f'href="styles.css?v={asset_version("styles.css")}"', text)
+    fresh = text
+    for css in ("styles.css", "teamdetail.css"):
+        fresh = re.sub(r'href="' + re.escape(css) + r'(\?v=[0-9a-f]+)?"',
+                       f'href="{css}?v={asset_version(css)}"', fresh)
+    fresh = re.sub(r'<meta name="keywords" content="[^"]*">',
+                   f'<meta name="keywords" content="{esc(", ".join(data.keywords("en", data.names)))}">', fresh)
     return int(write("index.html", fresh))
 
 
@@ -615,7 +660,7 @@ def main() -> int:
     # запасной sitemap: простой список адресов, его Google тоже принимает
     urls = [BASE_URL] + [f"{BASE_URL}{lang}/{path}" for path, _ in paths for lang in LANGS]
     changed += write("sitemap.txt", "\n".join(urls) + "\n")
-    changed += stamp_app_styles()
+    changed += stamp_app_styles(data)
     print(f"Страниц: {len(written)} (+ sitemap.xml), изменено файлов: {changed}")
     return 0
 

@@ -1,3 +1,5 @@
+import { siteURL } from "./paths.js";
+
 const SUPPORTED = ["en", "ru"];
 const FALLBACK = "en";
 const STORAGE_KEY = "girec.lang";
@@ -35,7 +37,7 @@ function detect() {
 
 async function loadDict(lang) {
   if (dicts.has(lang)) return dicts.get(lang);
-  const resp = await fetch(`i18n/${lang}.json`, { cache: "no-cache" });
+  const resp = await fetch(siteURL(`i18n/${lang}.json`), { cache: "no-cache" });
   if (!resp.ok) throw new Error(`i18n/${lang}.json: ${resp.status}`);
   const dict = await resp.json();
   dicts.set(lang, dict);
@@ -113,13 +115,13 @@ export async function setLang(next) {
   }
 }
 
-export async function init() {
-  const want = detect();
+export async function init({ language, updateDocument = true } = {}) {
+  const want = SUPPORTED.includes(language) ? language : detect();
   await loadDict(FALLBACK);
   if (want !== FALLBACK) {
     try { await loadDict(want); } catch {}
   }
   current = dicts.has(want) ? want : FALLBACK;
-  apply();
+  if (updateDocument) apply();
   return current;
 }

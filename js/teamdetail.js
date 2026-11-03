@@ -1,6 +1,7 @@
 import { t } from "./i18n.js";
 import { charLabel, weaponLabel, setLabel, statLabel } from "./labels.js";
 import { loadDetails, teamBuilds } from "./db.js";
+import { siteURL } from "./paths.js";
 
 const ROLL_VALUE = {
   "hp": 253.94, "hp%": 0.0496, "atk": 16.54, "atk%": 0.0496, "def": 19.68,
@@ -33,6 +34,17 @@ function videoUrl(src) {
   return /^https?:\/\//.test(src) ? src : null;
 }
 
+export function sourceLink(team, cls = "td-src") {
+  const href = team.origin ? videoUrl(team.src) : team.src ? SIM_URL + team.src : null;
+  if (!href) return null;
+  const link = el("a", cls, t(team.origin ? "team.video" : "team.source"));
+  link.href = href;
+  link.target = "_blank";
+  link.rel = "noopener noreferrer";
+  link.addEventListener("click", (event) => event.stopPropagation());
+  return link;
+}
+
 function el(tag, cls, text) {
   const n = document.createElement(tag);
   if (cls) n.className = cls;
@@ -44,7 +56,7 @@ function icon(src, alt, cls) {
   const img = new Image();
   img.loading = "lazy";
   img.decoding = "async";
-  img.src = src;
+  img.src = siteURL(src);
   img.alt = alt || "";
   if (cls) img.className = cls;
   img.onerror = () => { img.style.visibility = "hidden"; };
@@ -167,7 +179,7 @@ function variantsBlock(team, onPick) {
       const cell = el("span", "td-variant-cell");
       const pic = new Image();
       pic.loading = "lazy";
-      pic.src = `characters/${slot.char}.png`;
+      pic.src = siteURL(`characters/${slot.char}.png`);
       pic.alt = charLabel(slot.char);
       pic.title = `${charLabel(slot.char)} C${slot.cons}`;
       cell.appendChild(pic);
@@ -186,6 +198,8 @@ function variantsBlock(team, onPick) {
 }
 
 async function fillPanel(panel, team) {
+  const ticket = Symbol();
+  panel._ticket = ticket;
   panel.innerHTML = "";
 
   const head = el("div", "td-head");
@@ -201,14 +215,8 @@ async function fillPanel(panel, team) {
   } else if (team.sims) {
     meta.appendChild(el("span", "td-meta-item", t("team.sims", { n: team.sims })));
   }
-  const href = team.origin ? videoUrl(team.src) : team.src ? SIM_URL + team.src : null;
-  if (href) {
-    const a = el("a", "td-src", t(team.origin ? "team.video" : "team.source"));
-    a.href = href;
-    a.target = "_blank";
-    a.rel = "noopener";
-    meta.appendChild(a);
-  }
+  const source = sourceLink(team);
+  if (source) meta.appendChild(source);
   head.appendChild(meta);
   panel.appendChild(head);
 
@@ -219,6 +227,7 @@ async function fillPanel(panel, team) {
   panel.appendChild(grid);
 
   const stats = await loadDetails(team.teamIndex, team.buildIndex);
+  if (panel._ticket !== ticket) return;
   (team.build || []).forEach((slot, i) => {
     grid.appendChild(memberBlock(slot, stats && stats[i], !!team.origin));
   });
@@ -236,14 +245,20 @@ export async function toggleDetail(row, team) {
   if (existing && existing.classList.contains("team-detail")) {
     existing.remove();
     row.classList.remove("is-open");
+    row.setAttribute("aria-expanded", "false");
     return false;
   }
-  for (const open of document.querySelectorAll(".team-detail")) open.remove();
-  for (const r of document.querySelectorAll(".team-row.is-open")) r.classList.remove("is-open");
+  for (const open of row.parentElement.querySelectorAll(":scope > .team-detail")) open.remove();
+  for (const r of row.parentElement.querySelectorAll(":scope > .team-row.is-open")) {
+    r.classList.remove("is-open");
+    r.setAttribute("aria-expanded", "false");
+  }
 
   row.classList.add("is-open");
-  const panel = await buildPanel(team);
-  if (!row.isConnected || !row.classList.contains("is-open")) return false;
+  row.setAttribute("aria-expanded", "true");
+  const panel = el("div", "team-detail");
+  panel.addEventListener("click", (event) => event.stopPropagation());
   row.after(panel);
-  return true;
+  await fillPanel(panel, team);
+  return panel.isConnected && row.classList.contains("is-open");
 }
