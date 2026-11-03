@@ -838,6 +838,8 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--date", help="считать сегодняшней эту дату (YYYY-MM-DD)")
     ap.add_argument("--force-icons", action="store_true", help="перекачать иконки")
+    ap.add_argument("--only", choices=("all", "abyss", "onslaught"), default="all",
+                    help="обновить только выбранный раздел (по умолчанию оба)")
     args = ap.parse_args()
     today = (datetime.date.fromisoformat(args.date) if args.date
              else datetime.datetime.now(datetime.timezone.utc).date())
@@ -851,8 +853,10 @@ def main() -> int:
             old = None
 
     enemies = Enemies(cache=(old or {}).get("enemies"))
-    abyss = build_abyss(today, enemies)
-    onslaught = build_onslaught(today, enemies)
+    refresh_abyss = args.only in ("all", "abyss")
+    refresh_onslaught = args.only in ("all", "onslaught")
+    abyss = build_abyss(today, enemies) if refresh_abyss else (old or {}).get("abyss")
+    onslaught = build_onslaught(today, enemies) if refresh_onslaught else (old or {}).get("onslaught")
 
     # Игровые тексты (подсказки о врагах, аномалии, уровни Натиска): каждый
     # этап регистрирует нужные строки, а TextMap качаются один раз и только
@@ -860,7 +864,8 @@ def main() -> int:
     # при следующем запуске.
     gt = GameText()
     finishers = []
-    for name, plan in (("аномалии", lambda: plan_disorder(abyss, (old or {}).get("abyss"), gt)),
+    for name, plan in (("аномалии", lambda: plan_disorder(abyss, (old or {}).get("abyss"), gt)
+                       if refresh_abyss else None),
                        ("подсказки", lambda: plan_tips(enemies, gt))):
         try:
             f = plan()
@@ -872,16 +877,18 @@ def main() -> int:
     # Если раздел не разобрался (вики недоступна, страница нового цикла ещё
     # пустая), оставляем прежний — лучше старый цикл, чем пустая вкладка.
     items = dict(enemies.items)
-    for key, fresh in (("abyss", abyss), ("onslaught", onslaught)):
-        if fresh is None and old and old.get(key):
-            warn(f"{key}: оставляю данные прошлого запуска")
+    for key, fresh, selected in (("abyss", abyss, refresh_abyss),
+                                 ("onslaught", onslaught, refresh_onslaught)):
+        if (not selected or fresh is None) and old and old.get(key):
+            if selected:
+                warn(f"{key}: оставляю данные прошлого запуска")
             for ref in _refs(old[key]):
                 if ref in (old.get("enemies") or {}):
                     items.setdefault(ref, old["enemies"][ref])
     # Уровни сложности Натиска из игровых данных. Сбой здесь не должен ломать
     # остальное: тогда остаются детали прошлого запуска (если цикл тот же).
     old_ons = (old or {}).get("onslaught") or {}
-    if onslaught is not None:
+    if refresh_onslaught and onslaught is not None:
         old_details = old_ons.get("details") if old_ons.get("start") == onslaught.get("start") else None
         try:
             details = build_onslaught_details(onslaught, enemies, old_details, gt)

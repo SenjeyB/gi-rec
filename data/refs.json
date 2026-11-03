@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-02T12:51:18Z",
+ "generated": "2026-11-03T21:56:29Z",
  "weapons": {
   "absolution": {
    "name": "Absolution",
@@ -1820,6 +1820,18 @@
   }
  },
  "sets": {
+  "adaycarvedfromrisingwinds": {
+   "name": "A Day Carved From Rising Winds",
+   "icon": "UI_RelicIcon_15044_4"
+  },
+  "viridescentvenerer": {
+   "name": "Viridescent Venerer",
+   "icon": "UI_RelicIcon_15002_4"
+  },
+  "heartofthefurnace": {
+   "name": "Heart of the Furnace",
+   "icon": "UI_RelicIcon_15048_4"
+  },
   "nightoftheskysunveiling": {
    "name": "Night of the Sky's Unveiling",
    "icon": "UI_RelicIcon_15041_4"
@@ -1844,25 +1856,13 @@
    "name": "Aubade of Morningstar and Moon",
    "icon": "UI_RelicIcon_15043_4"
   },
-  "viridescentvenerer": {
-   "name": "Viridescent Venerer",
-   "icon": "UI_RelicIcon_15002_4"
-  },
   "disenchantmentindeepshadow": {
    "name": "Disenchantment in Deep Shadow",
    "icon": "UI_RelicIcon_15046_4"
   },
-  "heartofthefurnace": {
-   "name": "Heart of the Furnace",
-   "icon": "UI_RelicIcon_15048_4"
-  },
   "tenacityofthemillelith": {
    "name": "Tenacity of the Millelith",
    "icon": "UI_RelicIcon_15017_4"
-  },
-  "adaycarvedfromrisingwinds": {
-   "name": "A Day Carved From Rising Winds",
-   "icon": "UI_RelicIcon_15044_4"
   },
   "celestialgift": {
    "name": "Celestial Gift",

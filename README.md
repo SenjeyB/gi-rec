@@ -17,12 +17,14 @@ Hosted by Github Pages
 
 Data is refreshed by GitHub Actions (`.github/workflows/update-data.yml`):
 
-- daily — Spiral Abyss and Stygian Onslaught (`tools/build_content.py`)
-- weekly — the team database (`tools/build_db.py`)
+- on the 1st and 16th of each month at 09:00 UTC — Spiral Abyss (`tools/build_content.py --only abyss`)
+- every Wednesday at 12:00 UTC — Stygian Onslaught (`tools/build_content.py --only onslaught`)
+- daily at 04:40 UTC — the KQM team database (`tools/build_db.py --icons`)
 
 After that, `tools/build_pages.py` rebuilds static pages for search engines (`en/`, `ru/`: a catalog, a page per character, best teams, the current Abyss and Onslaught) and `sitemap.xml`.
 
-A commit is made only when the data actually changes. To run it by hand: Actions → Update data → Run workflow.
+A commit is made only when the data actually changes, followed by an explicit GitHub Pages rebuild.
+To run it by hand: Actions → Update data → Run workflow. Select `abyss`, `onslaught`, `teams`, `content` (both game modes), or `all`.
 Locally: `python tools/build_content.py`, `python tools/build_db.py --icons` (needs Pillow for icons).
 
 New characters still need a manual entry in `names.json` and a portrait in `characters/`; the workflow

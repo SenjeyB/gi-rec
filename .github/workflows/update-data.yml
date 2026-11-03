@@ -1,21 +1,16 @@
-# Автообновление данных сайта.
-#   каждый день  — Витая Бездна и Мрачный натиск (tools/build_content.py, вики)
-#   раз в неделю — база отрядов из симов KQM (tools/build_db.py)
-# Коммит появляется, только если данные действительно изменились; GitHub Pages
-# после него пересобирает сайт сам. Запустить вручную: Actions → Update data →
-# Run workflow.
 name: Update data
 
 on:
   schedule:
-    - cron: "20 5 * * *"    # ежедневно 05:20 UTC — Бездна и Натиск
-    - cron: "40 4 * * 1"    # по понедельникам 04:40 UTC — база отрядов
+    - cron: "0 9 1,16 * *"
+    - cron: "0 12 * * 3"
+    - cron: "40 4 * * *"
   workflow_dispatch:
     inputs:
       what:
         description: Что обновить
         type: choice
-        options: [all, content, teams]
+        options: [all, abyss, onslaught, content, teams]
         default: all
   push:
     branches: [main]
@@ -25,6 +20,7 @@ on:
 
 permissions:
   contents: write
+  pages: write
 
 concurrency:
   group: update-data
@@ -46,18 +42,28 @@ jobs:
 
       - name: Что запускать
         id: plan
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          UPDATE_WHAT: ${{ inputs.what }}
         run: |
-          content=false; teams=false
-          case "${{ github.event_name }}" in
+          content=none; teams=false
+          case "$EVENT_NAME" in
             schedule)
-              if [ "${{ github.event.schedule }}" = "40 4 * * 1" ]; then teams=true; else content=true; fi ;;
-            workflow_dispatch)
-              case "${{ inputs.what }}" in
-                content) content=true ;;
-                teams) teams=true ;;
-                *) content=true; teams=true ;;
+              case "$SCHEDULE" in
+                "0 9 1,16 * *") content=abyss ;;
+                "0 12 * * 3") content=onslaught ;;
+                "40 4 * * *") teams=true ;;
+                *) echo "Unknown schedule: $SCHEDULE"; exit 1 ;;
               esac ;;
-            *) content=true; teams=true ;;
+            workflow_dispatch)
+              case "$UPDATE_WHAT" in
+                abyss|onslaught) content="$UPDATE_WHAT" ;;
+                content) content=all ;;
+                teams) teams=true ;;
+                *) content=all; teams=true ;;
+              esac ;;
+            *) content=all; teams=true ;;
           esac
           echo "content=$content" >> "$GITHUB_OUTPUT"
           echo "teams=$teams" >> "$GITHUB_OUTPUT"
@@ -66,9 +72,11 @@ jobs:
       # обновится, а упавший шаг подсветит весь запуск красным в конце.
       - name: Бездна и Натиск
         id: content
-        if: steps.plan.outputs.content == 'true'
+        if: steps.plan.outputs.content != 'none'
         continue-on-error: true
-        run: python tools/build_content.py
+        env:
+          CONTENT_SCOPE: ${{ steps.plan.outputs.content }}
+        run: python tools/build_content.py --only "$CONTENT_SCOPE"
 
       - name: База отрядов
         id: teams
@@ -84,10 +92,12 @@ jobs:
         run: python tools/build_pages.py
 
       - name: Коммит изменений
+        id: commit
         run: |
           git add data enemies weapons sets en ru sitemap.xml sitemap.txt index.html
           if git diff --cached --quiet; then
             echo "Данные не изменились — коммитить нечего"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           parts=""
@@ -100,6 +110,13 @@ jobs:
           # пока шёл запуск, в main могли что-то запушить
           git pull --rebase --quiet origin main
           git push origin HEAD:main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Публикация обновлений на GitHub Pages
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/$GITHUB_REPOSITORY/pages/builds" --silent
 
       - name: Итог
         if: steps.content.outcome == 'failure' || steps.teams.outcome == 'failure' || steps.pages.outcome == 'failure'
