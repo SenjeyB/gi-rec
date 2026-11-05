@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="styles.css?v=90fe054641">
   <link rel="icon" href="https://senjeyb.github.io/gi-rec/assets/favicon.png" type="image/png" sizes="64x64">
   <link rel="apple-touch-icon" href="https://senjeyb.github.io/gi-rec/assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="teamdetail.css?v=7835058517">
+  <link rel="stylesheet" href="teamdetail.css?v=a8eb08e82c">
   <link rel="preload" href="tiers/ss.png" as="image">
   <link rel="preload" href="tiers/s.png" as="image">
   <link rel="preload" href="tiers/A.png" as="image">
@@ -103,9 +103,10 @@
               <details id="advanced-filters" class="adv-filters">
                 <summary data-i18n="filters.advanced">Advanced</summary>
                 <label class="side-check">
-                  <input id="show-assumed" type="checkbox" data-default="true" checked />
+                  <input id="show-assumed" type="checkbox" data-default="true" aria-describedby="assumed-info" checked />
                   <span data-i18n="filters.showAssumed">Show assumed builds</span>
                 </label>
+                <div id="assumed-info" class="small muted" data-i18n="team.assumedInfo">The team and DPS are known. Missing weapon, artifact and stat details are inferred.</div>
                 <label class="side-check">
                   <input id="show-boss-runs" type="checkbox" data-default="true" checked />
                   <span data-i18n="filters.showBossRuns">Show Boss Runs</span>

@@ -3,7 +3,7 @@
 
 ## 2.5.0 (2026/11/05)
 - Added 66 Cryo Traveler team calculations with assumed equipment
-- Added a yellow "Assumed" badge and excluded assumed builds from character pages
+- Added a yellow "Assumed" badge: the team and DPS are known, while missing equipment and artifact stats are inferred. These builds are excluded from character pages
 - Moved assumed builds and Boss Runs toggles into Advanced filters; removed the team source selector
 
 ## 2.4.2 (2026/11/05)

@@ -237,11 +237,9 @@ async function fillPanel(panel, team, options = {}) {
 
   const meta = el("div", "td-meta");
   const original = teamBuilds(team.teamIndex).find((v) => v.buildIndex === team.buildIndex);
-  if (team.assumed || original?.assumed) {
+  const assumed = team.assumed || original?.assumed || team.reconstructed || original?.reconstructed;
+  if (assumed) {
     meta.appendChild(el("span", "td-meta-item assumed-badge", "⚑ " + t("team.assumed")));
-  }
-  if (team.reconstructed || original?.reconstructed) {
-    meta.appendChild(el("span", "td-meta-item", t("team.reconstructedGear")));
   }
   if (team.origin === "clear") {
     meta.appendChild(el("span", "td-meta-item boss-run-badge", t("team.basedOnClear")));
@@ -255,6 +253,7 @@ async function fillPanel(panel, team, options = {}) {
   if (source) meta.appendChild(source);
   head.appendChild(meta);
   panel.appendChild(head);
+  if (assumed) panel.appendChild(el("p", "td-assumed-note", t("team.assumedInfo")));
 
   const variants = variantsBlock(team, (v) => fillPanel(panel, v, options), options);
   if (variants) panel.appendChild(variants);
