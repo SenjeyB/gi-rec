@@ -79,6 +79,21 @@ function kqmBadge(okCons, okArt) {
   return wrap;
 }
 
+function modifierBlock(title, modifiers, weapon, unverified = false) {
+  const box = el("div", "td-stats td-modifiers" + (unverified ? " td-unverified" : ""));
+  box.appendChild(el("div", "td-stats-title", title));
+  if (weapon) box.appendChild(el("div", "td-row-sub", weaponLabel(weapon)));
+  const rows = el("div", "td-subs");
+  for (const modifier of modifiers) {
+    const row = el("div", "td-sub");
+    row.appendChild(el("span", "td-sub-name", statLabel(modifier.stat)));
+    row.appendChild(el("span", "td-sub-rolls", statValue(modifier.stat, modifier.value)));
+    rows.appendChild(row);
+  }
+  box.appendChild(rows);
+  return box;
+}
+
 function memberBlock(slot, stats, real) {
   const card = el("div", "td-member");
 
@@ -118,18 +133,15 @@ function memberBlock(slot, stats, real) {
     card.appendChild(el("div", "td-row td-muted", t(real ? "team.noArtifacts" : "team.noSet")));
   }
 
-  if (stats?.modifiers?.length) {
-    const box = el("div", "td-stats td-modifiers");
-    box.appendChild(el("div", "td-stats-title", t("team.simModifiers")));
-    const rows = el("div", "td-subs");
-    for (const modifier of stats.modifiers) {
-      const row = el("div", "td-sub");
-      row.appendChild(el("span", "td-sub-name", statLabel(modifier.stat)));
-      row.appendChild(el("span", "td-sub-rolls", statValue(modifier.stat, modifier.value)));
-      rows.appendChild(row);
+  if (stats?.modifierSources?.length || stats?.unverifiedModifiers?.length) {
+    for (const source of stats.modifierSources || []) {
+      card.appendChild(modifierBlock(t("team.weaponModel"), source.stats, source.weapon));
     }
-    box.appendChild(rows);
-    card.appendChild(box);
+    if (stats.unverifiedModifiers?.length) {
+      card.appendChild(modifierBlock(t("team.unverifiedBonuses"), stats.unverifiedModifiers, null, true));
+    }
+  } else if (stats?.modifiers?.length) {
+    card.appendChild(modifierBlock(t("team.simModifiers"), stats.modifiers));
   }
 
   if (stats && stats.total && stats.total.length) {

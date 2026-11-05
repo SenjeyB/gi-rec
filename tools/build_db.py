@@ -267,6 +267,72 @@ def kqm_artifacts(subs: Dict[str, float]) -> bool:
     return round(sum(subs.values())) == 40 and all(n >= 2 for n in subs.values())
 
 
+def audit_community_sim(sim: dict) -> dict:
+    legacy = sim.get("simVersion") == "859270fe6e133da958d9fb01b88b128952c10bb3"
+    supported = legacy or sim.get("simVersion") == "0d2fce5ef2d2aa7a254ad023c85c6250544ec9ff"
+    config = sim.get("config") or ""
+    members = sim.get("team") or []
+    remaining, sources = {}, {}
+
+    def original(member):
+        return member.get("weaponProxy") or {"weapon": member.get("weapon"), "refine": member.get("refine", 1)}
+
+    def close(a, b):
+        return abs(a - b) < 0.001
+
+    def replace_weapon(member, weapon, refine):
+        member.setdefault("weaponProxy", dict(original(member)))
+        member["weapon"], member["refine"] = weapon, refine
+
+    def allocate(member, weapon, values):
+        rest = remaining[member["name"]]
+        if any(rest.get(stat, 0) + 0.001 < value for stat, value in values.items()):
+            return
+        for stat, value in values.items():
+            rest[stat] = round(rest.get(stat, 0) - value, 6)
+        sources[member["name"]].append({"weapon": weapon, "stats": values, "approximate": True})
+
+    for member in members:
+        remaining[member["name"]] = dict(member.get("mods") or {})
+        sources[member["name"]] = []
+        proxy = original(member)
+        if (legacy and member["name"] == "vesna" and proxy["weapon"] == "ironsting"
+                and proxy["refine"] == 5 and close(member.get("mods", {}).get("atk%", 0), 0.32)
+                and member.get("mods", {}).get("em", 0) >= 135
+                and re.search(r"vesna\s+add\s+stats[^\n]*крафт\s*[рr]\s*5", config, re.I)):
+            replace_weapon(member, "emberwell", 5)
+            allocate(member, "emberwell", {"atk%": 0.32, "em": 135})
+        if (supported and member["name"] == "odette" and proxy["weapon"] == "lionsroar"
+                and re.search(r"odette\s+add\s+stats[^\n]*ивент\s*[рr]\s*5", config, re.I)):
+            em = member.get("mods", {}).get("em", 0)
+            if any(close(em, n) for n in (204, 208, 309)):
+                replace_weapon(member, "silverlight", 5)
+                allocate(member, "silverlight", {"em": 204 if close(em, 204) else 208})
+
+    bows = [m for m in members if original(m)["weapon"] == "theviridescenthunt"
+            and original(m)["refine"] == 1]
+    party_em = any(any(close(rest.get("em", 0), n) for n in (101, 150)) for rest in remaining.values())
+    if supported and len(bows) == 1 and (close(remaining[bows[0]["name"]].get("er", 0), 0.2) or party_em):
+        bow = bows[0]
+        replace_weapon(bow, "breezebornerefrain", 1)
+        if close(remaining[bow["name"]].get("er", 0), 0.2):
+            allocate(bow, "breezebornerefrain", {"er": 0.2})
+        for member in members:
+            em = remaining[member["name"]].get("em", 0)
+            if any(close(em, n) for n in (101, 150)):
+                allocate(member, "breezebornerefrain", {"em": em})
+
+    for member in members:
+        unknown = {stat: value for stat, value in remaining[member["name"]].items() if abs(value) > 0.001}
+        for key, value in (("modifierSources", sources[member["name"]]), ("unverifiedModifiers", unknown)):
+            if value:
+                member[key] = value
+            else:
+                member.pop(key, None)
+        member["kqmArt"] = kqm_artifacts(member.get("subs") or {}) and not unknown and not member.get("total")
+    return sim
+
+
 def slim(entry: dict, alias: Optional[Dict[str, str]] = None) -> dict:
     """Оставляем только нужное: stats/snapshot — огромные массивы, они не нужны.
     Конфиг разбираем сразу и храним результат, а не исходный текст."""
@@ -469,7 +535,7 @@ def load_community() -> List[dict]:
         snapshot = json.load(f)
     if snapshot.get("version") != 1:
         raise ValueError("Unsupported community simulation snapshot version")
-    return [normalize_sim(s) for s in snapshot["simulations"]]
+    return [audit_community_sim(normalize_sim(s)) for s in snapshot["simulations"]]
 
 
 def load_names() -> Dict[str, dict]:
@@ -565,6 +631,9 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 "mods": dict(m.get("mods") or {}),
                 "subValues": dict(m.get("subValues") or {}),
                 "rollCounts": dict(m.get("rollCounts") or {}),
+                "weaponProxy": dict(m.get("weaponProxy") or {}),
+                "modifierSources": list(m.get("modifierSources") or []),
+                "unverifiedModifiers": dict(m.get("unverifiedModifiers") or {}),
                 "kqmArt": bool(m.get("kqmArt")),
             })
         order = [ckey(n) for n in s["chars"]]
@@ -588,7 +657,8 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
             sig = ("sim", s.get("simVersion", ""), bool(s.get("reconstructed"))) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
                                    tuple(m["main"]), tuple(sorted(m["subs"].items())),
                                    tuple(sorted(m["total"].items())), tuple(sorted(m["mods"].items())),
-                                   tuple(sorted(m["subValues"].items()))) for m in members)
+                                   tuple(sorted(m["subValues"].items())),
+                                   tuple(sorted(m["weaponProxy"].items()))) for m in members)
         agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": [], "keys": [], "origin": origin, "runs": []})
         if s.get("reconstructed"):
             agg["reconstructed"] = True
@@ -657,6 +727,13 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                     stats_mem[-1]["values"] = [[st_i(k), v] for k, v in sorted(m["subValues"].items())]
                 if m["rollCounts"]:
                     stats_mem[-1]["counts"] = [[st_i(k), v] for k, v in sorted(m["rollCounts"].items())]
+                if m["modifierSources"]:
+                    stats_mem[-1]["modSources"] = [
+                        {"weapon": source["weapon"], "approximate": source["approximate"],
+                         "stats": [[st_i(k), v] for k, v in sorted(source["stats"].items())]}
+                        for source in m["modifierSources"]]
+                if m["unverifiedModifiers"]:
+                    stats_mem[-1]["unverified"] = [[st_i(k), v] for k, v in sorted(m["unverifiedModifiers"].items())]
             out_builds.append({
                 "dps": int(round(sum(vals) / len(vals))),
                 "sims": len(vals),

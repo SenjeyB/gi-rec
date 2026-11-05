@@ -22,7 +22,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -68,6 +68,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -119,13 +140,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -171,6 +201,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -246,7 +296,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -292,14 +342,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -343,6 +407,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -467,7 +544,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -513,13 +590,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -564,6 +662,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -615,13 +733,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -667,6 +794,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -693,7 +840,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -739,6 +886,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -790,6 +958,15 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -841,13 +1018,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -893,6 +1079,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -919,7 +1125,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -965,6 +1171,20 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -1139,7 +1359,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -1185,6 +1405,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -1285,13 +1526,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -1337,6 +1587,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -1363,7 +1633,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -1409,6 +1679,20 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -1583,7 +1867,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -1629,6 +1913,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -1729,13 +2034,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -1781,6 +2095,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -1807,7 +2141,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -1847,13 +2181,30 @@
       "atk%": 0.32,
       "em": 236.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "qiqi",
@@ -1947,13 +2298,16 @@
      "mods": {
       "em": 101.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "vodyanitsa",
@@ -2029,7 +2383,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -2075,6 +2429,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -2175,13 +2550,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -2227,6 +2611,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -2253,7 +2657,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -2299,13 +2703,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "diona",
      "element": "cryo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "noblesseoblige": 4
@@ -2351,6 +2776,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -2402,6 +2847,15 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -2477,7 +2931,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -2523,6 +2977,20 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -2627,7 +3095,7 @@
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -2673,6 +3141,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -2699,7 +3187,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -2745,6 +3233,20 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -2918,7 +3420,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -2964,13 +3466,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -3015,6 +3538,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -3070,7 +3613,7 @@
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -3116,6 +3659,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -3142,7 +3705,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -3188,13 +3751,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -3239,6 +3816,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -3364,7 +3954,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -3410,13 +4000,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -3461,6 +4072,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -3516,7 +4147,7 @@
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -3562,6 +4193,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -3588,7 +4239,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -3634,13 +4285,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -3685,6 +4350,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -3809,7 +4487,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -3855,13 +4533,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -3906,6 +4605,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -3961,7 +4680,7 @@
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -4007,6 +4726,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -4033,7 +4772,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -4079,13 +4818,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -4130,6 +4883,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -4255,7 +5021,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -4301,13 +5067,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -4352,6 +5139,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -4407,7 +5214,7 @@
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -4453,6 +5260,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -4479,7 +5306,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -4525,14 +5352,35 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -4576,13 +5424,33 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "diona",
      "element": "cryo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "noblesseoblige": 4
@@ -4628,6 +5496,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -4703,7 +5591,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -4749,13 +5637,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -4800,6 +5709,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -4855,7 +5784,7 @@
      "name": "faruzan",
      "element": "anemo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "viridescentvenerer": 4
@@ -4901,6 +5830,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -4927,7 +5876,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -4973,13 +5922,27 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -5024,6 +5987,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -5148,7 +6124,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -5194,13 +6170,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "diona",
      "element": "cryo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "noblesseoblige": 4
@@ -5245,6 +6242,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -5345,6 +6355,15 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -5371,7 +6390,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -5417,13 +6436,34 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "diona",
      "element": "cryo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "noblesseoblige": 4
@@ -5468,6 +6508,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -5519,6 +6572,15 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -5594,7 +6656,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -5634,19 +6696,36 @@
       "atk%": 0.32,
       "em": 236.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -5685,13 +6764,29 @@
      "mods": {
       "em": 309.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "luminecryo",
@@ -5736,13 +6831,16 @@
      "mods": {
       "em": 101.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "sucrose",
@@ -5817,7 +6915,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -5863,14 +6961,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -5914,6 +7026,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -6038,7 +7163,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -6084,14 +7209,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -6135,6 +7274,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -6259,7 +7411,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -6305,14 +7457,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -6356,6 +7522,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -6480,7 +7659,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -6526,14 +7705,35 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -6577,6 +7777,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -6628,13 +7848,22 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 101.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "diona",
      "element": "cryo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "noblesseoblige": 4
@@ -6677,7 +7906,11 @@
       9,
       9,
       9
-     ]
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     }
     }
    ],
    "config": "# Build assumptions\nvesna char lvl=90/90 cons=0 talent=9,9,9;\nvesna add weapon=\"ironsting\" refine=5 lvl=90/90;\nvesna add set=\"scarletproof\" count=4;\nvesna add stats hp=4780 atk=311 atk%=0.466 atk%=0.466 cd=0.622 em=101;\nvesna add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*4 er=0.0551*2 em=19.82*2 cr=0.0331*12 cd=0.0662*10;\nvesna add stats atk%=0.32 em=135; //крафт р5\n\nodette char lvl=90/90 cons=0 talent=9,9,9; \nodette add weapon=\"lionsroar\" refine=1 lvl=90/90;\nodette add set=\"heartofthefurnace\" count=4;\nodette add stats hp=4780 atk=311 atk%=0.466 atk%=0.466 cr=0.311 em=101;\nodette add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*4 er=0.0551*2 em=19.82*2 cr=0.0331*10 cd=0.0662*12;\nodette add stats em=208; //ивент р5\n\ntravelercryo char lvl=90/90 cons=4 talent=9,9,9;\ntravelercryo add weapon=\"exaiphanesblade\" refine=3 lvl=90/90;\ntravelercryo add set=\"tom\" count=4;\n#travelercryo add set=\"deepshadow\" count=2;\n#travelercryo add set=\"gd\" count=2;\ntravelercryo add stats hp=4780 atk=311 em=187 atk%=0.466 cd=0.622 em=101; #main\ntravelercryo add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*5 er=0.0551*2 em=19.82*2 cr=0.0331*11 cd=0.0662*10;\n\ndiona char lvl=90/90 cons=6 talent=9,9,9;\ndiona add weapon=\"theviridescenthunt\" refine=1 lvl=90/90;\ndiona add set=\"no\" count=4;\ndiona add stats hp=4780 atk=311 er=0.518 cryo%=0.466 cr=0.311;\ndiona add stats def%=0.062*2 def=19.68*2 hp=253.94*2 hp%=0.0496*2 atk=16.54*2 atk%=0.0496*2 er=0.0551*10 em=19.82*2 cr=0.0331*6 cd=0.0662*10;\n\noptions swap_delay=12 iteration=100;\ntarget lvl=100 resist=0.1 radius=2 pos=0,2.4 hp=999999999;\nenergy every interval=480,720 amount=1;\n\nactive diona;\n  diona skill[hold=1], burst;\n  travelercryo skill;\n  odette skill:2;\n  vesna skill,\n        attack:1, charge, skill,\n        attack:1, charge, skill,\n        burst, attack, skill,\n        attack:1, charge, skill,\n        attack:1, charge, skill;\n        \nfor let i=0; i<5; i=i+1 {\n  diona skill[hold=1];\n  if.diona.burst.ready {diona burst;}\n  odette skill:2;\n  if.travelercryo.burst.ready {travelercryo burst, skill, attack, charge;} else {travelercryo skill, attack, charge, burst;}\n  vesna skill,\n        attack:1, charge, skill,\n        attack:1, charge, skill;\n  if.vesna.burst.ready {\n  vesna burst, attack, skill,\n        attack:1, charge, skill,\n        attack:1, charge, skill;\n  } else {\n  vesna attack:3, charge, skill,\n        attack:1, charge, skill,\n        attack:1, charge, skill;\n\n  } \n}\n\n\n"
@@ -6703,7 +7936,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -6743,20 +7976,37 @@
       "atk%": 0.32,
       "em": 236.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -6794,13 +8044,29 @@
      "mods": {
       "em": 309.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "luminecryo",
@@ -6845,13 +8111,16 @@
      "mods": {
       "em": 101.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 101.0
+     }
     },
     {
      "name": "rosaria",
@@ -6926,7 +8195,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -6972,14 +8241,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -7023,6 +8306,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -7147,7 +8443,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -7193,14 +8489,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -7244,6 +8554,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -7368,7 +8691,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -7414,14 +8737,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -7465,6 +8802,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -7589,7 +8939,7 @@
      "name": "vesna",
      "element": "anemo",
      "cons": 0,
-     "weapon": "ironsting",
+     "weapon": "emberwell",
      "refine": 5,
      "sets": {
       "scarletproof": 4
@@ -7635,14 +8985,28 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "ironsting",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "emberwell",
+       "stats": {
+        "atk%": 0.32,
+        "em": 135
+       },
+       "approximate": true
+      }
      ]
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -7686,6 +9050,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -10647,14 +12024,17 @@
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 218.0
+     }
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -10698,6 +12078,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -10859,7 +12252,10 @@
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 218.0
+     }
     },
     {
      "name": "mitya",
@@ -11071,20 +12467,23 @@
      "mods": {
       "em": 218.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 218.0
+     }
     },
     {
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -11128,6 +12527,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -14719,7 +16131,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -14764,6 +16176,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -14937,7 +16362,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -14982,6 +16407,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -15155,7 +16593,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -15200,6 +16638,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -15373,7 +16824,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -15418,6 +16869,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -15591,7 +17055,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -15636,6 +17100,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -15809,7 +17286,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -15854,6 +17331,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -16076,8 +17566,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -16121,6 +17611,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -16294,8 +17797,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -16339,6 +17842,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -16463,8 +17979,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -16508,6 +18024,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -16681,8 +18210,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -16726,6 +18255,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -16899,7 +18441,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -16944,6 +18486,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -17117,7 +18672,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -17162,6 +18717,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -17384,8 +18952,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -17429,6 +18997,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -17602,8 +19183,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -17647,6 +19228,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -17771,7 +19365,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -17816,6 +19410,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -17989,7 +19596,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -18034,6 +19641,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -18207,7 +19827,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -18252,6 +19872,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -18425,7 +20058,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -18470,6 +20103,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -18810,8 +20456,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -18855,6 +20501,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -19077,7 +20736,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
@@ -19122,6 +20781,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -19295,7 +20967,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -19340,6 +21012,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -19513,8 +21198,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -19558,6 +21243,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -19731,7 +21429,7 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
+     "weapon": "silverlight",
      "refine": 5,
      "sets": {
       "heartofthefurnace": 4
@@ -19776,6 +21474,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 5
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -19998,8 +21709,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -20043,6 +21754,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -20216,8 +21940,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -20261,6 +21985,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -20385,8 +22122,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -20430,6 +22167,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -20603,8 +22353,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "disenchantmentindeepshadow": 4
      },
@@ -20648,6 +22398,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -20988,8 +22751,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -21033,6 +22796,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -21418,6 +23194,15 @@
       9,
       9,
       9
+     ],
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 150.0
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -21522,7 +23307,7 @@
      "name": "diona",
      "element": "cryo",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "tenacityofthemillelith": 4
@@ -21567,6 +23352,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -21642,8 +23440,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -21687,6 +23485,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 204
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -21860,8 +23671,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -21905,6 +23716,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 204
+       },
+       "approximate": true
+      }
      ]
     },
     {
@@ -35592,8 +37416,8 @@
      "name": "odette",
      "element": "cryo",
      "cons": 0,
-     "weapon": "lionsroar",
-     "refine": 1,
+     "weapon": "silverlight",
+     "refine": 5,
      "sets": {
       "heartofthefurnace": 4
      },
@@ -35637,6 +37461,19 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "lionsroar",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "silverlight",
+       "stats": {
+        "em": 208
+       },
+       "approximate": true
+      }
      ]
     }
    ],
@@ -37214,19 +39051,22 @@
      "mods": {
       "em": 50.0
      },
-     "kqmArt": true,
+     "kqmArt": false,
      "lvl": 90,
      "talents": [
       9,
       9,
       9
-     ]
+     ],
+     "unverifiedModifiers": {
+      "em": 50.0
+     }
     },
     {
      "name": "fischl",
      "element": "electro",
      "cons": 6,
-     "weapon": "theviridescenthunt",
+     "weapon": "breezebornerefrain",
      "refine": 1,
      "sets": {
       "instructor": 4
@@ -37283,6 +39123,26 @@
       9,
       9,
       9
+     ],
+     "weaponProxy": {
+      "weapon": "theviridescenthunt",
+      "refine": 1
+     },
+     "modifierSources": [
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "er": 0.2
+       },
+       "approximate": true
+      },
+      {
+       "weapon": "breezebornerefrain",
+       "stats": {
+        "em": 150.0
+       },
+       "approximate": true
+      }
      ]
     },
     {

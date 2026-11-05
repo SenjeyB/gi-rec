@@ -185,6 +185,8 @@
     "basedOnClear": "Based on a Stygian Onslaught clear",
     "bossRun": "Boss Run",
     "simModifiers": "Simulation bonuses",
+    "weaponModel": "Weapon effect approximation",
+    "unverifiedBonuses": "Unverified extra stats",
     "reconstructedGear": "Equipment copied from a similar calculation",
     "originFull": { "dummy": "Training dummy runs · stygian.moe" },
     "runs": { "dummy": "Runs: {n}" },

@@ -17,7 +17,7 @@ from xml.etree import ElementTree as ET
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from build_db import (MAIN_VALUE, STAT_RE, SUB_KEYS, _rolls, _stat_values,
+from build_db import (MAIN_VALUE, STAT_RE, SUB_KEYS, _rolls, _stat_values, audit_community_sim,
                       build_char_index, kqm_artifacts, load_names)
 
 NS = {"s": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
@@ -207,11 +207,11 @@ def normalize_result(result, names):
             "talents": [talents.get(k) for k in ("attack", "skill", "burst")],
         })
     fingerprint = sha256((config + "\n" + repr(dps)).encode("utf-8")).hexdigest()[:20]
-    return {"id": None, "key": "community-" + fingerprint, "simulator": "sim",
+    return audit_community_sim({"id": None, "key": "community-" + fingerprint, "simulator": "sim",
             "simVersion": result.get("sim_version"), "mode": result.get("mode"), "targets": 1,
             "chars": member_keys, "dps": dps, "dur": (statistics.get("duration") or {}).get("mean"),
             "iterations": statistics.get("iterations"), "team": team,
-            "config": re.sub(r'https?://\S+', "[link removed]", config)}
+            "config": re.sub(r'https?://\S+', "[link removed]", config)})
 
 
 def main():
@@ -257,6 +257,8 @@ def main():
     merged = {s["key"]: {**s, "simulator": "sim"} for s in previous["simulations"]}
     added = sum(s["key"] not in merged for s in {s["key"]: s for s in sims}.values())
     merged.update({s["key"]: s for s in sims})
+    for sim in merged.values():
+        audit_community_sim(sim)
     snapshot = {"version": 1, "simulations": list(merged.values())}
     text = json.dumps(snapshot, ensure_ascii=False, indent=1) + "\n"
     if not args.output.exists() or args.output.read_text(encoding="utf-8") != text:

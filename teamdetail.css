@@ -45,6 +45,7 @@
 .td-sub-rolls{flex:0 0 auto}
 .td-sub-count{color:var(--muted);font-weight:400}
 .td-origin{color:#ddd6fe}
+.td-unverified .td-stats-title{color:#fca5a5}
 .boss-run-badge{display:inline-flex;align-items:center;align-self:flex-end;gap:4px;margin-top:3px;
   padding:2px 7px;border:1px solid rgba(248,113,113,.55);border-radius:999px;
   background:rgba(220,38,38,.14);color:#fca5a5;font-size:10px;font-weight:700;line-height:1.35;white-space:nowrap}

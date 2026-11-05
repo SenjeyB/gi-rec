@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.4.1 (2026/11/05)
+- Corrected weapon stand-ins in imported simulations: Emberwell R5, Silver Light R5 and Breezeborne Refrain R1
+- Separated weapon effect approximations from artifact stats; unverified extra stats exclude builds from KQMS artifacts
+
 ## 2.4.0 (2026/11/05)
 - Added Mitya and Valeriy, their portraits and character pages
 - Added 151 team calculations from the new workbook; three builds reconstructed from neighboring calculations

@@ -209,6 +209,11 @@ export async function loadDetails(teamIndex, buildIndex) {
       value: (m.values || []).find(([si]) => db.dict.stats[si] === stat)?.[1] })),
     total: m.tot ? m.tot.map(([si, value]) => ({ stat: db.dict.stats[si], value })) : null,
     modifiers: (m.mods || []).map(([si, value]) => ({ stat: db.dict.stats[si], value })),
+    modifierSources: (m.modSources || []).map((source) => ({
+      weapon: source.weapon,
+      stats: source.stats.map(([si, value]) => ({ stat: db.dict.stats[si], value })),
+    })),
+    unverifiedModifiers: (m.unverified || []).map(([si, value]) => ({ stat: db.dict.stats[si], value })),
   }));
 }
 
