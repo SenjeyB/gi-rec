@@ -49,13 +49,16 @@ UI = {
         "abyss": "Abyss & Onslaught",
         "char_h1": "Best {name} teams",
         "char_title": "Best {name} teams in Genshin Impact by DPS — GI-Rec",
-        "char_desc": "Top {n} {name} teams in Genshin Impact ranked by DPS from KQM simulations and real Stygian Onslaught clears, with weapons and artifact sets. Best: {top} — {dps} DPS.",
+        "char_desc": "Top {n} {name} teams in Genshin Impact ranked by DPS, with weapons and artifact sets. Best: {top} — {dps} DPS.",
+        "char_desc_empty": "{name} in Genshin Impact: teams, weapons and artifact sets. Open GI-Rec to choose constellations and equipment.",
         "char_meta": "{stars}★ · {element} · {weapon} · {n} teams in the database · best DPS {dps}",
+        "char_meta_empty": "{stars}★ · {element} · {weapon} · {n} teams",
+        "no_teams": "No teams match the default filters.",
         "top_teams": "Top teams",
         "teammates": "Most common teammates",
         "teammates_n": "{n} teams",
         "same_element": "Other {element} characters",
-        "note": "Default view: 5★ characters at C0, 4★ at C6, no 5★ weapons. Other constellations and weapons are in the app.",
+        "note": "Default view: 5★ characters at C0, 4★ at C6, no gacha 5★ weapons. Other constellations and weapons are in the app.",
         "kqms": "KQMS",
         "best_h1": "Best Genshin Impact teams by DPS",
         "best_title": "Best Genshin Impact teams by DPS — GI-Rec",
@@ -71,9 +74,9 @@ UI = {
         "battlefield": "Battlefield {n}", "advantage": "Advantage",
         "build_teams": "Build teams for this cycle",
         "hub_title": "GI-Rec — best Genshin Impact teams for every character",
-        "hub_desc": "Best teams for every Genshin Impact character by DPS from KQM simulations and real clears, the current Spiral Abyss and Stygian Onslaught, and a recommender for your account.",
-        "hub_intro": "Teams for every character, ranked by DPS from KQM simulations and real Stygian Onslaught clears (~ marks an estimate: boss HP / clear time). The app also tells you who to pull next based on the characters you own.",
-        "made_by": "Made by", "teams_from": "All teams are taken from",
+        "hub_desc": "Best teams for every Genshin Impact character ranked by DPS, with weapons and artifact sets. Find teammates and recommendations for your account.",
+        "hub_intro": "Teams for every character, ranked by DPS, with weapons and artifact sets. The app also tells you who to pull next based on the characters you own.",
+        "made_by": "Made by", "teams_from": "Simulation data from", "community": "and community submissions",
         "data_from": "Data from {date}",
         "home": "Home",
         "other_lang": "Русский",
@@ -92,13 +95,16 @@ UI = {
         "abyss": "Бездна и Натиск",
         "char_h1": "Лучшие отряды: {name}",
         "char_title": "{name}: лучшие отряды в Genshin Impact по DPS — GI-Rec",
-        "char_desc": "Топ-{n} отрядов с персонажем {name} в Genshin Impact по DPS из симуляций KQM и реальных прохождений Мрачного натиска: состав, оружие и сеты артефактов. Лучший: {top} — {dps} DPS.",
+        "char_desc": "Топ-{n} отрядов с персонажем {name} в Genshin Impact по DPS: состав, оружие и сеты артефактов. Лучший: {top} — {dps} DPS.",
+        "char_desc_empty": "{name} в Genshin Impact: отряды, оружие и сеты артефактов. Выберите созвездия и снаряжение в приложении GI-Rec.",
         "char_meta": "{stars}★ · {element} · {weapon} · отрядов в базе: {n} · лучший DPS {dps}",
+        "char_meta_empty": "{stars}★ · {element} · {weapon} · отрядов: {n}",
+        "no_teams": "Нет отрядов для стандартных фильтров.",
         "top_teams": "Лучшие отряды",
         "teammates": "Чаще всего в отряде с",
         "teammates_n": "отрядов: {n}",
         "same_element": "Другие персонажи: {element}",
-        "note": "Вид по умолчанию: 5★ персонажи на C0, 4★ на C6, без 5★ оружия. Другие созвездия и оружие — в приложении.",
+        "note": "Вид по умолчанию: 5★ персонажи на C0, 4★ на C6, без гача 5★ оружия. Другие созвездия и оружие — в приложении.",
         "kqms": "KQMS",
         "best_h1": "Лучшие отряды Genshin Impact по DPS",
         "best_title": "Лучшие отряды Genshin Impact по DPS — GI-Rec",
@@ -114,9 +120,9 @@ UI = {
         "battlefield": "Поле боя {n}", "advantage": "Преимущество",
         "build_teams": "Собрать отряды на этот цикл",
         "hub_title": "GI-Rec — лучшие отряды Genshin Impact для каждого персонажа",
-        "hub_desc": "Лучшие отряды для каждого персонажа Genshin Impact по DPS из симуляций KQM и реальных прохождений, текущие Витая Бездна и Мрачный натиск и рекомендации, кого крутить, под ваш аккаунт.",
-        "hub_intro": "Отряды для каждого персонажа по DPS из симуляций KQM и реальных прохождений Мрачного натиска (~ — оценка: HP босса / время прохождения). В приложении — ещё и рекомендации, кого крутить, под ваших персонажей.",
-        "made_by": "Сделал", "teams_from": "Все отряды взяты из",
+        "hub_desc": "Лучшие отряды для каждого персонажа Genshin Impact по DPS: оружие, сеты артефактов, союзники и рекомендации под ваш аккаунт.",
+        "hub_intro": "Отряды для каждого персонажа по DPS, с оружием и сетами артефактов. В приложении — ещё и рекомендации, кого крутить, под ваших персонажей.",
+        "made_by": "Сделал", "teams_from": "Симуляции из", "community": "и от сообщества",
         "data_from": "Данные от {date}",
         "home": "Главная",
         "other_lang": "English",
@@ -182,8 +188,9 @@ class Data:
         d = self.db["dict"]
         self.chars, self.weapons, self.sets = d["chars"], d["weapons"], d["sets"]
         self.teams = self.pick_teams()
-        self.by_char: Dict[str, List[dict]] = defaultdict(list)
-        for t in self.teams:
+        self.catalog_chars = sorted({k for team in self.teams for k in team["chars"] if k in self.names})
+        self.by_char: Dict[str, List[dict]] = defaultdict(list, {k: [] for k in self.catalog_chars})
+        for t in self.pick_teams(exclude_runs=True):
             for k in t["chars"]:
                 self.by_char[k].append(t)
 
@@ -197,7 +204,7 @@ class Data:
             return 5
         return 5 if self.five_star(key) else 4
 
-    def pick_teams(self) -> List[dict]:
+    def pick_teams(self, exclude_runs: bool = False) -> List[dict]:
         """Как в приложении по умолчанию: первая (самая сильная) сборка, где 5★
         на C0, 4★ на C6 (то есть без ограничений) и нет 5★ оружия."""
         meta = self.db.get("weaponMeta") or []
@@ -205,12 +212,15 @@ class Data:
         for ti, t in enumerate(self.db["teams"]):
             keys = [self.chars[i] for i in t["chars"]]
             for bi, b in enumerate(t["builds"]):
+                if exclude_runs and b.get("origin") == "clear":
+                    continue
                 ok = True
                 for k, m in zip(keys, b["members"]):
                     if self.five_star(k) and m["cons"] > 0:
                         ok = False
                     w = m.get("weapon")
-                    if w is not None and w < len(meta) and (meta[w] or {}).get("rarity") == 5:
+                    if (w is not None and w < len(meta) and (meta[w] or {}).get("rarity") == 5
+                            and not meta[w].get("free")):
                         ok = False
                 if ok:
                     out.append({"chars": keys, "build": b, "dps": b["dps"],
@@ -299,7 +309,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
   <link rel="apple-touch-icon" href="{BASE_URL}assets/apple-touch-icon.png">
   <link rel="stylesheet" href="{up}pages.css?v={asset_version("pages.css")}">{team_assets}{ld}
 </head>
-<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}">
+<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}" data-exclude-boss-runs="{str(path.startswith('characters/')).lower()}">
   <header class="pg-header">
     <a class="pg-brand" href="{up}?lang={lang}" aria-label="{esc(ui['open_app'])}"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
     <nav class="pg-nav">{nav}</nav>
@@ -309,7 +319,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
 {body}
   </main>
   <footer class="pg-footer">
-    <div>{esc(ui["made_by"])} <strong>SenjeyB</strong> · {esc(ui["teams_from"])} <a href="{KQM_DB}" rel="noopener">db.kqm.gg/database</a></div>
+    <div>{esc(ui["made_by"])} <strong>SenjeyB</strong> · {esc(ui["teams_from"])} <a href="{KQM_DB}" rel="noopener">db.kqm.gg/database</a> {esc(ui["community"])}</div>
     <div>{esc(ui["data_from"].format(date=data.updated))}</div>
   </footer>
 </body>
@@ -338,6 +348,8 @@ def team_html(data: Data, lang: str, t: dict, up: str, rank: int) -> str:
     b = t["build"]
     members = "".join(member_html(data, lang, k, m, up) for k, m in zip(t["chars"], b["members"]))
     kqms = f'<span class="pg-badge">{UI[lang]["kqms"]}</span>' if b.get("kqmCons") and b.get("kqmArt") else ""
+    if b.get("origin") == "clear":
+        kqms += f'<span class="boss-run-badge">{esc(data.i18n[lang]["team"]["bossRun"])}</span>'
     src = b.get("src") or ""
     if b.get("origin"):
         href = ("https://www.youtube.com/watch?v=" + urllib.parse.quote(src[3:], safe="") if src.startswith("yt:")
@@ -350,6 +362,7 @@ def team_html(data: Data, lang: str, t: dict, up: str, rank: int) -> str:
               if href else "")
     return (f'<li><details class="pg-team-card" data-team-index="{t["teamIndex"]}" '
             f'data-build-index="{t["buildIndex"]}" data-db-version="{esc(data.db["generated"])}" '
+            f'data-build-key="{esc(b.get("key") or "")}" '
             f'data-chars="{esc(",".join(t["chars"]))}" data-src="{esc(src)}">'
             f'<summary class="pg-team"><span class="pg-rank">{rank}</span>'
             f'<span class="pg-members">{members}</span>'
@@ -369,11 +382,13 @@ def char_page(data: Data, lang: str, key: str) -> str:
     entry = data.names.get(key) or {}
     name = data.char(lang, key)
     stars = data.rarity(key)
-    top = teams[0]
-    meta = ui["char_meta"].format(stars=stars, element=data.element(lang, entry.get("element", "")),
+    top = teams[0] if teams else None
+    meta = ui["char_meta" if top else "char_meta_empty"].format(stars=stars, element=data.element(lang, entry.get("element", "")),
                                   weapon=data.weapon_type(lang, entry.get("weapon", "")),
-                                  n=len(teams), dps=dps_text(top["build"]))
+                                  n=len(teams), dps=dps_text(top["build"]) if top else "")
     rows = "\n".join(team_html(data, lang, t, up, i + 1) for i, t in enumerate(teams[:TOP_PER_CHAR]))
+    if not rows:
+        rows = f'<li class="pg-note">{esc(ui["no_teams"])}</li>'
 
     mates = Counter(k for t in teams for k in t["chars"] if k != key)
     mates_html = "".join(
@@ -405,8 +420,9 @@ def char_page(data: Data, lang: str, key: str) -> str:
     <h2>{esc(ui["same_element"].format(element=data.element(lang, el)))}</h2>
     <div class="pg-grid pg-grid-small">{same_html}</div>"""
     title = ui["char_title"].format(name=name)
-    desc = ui["char_desc"].format(n=min(TOP_PER_CHAR, len(teams)), name=name,
+    desc = (ui["char_desc"].format(n=min(TOP_PER_CHAR, len(teams)), name=name,
                                   top=team_names(data, lang, top), dps=dps_text(top["build"]))
+            if top else ui["char_desc_empty"].format(name=name))
     crumbs = [(ui["catalog"], f"{BASE_URL}{lang}/characters/"), (name, f"{BASE_URL}{lang}/characters/{key}/")]
     return page(data, lang, f"characters/{key}/", 3, title, desc, body, crumbs,
                 keywords=data.keywords(lang, [key]), character=key)
@@ -634,7 +650,7 @@ def main() -> int:
     paths = [("characters/", data.updated), ("best-teams/", data.updated)]
     if (data.content or {}).get("abyss"):
         paths.append(("abyss/", abyss_date))
-    chars = sorted(k for k, ts in data.by_char.items() if ts and k in data.names)
+    chars = data.catalog_chars
     paths += [(f"characters/{k}/", data.updated) for k in chars]
 
     for lang in LANGS:

@@ -118,6 +118,20 @@ function memberBlock(slot, stats, real) {
     card.appendChild(el("div", "td-row td-muted", t(real ? "team.noArtifacts" : "team.noSet")));
   }
 
+  if (stats?.modifiers?.length) {
+    const box = el("div", "td-stats td-modifiers");
+    box.appendChild(el("div", "td-stats-title", t("team.simModifiers")));
+    const rows = el("div", "td-subs");
+    for (const modifier of stats.modifiers) {
+      const row = el("div", "td-sub");
+      row.appendChild(el("span", "td-sub-name", statLabel(modifier.stat)));
+      row.appendChild(el("span", "td-sub-rolls", statValue(modifier.stat, modifier.value)));
+      rows.appendChild(row);
+    }
+    box.appendChild(rows);
+    card.appendChild(box);
+  }
+
   if (stats && stats.total && stats.total.length) {
     const box = el("div", "td-stats");
     box.appendChild(el("div", "td-stats-title", t("team.artTotals")));
@@ -165,8 +179,8 @@ function memberBlock(slot, stats, real) {
 
 const fmtDps = (n) => Math.round(n || 0).toLocaleString("en-US").replace(/,/g, " ");
 
-function variantsBlock(team, onPick) {
-  const builds = teamBuilds(team.teamIndex);
+function variantsBlock(team, onPick, options) {
+  const builds = teamBuilds(team.teamIndex).filter((b) => !options.excludeBossRuns || b.origin !== "clear");
   if (builds.length < 2) return null;
   const box = el("div", "td-variants");
   box.appendChild(el("div", "td-stats-title", t("team.variants", { n: builds.length })));
@@ -188,6 +202,7 @@ function variantsBlock(team, onPick) {
       who.appendChild(cell);
     });
     row.appendChild(who);
+    if (v.origin === "clear") row.appendChild(el("span", "boss-run-badge", t("team.bossRun")));
     if (v.aboveStandard) row.appendChild(el("span", "td-variant-tag", t("team.aboveStd")));
     if (current) row.appendChild(el("span", "td-variant-tag is-current", t("team.shown")));
     row.appendChild(el("span", "td-variant-dps", (v.origin === "clear" ? "~" : "") + fmtDps(v.dps)));
@@ -197,7 +212,7 @@ function variantsBlock(team, onPick) {
   return box;
 }
 
-async function fillPanel(panel, team) {
+async function fillPanel(panel, team, options = {}) {
   const ticket = Symbol();
   panel._ticket = ticket;
   panel.innerHTML = "";
@@ -208,7 +223,7 @@ async function fillPanel(panel, team) {
 
   const meta = el("div", "td-meta");
   if (team.origin === "clear") {
-    meta.appendChild(el("span", "td-meta-item td-origin", t("team.basedOnClear")));
+    meta.appendChild(el("span", "td-meta-item boss-run-badge", t("team.basedOnClear")));
   } else if (team.origin === "dummy") {
     meta.appendChild(el("span", "td-meta-item td-origin", t("team.originFull.dummy")));
     meta.appendChild(el("span", "td-meta-item", t("team.runs.dummy", { n: team.sims || 1 })));
@@ -220,7 +235,7 @@ async function fillPanel(panel, team) {
   head.appendChild(meta);
   panel.appendChild(head);
 
-  const variants = variantsBlock(team, (v) => fillPanel(panel, v));
+  const variants = variantsBlock(team, (v) => fillPanel(panel, v, options), options);
   if (variants) panel.appendChild(variants);
 
   const grid = el("div", "td-members");
@@ -233,10 +248,11 @@ async function fillPanel(panel, team) {
   });
 }
 
-export async function buildPanel(team) {
+export async function buildPanel(team, options = {}) {
+  if (options.excludeBossRuns && team.origin === "clear") throw new Error("Boss runs are excluded from this view");
   const panel = el("div", "team-detail");
   panel.addEventListener("click", (e) => e.stopPropagation());
-  await fillPanel(panel, team);
+  await fillPanel(panel, team, options);
   return panel;
 }
 

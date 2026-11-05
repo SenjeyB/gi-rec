@@ -54,6 +54,7 @@ function expandBuild(team, build) {
     weapon: weaponKey(m.weapon),
     refine: m.refine,
     fiveStar: isFiveStar(m.weapon),
+    freeWeapon: !!db.weaponMeta[m.weapon]?.free,
     sets: (m.sets || []).map(([si, pieces]) => ({ key: db.dict.sets[si], pieces })),
   }));
 }
@@ -103,7 +104,7 @@ export function query(opts = {}) {
         if (m.cons > capFor(charKeys[i])) { ok = false; break; }
         if (isFiveStar(m.weapon)) {
           const key = weaponKey(m.weapon);
-          if (!allowFive || m.refine > refineCap) { ok = false; break; }
+          if (!db.weaponMeta[m.weapon]?.free && (!allowFive || m.refine > refineCap)) { ok = false; break; }
           if (needed) (needed[key] ||= []).push(m.refine);
         }
       }
@@ -123,6 +124,7 @@ export function query(opts = {}) {
       dps: best.dps,
       sims: best.sims,
       src: best.src,
+      key: best.key || "",
       origin: best.origin || null,
       kqmCons: !!best.kqmCons,
       kqmArt: !!best.kqmArt,
@@ -203,6 +205,7 @@ export async function loadDetails(teamIndex, buildIndex) {
     main: (m.main || []).map((si) => db.dict.stats[si]),
     subs: order.map((stat, k) => ({ stat, rolls: (m.subs || [])[k] || 0 })),
     total: m.tot ? m.tot.map(([si, value]) => ({ stat: db.dict.stats[si], value })) : null,
+    modifiers: (m.mods || []).map(([si, value]) => ({ stat: db.dict.stats[si], value })),
   }));
 }
 
@@ -217,6 +220,7 @@ export function teamBuilds(teamIndex) {
     dps: b.dps,
     sims: b.sims,
     src: b.src,
+    key: b.key || "",
     origin: b.origin || null,
     kqmCons: !!b.kqmCons,
     kqmArt: !!b.kqmArt,

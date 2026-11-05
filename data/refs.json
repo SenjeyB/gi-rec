@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-03T21:56:29Z",
+ "generated": "2026-11-04T23:51:23Z",
  "weapons": {
   "absolution": {
    "name": "Absolution",
@@ -359,7 +359,8 @@
    "name": "Exaiphanes Blade",
    "rarity": 5,
    "type": "sword",
-   "icon": "UI_EquipIcon_Sword_WeaponQuestSnezhnaya"
+   "icon": "UI_EquipIcon_Sword_WeaponQuestSnezhnaya",
+   "free": true
   },
   "eyeofperception": {
    "name": "Eye of Perception",
@@ -1452,6 +1453,7 @@
    "rarity": 5,
    "type": "sword",
    "icon": "UI_EquipIcon_Sword_WeaponQuestSnezhnaya",
+   "free": true,
    "inDb": true
   },
   "fangofthemountainking": {
@@ -2011,6 +2013,10 @@
   "maidenbeloved": {
    "name": "Maiden Beloved",
    "icon": "UI_RelicIcon_14004_4"
+  },
+  "scarletproof": {
+   "name": "Scarlet Proof",
+   "icon": "UI_RelicIcon_15047_4"
   }
  },
  "charAliases": {

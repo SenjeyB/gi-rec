@@ -1088,6 +1088,9 @@ function dpsCell(cls, team){
   if(team.origin){
     cell.classList.add('is-real');
   }
+  if(team.origin === 'clear'){
+    cell.appendChild(createEl('span','boss-run-badge',T('team.bossRun','Boss Run')));
+  }
   return cell;
 }
 

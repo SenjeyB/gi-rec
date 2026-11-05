@@ -3,9 +3,12 @@
 Genshin Impact Recommendations service.
 
 - Teams come from the KQM sim database: https://db.kqm.gg/database
+- Additional simulation builds are archived in `tools/community_sims.json`. They retain equipment, constellations, artifact stats and separate simulation bonuses, without temporary share links. Daily database rebuilds retain this snapshot.
+- To import another workbook: `python tools/import_community_sims.py teams.xlsx`. Only unique simulation links from its first worksheet are imported.
 - Real Stygian Onslaught clears and training dummy runs come from https://www.stygian.moe (a one-time export, used with the authors' permission; `tools/stygian_snapshot.json`). A clear's DPS is an estimate: boss HP / clear time, shown as ~DPS. Clears made with third-party tools, cheese strategies and teams of fewer than 4 characters are skipped; 4★ characters count as C6
 - Constellations are filters: by default 5★ at C0, 4★ at C6; your inventory or the "Any" setting can raise them
 - Builds are checked against KQM Standards (constellations and artifacts)
+- Free Exaiphanes Blade keeps its 5★ rarity, but is allowed in the default weapon filter and the KQMS equipment check. "Only mine" still checks its copies and refinement.
 - Current Spiral Abyss and Stygian Onslaught enemies come from the Genshin Impact wiki: https://genshin-impact.fandom.com
 - Stygian Onslaught difficulty details (boss forms, mechanics, rules) come from the game data mirror: https://github.com/DimbreathBot/AnimeGameData
 

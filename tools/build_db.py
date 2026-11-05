@@ -54,6 +54,8 @@ ROOT = os.path.dirname(os.path.abspath(__file__))
 SITE = os.environ.get("GIREC_SITE") or os.path.dirname(ROOT)
 DATA = os.path.join(SITE, "data")
 STYGIAN = os.path.join(ROOT, "stygian_snapshot.json")
+COMMUNITY = os.path.join(ROOT, "community_sims.json")
+FREE_WEAPONS = {"exaiphanesblade"}
 IN_CI = os.environ.get("GITHUB_ACTIONS") == "true"
 
 
@@ -372,6 +374,8 @@ def load_refs() -> Tuple[Dict[str, dict], Dict[str, dict], Dict[str, str]]:
             "type": wtype or None,
             "icon": v.get("icon"),
         }
+        if slug(v["name"]) in FREE_WEAPONS:
+            weapons[slug(v["name"])]["free"] = True
     sets = {}
     for v in fetch_json(f"{YATTA}/reliquary")["data"]["items"].values():
         sets[slug(v["name"])] = {"name": v["name"], "icon": v.get("icon")}
@@ -441,6 +445,16 @@ def short_link(url: str) -> str:
     if m:
         return "bb:" + m.group(1)
     return url
+
+
+def load_community() -> List[dict]:
+    if not os.path.exists(COMMUNITY):
+        return []
+    with open(COMMUNITY, "r", encoding="utf-8") as f:
+        snapshot = json.load(f)
+    if snapshot.get("version") != 1:
+        raise ValueError("Unsupported community simulation snapshot version")
+    return [normalize_sim(s) for s in snapshot["simulations"]]
 
 
 def load_names() -> Dict[str, dict]:
@@ -533,6 +547,7 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 "main": list(m.get("main") or []),
                 "subs": dict(m.get("subs") or {}),
                 "total": dict(m.get("total") or {}),
+                "mods": dict(m.get("mods") or {}),
                 "kqmArt": bool(m.get("kqmArt")),
             })
         order = [ckey(n) for n in s["chars"]]
@@ -553,12 +568,16 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 (m["char"], m["cons"]) + ((m["weapon"], m["refine"]) if is_five(m["weapon"]) else ("", 0))
                 for m in members)
         else:
-            sig = (None,) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
+            sig = (s.get("simulator", "gcsim"),) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
                                    tuple(m["main"]), tuple(sorted(m["subs"].items())),
-                                   tuple(sorted(m["total"].items()))) for m in members)
-        agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": [], "origin": origin, "runs": []})
+                                   tuple(sorted(m["total"].items())), tuple(sorted(m["mods"].items()))) for m in members)
+        agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": [], "keys": [], "origin": origin, "runs": []})
+        if s.get("simulator"):
+            agg["simulator"] = s["simulator"]
         agg["dps"].append(s["dps"])
         agg["ids"].append(s["id"])
+        if s.get("key"):
+            agg["keys"].append(s["key"])
         if origin:
             agg["runs"].append((s["dps"], s["id"], members))
 
@@ -572,9 +591,9 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
         return cons == 6
 
     def kqm_weapon_ok(weapon_key: str) -> bool:
-        """Оружие по стандарту KQMS: только 4* (и ниже), 5* не допускается."""
+        """Оружие до 4* и бесплатный Клинок озарения."""
         rarity = (weapons.get(weapon_key) or {}).get("rarity")
-        return not rarity or rarity <= 4
+        return not rarity or rarity <= 4 or bool((weapons.get(weapon_key) or {}).get("free"))
     teams = []
     stats_by_team = []
     n_builds = 0
@@ -614,17 +633,23 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                         # роллы сабстатов в порядке SUB_ORDER; дробные — у живых аккаунтов
                         "subs": [_compact(m["subs"].get(k, 0)) for k in SUB_ORDER],
                     })
+                if m["mods"]:
+                    stats_mem[-1]["mods"] = [[st_i(k), v] for k, v in sorted(m["mods"].items())]
             out_builds.append({
                 "dps": int(round(sum(vals) / len(vals))),
                 "sims": len(vals),
                 "src": agg["ids"][0],
                 # стандарт KQMS: kqmCons — созвездия и оружие (5* на C0, 4* на C6,
-                # оружие не выше 4*), kqmArt — артефакты; проверяются независимо
+                # оружие до 4* или бесплатное), kqmArt — артефакты; проверяются независимо
                 "kqmCons": all(kqm_cons_ok(m["char"], m["cons"]) and kqm_weapon_ok(m["weapon"])
                                for m in agg["members"]),
                 "kqmArt": all(m["kqmArt"] for m in agg["members"]),
                 "members": mem,
             })
+            if agg.get("simulator"):
+                out_builds[-1]["simulator"] = agg["simulator"]
+            if agg["keys"]:
+                out_builds[-1]["key"] = agg["keys"][0]
             out_stats.append({"members": stats_mem})
             n_builds += 1
         # Сборку, у которой в том же источнике есть не менее сильная с не большими
@@ -661,7 +686,8 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
     wmeta = []
     for wkey in w_i.items:
         info = weapons.get(wkey) or {}
-        wmeta.append({"rarity": info.get("rarity"), "type": info.get("type")})
+        wmeta.append({"rarity": info.get("rarity"), "type": info.get("type"),
+                      **({"free": True} if info.get("free") else {})})
 
     db = {
         "version": 2,
@@ -697,7 +723,7 @@ def legacy_teams(db: dict, cap: Dict[str, int]) -> List[dict]:
                     ok = False
                     break
                 w = m["weapon"]
-                if w is not None and wmeta[w]["rarity"] == 5:
+                if w is not None and wmeta[w]["rarity"] == 5 and not wmeta[w].get("free"):
                     ok = False
                     break
             if ok:
@@ -781,6 +807,8 @@ def main():
     print(f"Симов получено: {len(sims)}")
     real = load_stygian()
     print(f"Реальных прохождений (stygian.moe): {len(real)}")
+    community = load_community()
+    print(f"Симуляций сообщества: {len(community)}")
 
     if args.save_cache:
         with open(args.save_cache, "w", encoding="utf-8") as f:
@@ -788,7 +816,7 @@ def main():
                 f.write(json.dumps(s, ensure_ascii=False) + "\n")
         print("Кэш сохранён в", args.save_cache)
 
-    db, stats_by_team, full, unknown_chars, unknown_weapons = build(sims + real, char_idx, weapons, names)
+    db, stats_by_team, full, unknown_chars, unknown_weapons = build(sims + community + real, char_idx, weapons, names)
     print(f"Отрядов: {db['stats']['teams']}, сборок: {db['stats']['builds']} (из {len(full)} полных симов)")
 
     os.makedirs(DATA, exist_ok=True)
