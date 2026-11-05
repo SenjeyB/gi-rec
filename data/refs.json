@@ -1708,6 +1708,13 @@
    "icon": "UI_EquipIcon_Catalyst_Figurines",
    "inDb": true
   },
+  "starsealededict": {
+   "name": "Starsealed Edict",
+   "rarity": 5,
+   "type": "catalyst",
+   "icon": "UI_EquipIcon_Catalyst_Chernaya",
+   "inDb": false
+  },
   "summitshaper": {
    "name": "Summit Shaper",
    "rarity": 5,
