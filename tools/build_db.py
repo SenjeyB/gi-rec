@@ -39,6 +39,7 @@ import datetime
 import urllib.parse
 import urllib.request
 import urllib.error
+from functools import lru_cache
 from typing import Dict, List, Tuple, Optional
 
 API_URL = "https://db.kqm.gg/api/db"
@@ -357,10 +358,25 @@ def fetch_all_sims(alias: Optional[Dict[str, str]] = None, pause: float = 0.12) 
 
 # -------------------------------------------------------------- справочники
 
+@lru_cache(maxsize=None)
+def game_catalog(kind: str):
+    localized = {lang: fetch_json(f"{YATTA_BASE}/{lang}/{kind}")["data"]["items"] for lang in LANGS}
+    english = {}
+    for item_id in sorted(set().union(*(items.keys() for items in localized.values()))):
+        primary = localized["en"].get(item_id) or {}
+        fallback = localized["ru"].get(item_id) or {}
+        name = primary.get("name") or fallback.get("route")
+        if not name:
+            ci_warning(f"missing English name and route: {kind}/{item_id}")
+            continue
+        english[item_id] = {**fallback, **primary, "name": name}
+    return english, localized
+
+
 def load_refs() -> Tuple[Dict[str, dict], Dict[str, dict], Dict[str, str]]:
     """Оружие и сеты из игровых данных + алиасы персонажей из gcsim."""
     weapons = {}
-    for v in fetch_json(f"{YATTA}/weapon")["data"]["items"].values():
+    for v in game_catalog("weapon")[0].values():
         # скины оружия (Serpent Devourer - Sublimation и т.п.) — не оружие из
         # инвентаря, в каталоге им делать нечего
         if v.get("isWeaponSkin"):
@@ -369,6 +385,7 @@ def load_refs() -> Tuple[Dict[str, dict], Dict[str, dict], Dict[str, str]]:
         if wtype == "pole":          # в names.json тип копейщиков называется polearm
             wtype = "polearm"
         weapons[slug(v["name"])] = {
+            "gameId": v.get("id"),
             "name": v["name"],
             "rarity": v.get("rank"),
             "type": wtype or None,
@@ -377,7 +394,7 @@ def load_refs() -> Tuple[Dict[str, dict], Dict[str, dict], Dict[str, str]]:
         if slug(v["name"]) in FREE_WEAPONS:
             weapons[slug(v["name"])]["free"] = True
     sets = {}
-    for v in fetch_json(f"{YATTA}/reliquary")["data"]["items"].values():
+    for v in game_catalog("reliquary")[0].values():
         sets[slug(v["name"])] = {"name": v["name"], "icon": v.get("icon")}
 
     cgo = http(GCSIM_CHARS).decode("utf-8")
@@ -394,19 +411,17 @@ def load_localized() -> Dict[str, Dict[str, Dict[str, str]]]:
     out: Dict[str, Dict[str, Dict[str, str]]] = {}
     for lang in LANGS:
         bucket = {"chars": {}, "weapons": {}, "sets": {}}
-        en_chars = fetch_json(f"{YATTA_BASE}/en/avatar")["data"]["items"]
-        loc_chars = fetch_json(f"{YATTA_BASE}/{lang}/avatar")["data"]["items"]
+        en_chars, char_labels = game_catalog("avatar")
+        loc_chars = char_labels[lang]
         for cid, v in en_chars.items():
             loc = loc_chars.get(cid)
-            if loc:
-                bucket["chars"][slug(v["name"])] = loc["name"]
+            bucket["chars"][slug(v["name"])] = (loc or {}).get("name") or v["name"]
         for kind, path in (("weapons", "weapon"), ("sets", "reliquary")):
-            en_items = fetch_json(f"{YATTA_BASE}/en/{path}")["data"]["items"]
-            loc_items = fetch_json(f"{YATTA_BASE}/{lang}/{path}")["data"]["items"]
+            en_items, item_labels = game_catalog(path)
+            loc_items = item_labels[lang]
             for wid, v in en_items.items():
                 loc = loc_items.get(wid)
-                if loc:
-                    bucket[kind][slug(v["name"])] = loc["name"]
+                bucket[kind][slug(v["name"])] = (loc or {}).get("name") or v["name"]
         out[lang] = bucket
         print(f"  {lang}: персонажей {len(bucket['chars'])}, "
               f"оружия {len(bucket['weapons'])}, сетов {len(bucket['sets'])}")
@@ -548,6 +563,8 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 "subs": dict(m.get("subs") or {}),
                 "total": dict(m.get("total") or {}),
                 "mods": dict(m.get("mods") or {}),
+                "subValues": dict(m.get("subValues") or {}),
+                "rollCounts": dict(m.get("rollCounts") or {}),
                 "kqmArt": bool(m.get("kqmArt")),
             })
         order = [ckey(n) for n in s["chars"]]
@@ -568,12 +585,13 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 (m["char"], m["cons"]) + ((m["weapon"], m["refine"]) if is_five(m["weapon"]) else ("", 0))
                 for m in members)
         else:
-            sig = (s.get("simulator", "gcsim"),) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
+            sig = ("sim", s.get("simVersion", ""), bool(s.get("reconstructed"))) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
                                    tuple(m["main"]), tuple(sorted(m["subs"].items())),
-                                   tuple(sorted(m["total"].items())), tuple(sorted(m["mods"].items()))) for m in members)
+                                   tuple(sorted(m["total"].items())), tuple(sorted(m["mods"].items())),
+                                   tuple(sorted(m["subValues"].items()))) for m in members)
         agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": [], "keys": [], "origin": origin, "runs": []})
-        if s.get("simulator"):
-            agg["simulator"] = s["simulator"]
+        if s.get("reconstructed"):
+            agg["reconstructed"] = True
         agg["dps"].append(s["dps"])
         agg["ids"].append(s["id"])
         if s.get("key"):
@@ -635,6 +653,10 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                     })
                 if m["mods"]:
                     stats_mem[-1]["mods"] = [[st_i(k), v] for k, v in sorted(m["mods"].items())]
+                if m["subValues"]:
+                    stats_mem[-1]["values"] = [[st_i(k), v] for k, v in sorted(m["subValues"].items())]
+                if m["rollCounts"]:
+                    stats_mem[-1]["counts"] = [[st_i(k), v] for k, v in sorted(m["rollCounts"].items())]
             out_builds.append({
                 "dps": int(round(sum(vals) / len(vals))),
                 "sims": len(vals),
@@ -646,10 +668,10 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 "kqmArt": all(m["kqmArt"] for m in agg["members"]),
                 "members": mem,
             })
-            if agg.get("simulator"):
-                out_builds[-1]["simulator"] = agg["simulator"]
             if agg["keys"]:
                 out_builds[-1]["key"] = agg["keys"][0]
+            if agg.get("reconstructed"):
+                out_builds[-1]["reconstructed"] = True
             out_stats.append({"members": stats_mem})
             n_builds += 1
         # Сборку, у которой в том же источнике есть не менее сильная с не большими
@@ -882,13 +904,15 @@ def main():
             if own:
                 chars[own] = label
         for key, entry in names.items():
-            if key in chars:
+            if chars.get(key):
                 continue
             m = re.match(r"^(?:lumine|aether)(\w+)$", key)
             if m:
                 elem = m.group(1)
                 chars[key] = (f"ГГ ({ELEM_RU.get(elem, elem.title())})" if lang == "ru"
                               else entry.get("name") or key)
+            else:
+                chars[key] = (entry.get("nameRu") if lang == "ru" else None) or entry.get("name") or key
         bucket["chars"] = chars
         # на сайте только прямые кавычки, а в игровых названиях бывают ёлочки
         plain = lambda s: s.replace(chr(0xAB), '"').replace(chr(0xBB), '"')

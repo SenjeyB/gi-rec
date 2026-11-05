@@ -159,6 +159,8 @@ https://senjeyb.github.io/gi-rec/en/characters/mavuika/
 https://senjeyb.github.io/gi-rec/ru/characters/mavuika/
 https://senjeyb.github.io/gi-rec/en/characters/mika/
 https://senjeyb.github.io/gi-rec/ru/characters/mika/
+https://senjeyb.github.io/gi-rec/en/characters/mitya/
+https://senjeyb.github.io/gi-rec/ru/characters/mitya/
 https://senjeyb.github.io/gi-rec/en/characters/mizuki/
 https://senjeyb.github.io/gi-rec/ru/characters/mizuki/
 https://senjeyb.github.io/gi-rec/en/characters/mona/
@@ -217,6 +219,8 @@ https://senjeyb.github.io/gi-rec/en/characters/thoma/
 https://senjeyb.github.io/gi-rec/ru/characters/thoma/
 https://senjeyb.github.io/gi-rec/en/characters/tighnari/
 https://senjeyb.github.io/gi-rec/ru/characters/tighnari/
+https://senjeyb.github.io/gi-rec/en/characters/valeriy/
+https://senjeyb.github.io/gi-rec/ru/characters/valeriy/
 https://senjeyb.github.io/gi-rec/en/characters/varesa/
 https://senjeyb.github.io/gi-rec/ru/characters/varesa/
 https://senjeyb.github.io/gi-rec/en/characters/varka/

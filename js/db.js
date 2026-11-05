@@ -125,6 +125,7 @@ export function query(opts = {}) {
       sims: best.sims,
       src: best.src,
       key: best.key || "",
+      reconstructed: !!best.reconstructed,
       origin: best.origin || null,
       kqmCons: !!best.kqmCons,
       kqmArt: !!best.kqmArt,
@@ -203,7 +204,9 @@ export async function loadDetails(teamIndex, buildIndex) {
   const order = db.dict.subOrder || [];
   return entry.members.map((m) => ({
     main: (m.main || []).map((si) => db.dict.stats[si]),
-    subs: order.map((stat, k) => ({ stat, rolls: (m.subs || [])[k] || 0 })),
+    subs: order.map((stat, k) => ({ stat, rolls: (m.subs || [])[k] || 0,
+      count: (m.counts || []).find(([si]) => db.dict.stats[si] === stat)?.[1],
+      value: (m.values || []).find(([si]) => db.dict.stats[si] === stat)?.[1] })),
     total: m.tot ? m.tot.map(([si, value]) => ({ stat: db.dict.stats[si], value })) : null,
     modifiers: (m.mods || []).map(([si, value]) => ({ stat: db.dict.stats[si], value })),
   }));
@@ -221,6 +224,7 @@ export function teamBuilds(teamIndex) {
     sims: b.sims,
     src: b.src,
     key: b.key || "",
+    reconstructed: !!b.reconstructed,
     origin: b.origin || null,
     kqmCons: !!b.kqmCons,
     kqmArt: !!b.kqmArt,

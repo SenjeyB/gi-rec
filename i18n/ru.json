@@ -185,6 +185,7 @@
     "basedOnClear": "Основано на прохождении Натиска",
     "bossRun": "Забег Натиска",
     "simModifiers": "Бонусы симуляции",
+    "reconstructedGear": "Снаряжение перенесено из похожего расчёта",
     "originFull": { "dummy": "Прогоны на манекене · stygian.moe" },
     "runs": { "dummy": "Прогонов: {n}" },
     "refine": "R{n}",

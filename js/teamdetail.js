@@ -165,8 +165,8 @@ function memberBlock(slot, stats, real) {
     for (const s of subs.slice().sort((a, b) => b.rolls - a.rolls)) {
       const row = el("div", "td-sub" + (s.rolls > 2 ? " is-rolled" : ""));
       row.appendChild(el("span", "td-sub-name", statLabel(s.stat)));
-      const val = el("span", "td-sub-rolls", subValue(s.stat, s.rolls));
-      val.appendChild(el("span", "td-sub-count", ` (${fmtRolls(s.rolls)})`));
+      const val = el("span", "td-sub-rolls", s.value == null ? subValue(s.stat, s.rolls) : statValue(s.stat, s.value));
+      val.appendChild(el("span", "td-sub-count", ` (${fmtRolls(s.count ?? s.rolls)})`));
       row.appendChild(val);
       grid.appendChild(row);
     }
@@ -222,6 +222,10 @@ async function fillPanel(panel, team, options = {}) {
   head.appendChild(kqmBadge(team.kqmCons, team.kqmArt));
 
   const meta = el("div", "td-meta");
+  const original = teamBuilds(team.teamIndex).find((v) => v.buildIndex === team.buildIndex);
+  if (team.reconstructed || original?.reconstructed) {
+    meta.appendChild(el("span", "td-meta-item", t("team.reconstructedGear")));
+  }
   if (team.origin === "clear") {
     meta.appendChild(el("span", "td-meta-item boss-run-badge", t("team.basedOnClear")));
   } else if (team.origin === "dummy") {

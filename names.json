@@ -114,6 +114,8 @@
     "yaoyao": {"name": "Yaoyao", "element": "dendro", "weapon": "polearm", "stars": 2},
     "yoimiya": {"name": "Yoimiya", "element": "pyro", "weapon": "bow", "stars": 4},
     "mizuki": {"name": "Yumemizuki Mizuki", "element": "anemo", "weapon": "catalyst", "stars": 3},
+    "mitya": {"name": "Mitya", "nameRu": "Митя", "element": "electro", "weapon": "catalyst", "stars": 4, "signatureWeapon": "starsealededict"},
+    "valeriy": {"name": "Valeriy", "nameRu": "Валерий", "element": "electro", "weapon": "sword", "stars": 2},
     "yunjin": {"name": "Yun Jin", "element": "geo", "weapon": "polearm", "stars": 2},
     "zibai": {"name": "Zibai", "element": "geo", "weapon": "sword", "stars": 4},
     "zhongli": {"name": "Zhongli", "element": "geo", "weapon": "polearm", "stars": 4},

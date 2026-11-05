@@ -4,7 +4,8 @@ Genshin Impact Recommendations service.
 
 - Teams come from the KQM sim database: https://db.kqm.gg/database
 - Additional simulation builds are archived in `tools/community_sims.json`. They retain equipment, constellations, artifact stats and separate simulation bonuses, without temporary share links. Daily database rebuilds retain this snapshot.
-- To import another workbook: `python tools/import_community_sims.py teams.xlsx`. Only unique simulation links from its first worksheet are imported.
+- To import workbooks: `python tools/import_community_sims.py teams.xlsx more-teams.xlsx`. Unique simulation links are read from all worksheets; `--sheet NAME` selects specific worksheets. Imports merge into the existing snapshot and ignore teams with fewer than four characters. Source workbooks and raw downloads stay outside the repository.
+- `--skip-unavailable` skips expired or broken share URLs. `--supplement FILE` accepts explicitly marked reconstructed builds; their equipment assumptions remain visible in team details.
 - Real Stygian Onslaught clears and training dummy runs come from https://www.stygian.moe (a one-time export, used with the authors' permission; `tools/stygian_snapshot.json`). A clear's DPS is an estimate: boss HP / clear time, shown as ~DPS. Clears made with third-party tools, cheese strategies and teams of fewer than 4 characters are skipped; 4★ characters count as C6
 - Constellations are filters: by default 5★ at C0, 4★ at C6; your inventory or the "Any" setting can raise them
 - Builds are checked against KQM Standards (constellations and artifacts)
@@ -29,6 +30,8 @@ After that, `tools/build_pages.py` rebuilds static pages for search engines (`en
 A commit is made only when the data actually changes, followed by an explicit GitHub Pages rebuild.
 To run it by hand: Actions → Update data → Run workflow. Select `abyss`, `onslaught`, `teams`, `content` (both game modes), or `all`.
 Locally: `python tools/build_content.py`, `python tools/build_db.py --icons` (needs Pillow for icons).
+
+Game catalogs combine EN/RU records by game ID, so a missing English translation does not drop a weapon or character. Imported calculations use the same simulation presentation as database sims.
 
 New characters still need a manual entry in `names.json` and a portrait in `characters/`; the workflow
 prints a warning when the sims contain characters it doesn't know.

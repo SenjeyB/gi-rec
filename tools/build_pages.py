@@ -139,7 +139,7 @@ def asset_version(name: str) -> str:
     """Версия файла по содержимому: ссылки вида pages.css?v=… не дают браузеру
     взять из кэша старые стили к новой странице."""
     with open(os.path.join(SITE, name), "rb") as f:
-        return hashlib.sha1(f.read()).hexdigest()[:10]
+        return hashlib.sha1(f.read().replace(b"\r\n", b"\n")).hexdigest()[:10]
 
 
 def esc(s) -> str:

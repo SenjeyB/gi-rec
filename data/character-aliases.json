@@ -1,5 +1,6 @@
 {
  "en": {
+  "valeriy": ["Valery", "Valera"],
   "arlecchino": ["Arle", "The Knave"],
   "ayaka": ["Ayaka"],
   "ayato": ["Ayato"],
@@ -22,6 +23,7 @@
   "zhongli": ["Zhong Li", "Rex Lapis", "Morax"]
  },
  "ru": {
+  "valeriy": ["Валера"],
   "alhaitham": ["Альхайтам", "Аль-Хайтам"],
   "arlecchino": ["Арле"],
   "ayaka": ["Аяка"],
