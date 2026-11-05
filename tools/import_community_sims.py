@@ -189,9 +189,12 @@ def normalize_result(result, names):
         subs = {s: _rolls(s, v) for s, v in slot["subs"].items()}
         total = None
         if not slot["main"]:
-            total = {s: round(v, 6) for s, v in sorted(slot["sum"].items())}
+            if slot["subs"]:
+                total = {s: round(v, 6) for s, v in sorted(slot["subs"].items())}
+            else:
+                total = {s: round(v, 6) for s, v in sorted(slot["sum"].items())}
+                slot["mods"] = {}
             subs = {}
-            slot["mods"] = {}
         weapon = member.get("weapon") or {}
         talents = member.get("talents") or {}
         team.append({

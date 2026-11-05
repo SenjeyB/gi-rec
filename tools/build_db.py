@@ -268,7 +268,11 @@ def kqm_artifacts(subs: Dict[str, float]) -> bool:
 
 
 def audit_community_sim(sim: dict) -> dict:
-    legacy = sim.get("simVersion") == "859270fe6e133da958d9fb01b88b128952c10bb3"
+    legacy = sim.get("simVersion") in {
+        "859270fe6e133da958d9fb01b88b128952c10bb3",
+        "06e2259a345b36837ce9f4cf1142e5216c503791",
+        "fccc18bf19f80b8d3650f945a1c92f9a30d5c9fe",
+    }
     supported = legacy or sim.get("simVersion") == "0d2fce5ef2d2aa7a254ad023c85c6250544ec9ff"
     config = sim.get("config") or ""
     members = sim.get("team") or []
@@ -296,12 +300,17 @@ def audit_community_sim(sim: dict) -> dict:
         remaining[member["name"]] = dict(member.get("mods") or {})
         sources[member["name"]] = []
         proxy = original(member)
-        if (legacy and member["name"] == "vesna" and proxy["weapon"] == "ironsting"
+        if (legacy and member["name"] in ("vesna", "odette") and proxy["weapon"] == "ironsting"
                 and proxy["refine"] == 5 and close(member.get("mods", {}).get("atk%", 0), 0.32)
                 and member.get("mods", {}).get("em", 0) >= 135
-                and re.search(r"vesna\s+add\s+stats[^\n]*крафт\s*[рr]\s*5", config, re.I)):
+                and re.search(rf"{member['name']}\s+add\s+stats[^\n]*крафт\s*[рr]\s*5", config, re.I)):
             replace_weapon(member, "emberwell", 5)
             allocate(member, "emberwell", {"atk%": 0.32, "em": 135})
+        if (legacy and member["name"] == "sandrone" and proxy["weapon"] == "earthshaker"
+                and proxy["refine"] == 5 and close(member.get("mods", {}).get("em", 0), 128)
+                and close(member.get("mods", {}).get("atk%", 0), 0.32)):
+            replace_weapon(member, "bladeofatonement", 5)
+            allocate(member, "bladeofatonement", {"em": 128, "atk%": 0.32})
         if (supported and member["name"] == "odette" and proxy["weapon"] == "lionsroar"
                 and re.search(r"odette\s+add\s+stats[^\n]*ивент\s*[рr]\s*5", config, re.I)):
             em = member.get("mods", {}).get("em", 0)

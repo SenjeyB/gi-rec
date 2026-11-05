@@ -42,6 +42,52 @@ class CommunityAssumptionsTest(unittest.TestCase):
         audit_community_sim(sim)
         self.assertFalse(sim["team"][0]["kqmArt"])
 
+    def test_craft_weapon_compensation_also_applies_to_odette(self):
+        sim = self.simulation()
+        sim["team"][0]["name"] = "odette"
+        sim["team"][1]["name"] = "vesna"
+        sim["config"] = "odette add stats atk%=0.32 em=135; //крафт р5"
+        sim["team"][0]["mods"] = {"atk%": 0.32, "em": 135}
+        audit_community_sim(sim)
+        self.assertEqual(sim["team"][0]["weapon"], "emberwell")
+        self.assertTrue(sim["team"][0]["kqmArt"])
+
+    def test_weapon_bonus_does_not_certify_total_only_artifacts(self):
+        sim = self.simulation()
+        sim["team"][0].update(name="sandrone", weapon="earthshaker", mods={"em": 128, "atk%": 0.32},
+                               subs={}, total={"atk": 344, "atk%": 1.13, "em": 40})
+        audit_community_sim(sim)
+        member = sim["team"][0]
+        self.assertEqual(member["weapon"], "bladeofatonement")
+        self.assertEqual(member["modifierSources"][0]["stats"], {"em": 128, "atk%": 0.32})
+        self.assertFalse(member["kqmArt"])
+
+    def test_event_assumptions_in_older_imported_models(self):
+        for version in ["06e2259a345b36837ce9f4cf1142e5216c503791", "fccc18bf19f80b8d3650f945a1c92f9a30d5c9fe"]:
+            with self.subTest(version=version):
+                sim = self.simulation()
+                sim["simVersion"] = version
+                sim["config"] = "odette add stats em=208; #ивент р5"
+                sim["team"][1].update(weapon="lionsroar", refine=5, mods={"em": 208})
+                audit_community_sim(sim)
+                self.assertEqual(sim["team"][1]["weapon"], "silverlight")
+
+    def test_total_only_import_keeps_equipment_bonuses_separate(self):
+        from import_community_sims import normalize_result, STAT_ORDER
+        members = [{"name": name, "cons": 0, "weapon": {"name": "earthshaker" if name == "sandrone" else "favoniussword", "refine": 5},
+                    "sets": {}, "stats": [({"atk": 344, "atk%": 1.45, "em": 168, "cr": 0.397, "cd": 1.283, "er": 0.11}.get(stat, 0)
+                                           if name == "sandrone" else 0) for stat in STAT_ORDER]}
+                   for name in ["sandrone", "mona", "escoffier", "vodyanitsa"]]
+        result = {"character_details": members, "target_details": [{}], "statistics": {"dps": {"mean": 140000}},
+                  "sim_version": "859270fe6e133da958d9fb01b88b128952c10bb3",
+                  "config_file": "sandrone add stats atk=344 atk%=1.13 em=40 cr=0.397 cd=1.283 er=0.11;\nsandrone add stats em=128 atk%=0.32; #крафт р5"}
+        normalized = normalize_result(result, {m["name"]: {"name": m["name"]} for m in members})
+        member = normalized["team"][0]
+        self.assertEqual(member["total"]["atk%"], 1.13)
+        self.assertEqual(member["total"]["em"], 40)
+        self.assertEqual(member["mods"], {"atk%": 0.32, "em": 128})
+        self.assertFalse(member["kqmArt"])
+
     def test_party_bonus_requires_a_source_in_the_team(self):
         sim = self.simulation()
         sim["team"][1]["mods"] = {"em": 101}

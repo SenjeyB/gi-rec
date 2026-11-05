@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.4.2 (2026/11/05)
+- Added 44 Vodyanitsa team calculations, including one row reconstructed from similar builds
+- Corrected weapon stand-ins and separated weapon bonuses from artifact totals in the imported builds
+
 ## 2.4.1 (2026/11/05)
 - Corrected weapon stand-ins in imported simulations: Emberwell R5, Silver Light R5 and Breezeborne Refrain R1
 - Separated weapon effect approximations from artifact stats; unverified extra stats exclude builds from KQMS artifacts
