@@ -2,22 +2,11 @@
 - Saving your own teams
 
 ## 2.5.0 (2026/11/05)
-- Added 66 Cryo Traveler team calculations with assumed equipment
-- Added a yellow "Assumed" badge: the team and DPS are known, while missing equipment and artifact stats are inferred. These builds are excluded from character pages
-- Moved assumed builds and Boss Runs toggles into Advanced filters; removed the team source selector
-
-## 2.4.2 (2026/11/05)
-- Added 44 Vodyanitsa team calculations, including one row reconstructed from similar builds
-- Corrected weapon stand-ins and separated weapon bonuses from artifact totals in the imported builds
-
-## 2.4.1 (2026/11/05)
-- Corrected weapon stand-ins in imported simulations: Emberwell R5, Silver Light R5 and Breezeborne Refrain R1
-- Separated weapon effect approximations from artifact stats; unverified extra stats exclude builds from KQMS artifacts
-
-## 2.4.0 (2026/11/05)
-- Added Mitya and Valeriy, their portraits and character pages
-- Added 151 team calculations from the new workbook; three builds reconstructed from neighboring calculations
-- Updated the weapon catalog and improved artifact stat display
+- Added many new teams
+- Added Mitya and Valeriy
+- Updated team and Boss Run display
+- Added new badges and filters
+- Refined weapon and artifact data
 
 ## 2.3.1 (2026/10/28)
 - Added Vodyanitsa and Vesna
