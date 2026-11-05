@@ -339,6 +339,8 @@ def audit_community_sim(sim: dict) -> dict:
             else:
                 member.pop(key, None)
         member["kqmArt"] = kqm_artifacts(member.get("subs") or {}) and not unknown and not member.get("total")
+    if sim.get("reconstructed") or any(m.get("weaponProxy") for m in members):
+        sim["assumed"] = True
     return sim
 
 
@@ -663,7 +665,7 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 (m["char"], m["cons"]) + ((m["weapon"], m["refine"]) if is_five(m["weapon"]) else ("", 0))
                 for m in members)
         else:
-            sig = ("sim", s.get("simVersion", ""), bool(s.get("reconstructed"))) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
+            sig = ("sim", s.get("simVersion", ""), bool(s.get("reconstructed")), bool(s.get("assumed"))) + tuple((m["char"], m["cons"], m["weapon"], m["refine"], tuple(m["sets"]),
                                    tuple(m["main"]), tuple(sorted(m["subs"].items())),
                                    tuple(sorted(m["total"].items())), tuple(sorted(m["mods"].items())),
                                    tuple(sorted(m["subValues"].items())),
@@ -671,6 +673,8 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
         agg = slot["builds"].setdefault(sig, {"members": members, "dps": [], "ids": [], "keys": [], "origin": origin, "runs": []})
         if s.get("reconstructed"):
             agg["reconstructed"] = True
+        if s.get("assumed"):
+            agg["assumed"] = True
         agg["dps"].append(s["dps"])
         agg["ids"].append(s["id"])
         if s.get("key"):
@@ -758,6 +762,8 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
                 out_builds[-1]["key"] = agg["keys"][0]
             if agg.get("reconstructed"):
                 out_builds[-1]["reconstructed"] = True
+            if agg.get("assumed"):
+                out_builds[-1]["assumed"] = True
             out_stats.append({"members": stats_mem})
             n_builds += 1
         # Сборку, у которой в том же источнике есть не менее сильная с не большими

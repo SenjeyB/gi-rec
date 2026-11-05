@@ -192,7 +192,8 @@ function memberBlock(slot, stats, real) {
 const fmtDps = (n) => Math.round(n || 0).toLocaleString("en-US").replace(/,/g, " ");
 
 function variantsBlock(team, onPick, options) {
-  const builds = teamBuilds(team.teamIndex).filter((b) => !options.excludeBossRuns || b.origin !== "clear");
+  const builds = teamBuilds(team.teamIndex).filter((b) => (!options.excludeBossRuns || b.origin !== "clear")
+    && (!options.excludeAssumed || !b.assumed));
   if (builds.length < 2) return null;
   const box = el("div", "td-variants");
   box.appendChild(el("div", "td-stats-title", t("team.variants", { n: builds.length })));
@@ -215,6 +216,7 @@ function variantsBlock(team, onPick, options) {
     });
     row.appendChild(who);
     if (v.origin === "clear") row.appendChild(el("span", "boss-run-badge", t("team.bossRun")));
+    if (v.assumed) row.appendChild(el("span", "assumed-badge", "⚑ " + t("team.assumed")));
     if (v.aboveStandard) row.appendChild(el("span", "td-variant-tag", t("team.aboveStd")));
     if (current) row.appendChild(el("span", "td-variant-tag is-current", t("team.shown")));
     row.appendChild(el("span", "td-variant-dps", (v.origin === "clear" ? "~" : "") + fmtDps(v.dps)));
@@ -235,6 +237,9 @@ async function fillPanel(panel, team, options = {}) {
 
   const meta = el("div", "td-meta");
   const original = teamBuilds(team.teamIndex).find((v) => v.buildIndex === team.buildIndex);
+  if (team.assumed || original?.assumed) {
+    meta.appendChild(el("span", "td-meta-item assumed-badge", "⚑ " + t("team.assumed")));
+  }
   if (team.reconstructed || original?.reconstructed) {
     meta.appendChild(el("span", "td-meta-item", t("team.reconstructedGear")));
   }
@@ -266,13 +271,14 @@ async function fillPanel(panel, team, options = {}) {
 
 export async function buildPanel(team, options = {}) {
   if (options.excludeBossRuns && team.origin === "clear") throw new Error("Boss runs are excluded from this view");
+  if (options.excludeAssumed && team.assumed) throw new Error("Assumed builds are excluded from this view");
   const panel = el("div", "team-detail");
   panel.addEventListener("click", (e) => e.stopPropagation());
   await fillPanel(panel, team, options);
   return panel;
 }
 
-export async function toggleDetail(row, team) {
+export async function toggleDetail(row, team, options = {}) {
   const existing = row.nextElementSibling;
   if (existing && existing.classList.contains("team-detail")) {
     existing.remove();
@@ -291,6 +297,6 @@ export async function toggleDetail(row, team) {
   const panel = el("div", "team-detail");
   panel.addEventListener("click", (event) => event.stopPropagation());
   row.after(panel);
-  await fillPanel(panel, team);
+  await fillPanel(panel, team, options);
   return panel.isConnected && row.classList.contains("is-open");
 }

@@ -190,7 +190,7 @@ class Data:
         self.teams = self.pick_teams()
         self.catalog_chars = sorted({k for team in self.teams for k in team["chars"] if k in self.names})
         self.by_char: Dict[str, List[dict]] = defaultdict(list, {k: [] for k in self.catalog_chars})
-        for t in self.pick_teams(exclude_runs=True):
+        for t in self.pick_teams(exclude_runs=True, exclude_assumed=True):
             for k in t["chars"]:
                 self.by_char[k].append(t)
 
@@ -204,7 +204,7 @@ class Data:
             return 5
         return 5 if self.five_star(key) else 4
 
-    def pick_teams(self, exclude_runs: bool = False) -> List[dict]:
+    def pick_teams(self, exclude_runs: bool = False, exclude_assumed: bool = False) -> List[dict]:
         """Как в приложении по умолчанию: первая (самая сильная) сборка, где 5★
         на C0, 4★ на C6 (то есть без ограничений) и нет 5★ оружия."""
         meta = self.db.get("weaponMeta") or []
@@ -213,6 +213,8 @@ class Data:
             keys = [self.chars[i] for i in t["chars"]]
             for bi, b in enumerate(t["builds"]):
                 if exclude_runs and b.get("origin") == "clear":
+                    continue
+                if exclude_assumed and b.get("assumed"):
                     continue
                 ok = True
                 for k, m in zip(keys, b["members"]):
@@ -309,7 +311,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
   <link rel="apple-touch-icon" href="{BASE_URL}assets/apple-touch-icon.png">
   <link rel="stylesheet" href="{up}pages.css?v={asset_version("pages.css")}">{team_assets}{ld}
 </head>
-<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}" data-exclude-boss-runs="{str(path.startswith('characters/')).lower()}">
+<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}" data-exclude-boss-runs="{str(path.startswith('characters/')).lower()}" data-exclude-assumed="{str(path.startswith('characters/')).lower()}">
   <header class="pg-header">
     <a class="pg-brand" href="{up}?lang={lang}" aria-label="{esc(ui['open_app'])}"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
     <nav class="pg-nav">{nav}</nav>
@@ -350,6 +352,8 @@ def team_html(data: Data, lang: str, t: dict, up: str, rank: int) -> str:
     kqms = f'<span class="pg-badge">{UI[lang]["kqms"]}</span>' if b.get("kqmCons") and b.get("kqmArt") else ""
     if b.get("origin") == "clear":
         kqms += f'<span class="boss-run-badge">{esc(data.i18n[lang]["team"]["bossRun"])}</span>'
+    if b.get("assumed"):
+        kqms += f'<span class="assumed-badge">⚑ {esc(data.i18n[lang]["team"]["assumed"])}</span>'
     src = b.get("src") or ""
     if b.get("origin"):
         href = ("https://www.youtube.com/watch?v=" + urllib.parse.quote(src[3:], safe="") if src.startswith("yt:")

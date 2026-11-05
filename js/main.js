@@ -17,8 +17,7 @@ let aliases = {};
 let refs = null;
 let app = null;
 
-const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine", source: "all" };
-const SOURCES = ["all", "kqm", "real"];
+const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine", showAssumed: true, showBossRuns: true };
 const settings = { ...DEFAULTS };
 const FIVE_MODES = ["none", "r1", "any", "mine"];
 
@@ -50,7 +49,8 @@ function loadSettings() {
     settings.kqmFull = !!(raw.kqmFull ?? raw.kqmCons);
     settings.kqmArt = !!raw.kqmArt;
     settings.consMode = ["standard", "mine", "any"].includes(raw.consMode) ? raw.consMode : "mine";
-    settings.source = SOURCES.includes(raw.source) ? raw.source : "all";
+    settings.showAssumed = raw.showAssumed !== false;
+    settings.showBossRuns = raw.showBossRuns ?? (raw.source !== "kqm");
   } catch {}
 }
 
@@ -72,7 +72,7 @@ function currentTeams() {
     fiveStar: settings.fiveStar,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
-    source: settings.source,
+    showAssumed: settings.showAssumed, showBossRuns: settings.showBossRuns,
   });
 }
 
@@ -84,7 +84,7 @@ function strictTeams(weapons) {
     fiveStar: "mine",
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
-    source: settings.source,
+    showAssumed: settings.showAssumed, showBossRuns: settings.showBossRuns,
   });
 }
 
@@ -95,7 +95,7 @@ function baseTeams() {
     fiveStar: settings.fiveStar,
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
-    source: settings.source,
+    showAssumed: settings.showAssumed, showBossRuns: settings.showBossRuns,
   });
 }
 
@@ -118,21 +118,12 @@ function wireSettings() {
       refresh();
     });
   }
-  for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
+  for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"], ["show-assumed", "showAssumed"], ["show-boss-runs", "showBossRuns"]]) {
     const box = document.getElementById(id);
     if (!box) continue;
     box.checked = settings[key];
     box.addEventListener("change", () => {
       settings[key] = box.checked;
-      saveSettings();
-      refresh();
-    });
-  }
-  const sourceSel = document.getElementById("source-mode");
-  if (sourceSel) {
-    sourceSel.value = settings.source;
-    sourceSel.addEventListener("change", () => {
-      settings.source = sourceSel.value;
       saveSettings();
       refresh();
     });
@@ -154,9 +145,7 @@ function wireSettings() {
       if (cm) cm.value = settings.consMode;
       const fm = document.getElementById("five-mode");
       if (fm) fm.value = settings.fiveStar;
-      const sm = document.getElementById("source-mode");
-      if (sm) sm.value = settings.source;
-      for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"]]) {
+      for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"], ["show-assumed", "showAssumed"], ["show-boss-runs", "showBossRuns"]]) {
         const box = document.getElementById(id);
         if (box) box.checked = settings[key];
       }
@@ -304,6 +293,7 @@ async function boot() {
     names, refs, content,
     teams: currentTeams(), strictTeams: strictTeams(), baseTeams: baseTeams(),
     strictWith: (weapons) => strictTeams(weapons),
+    detailOptions: () => ({ excludeAssumed: !settings.showAssumed, excludeBossRuns: !settings.showBossRuns }),
     weaponCopies: () => store.weaponCopies(),
   });
 

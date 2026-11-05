@@ -45,7 +45,10 @@ for (const card of cards) {
         ? variants[Number(card.dataset.buildIndex)]
         : variants.find((v) => card.dataset.buildKey ? v.key === card.dataset.buildKey : v.src === card.dataset.src);
       if (!team) throw new Error("Build no longer exists in the database");
-      const panel = await buildPanel(team, { excludeBossRuns: document.body.dataset.excludeBossRuns === "true" });
+      const panel = await buildPanel(team, {
+        excludeBossRuns: document.body.dataset.excludeBossRuns === "true",
+        excludeAssumed: document.body.dataset.excludeAssumed === "true",
+      });
       host.replaceChildren(panel);
       card.dataset.loaded = "true";
     } catch (error) {

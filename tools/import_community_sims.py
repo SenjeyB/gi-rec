@@ -67,7 +67,8 @@ def workbook_links(path, sheet_names=None, first_only=False):
         url = urllib.parse.urlsplit(candidate)
         if (url.scheme == "https" and url.hostname in SHARE_HOSTS
                 and url.path.startswith("/sh/")):
-            clean = urllib.parse.urlunsplit((url.scheme, url.netloc, url.path.rstrip("/"), "", ""))
+            clean_path = url.path.rstrip("/").rstrip(").,;]")
+            clean = urllib.parse.urlunsplit((url.scheme, url.netloc, clean_path, "", ""))
             if clean not in out:
                 out.append(clean)
     return out

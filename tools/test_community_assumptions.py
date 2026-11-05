@@ -27,6 +27,18 @@ class CommunityAssumptionsTest(unittest.TestCase):
         self.assertEqual(sim["team"][0]["subs"], before["team"][0]["subs"])
         self.assertEqual(sim["team"][0]["mods"], before["team"][0]["mods"])
         self.assertEqual(sim["dps"], before["dps"])
+        self.assertTrue(sim["assumed"])
+
+    def test_reconstructed_equipment_is_assumed(self):
+        sim = self.simulation()
+        sim["reconstructed"] = True
+        audit_community_sim(sim)
+        self.assertTrue(sim["assumed"])
+
+    def test_original_simulation_is_not_marked_assumed(self):
+        sim = self.simulation()
+        audit_community_sim(sim)
+        self.assertFalse(sim.get("assumed", False))
 
     def test_extra_artifact_stats_cannot_hide_behind_weapon_compensation(self):
         sim = self.simulation()

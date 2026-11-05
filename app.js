@@ -8,6 +8,7 @@ import { openCharacterWindow } from './js/charwindow.js';
 
 let WEAPON_NAMES = {};
 let SET_NAMES = {};
+let detailOptions = () => ({});
 
 function T(key, fallback, vars){
   const s = t(key, vars);
@@ -96,11 +97,11 @@ function buildTeamRow(team, owned, extraCls){
     row.tabIndex = 0;
     row.setAttribute('role', 'button');
     row.setAttribute('aria-expanded', 'false');
-    row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team); });
+    row.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDetail(row, team, detailOptions()); });
     row.addEventListener('keydown', (e)=>{
       if(e.target === row && (e.key === 'Enter' || e.key === ' ')){
         e.preventDefault();
-        toggleDetail(row, team);
+        toggleDetail(row, team, detailOptions());
       }
     });
   }
@@ -131,6 +132,7 @@ function createEl(tag,cls,txt){
 }
 
 export async function start(ctx){
+  detailOptions = ctx?.detailOptions || (() => ({}));
   const names = ctx && ctx.names;
   let teams = (ctx && ctx.teams) || [];
   let strictTeams = [];
@@ -156,6 +158,7 @@ export async function start(ctx){
     dps: t.dps != null ? t.dps : 0,
     build: t.build || null, src: t.src || null, origin: t.origin || null, sims: t.sims || 0,
     kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
+    assumed: !!t.assumed,
     teamIndex: t.teamIndex, buildIndex: t.buildIndex,
   });
 
@@ -171,6 +174,7 @@ export async function start(ctx){
       build: t.build || null,
       src: t.src || null,
       origin: t.origin || null,
+      assumed: !!t.assumed,
       sims: t.sims || 0,
       kqmCons: !!t.kqmCons,
       kqmArt: !!t.kqmArt,
@@ -476,6 +480,7 @@ export async function start(ctx){
     const pack = (team)=> ({
       members: team.members.slice(), dps: team.dps || 0, build: team.build || null,
       src: team.src || null, origin: team.origin || null, sims: team.sims || 0, kqmCons: !!team.kqmCons, kqmArt: !!team.kqmArt,
+      assumed: !!team.assumed,
       teamIndex: team.teamIndex, buildIndex: team.buildIndex, gen,
     });
     const sameMembers = (a, b)=> a.length === b.length && a.every(m => b.includes(m));
@@ -931,6 +936,7 @@ export async function start(ctx){
         members: t.members,
         dps: t.dps,
         build: t.build, src: t.src, origin: t.origin, sims: t.sims,
+        assumed: !!t.assumed,
         kqmCons: t.kqmCons, kqmArt: t.kqmArt,
         teamIndex: t.teamIndex, buildIndex: t.buildIndex,
         missingCount
@@ -1091,6 +1097,9 @@ function dpsCell(cls, team){
   if(team.origin === 'clear'){
     cell.appendChild(createEl('span','boss-run-badge',T('team.bossRun','Boss Run')));
   }
+  if(team.assumed){
+    cell.appendChild(createEl('span','assumed-badge','⚑ ' + T('team.assumed','Assumed')));
+  }
   return cell;
 }
 
@@ -1109,7 +1118,7 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
       const sortedMissing = missing.slice().sort();
       const key = sortedMissing.join('||');
       const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
-      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex});
+      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex});
       byMissingSet.set(key, list);
     }
   }
@@ -1208,7 +1217,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, mode=
       const missingOthers = others.length - ownedCount;
       const totalMissing = isOwned ? missingOthers : (1 + missingOthers);
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount});
       }
     }
     if(candidates.length===0){ continue; }

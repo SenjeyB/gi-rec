@@ -19,7 +19,7 @@
   <link rel="stylesheet" href="styles.css?v=90fe054641">
   <link rel="icon" href="https://senjeyb.github.io/gi-rec/assets/favicon.png" type="image/png" sizes="64x64">
   <link rel="apple-touch-icon" href="https://senjeyb.github.io/gi-rec/assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="teamdetail.css?v=9907e07fe6">
+  <link rel="stylesheet" href="teamdetail.css?v=7835058517">
   <link rel="preload" href="tiers/ss.png" as="image">
   <link rel="preload" href="tiers/s.png" as="image">
   <link rel="preload" href="tiers/A.png" as="image">
@@ -100,15 +100,16 @@
                 <option value="mine" data-i18n="settings.fiveMine">Only mine</option>
               </select>
 
-              <label for="source-mode" class="side-label" data-i18n="settings.source">Teams from:</label>
-              <select id="source-mode" class="side-input" data-default="all">
-                <option value="all" data-i18n="settings.sourceAll">Sims and real clears</option>
-                <option value="kqm" data-i18n="settings.sourceKqm">Simulations only</option>
-                <option value="real" data-i18n="settings.sourceReal">Real clears only</option>
-              </select>
-              
               <details id="advanced-filters" class="adv-filters">
                 <summary data-i18n="filters.advanced">Advanced</summary>
+                <label class="side-check">
+                  <input id="show-assumed" type="checkbox" data-default="true" checked />
+                  <span data-i18n="filters.showAssumed">Show assumed builds</span>
+                </label>
+                <label class="side-check">
+                  <input id="show-boss-runs" type="checkbox" data-default="true" checked />
+                  <span data-i18n="filters.showBossRuns">Show Boss Runs</span>
+                </label>
                 <label class="side-check">
                   <input id="kqm-full" type="checkbox" />
                   <span data-i18n="filters.kqmFullOnly">Only fully KQMS-compliant</span>

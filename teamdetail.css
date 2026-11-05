@@ -45,6 +45,11 @@
 .td-sub-rolls{flex:0 0 auto}
 .td-sub-count{color:var(--muted);font-weight:400}
 .td-origin{color:#ddd6fe}
+.assumed-badge{display:inline-flex;align-items:center;align-self:flex-end;gap:3px;margin-top:3px;
+  padding:2px 7px;border:1px solid rgba(251,191,36,.5);border-radius:999px;
+  background:rgba(245,158,11,.12);color:#fcd34d;font-size:10px;font-weight:700;line-height:1.35;white-space:nowrap}
+.td-meta .assumed-badge,.td-variant .assumed-badge{margin:0;align-self:center}
+.team-dps .assumed-badge,.slot-dps .assumed-badge{display:flex;width:max-content;margin-left:auto}
 .td-unverified .td-stats-title{color:#fca5a5}
 .boss-run-badge{display:inline-flex;align-items:center;align-self:flex-end;gap:4px;margin-top:3px;
   padding:2px 7px;border:1px solid rgba(248,113,113,.55);border-radius:999px;

@@ -1,6 +1,11 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.5.0 (2026/11/05)
+- Added 66 Cryo Traveler team calculations with assumed equipment
+- Added a yellow "Assumed" badge and excluded assumed builds from character pages
+- Moved assumed builds and Boss Runs toggles into Advanced filters; removed the team source selector
+
 ## 2.4.2 (2026/11/05)
 - Added 44 Vodyanitsa team calculations, including one row reconstructed from similar builds
 - Corrected weapon stand-ins and separated weapon bonuses from artifact totals in the imported builds

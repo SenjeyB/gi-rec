@@ -60,7 +60,9 @@ function moveInto(node, target) {
 
 function activeFilterCount() {
   let n = document.querySelectorAll("#view-controls .filter-chip.selected, #view-controls .char-filter-chosen .anchor-chip").length;
-  n += document.querySelectorAll("#settings-card input[type=checkbox]:checked").length;
+  for (const box of document.querySelectorAll("#settings-card input[type=checkbox]")) {
+    if (box.checked !== (box.dataset.default === "true")) n++;
+  }
   for (const sel of document.querySelectorAll("#settings-card select[data-default]")) {
     if (sel.value !== sel.dataset.default) n++;
   }

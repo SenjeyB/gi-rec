@@ -93,6 +93,8 @@ export function query(opts = {}) {
 
     for (let bi = 0; bi < team.builds.length; bi++) {
       const build = team.builds[bi];
+      if (opts.showAssumed === false && build.assumed) continue;
+      if (opts.showBossRuns === false && build.origin === "clear") continue;
       if (source === "kqm" && build.origin) continue;
       if (source === "real" && !build.origin) continue;
       if (needFull && !(build.kqmCons && build.kqmArt)) continue;
@@ -126,6 +128,7 @@ export function query(opts = {}) {
       src: best.src,
       key: best.key || "",
       reconstructed: !!best.reconstructed,
+      assumed: !!best.assumed,
       origin: best.origin || null,
       kqmCons: !!best.kqmCons,
       kqmArt: !!best.kqmArt,
@@ -230,6 +233,7 @@ export function teamBuilds(teamIndex) {
     src: b.src,
     key: b.key || "",
     reconstructed: !!b.reconstructed,
+    assumed: !!b.assumed,
     origin: b.origin || null,
     kqmCons: !!b.kqmCons,
     kqmArt: !!b.kqmArt,
