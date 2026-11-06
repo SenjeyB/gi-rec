@@ -687,7 +687,9 @@ def build(sims: List[dict], char_idx: Dict[str, str], weapons: Dict[str, dict],
     ch_i, w_i, s_i, st_i = Interner(), Interner(), Interner(), Interner()
 
     def kqm_cons_ok(char_key: str, cons: int) -> bool:
-        """Созвездия по стандарту KQMS: 5* на C0, 4* на C6."""
+        """Созвездия по KQMS: Путешественник C0–C6, остальные 5* C0 и 4* C6."""
+        if char_key.startswith(("lumine", "aether", "traveler")):
+            return 0 <= cons <= 6
         entry = (names or {}).get(char_key) or {}
         if (entry.get("stars") or 0) >= 3:
             return cons == 0
