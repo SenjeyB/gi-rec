@@ -339,8 +339,10 @@ def audit_community_sim(sim: dict) -> dict:
             else:
                 member.pop(key, None)
         member["kqmArt"] = kqm_artifacts(member.get("subs") or {}) and not unknown and not member.get("total")
-    if sim.get("reconstructed") or any(m.get("weaponProxy") for m in members):
+    if sim.get("reconstructed"):
         sim["assumed"] = True
+    elif any(m.get("weaponProxy") for m in members):
+        sim.setdefault("assumed", True)
     return sim
 
 

@@ -188,9 +188,10 @@ class Data:
         d = self.db["dict"]
         self.chars, self.weapons, self.sets = d["chars"], d["weapons"], d["sets"]
         self.teams = self.pick_teams()
+        self.verified_teams = self.pick_teams(exclude_runs=True, exclude_assumed=True)
         self.catalog_chars = sorted({k for team in self.teams for k in team["chars"] if k in self.names})
         self.by_char: Dict[str, List[dict]] = defaultdict(list, {k: [] for k in self.catalog_chars})
-        for t in self.pick_teams(exclude_runs=True, exclude_assumed=True):
+        for t in self.verified_teams:
             for k in t["chars"]:
                 self.by_char[k].append(t)
 
@@ -291,6 +292,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
            f'<a href="{up}{lang}/best-teams/">{esc(ui["best"])}</a>'
            f'<a href="{up}{lang}/abyss/">{esc(ui["abyss"])}</a>'
            f'<a class="pg-lang" href="{up}{other}/{path}" hreflang="{other}">{esc(ui["other_lang"])}</a>')
+    verified_only = str(path.startswith("characters/") or path == "best-teams/").lower()
     return f"""<!doctype html>
 <html lang="{lang}">
 <head>
@@ -311,7 +313,7 @@ def page(data: Data, lang: str, path: str, depth: int, title: str, desc: str, bo
   <link rel="apple-touch-icon" href="{BASE_URL}assets/apple-touch-icon.png">
   <link rel="stylesheet" href="{up}pages.css?v={asset_version("pages.css")}">{team_assets}{ld}
 </head>
-<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}" data-exclude-boss-runs="{str(path.startswith('characters/')).lower()}" data-exclude-assumed="{str(path.startswith('characters/')).lower()}">
+<body data-team-load-error="{esc(data.i18n[lang]['team']['loadError'])}" data-exclude-boss-runs="{verified_only}" data-exclude-assumed="{verified_only}">
   <header class="pg-header">
     <a class="pg-brand" href="{up}?lang={lang}" aria-label="{esc(ui['open_app'])}"><img src="{up}assets/logo.png" alt="" width="28" height="28"><span>GI-Rec</span></a>
     <nav class="pg-nav">{nav}</nav>
@@ -434,7 +436,7 @@ def char_page(data: Data, lang: str, key: str) -> str:
 
 def best_page(data: Data, lang: str) -> str:
     ui, up = UI[lang], "../../"
-    rows = "\n".join(team_html(data, lang, t, up, i + 1) for i, t in enumerate(data.teams[:TOP_OVERALL]))
+    rows = "\n".join(team_html(data, lang, t, up, i + 1) for i, t in enumerate(data.verified_teams[:TOP_OVERALL]))
     body = f"""    <h1>{esc(ui["best_h1"])}</h1>
     <p class="pg-sub">{esc(ui["note"])}</p>
     <ol class="pg-teams">

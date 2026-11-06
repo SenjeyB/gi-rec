@@ -35,6 +35,23 @@ class CommunityAssumptionsTest(unittest.TestCase):
         audit_community_sim(sim)
         self.assertTrue(sim["assumed"])
 
+    def test_reviewed_equipment_keeps_proxy_without_assumed_badge(self):
+        sim = self.simulation()
+        sim["team"][0]["mods"] = {"atk%": 0.32, "em": 135}
+        audit_community_sim(sim)
+        sim["assumed"] = False
+        audit_community_sim(sim)
+        self.assertFalse(sim["assumed"])
+        self.assertEqual(sim["team"][0]["weapon"], "emberwell")
+        self.assertTrue(sim["team"][0]["weaponProxy"])
+        self.assertTrue(sim["team"][0]["modifierSources"])
+
+    def test_reconstructed_equipment_cannot_clear_assumed_badge(self):
+        sim = self.simulation()
+        sim.update(reconstructed=True, assumed=False)
+        audit_community_sim(sim)
+        self.assertTrue(sim["assumed"])
+
     def test_original_simulation_is_not_marked_assumed(self):
         sim = self.simulation()
         audit_community_sim(sim)

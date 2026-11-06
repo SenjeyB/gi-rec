@@ -260,7 +260,10 @@ def main():
         raise ValueError("Unsupported simulation snapshot version")
     merged = {s["key"]: {**s, "simulator": "sim"} for s in previous["simulations"]}
     added = sum(s["key"] not in merged for s in {s["key"]: s for s in sims}.values())
-    merged.update({s["key"]: s for s in sims})
+    for sim in sims:
+        if merged.get(sim["key"], {}).get("assumed") is False:
+            sim["assumed"] = False
+        merged[sim["key"]] = sim
     for sim in merged.values():
         audit_community_sim(sim)
     snapshot = {"version": 1, "simulations": list(merged.values())}
