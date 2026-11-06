@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 2.4.1 (2026/11/07)
+- Removed the Assumed badge from Vesna teams
+- Excluded Boss Run teams from best-teams
+
 ## 2.4.0 (2026/11/05)
 - Added many new teams
 - Added Mitya and Valeriy
