@@ -1,7 +1,7 @@
 ## Upcoming features:
 - Saving your own teams
 
-## 2.5.0 (2026/11/05)
+## 2.4.0 (2026/11/05)
 - Added many new teams
 - Added Mitya and Valeriy
 - Updated team and Boss Run display
