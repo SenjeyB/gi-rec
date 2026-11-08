@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-06T22:23:01Z",
+ "generated": "2026-11-08T11:30:58Z",
  "weapons": {
   "absolution": {
    "gameId": 11515,
@@ -2120,6 +2120,18 @@
   }
  },
  "sets": {
+  "obsidiancodex": {
+   "name": "Obsidian Codex",
+   "icon": "UI_RelicIcon_15038_4"
+  },
+  "celestialgift": {
+   "name": "Celestial Gift",
+   "icon": "UI_RelicIcon_15045_4"
+  },
+  "silkenmoonsserenade": {
+   "name": "Silken Moon's Serenade",
+   "icon": "UI_RelicIcon_15042_4"
+  },
   "adaycarvedfromrisingwinds": {
    "name": "A Day Carved From Rising Winds",
    "icon": "UI_RelicIcon_15044_4"
@@ -2139,10 +2151,6 @@
   "deepwoodmemories": {
    "name": "Deepwood Memories",
    "icon": "UI_RelicIcon_15025_4"
-  },
-  "silkenmoonsserenade": {
-   "name": "Silken Moon's Serenade",
-   "icon": "UI_RelicIcon_15042_4"
   },
   "instructor": {
    "name": "Instructor",
@@ -2164,10 +2172,6 @@
    "name": "Tenacity of the Millelith",
    "icon": "UI_RelicIcon_15017_4"
   },
-  "celestialgift": {
-   "name": "Celestial Gift",
-   "icon": "UI_RelicIcon_15045_4"
-  },
   "marechausseehunter": {
    "name": "Marechaussee Hunter",
    "icon": "UI_RelicIcon_15031_4"
@@ -2175,10 +2179,6 @@
   "scrolloftheheroofcindercity": {
    "name": "Scroll of the Hero of Cinder City",
    "icon": "UI_RelicIcon_15037_4"
-  },
-  "obsidiancodex": {
-   "name": "Obsidian Codex",
-   "icon": "UI_RelicIcon_15038_4"
   },
   "noblesseoblige": {
    "name": "Noblesse Oblige",
