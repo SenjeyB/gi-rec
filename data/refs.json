@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-08T11:30:58Z",
+ "generated": "2026-11-08T19:34:42Z",
  "weapons": {
   "absolution": {
    "gameId": 11515,
@@ -2124,13 +2124,17 @@
    "name": "Obsidian Codex",
    "icon": "UI_RelicIcon_15038_4"
   },
-  "celestialgift": {
-   "name": "Celestial Gift",
-   "icon": "UI_RelicIcon_15045_4"
+  "tenacityofthemillelith": {
+   "name": "Tenacity of the Millelith",
+   "icon": "UI_RelicIcon_15017_4"
   },
   "silkenmoonsserenade": {
    "name": "Silken Moon's Serenade",
    "icon": "UI_RelicIcon_15042_4"
+  },
+  "celestialgift": {
+   "name": "Celestial Gift",
+   "icon": "UI_RelicIcon_15045_4"
   },
   "adaycarvedfromrisingwinds": {
    "name": "A Day Carved From Rising Winds",
@@ -2167,10 +2171,6 @@
   "disenchantmentindeepshadow": {
    "name": "Disenchantment in Deep Shadow",
    "icon": "UI_RelicIcon_15046_4"
-  },
-  "tenacityofthemillelith": {
-   "name": "Tenacity of the Millelith",
-   "icon": "UI_RelicIcon_15017_4"
   },
   "marechausseehunter": {
    "name": "Marechaussee Hunter",
