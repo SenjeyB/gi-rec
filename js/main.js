@@ -7,6 +7,7 @@ import { mount as mountInventory } from "./inventory.js";
 import { parseGood, looksLikeGood } from "./good.js";
 import * as mobile from "./mobile.js";
 import * as tour from "./tour.js";
+import { openSheet } from "./sheet.js";
 import { start as startApp } from "../app.js";
 
 const GITHUB_ISSUES = "https://github.com/SenjeyB/gi-rec/issues/new/choose";
@@ -186,6 +187,45 @@ function wireFeedback() {
   });
 }
 
+function wireTeamSubmission() {
+  const open = document.getElementById("open-team-submission");
+  if (!open) return;
+  let active;
+  open.addEventListener("click", () => {
+    if (active) return;
+    const sheet = openSheet({
+      title: i18n.t("submission.title"),
+      className: "team-submission",
+      onClose() { active = null; open.focus({ preventScroll: true }); },
+    });
+    active = sheet;
+    const title = sheet.panel.querySelector(".sheet-title");
+    title.id = "team-submission-title";
+    title.dataset.i18n = "submission.title";
+    sheet.panel.setAttribute("aria-labelledby", title.id);
+    sheet.panel.querySelector(".sheet-close").dataset.i18nAttr = "aria-label:common.close";
+    const intro = document.createElement("p");
+    intro.dataset.i18n = "submission.intro";
+    const rules = document.createElement("ol");
+    rules.className = "submission-rules";
+    for (const key of ["simulation", "dummy"]) {
+      const item = document.createElement("li");
+      item.dataset.i18n = `submission.${key}`;
+      rules.appendChild(item);
+    }
+    sheet.body.append(intro, rules);
+    const link = document.createElement("a");
+    link.className = "nav-link submission-proceed";
+    link.href = "https://forms.gle/XnnbDkTDDvTGccCMA";
+    link.target = "_blank";
+    link.rel = "noopener";
+    link.dataset.i18n = "submission.openForm";
+    sheet.footer.hidden = false;
+    sheet.footer.appendChild(link);
+    i18n.apply(sheet.panel);
+  });
+}
+
 function wireInventoryView() {
   const section = document.getElementById("inventory-view");
   const container = document.getElementById("inventory-content");
@@ -300,6 +340,7 @@ async function boot() {
   buildLangSwitcher();
   wireSettings();
   wireFeedback();
+  wireTeamSubmission();
   wireImport();
   wireInventoryView();
   mobile.init();

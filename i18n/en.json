@@ -214,6 +214,13 @@
     "aboveStd": "above standard",
     "artTotals": "Artifact stats (total)"
   },
+  "submission": {
+    "title": "Submit a team",
+    "intro": "Submit either of the following:",
+    "simulation": "A link to a team simulation.",
+    "dummy": "A video of a 1-minute Dummy fight, showing character stats, weapons and artifacts.",
+    "openForm": "Open form"
+  },
   "feedback": {
     "title": "Leave feedback",
     "body": "Feedback and bug reports go to GitHub Issues. You will be taken to github.com and will need a GitHub account to post.",

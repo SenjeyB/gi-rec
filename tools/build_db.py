@@ -579,6 +579,23 @@ def build_char_index(names: Dict[str, dict], alias: Dict[str, str]) -> Dict[str,
     return idx
 
 
+def localized_char_names(names: dict, char_idx: dict, source: dict, lang: str) -> dict:
+    chars = {char_idx[key]: label for key, label in source.items() if key in char_idx}
+    elements_ru = {"anemo": "Анемо", "cryo": "Крио", "geo": "Гео", "electro": "Электро",
+                   "dendro": "Дендро", "hydro": "Гидро", "pyro": "Пиро"}
+    for key, entry in names.items():
+        if lang == "ru" and entry.get("nameRu"):
+            chars[key] = entry["nameRu"]
+        elif not chars.get(key):
+            traveler = re.match(r"^(?:lumine|aether)(\w+)$", key)
+            if traveler and lang == "ru":
+                elem = traveler.group(1)
+                chars[key] = f"ГГ ({elements_ru.get(elem, elem.title())})"
+            else:
+                chars[key] = entry.get("name") or key
+    return chars
+
+
 # ----------------------------------------------------------------- сборка
 
 def cons_cap(names: Dict[str, dict]) -> Dict[str, int]:
@@ -988,28 +1005,8 @@ def main():
 
     print("Локализованные названия...")
     localized = load_localized()
-    # ГГ у yatta одной записью "Traveler", а у нас по одному ключу на стихию
-    ELEM_RU = {"anemo": "Анемо", "cryo": "Крио", "geo": "Гео", "electro": "Электро",
-               "dendro": "Дендро", "hydro": "Гидро", "pyro": "Пиро"}
     for lang, bucket in localized.items():
-        # ключи яtta — slug английского имени (kamisatoayaka); в names.json ключи
-        # короткие (ayaka), поэтому переводим через ту же карту алиасов
-        chars = {}
-        for slug_key, label in bucket["chars"].items():
-            own = char_idx.get(slug_key)
-            if own:
-                chars[own] = label
-        for key, entry in names.items():
-            if chars.get(key):
-                continue
-            m = re.match(r"^(?:lumine|aether)(\w+)$", key)
-            if m:
-                elem = m.group(1)
-                chars[key] = (f"ГГ ({ELEM_RU.get(elem, elem.title())})" if lang == "ru"
-                              else entry.get("name") or key)
-            else:
-                chars[key] = (entry.get("nameRu") if lang == "ru" else None) or entry.get("name") or key
-        bucket["chars"] = chars
+        bucket["chars"] = localized_char_names(names, char_idx, bucket["chars"], lang)
         # на сайте только прямые кавычки, а в игровых названиях бывают ёлочки
         plain = lambda s: s.replace(chr(0xAB), '"').replace(chr(0xBB), '"')
         # оставляем только то, что реально встречается на сайте
