@@ -215,7 +215,7 @@
     "artTotals": "Artifact stats (total)"
   },
   "submission": {
-    "title": "Submit a team",
+    "title": "Suggest a team",
     "intro": "Submit either of the following:",
     "simulation": "A link to a team simulation.",
     "dummy": "A video of a 1-minute Dummy fight, showing character stats, weapons and artifacts.",
