@@ -222,6 +222,13 @@
     "artTotals": "Artifact stats (total)"
   },
   "acquisitions": {
+    "reference": "Inventory → team",
+    "none": "None",
+    "noBaseline": "No comparable DPS baseline",
+    "baselineDps": "Baseline: {before} → {after} DPS",
+    "baseline": "Without extra constellations or weapons",
+    "upgraded": "With the suggested upgrades",
+    "compare": "Compare",
     "new": "New",
     "cost": "Required acquisitions: {n} of {limit}",
     "weapon": "5★ weapon"

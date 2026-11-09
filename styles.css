@@ -748,6 +748,14 @@ body.sheet-open{overflow:hidden}
 .acquisition-tag.is-weapon{border-color:rgba(196,181,253,.4);background:rgba(196,181,253,.08);color:#ddd6fe}
 .acquisition-tag.is-weapon img{background:rgba(226,232,240,.25)}
 .acquisition-cost{padding:3px 6px;font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.acquisition-reference{flex-basis:100%;font-size:11px;color:var(--muted)}
+.dps-comparison{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:12px;line-height:1.4;color:#cbd5e1}
+.team-row>.dps-comparison{order:6;flex-basis:100%}
+.comparison-values{font-variant-numeric:tabular-nums}
+.comparison-delta{color:#86efac;font-weight:600;font-variant-numeric:tabular-nums}
+.dps-comparison .small-btn{font-size:11px;padding:4px 7px}
+.comparison-label{font-size:13px;font-weight:600;margin:4px 0 10px}
+.comparison-sheet .team-row{margin-bottom:22px}
 .team-row>.acquisition-list{order:5;flex-basis:100%;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
 .member-cell.needs-upgrade{border-color:rgba(251,191,36,.6);background:rgba(251,191,36,.06)}
 .missing-group{flex-wrap:wrap;min-width:0}

@@ -1,6 +1,10 @@
 ## Upcoming features:
 - Saving your own teams
 
+## 3.0.0 (2026/11/10)
+- Fully redesigned UI
+- Added weapon and constellation recommendations
+
 ## 2.5.0 (2026/11/08)
 - Fixed the Russian names of Mitya and Valeriy
 - Added a form for suggesting your own teams

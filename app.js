@@ -5,6 +5,7 @@ import { copiesNeeded, subtractCopies, haveCopies, charactersInDb, meta as dbMet
 import * as draft from './js/draft.js';
 import { groupKeys } from './js/store.js';
 import { openCharacterWindow } from './js/charwindow.js';
+import { openSheet } from './js/sheet.js';
 
 let WEAPON_NAMES = {};
 let SET_NAMES = {};
@@ -82,7 +83,7 @@ function viewControls(){
 
 let NAMES = {};
 
-function buildTeamRow(team, owned, extraCls){
+function buildTeamRow(team, owned, extraCls, showComparison = true){
   const row = createEl('div','team-row' + (extraCls ? ' ' + extraCls : ''));
   const members = createEl('div','members');
   team.members.forEach((m, mi)=>{
@@ -94,6 +95,10 @@ function buildTeamRow(team, owned, extraCls){
   if(source) row.appendChild(source);
   const acquisitions = renderAcquisitions(team.acquisition);
   if(acquisitions) row.appendChild(acquisitions);
+  if(showComparison){
+    const comparison = renderDpsComparison(team,owned);
+    if(comparison) row.appendChild(comparison);
+  }
   if(team.build){
     const indicator = createEl('span','row-expand-indicator','⌄');
     indicator.setAttribute('aria-hidden','true');
@@ -158,6 +163,7 @@ function acquisitionTargets(plan){
 function renderAcquisitions(plan){
   if(!plan || !plan.cost) return null;
   const box = createEl('div','acquisition-list');
+  if(plan.constellations.length || plan.weapons.length) box.appendChild(createEl('span','acquisition-reference',T('acquisitions.reference','Inventory → team')));
   const newChars = new Set(plan.characters.map(item => item.char));
   const badge = (text, icon, kind)=>{
     const tag = createEl('span','acquisition-tag ' + kind);
@@ -176,7 +182,15 @@ function renderAcquisitions(plan){
     group.copies++;
     weaponGroups.set(key,group);
   }
+  const comparedWeapons = new Set();
   for(const item of weaponGroups.values()){
+    const comparison = plan.weaponComparison?.[item.weapon];
+    if(comparison){
+      if(comparedWeapons.has(item.weapon)) continue;
+      comparedWeapons.add(item.weapon);
+      badge(`${weaponLabel(item.weapon)}: ${refineList(comparison.owned)} → ${refineList(comparison.required)}`,`weapons/${item.weapon}.png`,'is-weapon');
+      continue;
+    }
     const refinement = item.from ? `R${item.from} → R${item.to}` : `R${item.to}`;
     badge(`${item.from ? '' : '+ '}${weaponLabel(item.weapon)} ${refinement}${item.copies > 1 ? ' ×'+item.copies : ''}`,`weapons/${item.weapon}.png`,'is-weapon');
   }
@@ -184,6 +198,41 @@ function renderAcquisitions(plan){
   const cost = createEl('span','acquisition-cost',`${plan.cost} / ${limit}`);
   cost.setAttribute('aria-label',T('acquisitions.cost','Required: {n} of {limit}',{n:plan.cost,limit}));
   box.appendChild(cost);
+  return box;
+}
+
+function refineList(values){
+  if(!values.length) return T('acquisitions.none','None');
+  const counts = new Map();
+  for(const refine of values) counts.set(refine,(counts.get(refine)||0)+1);
+  return [...counts].sort((a,b)=>b[0]-a[0]).map(([refine,count])=>`R${refine}${count > 1 ? ' ×'+count : ''}`).join(' + ');
+}
+
+function renderDpsComparison(team,owned){
+  if(!team.acquisition?.constellations.length && !team.acquisition?.weapons.length) return null;
+  const box = createEl('div','dps-comparison');
+  const base = team.comparison?.baseline;
+  if(!base){
+    box.appendChild(createEl('span','small muted',T('acquisitions.noBaseline','No comparable baseline in the database')));
+    return box;
+  }
+  const baseline = {...base,members:base.members || base.chars};
+  const delta = (team.dps / baseline.dps - 1) * 100;
+  box.appendChild(createEl('span','comparison-values',T('acquisitions.baselineDps','Baseline: {before} → {after} DPS',{
+    before:fmtDps(baseline.dps),after:fmtDps(team.dps),
+  })));
+  box.appendChild(createEl('span','comparison-delta',delta < 0.1 ? '+<0.1%' : `+${delta.toFixed(1)}%`));
+  const button = createEl('button','small-btn',T('acquisitions.compare','Compare'));
+  button.type = 'button';
+  button.addEventListener('click',event=>{
+    event.stopPropagation();
+    const sheet = openSheet({title:T('acquisitions.compare','Compare'),className:'sheet-wide comparison-sheet'});
+    sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.baseline','Without extra constellations or weapons')));
+    sheet.body.appendChild(buildTeamRow(baseline,owned,'',false));
+    sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.upgraded','With the suggested upgrades')));
+    sheet.body.appendChild(buildTeamRow(team,owned,'',false));
+  });
+  box.appendChild(button);
   return box;
 }
 
@@ -216,6 +265,7 @@ export async function start(ctx){
     kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
     assumed: !!t.assumed,
     acquisition: t.acquisition,
+    comparison: t.comparison,
     teamIndex: t.teamIndex, buildIndex: t.buildIndex,
   });
 
@@ -233,6 +283,7 @@ export async function start(ctx){
       origin: t.origin || null,
       assumed: !!t.assumed,
       acquisition: t.acquisition,
+      comparison: t.comparison,
       sims: t.sims || 0,
       kqmCons: !!t.kqmCons,
       kqmArt: !!t.kqmArt,
@@ -1310,6 +1361,8 @@ function renderSuggestions(list, owned){
       const dpsEl = dpsCell('team-dps', best);
       preview.appendChild(dpsEl);
       right.appendChild(preview);
+      const comparison = renderDpsComparison(best,owned);
+      if(comparison) right.appendChild(comparison);
     }
 
     card.appendChild(left);
@@ -1347,7 +1400,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, mode=
       const missingOthers = others.length - ownedCount;
       const totalMissing = s.acquisition ? s.acquisition.cost : (isOwned ? missingOthers : (1 + missingOthers));
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount, acquisition: s.acquisition});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount, acquisition: s.acquisition, comparison: s.comparison});
       }
     }
     if(candidates.length===0){ continue; }

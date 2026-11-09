@@ -30,7 +30,7 @@ export function weaponAcquisitions(required, owned) {
 
 export function acquisitionPlan(team, inventory, names, options = {}) {
   const characters = [], constellations = [], weapons = [];
-  const required = {};
+  const required = {}, weaponComparison = {};
   for (const slot of team.build || []) {
     const key = slot.char;
     const have = inventory.characters?.[key];
@@ -50,6 +50,10 @@ export function acquisitionPlan(team, inventory, names, options = {}) {
     const additions = weaponAcquisitions(slots, inventory.weapons?.[key] || []);
     if (additions.cost && !options.weapons) return null;
     weapons.push(...additions.changes);
+    if (additions.cost) weaponComparison[key] = {
+      owned: (inventory.weapons?.[key] || []).slice(),
+      required: slots.map(slot => slot.refine),
+    };
   }
   const cost = [...characters, ...constellations, ...weapons].reduce((sum, item) => sum + item.cost, 0);
   const signature = JSON.stringify({
@@ -57,18 +61,37 @@ export function acquisitionPlan(team, inventory, names, options = {}) {
     constellations: constellations.map(x => [x.char, x.from, x.to]).sort(),
     weapons: weapons.map(x => [x.weapon, x.from, x.to]).sort(),
   });
-  return { characters, constellations, weapons, cost, signature };
+  return { characters, constellations, weapons, cost, signature, weaponComparison };
+}
+
+function comparisonKey(team) {
+  if (team.origin || !team.build?.length || team.build.some(slot => !slot.sets?.length)) return null;
+  const equipment = team.build.map(slot => [slot.char, slot.sets.map(set => [set.key, set.pieces]).sort()])
+    .sort((a, b) => a[0].localeCompare(b[0]));
+  return JSON.stringify([!!team.assumed, equipment]);
 }
 
 export function affordableTeams(teams, inventory, names, options, budget) {
   const unique = new Map();
+  const baselines = new Map();
   for (const team of teams) {
     const acquisition = acquisitionPlan(team, inventory, names, options);
     if (!acquisition || acquisition.cost > budget) continue;
+    if (!acquisition.constellations.length && !acquisition.weapons.length) {
+      const baseKey = comparisonKey(team);
+      if (baseKey && (!baselines.has(baseKey) || team.dps > baselines.get(baseKey).dps)) baselines.set(baseKey, { ...team, acquisition });
+    }
     const composition = team.chars || team.members || [];
     const key = composition.slice().sort().join(",") + acquisition.signature;
     const previous = unique.get(key);
     if (!previous || team.dps > previous.dps) unique.set(key, { ...team, acquisition });
   }
-  return [...unique.values()].sort((a, b) => b.dps - a.dps);
+  const candidates = [...unique.values()];
+  return candidates.flatMap(team => {
+    if (!team.acquisition.constellations.length && !team.acquisition.weapons.length) return [team];
+    const key = comparisonKey(team);
+    const baseline = key ? baselines.get(key) : null;
+    if (baseline && team.dps <= baseline.dps) return [];
+    return [{ ...team, comparison: baseline ? { baseline } : { baseline: null } }];
+  }).sort((a, b) => b.dps - a.dps);
 }

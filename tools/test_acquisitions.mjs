@@ -80,3 +80,47 @@ test("planning does not modify the user's inventory", () => {
   acquisitionPlan({ build: [slot("mavuika", 2, "sword", 3)] }, inventory, names, all);
   assert.deepEqual(inventory, before);
 });
+
+const withSets = build => build.map(member => ({ ...member, sets: [{ key: "set", pieces: 4 }] }));
+
+test("upgrades refer to the best available baseline with the same composition and artifact sets", () => {
+  const teams = [
+    { chars: ["mavuika"], dps: 200000, build: withSets([slot("mavuika", 2)]) },
+    { chars: ["mavuika"], dps: 100000, build: withSets([slot("mavuika")]) },
+    { chars: ["mavuika"], dps: 120000, build: withSets([slot("mavuika")]) },
+    { chars: ["mavuika"], dps: 180000, build: [{ ...slot("mavuika"), sets: [{ key: "other", pieces: 4 }] }] },
+  ];
+  const result = affordableTeams(teams, { characters: { mavuika: { cons: 0 } } }, names, all, 2);
+  const upgrade = result.find(team => team.acquisition.cost === 2);
+  assert.equal(upgrade.comparison.baseline.dps, 120000);
+});
+
+test("comparisons do not use Boss Runs, different sets, or assumptions as verified baselines", () => {
+  const cases = [
+    { origin: "clear" },
+    { assumed: true },
+    { build: [{ ...slot("mavuika"), sets: [{ key: "other", pieces: 4 }] }] },
+  ];
+  for (const extra of cases) {
+    const target = { chars: ["mavuika"], dps: 200000, build: withSets([slot("mavuika", 2)]) };
+    const baseline = { chars: ["mavuika"], dps: 100000, build: withSets([slot("mavuika")]), ...extra };
+    const result = affordableTeams([target, baseline], { characters: { mavuika: { cons: 0 } } }, names, all, 2);
+    assert.equal(result.find(team => team.acquisition.cost === 2).comparison.baseline, null);
+  }
+});
+
+test("recommendations do not spend extra acquisitions for a weaker comparable build", () => {
+  const teams = [
+    { chars: ["mavuika"], dps: 90000, build: withSets([slot("mavuika", 2)]) },
+    { chars: ["mavuika"], dps: 100000, build: withSets([slot("mavuika")]) },
+  ];
+  assert.equal(affordableTeams(teams, { characters: { mavuika: { cons: 0 } } }, names, all, 2).length, 1);
+});
+
+test("weapon comparisons retain owned and required copies, including allocated copies", () => {
+  const team = { build: [slot("mavuika", 0, "sword"), slot("furina", 0, "sword"), slot("bennett", 6, "sword")] };
+  const inventory = { characters: { mavuika: { cons: 0 }, furina: { cons: 0 }, bennett: { cons: 6 } }, weapons: { sword: [5] } };
+  const plan = acquisitionPlan(team, inventory, names, all);
+  assert.equal(plan.cost, 2);
+  assert.deepEqual(plan.weaponComparison.sword, { owned: [5], required: [1, 1, 1] });
+});
