@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { acquisitionPlan, weaponAcquisitions, affordableTeams } from "../js/acquisitions.js";
+import { acquisitionPlan, weaponAcquisitions, affordableTeams, buildDifferences } from "../js/acquisitions.js";
 
 const names = { mavuika: { stars: 4 }, furina: { stars: 4 }, bennett: { stars: 2 }, luminecryo: { stars: 1 } };
 const slot = (char, cons = 0, weapon = null, refine = 1) => ({ char, cons, weapon, refine, fiveStar: !!weapon });
@@ -83,7 +83,7 @@ test("planning does not modify the user's inventory", () => {
 
 const withSets = build => build.map(member => ({ ...member, sets: [{ key: "set", pieces: 4 }] }));
 
-test("upgrades refer to the best available baseline with the same composition and artifact sets", () => {
+test("upgrades refer to the best available baseline of the same composition regardless of artifacts", () => {
   const teams = [
     { chars: ["mavuika"], dps: 200000, build: withSets([slot("mavuika", 2)]) },
     { chars: ["mavuika"], dps: 100000, build: withSets([slot("mavuika")]) },
@@ -92,14 +92,14 @@ test("upgrades refer to the best available baseline with the same composition an
   ];
   const result = affordableTeams(teams, { characters: { mavuika: { cons: 0 } } }, names, all, 2);
   const upgrade = result.find(team => team.acquisition.cost === 2);
-  assert.equal(upgrade.comparison.baseline.dps, 120000);
+  assert.equal(upgrade.comparison.baseline.dps, 180000);
 });
 
-test("comparisons do not use Boss Runs, different sets, or assumptions as verified baselines", () => {
+test("comparisons do not use Boss Runs, different characters, or assumptions as verified baselines", () => {
   const cases = [
     { origin: "clear" },
     { assumed: true },
-    { build: [{ ...slot("mavuika"), sets: [{ key: "other", pieces: 4 }] }] },
+    { chars: ["furina"], build: withSets([slot("furina")]) },
   ];
   for (const extra of cases) {
     const target = { chars: ["mavuika"], dps: 200000, build: withSets([slot("mavuika", 2)]) };
@@ -107,6 +107,15 @@ test("comparisons do not use Boss Runs, different sets, or assumptions as verifi
     const result = affordableTeams([target, baseline], { characters: { mavuika: { cons: 0 } } }, names, all, 2);
     assert.equal(result.find(team => team.acquisition.cost === 2).comparison.baseline, null);
   }
+});
+
+test("artifact data is not required for a composition baseline", () => {
+  const teams = [
+    { chars: ["mavuika"], dps: 200000, build: withSets([slot("mavuika", 2)]) },
+    { chars: ["mavuika"], dps: 100000, build: [slot("mavuika")] },
+  ];
+  const result = affordableTeams(teams, { characters: { mavuika: { cons: 0 } } }, names, all, 2);
+  assert.equal(result.find(team => team.acquisition.cost === 2).comparison.baseline.dps, 100000);
 });
 
 test("recommendations do not spend extra acquisitions for a weaker comparable build", () => {
@@ -123,4 +132,49 @@ test("weapon comparisons retain owned and required copies, including allocated c
   const plan = acquisitionPlan(team, inventory, names, all);
   assert.equal(plan.cost, 2);
   assert.deepEqual(plan.weaponComparison.sword, { owned: [5], required: [1, 1, 1] });
+});
+
+const huTaoBaseline = { chars: ["hutao", "yelan", "kazuha", "bennett"], dps: 76724, build: [
+  { ...slot("hutao", 0, "balladofthefjords"), fiveStar: false },
+  { ...slot("yelan", 0, "favoniuswarbow", 5), fiveStar: false },
+  { ...slot("kazuha", 0, "favoniussword", 3), fiveStar: false },
+  { ...slot("bennett", 6, "thealleyflash"), fiveStar: false },
+] };
+const huTaoUpgrade = { chars: huTaoBaseline.chars, dps: 106623, build: [
+  slot("hutao", 1, "staffofthescarletsands"),
+  slot("yelan", 2, "elegyfortheend"),
+  { ...slot("kazuha", 0, "xiphosmoonlight"), fiveStar: false },
+  huTaoBaseline.build[3],
+] };
+const huTaoNames = { hutao: { stars: 4 }, yelan: { stars: 4 }, kazuha: { stars: 4 }, bennett: { stars: 2 } };
+
+test("Hu Tao's C1 proposal also charges for Yelan C2 and both missing five-star weapons", () => {
+  const inventory = { characters: { hutao: { cons: 0 }, yelan: { cons: 0 }, kazuha: { cons: 0 }, bennett: { cons: 6 } } };
+  assert.equal(acquisitionPlan(huTaoUpgrade, inventory, huTaoNames, all).cost, 5);
+  assert(!affordableTeams([huTaoBaseline, huTaoUpgrade], inventory, huTaoNames, all, 4).some(team => team.dps === 106623));
+  assert(affordableTeams([huTaoBaseline, huTaoUpgrade], inventory, huTaoNames, all, 5).some(team => team.dps === 106623));
+});
+
+test("build differences include owned Yelan C2 and Elegy even when only Hu Tao C1 needs acquiring", () => {
+  const inventory = {
+    characters: { hutao: { cons: 0 }, yelan: { cons: 2 }, kazuha: { cons: 0 }, bennett: { cons: 6 } },
+    weapons: { staffofthescarletsands: [1], elegyfortheend: [1] },
+  };
+  const result = affordableTeams([huTaoBaseline, huTaoUpgrade], inventory, huTaoNames, all, 1);
+  const upgrade = result.find(team => team.dps === 106623);
+  assert.equal(upgrade.acquisition.cost, 1);
+  assert.equal(upgrade.acquisition.weapons.length, 0);
+  assert.deepEqual(upgrade.comparison.changes.map(change => [change.char, change.cons, change.weapon?.to.key]), [
+    ["hutao", { from: 0, to: 1 }, "staffofthescarletsands"],
+    ["yelan", { from: 0, to: 2 }, "elegyfortheend"],
+    ["kazuha", null, "xiphosmoonlight"],
+  ]);
+});
+
+test("build differences match character keys, preserve refinement decreases, and ignore artifacts", () => {
+  const baseline = { build: [slot("mavuika", 0, "sword", 5), slot("furina")] };
+  const target = { build: withSets([slot("furina"), slot("mavuika", 0, "sword", 3)]) };
+  assert.deepEqual(buildDifferences(baseline, target), [{ char: "mavuika", cons: null, weapon: {
+    from: { key: "sword", refine: 5 }, to: { key: "sword", refine: 3 },
+  } }]);
 });

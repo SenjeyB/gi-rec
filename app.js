@@ -60,6 +60,7 @@ function appendMemberCell(host, key, team, idx, pillClass){
   const cell = createEl('div','member-cell');
   if(pillClass) cell.classList.add(pillClass);
   if([...(team?.acquisition?.constellations || []), ...(team?.acquisition?.weapons || [])].some(item => item.char === key)) cell.classList.add('needs-upgrade');
+  if(team?.comparisonChanges?.some(item => item.char === key)) cell.classList.add('differs-from-baseline');
 
   const avatarWrap = createEl('div','member-portrait');
   const img = createAvatarImg(key,'member-avatar');
@@ -83,19 +84,24 @@ function viewControls(){
 
 let NAMES = {};
 
-function buildTeamRow(team, owned, extraCls, showComparison = true){
+function buildTeamRow(team, owned, extraCls, options = {}){
   const row = createEl('div','team-row' + (extraCls ? ' ' + extraCls : ''));
   const members = createEl('div','members');
+  const shown = options.changes ? {...team,comparisonChanges:options.changes} : team;
   team.members.forEach((m, mi)=>{
-    appendMemberCell(members, m, team, mi, (owned && !owned.has(m)) ? 'missing' : 'owned');
+    appendMemberCell(members, m, shown, mi, (owned && !owned.has(m)) ? 'missing' : 'owned');
   });
   row.appendChild(members);
   row.appendChild(dpsCell('team-dps', team));
   const source = sourceLink(team, 'team-source');
   if(source) row.appendChild(source);
-  const acquisitions = renderAcquisitions(team.acquisition);
+  const acquisitions = options.acquisitions === false ? null : renderAcquisitions(team.acquisition);
   if(acquisitions) row.appendChild(acquisitions);
-  if(showComparison){
+  if(options.changes){
+    const changes = renderBuildDifferences(options.changes,team.acquisition);
+    if(changes) row.appendChild(changes);
+  }
+  if(options.comparison !== false){
     const comparison = renderDpsComparison(team,owned);
     if(comparison) row.appendChild(comparison);
   }
@@ -208,6 +214,32 @@ function refineList(values){
   return [...counts].sort((a,b)=>b[0]-a[0]).map(([refine,count])=>`R${refine}${count > 1 ? ' ×'+count : ''}`).join(' + ');
 }
 
+function renderBuildDifferences(changes,plan){
+  if(!changes.length) return null;
+  const box = createEl('div','acquisition-list build-differences');
+  box.appendChild(createEl('span','acquisition-reference',T('acquisitions.buildReference','Between builds')));
+  const badge = (text,icon,kind)=>{
+    const tag = createEl('span','acquisition-tag '+kind);
+    const img = new Image(); img.src = icon; img.alt = '';
+    tag.append(img,createEl('span',null,text));
+    box.appendChild(tag);
+  };
+  const weaponText = weapon=>weapon.key ? `${weaponLabel(weapon.key)} R${weapon.refine}` : T('acquisitions.none','None');
+  for(const change of changes){
+    if(change.cons) badge(`${charLabel(change.char)} C${change.cons.from} → C${change.cons.to}`,`characters/${change.char}.png`,'is-constellation');
+    if(change.weapon){
+      const {from,to} = change.weapon;
+      const text = from.key === to.key ? `${weaponLabel(to.key)} R${from.refine} → R${to.refine}` : `${weaponText(from)} → ${weaponText(to)}`;
+      badge(`${charLabel(change.char)}: ${text}`,`characters/${change.char}.png`,'is-weapon');
+    }
+  }
+  if(plan?.cost){
+    const limit = document.getElementById('mode')?.value || plan.cost;
+    box.appendChild(createEl('span','acquisition-cost',T('acquisitions.cost','Required: {n} of {limit}',{n:plan.cost,limit})));
+  }
+  return box;
+}
+
 function renderDpsComparison(team,owned){
   if(!team.acquisition?.constellations.length && !team.acquisition?.weapons.length) return null;
   const box = createEl('div','dps-comparison');
@@ -221,16 +253,17 @@ function renderDpsComparison(team,owned){
   box.appendChild(createEl('span','comparison-values',T('acquisitions.baselineDps','Baseline: {before} → {after} DPS',{
     before:fmtDps(baseline.dps),after:fmtDps(team.dps),
   })));
-  box.appendChild(createEl('span','comparison-delta',delta < 0.1 ? '+<0.1%' : `+${delta.toFixed(1)}%`));
+  const difference = delta < 0.1 ? '+<0.1%' : `+${delta.toFixed(1)}%`;
+  box.appendChild(createEl('span','comparison-delta',T('acquisitions.buildDelta','Build difference: {value}',{value:difference})));
   const button = createEl('button','small-btn',T('acquisitions.compare','Compare'));
   button.type = 'button';
   button.addEventListener('click',event=>{
     event.stopPropagation();
     const sheet = openSheet({title:T('acquisitions.compare','Compare'),className:'sheet-wide comparison-sheet'});
-    sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.baseline','Without extra constellations or weapons')));
-    sheet.body.appendChild(buildTeamRow(baseline,owned,'',false));
+    sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.baseline','Best available build')));
+    sheet.body.appendChild(buildTeamRow(baseline,owned,'',{comparison:false}));
     sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.upgraded','With the suggested upgrades')));
-    sheet.body.appendChild(buildTeamRow(team,owned,'',false));
+    sheet.body.appendChild(buildTeamRow(team,owned,'',{comparison:false,acquisitions:false,changes:team.comparison.changes}));
   });
   box.appendChild(button);
   return box;

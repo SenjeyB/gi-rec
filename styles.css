@@ -758,6 +758,9 @@ body.sheet-open{overflow:hidden}
 .comparison-sheet .team-row{margin-bottom:22px}
 .team-row>.acquisition-list{order:5;flex-basis:100%;border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
 .member-cell.needs-upgrade{border-color:rgba(251,191,36,.6);background:rgba(251,191,36,.06)}
+.member-cell.differs-from-baseline{border-color:rgba(251,191,36,.6);background:rgba(251,191,36,.06)}
+.build-differences .acquisition-tag{max-width:100%;white-space:normal}
+.build-differences .acquisition-tag span{min-width:0;overflow-wrap:anywhere}
 .missing-group{flex-wrap:wrap;min-width:0}
 .squad:has(.acquisition-list){gap:14px;flex-wrap:wrap}
 .squad:has(.acquisition-list) .left{flex-direction:column;align-items:flex-start;flex:1 1 250px;min-width:0}

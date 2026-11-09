@@ -65,10 +65,22 @@ export function acquisitionPlan(team, inventory, names, options = {}) {
 }
 
 function comparisonKey(team) {
-  if (team.origin || !team.build?.length || team.build.some(slot => !slot.sets?.length)) return null;
-  const equipment = team.build.map(slot => [slot.char, slot.sets.map(set => [set.key, set.pieces]).sort()])
-    .sort((a, b) => a[0].localeCompare(b[0]));
-  return JSON.stringify([!!team.assumed, equipment]);
+  if (team.origin || !team.build?.length) return null;
+  return JSON.stringify([!!team.assumed, team.build.map(slot => slot.char).sort()]);
+}
+
+export function buildDifferences(baseline, team) {
+  const previous = new Map((baseline.build || []).map(slot => [slot.char, slot]));
+  return (team.build || []).flatMap(slot => {
+    const before = previous.get(slot.char);
+    if (!before) return [];
+    const cons = before.cons !== slot.cons ? { from: before.cons, to: slot.cons } : null;
+    const weapon = before.weapon !== slot.weapon || before.refine !== slot.refine ? {
+      from: { key: before.weapon, refine: before.refine },
+      to: { key: slot.weapon, refine: slot.refine },
+    } : null;
+    return cons || weapon ? [{ char: slot.char, cons, weapon }] : [];
+  });
 }
 
 export function affordableTeams(teams, inventory, names, options, budget) {
@@ -92,6 +104,6 @@ export function affordableTeams(teams, inventory, names, options, budget) {
     const key = comparisonKey(team);
     const baseline = key ? baselines.get(key) : null;
     if (baseline && team.dps <= baseline.dps) return [];
-    return [{ ...team, comparison: baseline ? { baseline } : { baseline: null } }];
+    return [{ ...team, comparison: { baseline: baseline || null, changes: baseline ? buildDifferences(baseline, team) : [] } }];
   }).sort((a, b) => b.dps - a.dps);
 }
