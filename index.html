@@ -16,7 +16,7 @@
   <meta property="twitter:title" content="GI-Rec - Genshin Impact Character Pulling Recommendations & Tier Lists">
   <meta property="twitter:description" content="Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!">
   <meta property="twitter:image" content="https://senjeyb.github.io/gi-rec/preview.png">
-  <link rel="stylesheet" href="styles.css?v=7130b40be7">
+  <link rel="stylesheet" href="styles.css?v=169f20d6ec">
   <link rel="icon" href="https://senjeyb.github.io/gi-rec/assets/favicon.png" type="image/png" sizes="64x64">
   <link rel="apple-touch-icon" href="https://senjeyb.github.io/gi-rec/assets/apple-touch-icon.png">
   <link rel="stylesheet" href="teamdetail.css?v=a8eb08e82c">
@@ -37,7 +37,7 @@
     <div class="ui-scale-inner">
       <header class="app-header">
         <button id="drawer-toggle" class="drawer-toggle" type="button"
-                aria-expanded="false" data-i18n-attr="aria-label:filters.title">☰</button>
+                aria-expanded="false" data-i18n-attr="aria-label:roster.title">☰</button>
         <div class="brand">
           <img src="assets/logo.png" alt="GI-Rec" class="logo-img" width="32" height="32" />
           <div class="titles">
@@ -48,8 +48,11 @@
         <div class="app-nav">
           <div id="lang-switch" class="lang-switch" role="group"></div>
           <a class="nav-link" href="en/characters/" data-i18n="nav.catalog" data-i18n-attr="href:about.catalogHref">Characters</a>
-          <button id="open-tour" class="nav-link" type="button" data-i18n="tour.open">Guide</button>
           <button id="open-team-submission" class="nav-link" type="button" data-i18n="submission.title">Suggest a team</button>
+          <details id="header-more" class="header-more">
+            <summary class="nav-link" data-i18n="nav.more">More</summary>
+            <div class="header-more-menu">
+          <button id="open-tour" class="nav-link" type="button" data-i18n="tour.open">Guide</button>
           <button id="open-feedback" class="nav-link" type="button" data-i18n="app.feedback">Leave feedback</button>
           <button id="open-updates" class="nav-link" type="button" data-i18n="app.updates">Updates</button>
           <a class="nav-link" href="https://github.com/SenjeyB/gi-rec" target="_blank" rel="noopener"
@@ -57,38 +60,38 @@
             <svg width="20" height="20" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
               <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
             </svg>
-            <span class="sr-only">GitHub</span>
+            <span>GitHub</span>
           </a>
+            </div>
+          </details>
         </div>
       </header>
+
+      <nav class="workspace-nav side-nav" data-i18n-attr="aria-label:nav.sections" aria-label="Sections">
+        <a href="#recommendations" class="nav-link" data-view="recommendations" data-i18n="nav.recommendations">Recommendations</a>
+        <a href="#tierlist" class="nav-link" data-view="tierlist" data-i18n="nav.tierlist">Tier List</a>
+        <a href="#team-builder" class="nav-link" data-view="team-builder" data-i18n="nav.teamBuilder">Team Builder</a>
+        <a href="#best-teams" class="nav-link" data-view="best-teams" data-i18n="nav.bestTeams">Best Teams</a>
+        <a href="#inventory" class="nav-link" data-view="inventory" data-i18n="nav.inventory">Inventory</a>
+      </nav>
 
       <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
       <div class="app-container">
         <aside class="sidebar" aria-label="Settings panel">
           <div class="side-row">
-            <div class="side-card">
-              <h2 class="side-title" data-i18n="nav.mode">Mode</h2>
-              <div class="side-nav" role="tablist" aria-label="View switcher">
-                <a href="#recommendations" class="nav-link" data-view="recommendations" role="tab" data-i18n="nav.recommendations">Recommendations</a>
-                <a href="#tierlist" class="nav-link" data-view="tierlist" role="tab" data-i18n="nav.tierlist">Tier List</a>
-                <a href="#team-builder" class="nav-link" data-view="team-builder" role="tab" data-i18n="nav.teamBuilder">Team Builder</a>
-                <a href="#best-teams" class="nav-link" data-view="best-teams" role="tab" data-i18n="nav.bestTeams">Best Teams</a>
-                <a href="#inventory" class="nav-link" role="tab" data-i18n="nav.inventory">Inventory</a>
-              </div>
-            </div>
             <div class="side-card" id="settings-card">
-              <h2 class="side-title" data-i18n="settings.title">Settings</h2>
-              <label for="mode" class="side-label" data-i18n="settings.willingToObtain">Willing to obtain:</label>
-              <select id="mode" class="side-input">
-                <option value="0" data-i18n="settings.characters_0">0 characters</option>
-                <option value="1" data-i18n="settings.characters_1" selected>1 character</option>
-                <option value="2" data-i18n="settings.characters_2">2 characters</option>
-                <option value="3" data-i18n="settings.characters_3">3 characters</option>
-                <option value="4" data-i18n="settings.characters_4">4 characters</option>
-              </select>
+              <h2 class="side-title" data-i18n="filters.title">Filters</h2>
+              <label for="mode" class="side-label" data-i18n="settings.willingToObtain">Acquisition limit:</label>
+              <input id="mode" class="side-input" type="number" value="1" min="0" max="48" step="1" inputmode="numeric">
+              <fieldset id="recommendation-options" class="recommendation-options">
+                <legend data-i18n="settings.suggest">Suggest</legend>
+                <label class="side-check"><input id="suggest-characters" type="checkbox" data-default="true" checked><span data-i18n="settings.suggestCharacters">New characters</span></label>
+                <label class="side-check"><input id="suggest-constellations" type="checkbox"><span data-i18n="settings.suggestConstellations">5★ constellations</span></label>
+                <label class="side-check"><input id="suggest-weapons" type="checkbox"><span data-i18n="settings.suggestWeapons">5★ weapons</span></label>
+              </fieldset>
               <label for="cons-mode" class="side-label" data-i18n="settings.consMode">Constellations:</label>
               <select id="cons-mode" class="side-input" data-default="mine">
-                <option value="standard" data-i18n="settings.consStandard">Standard</option>
+                <option value="standard" data-i18n="settings.consStandard">5★ C0, 4★ C6</option>
                 <option value="mine" data-i18n="settings.consMine">With mine</option>
                 <option value="any" data-i18n="settings.consAny">Any</option>
               </select>
@@ -128,13 +131,16 @@
           <div class="side-card" id="roster-card">
             <h2 class="side-title" data-i18n="roster.title">Quick inventory settings</h2>
             <div class="side-actions" style="margin-bottom:8px">
-              <button id="open-import" type="button" data-i18n="roster.import">Import Characters</button>
-              <a class="macro-btn" href="#inventory" data-i18n="roster.openInventory">Open full Inventory editor</a>
+              <button id="open-import" type="button" data-i18n="roster.import">Import</button>
+              <a class="macro-btn" href="#inventory" data-i18n="roster.openInventory">Inventory editor</a>
             </div>
             <div id="good-status" class="small muted"></div>
             <input id="char-search" class="side-input" type="search"
                    data-i18n-attr="placeholder:roster.search, aria-label:roster.searchLabel" autocomplete="off" />
+            <details class="roster-options">
+              <summary><span data-i18n="roster.selectionTools">Filters and quick selection</span><span id="roster-filter-count" hidden></span></summary>
             <div id="owned-filters" class="filter-bar" data-i18n-attr="aria-label:roster.filterLabel"></div>
+            <button id="reset-roster-filters" type="button" class="macro-btn" data-i18n="filters.reset" hidden>Reset filters</button>
             <div class="macro-buttons">
               <button id="macro-free" type="button" class="macro-btn" data-i18n="roster.allFree">All free</button>
               <button id="macro-4star" type="button" class="macro-btn" data-i18n="roster.all4star">All 4★</button>
@@ -142,6 +148,7 @@
               <button id="macro-all" type="button" class="macro-btn" data-i18n="roster.all">All</button>
               <button id="macro-clear" type="button" class="macro-btn" data-i18n="roster.clearAll">Clear all</button>
             </div>
+            </details>
             <div class="draft-actions">
               <button id="draft-rollback" type="button" class="macro-btn" data-i18n="roster.rollback" disabled>Revert</button>
               <button id="draft-save" type="button" class="macro-btn draft-save" data-i18n="roster.save" disabled>Save to inventory</button>
@@ -160,6 +167,10 @@
           <section id="view-container">
             <div id="view-header" class="view-header">
               <h1 id="view-title" data-i18n="nav.recommendations">Recommendations</h1>
+              <div id="active-filter-summary" class="active-filter-summary" hidden>
+                <span id="active-filter-count" aria-live="polite"></span>
+                <button id="view-reset-filters" type="button" class="macro-btn" data-i18n="filters.reset">Reset filters</button>
+              </div>
             </div>
             <div class="view-content view-box">
               <div id="view-controls" class="view-controls"></div>
@@ -184,7 +195,8 @@
   </button>
   <nav id="mobile-nav" class="mobile-nav" aria-label="Views"></nav>
 
-  <script type="module" src="js/main.js"></script>
+  <script type="importmap" id="app-modules">{"imports":{"./app.js":"./app.js?v=b9ea538278","./js/acquisitions.js":"./js/acquisitions.js?v=a9f1a092a9","./js/charwindow.js":"./js/charwindow.js?v=c7de0f74c5","./js/db.js":"./js/db.js?v=ad16541d2b","./js/draft.js":"./js/draft.js?v=7df7f12366","./js/good.js":"./js/good.js?v=7bb1c6f2bc","./js/i18n.js":"./js/i18n.js?v=99e49da2c2","./js/inventory.js":"./js/inventory.js?v=fd11c7ca57","./js/labels.js":"./js/labels.js?v=ca0e220029","./js/main.js":"./js/main.js?v=8da2119b1b","./js/mobile.js":"./js/mobile.js?v=dcf9bedf67","./js/paths.js":"./js/paths.js?v=9dc1449202","./js/sheet.js":"./js/sheet.js?v=6f263d8eef","./js/staticteams.js":"./js/staticteams.js?v=1001bffc4b","./js/store.js":"./js/store.js?v=eadc930fa5","./js/teamdetail.js":"./js/teamdetail.js?v=6943c1d43c","./js/tour.js":"./js/tour.js?v=c0cb9d7bea"}}</script>
+  <script type="module" src="js/main.js?v=8da2119b1b"></script>
   <script type="application/ld+json" id="structured-data">
     {
         "@context": "https://schema.org",

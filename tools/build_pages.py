@@ -632,8 +632,7 @@ def sitemap(data: Data, paths: List[tuple]) -> str:
             'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(rows) + "\n</urlset>\n")
 
 
-def stamp_app_styles(data: Data) -> int:
-    """Та же версия по содержимому для styles.css основного приложения."""
+def stamp_app_assets(data: Data) -> int:
     path = os.path.join(SITE, "index.html")
     with open(path, "r", encoding="utf-8") as f:
         text = f.read()
@@ -643,6 +642,18 @@ def stamp_app_styles(data: Data) -> int:
                        f'href="{css}?v={asset_version(css)}"', fresh)
     fresh = re.sub(r'<meta name="keywords" content="[^"]*">',
                    f'<meta name="keywords" content="{esc(", ".join(data.keywords("en", data.names)))}">', fresh)
+    modules = ["app.js"] + [f"js/{name}" for name in sorted(os.listdir(os.path.join(SITE, "js")))
+                            if name.endswith(".js")]
+    imports = {f"./{path}": f"./{path}?v={asset_version(path)}" for path in modules}
+    module_map = '<script type="importmap" id="app-modules">' + json.dumps({"imports": imports}, separators=(",", ":")) + '</script>'
+    pattern = r'<script type="importmap" id="app-modules">.*?</script>'
+    if re.search(pattern, fresh, re.S):
+        fresh = re.sub(pattern, lambda _: module_map, fresh, flags=re.S)
+    else:
+        fresh = re.sub(r'(<script type="module" src="js/main\.js(?:\?v=[0-9a-f]+)?"></script>)',
+                       lambda match: module_map + "\n  " + match.group(1), fresh)
+    fresh = re.sub(r'src="js/main\.js(?:\?v=[0-9a-f]+)?"',
+                   f'src="js/main.js?v={asset_version("js/main.js")}"', fresh)
     return int(write("index.html", fresh))
 
 
@@ -682,7 +693,7 @@ def main() -> int:
     # запасной sitemap: простой список адресов, его Google тоже принимает
     urls = [BASE_URL] + [f"{BASE_URL}{lang}/{path}" for path, _ in paths for lang in LANGS]
     changed += write("sitemap.txt", "\n".join(urls) + "\n")
-    changed += stamp_app_styles(data)
+    changed += stamp_app_assets(data)
     print(f"Страниц: {len(written)} (+ sitemap.xml), изменено файлов: {changed}")
     return 0
 

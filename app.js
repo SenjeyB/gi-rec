@@ -58,6 +58,7 @@ function appendMemberCell(host, key, team, idx, pillClass){
   const slot = (team && team.build) ? team.build[idx] : null;
   const cell = createEl('div','member-cell');
   if(pillClass) cell.classList.add(pillClass);
+  if([...(team?.acquisition?.constellations || []), ...(team?.acquisition?.weapons || [])].some(item => item.char === key)) cell.classList.add('needs-upgrade');
 
   const avatarWrap = createEl('div','member-portrait');
   const img = createAvatarImg(key,'member-avatar');
@@ -91,7 +92,12 @@ function buildTeamRow(team, owned, extraCls){
   row.appendChild(dpsCell('team-dps', team));
   const source = sourceLink(team, 'team-source');
   if(source) row.appendChild(source);
+  const acquisitions = renderAcquisitions(team.acquisition);
+  if(acquisitions) row.appendChild(acquisitions);
   if(team.build){
+    const indicator = createEl('span','row-expand-indicator','⌄');
+    indicator.setAttribute('aria-hidden','true');
+    row.appendChild(indicator);
     row.classList.add('expandable');
     row.title = T('team.details','Team details');
     row.tabIndex = 0;
@@ -131,6 +137,56 @@ function createEl(tag,cls,txt){
   return el;
 }
 
+function renderEmptyState(container, message){
+  const box = createEl('div','empty-state');
+  box.appendChild(createEl('p','empty-state-title',message));
+  const actions = createEl('div','empty-state-actions');
+  const reset = createEl('button','inv-btn inv-btn-primary', T('filters.reset','Reset filters'));
+  reset.type = 'button';
+  reset.addEventListener('click', ()=> document.getElementById('reset-filters')?.click());
+  const inventory = createEl('a','nav-link', T('nav.inventory','Inventory'));
+  inventory.href = '#inventory';
+  actions.append(reset, inventory);
+  box.appendChild(actions);
+  container.appendChild(box);
+}
+
+function acquisitionTargets(plan){
+  return [...new Set([...(plan?.characters || []), ...(plan?.constellations || []), ...(plan?.weapons || [])].map(item => item.char))];
+}
+
+function renderAcquisitions(plan){
+  if(!plan || !plan.cost) return null;
+  const box = createEl('div','acquisition-list');
+  const newChars = new Set(plan.characters.map(item => item.char));
+  const badge = (text, icon, kind)=>{
+    const tag = createEl('span','acquisition-tag ' + kind);
+    if(icon){ const img = new Image(); img.src = icon; img.alt = ''; tag.appendChild(img); }
+    tag.appendChild(createEl('span',null,text));
+    box.appendChild(tag);
+  };
+  for(const item of plan.characters) badge(`${charLabel(item.char)}${item.to ? ' C'+item.to : ''} · ${T('acquisitions.new','New')}`,`characters/${item.char}.png`,'is-new');
+  for(const item of plan.constellations){
+    if(!newChars.has(item.char)) badge(`${charLabel(item.char)} C${item.from} → C${item.to}`,`characters/${item.char}.png`,'is-constellation');
+  }
+  const weaponGroups = new Map();
+  for(const item of plan.weapons){
+    const key = `${item.weapon}:${item.from}:${item.to}`;
+    const group = weaponGroups.get(key) || {...item, copies:0};
+    group.copies++;
+    weaponGroups.set(key,group);
+  }
+  for(const item of weaponGroups.values()){
+    const refinement = item.from ? `R${item.from} → R${item.to}` : `R${item.to}`;
+    badge(`${item.from ? '' : '+ '}${weaponLabel(item.weapon)} ${refinement}${item.copies > 1 ? ' ×'+item.copies : ''}`,`weapons/${item.weapon}.png`,'is-weapon');
+  }
+  const limit = document.getElementById('mode')?.value || plan.cost;
+  const cost = createEl('span','acquisition-cost',`${plan.cost} / ${limit}`);
+  cost.setAttribute('aria-label',T('acquisitions.cost','Required: {n} of {limit}',{n:plan.cost,limit}));
+  box.appendChild(cost);
+  return box;
+}
+
 export async function start(ctx){
   detailOptions = ctx?.detailOptions || (() => ({}));
   const names = ctx && ctx.names;
@@ -159,6 +215,7 @@ export async function start(ctx){
     build: t.build || null, src: t.src || null, origin: t.origin || null, sims: t.sims || 0,
     kqmCons: !!t.kqmCons, kqmArt: !!t.kqmArt,
     assumed: !!t.assumed,
+    acquisition: t.acquisition,
     teamIndex: t.teamIndex, buildIndex: t.buildIndex,
   });
 
@@ -175,6 +232,7 @@ export async function start(ctx){
       src: t.src || null,
       origin: t.origin || null,
       assumed: !!t.assumed,
+      acquisition: t.acquisition,
       sims: t.sims || 0,
       kqmCons: !!t.kqmCons,
       kqmArt: !!t.kqmArt,
@@ -220,6 +278,8 @@ export async function start(ctx){
     const mkChip = (group, key, label, iconSrc) => {
       const chip = createEl('button','filter-chip');
       chip.type = 'button';
+      chip.setAttribute('aria-label', label);
+      chip.title = label;
       const icon = new Image(); icon.src = iconSrc; icon.alt = ''; icon.className = 'icon';
       chip.appendChild(icon);
       chip.appendChild(createEl('span',null,label));
@@ -232,25 +292,30 @@ export async function start(ctx){
       sync();
       return chip;
     };
+    const group = (labelKey, fallback)=>{
+      const field = createEl('fieldset','filter-group');
+      field.appendChild(createEl('legend','filter-group-label',T(labelKey,fallback)));
+      const options = createEl('div','filter-group-options');
+      field.appendChild(options);
+      host.appendChild(field);
+      return options;
+    };
+    const elements = group(scope === 'bestTeams' ? 'filters.teamElements' : 'filters.characterElement','Element');
     const elOrder = ['anemo','cryo','dendro','electro','geo','hydro','pyro'];
     for(const e of elOrder){
       if(byElement.has(e)){
         const label = T('element.'+e, e[0].toUpperCase()+e.slice(1));
         const chip = mkChip('elements', e, label, `filters/Element_${e[0].toUpperCase()+e.slice(1)}.png`);
-        host.appendChild(chip);
+        elements.appendChild(chip);
       }
     }
-    if(scope === 'main' || scope === 'bestTeams'){
-      const br = document.createElement('span');
-      br.className = 'filter-break';
-      host.appendChild(br);
-    }
+    const weapons = group(scope === 'bestTeams' ? 'filters.teamWeapons' : 'filters.characterWeapon','Weapon type');
     const wOrder = ['sword','polearm','bow','claymore','catalyst'];
     for(const w of wOrder){
       if(byWeapon.has(w)){
         const label = T('weaponType.'+w, w[0].toUpperCase()+w.slice(1));
         const chip = mkChip('weapons', w, label, `filters/Class-${w}.png`);
-        host.appendChild(chip);
+        weapons.appendChild(chip);
       }
     }
   }
@@ -312,6 +377,11 @@ export async function start(ctx){
 
   function renderOwnedCharacters(){
     charactersDiv.innerHTML = '';
+    const filterCount = filterState.owned.elements.size + filterState.owned.weapons.size;
+    const count = document.getElementById('roster-filter-count');
+    if(count){ count.hidden = filterCount === 0; count.textContent = String(filterCount); }
+    const reset = document.getElementById('reset-roster-filters');
+    if(reset) reset.hidden = filterCount === 0;
     const pred = makeFilterPredicate('owned');
     const q = (document.getElementById('char-search')?.value || '').trim().toLowerCase();
     const inDb = charactersInDb();
@@ -324,6 +394,8 @@ export async function start(ctx){
       const chip = createEl('div','char' + (on ? ' selected' : ''));
       const main = createEl('button','char-main');
       main.type = 'button';
+      main.title = label;
+      main.setAttribute('aria-pressed', String(on));
       const pic = createEl('span','char-pic');
       const img = createAvatarImg(key,'avatar');
       if(img) pic.appendChild(img);
@@ -353,6 +425,13 @@ export async function start(ctx){
     updateDraftBar();
   }
 
+  document.getElementById('reset-roster-filters')?.addEventListener('click', ()=>{
+    filterState.owned.elements.clear();
+    filterState.owned.weapons.clear();
+    renderFilters(ownedFiltersHost, 'owned');
+    renderOwnedCharacters();
+  });
+
   let searchTimer = null;
   document.getElementById('char-search')?.addEventListener('input', ()=>{
     clearTimeout(searchTimer);
@@ -366,7 +445,19 @@ export async function start(ctx){
   try{
     const savedMode = localStorage.getItem('settingMode'); if(savedMode) modeEl.value = savedMode;
   }catch{}
-  modeEl.addEventListener('change', ()=> { localStorage.setItem('settingMode', modeEl.value); renderActiveView(); });
+  const budgetValue = ()=> Math.min(48,Math.max(0,parseInt(modeEl.value,10)||0));
+  modeEl.value = String(budgetValue());
+  const updateBudget = ()=>{
+    modeEl.value = String(budgetValue());
+    try{ localStorage.setItem('settingMode',modeEl.value); }catch{}
+    renderActiveView();
+  };
+  let budgetTimer;
+  modeEl.addEventListener('input', ()=>{
+    clearTimeout(budgetTimer);
+    if(modeEl.value !== '') budgetTimer = setTimeout(updateBudget,100);
+  });
+  modeEl.addEventListener('change', ()=>{ clearTimeout(budgetTimer); updateBudget(); });
 
   for(const [id, group] of [['macro-free','free'], ['macro-4star','four'], ['macro-standard','standard'], ['macro-all','all']]){
     document.getElementById(id)?.addEventListener('click', ()=> draft.addAll(groupKeys(group)));
@@ -387,8 +478,14 @@ export async function start(ctx){
   const navLinks = Array.from(document.querySelectorAll('.nav-link'));
   function setActiveLink(hash){
     navLinks.forEach(a=>{
-      if(a.getAttribute('href') === hash) a.classList.add('active'); else a.classList.remove('active');
+      const active = a.getAttribute('href') === hash;
+      a.classList.toggle('active', active);
+      if(active) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current');
     });
+    const title = document.getElementById('view-title');
+    const key = { '#recommendations': 'nav.recommendations', '#tierlist': 'nav.tierlist',
+      '#team-builder': 'nav.teamBuilder', '#best-teams': 'nav.bestTeams', '#inventory': 'nav.inventory' }[hash] || 'nav.recommendations';
+    if(title){ title.dataset.i18n = key; title.textContent = T(key, 'GI-Rec'); }
   }
   function getOwned(){ return new Set(draft.characters()); }
 
@@ -401,14 +498,14 @@ export async function start(ctx){
     const base = computeSuggestions(parsedTeams, owned, mode);
     const suggestions = active
       ? base.map(item => {
-          const missingAllMatch = item.missing.every(pred);
+          const missingAllMatch = (item.acquisition ? acquisitionTargets(item.acquisition) : item.missing).every(pred);
           if(!missingAllMatch) return null;
           const filteredTop = (item.topteams||[]).filter(t => {
-            const missingInTeam = t.members.filter(m => !owned.has(m));
+            const missingInTeam = t.acquisition ? acquisitionTargets(t.acquisition) : t.members.filter(m => !owned.has(m));
             return missingInTeam.every(pred);
           });
           if(filteredTop.length === 0) return null;
-          return { ...item, topteams: filteredTop };
+          return { ...item, topteams: filteredTop, count: filteredTop.length, median: suggestionMedian(filteredTop) };
         }).filter(Boolean)
       : base;
     const content = document.getElementById('view-content');
@@ -732,6 +829,7 @@ export async function start(ctx){
     displayLabel.textContent = T('tier.show','Show: ');
     const displaySelect = createEl('select','side-input toggle-select');
     displaySelect.id = 'tier-display-mode';
+    displaySelect.dataset.default = 'not-owned';
     const optNotOwned = createEl('option');
     optNotOwned.value = 'not-owned';
     optNotOwned.textContent = T('tier.notOwned','Not owned');
@@ -744,6 +842,9 @@ export async function start(ctx){
     displaySelect.appendChild(optNotOwned);
     displaySelect.appendChild(optAll);
     displaySelect.appendChild(optOwned);
+    const proposalOptions = ctx?.recommendationOptions?.();
+    const ownedSuggestions = proposalOptions?.constellations || proposalOptions?.weapons;
+    if(ownedSuggestions){ displaySelect.value = 'all'; displaySelect.dataset.default = 'all'; }
     try{
       const savedDisplayMode = localStorage.getItem('tierDisplayMode');
       if(savedDisplayMode) displaySelect.value = savedDisplayMode;
@@ -812,6 +913,7 @@ export async function start(ctx){
     label.textContent = T('tier.show','Show: ');
     const select = createEl('select','side-input toggle-select');
     select.id = 'best-teams-mode';
+    select.dataset.default = 'all';
     const optAll = createEl('option');
     optAll.value = 'all';
     optAll.textContent = T('tier.allTeams','All Teams');
@@ -848,6 +950,7 @@ export async function start(ctx){
 
     const showMode = select.value || 'all';
     renderBestTeamsList(showMode, mode);
+    document.dispatchEvent(new window.Event('girec:view-filters'));
   }
 
   const bestTeamsChars = [];
@@ -987,7 +1090,7 @@ export async function start(ctx){
 
     allTeams.sort((a, b) => b.dps - a.dps);
     if(allTeams.length === 0){
-      container.appendChild(createEl('div','small',T('views.noTeamsFiltered','No teams found matching the current filters.')));
+      renderEmptyState(container, T('views.noTeamsFiltered','No teams found matching the current filters.'));
       return;
     }
 
@@ -1072,6 +1175,22 @@ export async function start(ctx){
   }
 
   return {
+    resetFilters(){
+      const view = location.hash || '#recommendations';
+      const scopes = view === '#best-teams' ? ['bestTeams']
+        : ['#recommendations','#tierlist'].includes(view) ? ['main'] : [];
+      for(const scope of scopes){
+        filterState[scope].elements.clear();
+        filterState[scope].weapons.clear();
+      }
+      try{
+        if(view === '#best-teams'){
+          bestTeamsChars.length = 0;
+          localStorage.setItem('bestTeamsMode','all');
+        }
+        if(view === '#tierlist') localStorage.setItem('tierDisplayMode','not-owned');
+      }catch{}
+    },
     refreshTeams(list, strictList, baseList){
       keepScroll(()=>{
         rebuildTeams(list, strictList, baseList);
@@ -1114,11 +1233,12 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
     for(const m of s.members){
       if(!ownedDisplaySet.has(m)) missing.push(m);
     }
-    if(missing.length > 0 && missing.length <= mode){
+    const cost = s.acquisition ? s.acquisition.cost : missing.length;
+    if(cost > 0 && cost <= mode){
       const sortedMissing = missing.slice().sort();
-      const key = sortedMissing.join('||');
-      const list = byMissingSet.get(key) || {missing: sortedMissing, teams: []};
-      list.teams.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex});
+      const key = s.acquisition ? s.acquisition.signature : sortedMissing.join('||');
+      const list = byMissingSet.get(key) || {missing: sortedMissing, teams: [], acquisition: s.acquisition};
+      list.teams.push({...s});
       byMissingSet.set(key, list);
     }
   }
@@ -1126,18 +1246,13 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
   const results = [];
   for(const [key, obj] of byMissingSet.entries()){
   const list = obj.teams.slice().sort((a,b)=>b.dps - a.dps);
-  const top3 = list.slice(0,3);
-  const dpsVals = top3.map(x=>x.dps).sort((a,b)=>a-b);
-    let median = 0;
-    if(dpsVals.length>0){
-      const mid = Math.floor(dpsVals.length/2);
-      median = (dpsVals.length%2===1) ? dpsVals[mid] : (dpsVals[mid-1]+dpsVals[mid])/2;
-    }
+    const median = suggestionMedian(list);
     results.push({
       missing: obj.missing,
       count: obj.teams.length,
       median,
-      topteams: list
+      topteams: list,
+      acquisition: obj.acquisition
     });
   }
 
@@ -1147,22 +1262,35 @@ function computeSuggestions(parsedTeams, ownedDisplaySet, mode){
 
 const SUGGESTION_PAGE = 25;
 
+function suggestionMedian(teams){
+  const values = teams.slice(0,3).map(team=>team.dps).sort((a,b)=>a-b);
+  const middle = Math.floor(values.length/2);
+  return values.length ? (values.length%2 ? values[middle] : (values[middle-1]+values[middle])/2) : 0;
+}
+
 function renderSuggestions(list, owned){
   const container = document.getElementById('suggestions');
   container.innerHTML = '';
   if(list.length === 0){
-    container.appendChild(createEl('div','small',T('views.emptyRecommendations','No recommendations: either too few characters are selected or no teams fit the current rules.')));
+    renderEmptyState(container, T('views.emptyRecommendations','No recommendations: either too few characters are selected or no teams fit the current rules.'));
     return;
   }
   function buildCard(item){
     const card = createEl('div','squad clickable');
+    card.tabIndex = 0;
+    card.setAttribute('role','button');
+    card.setAttribute('aria-haspopup','dialog');
+    card.addEventListener('keydown',event=>{
+      if(event.target === card && (event.key === 'Enter' || event.key === ' ')){ event.preventDefault(); card.click(); }
+    });
     const left = createEl('div','left');
     const group = createEl('div','missing-group');
-    for(const missingName of item.missing){
+    for(const missingName of item.acquisition ? [] : item.missing){
       const img = createAvatarImg(missingName,'avatar-sm');
       if(img) group.appendChild(img);
       group.appendChild(createEl('div','pill',charLabel(missingName)));
     }
+    if(item.acquisition) group.appendChild(renderAcquisitions(item.acquisition));
     left.appendChild(group);
     left.appendChild(createEl('div','small',T('views.teamsMatchSet',item.count+' team(s) match this set',{n:item.count})));
 
@@ -1187,7 +1315,9 @@ function renderSuggestions(list, owned){
     card.appendChild(left);
     card.appendChild(right);
     card.addEventListener('click',()=> openCharacterWindow({
-      chars: item.missing,
+      chars: item.acquisition ? [...new Set([...item.acquisition.characters, ...item.acquisition.constellations].map(change=>change.char))] : item.missing,
+      title: item.acquisition ? [...new Set([...item.acquisition.characters, ...item.acquisition.constellations].map(change=>charLabel(change.char)))].concat([...new Set(item.acquisition.weapons.map(change=>weaponLabel(change.weapon)))]).join(' + ') : undefined,
+      summary: renderAcquisitions(item.acquisition),
       teams: item.topteams || [],
       names: NAMES,
       teamRow: (team)=> buildTeamRow(team, owned),
@@ -1204,7 +1334,7 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, mode=
 
   let globalDpsThreshold = 0;
   if(sortMode === 'average'){
-    const allDps = parsedTeams.map(t => t.dps).sort((a,b) => a - b);
+    const allDps = parsedTeams.filter(team => !team.acquisition || team.acquisition.cost <= mode).map(t => t.dps).sort((a,b) => a - b);
     globalDpsThreshold = allDps[Math.floor(allDps.length * 0.5)] || 0;
   }
 
@@ -1215,9 +1345,9 @@ function buildTierlist(names, parsedTeams, teamsByMember, ownedDisplaySet, mode=
       const others = s.members.filter(m=>m!==disp);
       let ownedCount = 0; for(const o of others) if(ownedDisplaySet.has(o)) ownedCount++;
       const missingOthers = others.length - ownedCount;
-      const totalMissing = isOwned ? missingOthers : (1 + missingOthers);
+      const totalMissing = s.acquisition ? s.acquisition.cost : (isOwned ? missingOthers : (1 + missingOthers));
       if(totalMissing <= mode){
-        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount});
+        candidates.push({members: s.members, dps: s.dps, build: s.build, src: s.src, origin: s.origin, assumed: !!s.assumed, sims: s.sims, kqmCons: s.kqmCons, kqmArt: s.kqmArt, teamIndex: s.teamIndex, buildIndex: s.buildIndex, ownedCount, acquisition: s.acquisition});
       }
     }
     if(candidates.length===0){ continue; }
@@ -1301,7 +1431,7 @@ function renderTierlist(tierData, ownedSet){
   const table = createEl('table','tier-table');
   const anyMembers = tierData && tierData.length>0;
   if(!anyMembers){
-    container.appendChild(createEl('div','small',T('views.emptyTierlist','Tier list is empty: no characters have teams that include any of your selected characters.')));
+    renderEmptyState(container, T('views.emptyTierlist','Tier list is empty: no characters have teams that include any of your selected characters.'));
     return;
   }
   for(const t of tiersOrder){
@@ -1315,9 +1445,19 @@ function renderTierlist(tierData, ownedSet){
     for(const member of grouped[t]){
       const key = member.name;
       const chip = createEl('div','tier-member');
+      chip.tabIndex = 0;
+      chip.setAttribute('role','button');
+      chip.setAttribute('aria-haspopup','dialog');
+      chip.addEventListener('keydown',event=>{
+        if(event.target === chip && (event.key === 'Enter' || event.key === ' ')){ event.preventDefault(); chip.click(); }
+      });
       const avatar = createAvatarImg(key,'avatar');
       if(avatar) chip.appendChild(avatar);
       chip.appendChild(createEl('div','pill',charLabel(member.name)));
+      const proposed = member.teams?.[0]?.acquisition;
+      const cons = proposed?.constellations.find(item=>item.char === key);
+      if(cons) chip.appendChild(createEl('span','tier-upgrade',`C${cons.from} → C${cons.to}`));
+      else if(proposed?.weapons.some(item=>item.char === key)) chip.appendChild(createEl('span','tier-upgrade',T('acquisitions.weapon','5★ weapon')));
       chip.addEventListener('click', ()=> openCharacterWindow({
         chars: [key],
         teams: member.teams || [],

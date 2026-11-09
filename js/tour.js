@@ -1,7 +1,7 @@
 import { t, onChange as onLangChange } from "./i18n.js";
 
 const KEY = "girec.tour";
-const mobile = window.matchMedia("(max-width: 640px)");
+const mobile = window.matchMedia("(max-width: 900px)");
 
 const STEPS = [
   { id: "welcome" },

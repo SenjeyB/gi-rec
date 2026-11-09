@@ -88,8 +88,7 @@ export function query(opts = {}) {
   for (let teamIndex = 0; teamIndex < db.teams.length; teamIndex++) {
     const team = db.teams[teamIndex];
     const charKeys = team.chars.map((i) => db.dict.chars[i]);
-    let best = null;
-    let bestIndex = -1;
+    const matches = [];
 
     for (let bi = 0; bi < team.builds.length; bi++) {
       const build = team.builds[bi];
@@ -112,13 +111,10 @@ export function query(opts = {}) {
       }
       if (ok && needed && !haveCopies(needed, invWeapons)) ok = false;
       if (!ok) continue;
-      best = build;
-      bestIndex = bi;
-      break;
+      matches.push([build, bi]);
+      if (!opts.allBuilds) break;
     }
-    if (!best) continue;
-
-    out.push({
+    for (const [best, bestIndex] of matches) out.push({
       teamIndex,
       buildIndex: bestIndex,
       chars: charKeys,

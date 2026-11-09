@@ -1,6 +1,6 @@
 import { t } from "./i18n.js";
 import { charLabel } from "./labels.js";
-import * as store from "./store.js";
+import * as draft from "./draft.js";
 import { openSheet } from "./sheet.js";
 
 const PAGE = 10;
@@ -54,10 +54,10 @@ function infoCard(key, names, teams) {
   }
   info.appendChild(tags);
 
-  const owned = store.hasCharacter(key);
+  const owned = draft.has(key);
   const status = el("div", `cw-status${owned ? " is-owned" : ""}`);
   status.textContent = owned
-    ? (five ? t("char.ownedCons", { n: store.consOf(key) }) : t("char.owned"))
+    ? (five ? t("char.ownedCons", { n: draft.consOf(key) }) : t("char.owned"))
     : t("char.notOwned");
   info.appendChild(status);
 
@@ -69,15 +69,16 @@ function infoCard(key, names, teams) {
   return card;
 }
 
-export function openCharacterWindow({ chars, teams, names, teamRow }) {
+export function openCharacterWindow({ chars, teams, names, teamRow, title, summary }) {
   const sheet = openSheet({
-    title: chars.map((k) => charLabel(k)).join(" + "),
+    title: title || chars.map((k) => charLabel(k)).join(" + "),
     className: "sheet-wide cw-sheet",
   });
 
   const head = el("div", "cw-head");
   for (const key of chars) head.appendChild(infoCard(key, names, teams));
-  sheet.body.appendChild(head);
+  if(chars.length) sheet.body.appendChild(head);
+  if(summary) sheet.body.appendChild(summary);
 
   const listHead = el("div", "cw-list-head", t("char.teams", { n: teams.length }));
   sheet.body.appendChild(listHead);

@@ -10,13 +10,27 @@ function el(tag, cls, text) {
 }
 
 function onKey(e) {
+  if (!stack.length) return;
+  const sheet = stack[stack.length - 1];
   if (e.key === "Escape" && stack.length) {
+    e.preventDefault();
     e.stopPropagation();
-    stack[stack.length - 1].close();
+    sheet.close();
+  } else if (e.key === "Tab") {
+    const controls = [...sheet.panel.querySelectorAll('a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])')]
+      .filter(node => node.getClientRects().length);
+    const first = controls[0], last = controls[controls.length - 1];
+    if (!first) { e.preventDefault(); return; }
+    const active = document.activeElement;
+    if (!sheet.panel.contains(active) || (e.shiftKey ? active === first : active === last)) {
+      e.preventDefault();
+      (e.shiftKey ? last : first).focus();
+    }
   }
 }
 
 export function openSheet({ title = "", className = "", onClose } = {}) {
+  const previousFocus = document.activeElement;
   const layer = el("div", "sheet-layer");
   const backdrop = el("div", "sheet-backdrop");
   const panel = el("div", `sheet-panel ${className}`.trim());
@@ -56,6 +70,7 @@ export function openSheet({ title = "", className = "", onClose } = {}) {
         document.removeEventListener("keydown", onKey, true);
       }
       if (onClose) onClose();
+      if (previousFocus?.isConnected) previousFocus.focus({ preventScroll: true });
     },
   };
 

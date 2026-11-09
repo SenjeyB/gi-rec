@@ -15,6 +15,8 @@
     "metaDescription": "Free Genshin Impact character pulling recommendations, tier lists, team builder and best team compositions based on your characters. Find out who to pull next!"
   },
   "nav": {
+    "more": "More",
+    "sections": "Sections",
     "catalog": "Characters",
     "mode": "Mode",
     "recommendations": "Recommendations",
@@ -24,6 +26,10 @@
     "inventory": "Inventory"
   },
   "settings": {
+    "suggest": "Suggest:",
+    "suggestCharacters": "New characters",
+    "suggestConstellations": "5★ constellations",
+    "suggestWeapons": "5★ weapons",
     "source": "Teams from:",
     "sourceAll": "Sims and real clears",
     "sourceKqm": "Simulations only",
@@ -41,13 +47,13 @@
     "fiveAny": "Any refinement",
     "fiveMine": "Only mine",
     "consMode": "Constellations:",
-    "consStandard": "Standard (5★ C0, 4★ C6)",
+    "consStandard": "5★ C0, 4★ C6",
     "consMine": "With my constellations",
     "consAny": "Any"
   },
   "roster": {
     "title": "Quick inventory settings",
-    "import": "Import Characters",
+    "import": "Import",
     "search": "Search characters...",
     "searchLabel": "Search characters",
     "filterLabel": "Filter owned characters",
@@ -56,7 +62,8 @@
     "allStandard": "All Standard 5★",
     "all": "All",
     "clearAll": "Clear all",
-    "openInventory": "Open full Inventory editor",
+    "openInventory": "Inventory editor",
+    "selectionTools": "Filters and quick selection",
     "noTeamsForChar": "No teams with this character in the database",
     "removeFromSelection": "Remove from selection",
     "rollback": "Revert",
@@ -110,8 +117,8 @@
     }
   },
   "views": {
-    "emptyRecommendations": "No recommendations: either too few characters are selected or no teams fit the current rules.",
-    "emptyTierlist": "Tier list is empty: no characters have teams that include any of your selected characters.",
+    "emptyRecommendations": "No matching recommendations.",
+    "emptyTierlist": "No characters match this tier list.",
     "noTeamsSelection": "No teams available with this selection.",
     "noTeamsFiltered": "No teams found matching the current filters.",
     "showingOf": "Showing {shown} of {total} team(s) by DPS",
@@ -214,6 +221,11 @@
     "aboveStd": "above standard",
     "artTotals": "Artifact stats (total)"
   },
+  "acquisitions": {
+    "new": "New",
+    "cost": "Required acquisitions: {n} of {limit}",
+    "weapon": "5★ weapon"
+  },
   "submission": {
     "title": "Suggest a team",
     "intro": "Submit either of the following:",
@@ -235,6 +247,10 @@
     "loading": "Loading..."
   },
   "filters": {
+    "characterElement": "Character element",
+    "characterWeapon": "Character weapon type",
+    "teamElements": "Elements in the team",
+    "teamWeapons": "Weapon types in the team",
     "currentView": "Filter current view",
     "byElementWeapon": "Filter teams by element and weapon",
     "title": "Filters",

@@ -1,7 +1,7 @@
 import { t, onChange as onLangChange } from "./i18n.js";
 import { openSheet } from "./sheet.js";
 
-const MQ = "(max-width: 640px)";
+const MQ = "(max-width: 900px)";
 const VIEWS = [
   ["#recommendations", "nav.recommendations", "★"],
   ["#tierlist", "nav.tierlist", "≡"],
@@ -59,21 +59,30 @@ function moveInto(node, target) {
 }
 
 function activeFilterCount() {
+  if (location.hash === "#inventory") return 0;
   let n = document.querySelectorAll("#view-controls .filter-chip.selected, #view-controls .char-filter-chosen .anchor-chip").length;
   for (const box of document.querySelectorAll("#settings-card input[type=checkbox]")) {
+    if (box.closest("[hidden]")) continue;
     if (box.checked !== (box.dataset.default === "true")) n++;
   }
-  for (const sel of document.querySelectorAll("#settings-card select[data-default]")) {
+  for (const sel of document.querySelectorAll("#settings-card select[data-default], #view-controls select[data-default]")) {
+    if (sel.closest("[hidden]")) continue;
     if (sel.value !== sel.dataset.default) n++;
   }
   return n;
 }
+
+export function refreshFilters() { updateFab(); }
 
 function updateFab() {
   const fab = document.getElementById("filters-fab");
   if (!fab) return;
   const badge = fab.querySelector(".filters-fab-count");
   const n = activeFilterCount();
+  const summary = document.getElementById("active-filter-summary");
+  if (summary) summary.hidden = n === 0 || location.hash === "#inventory";
+  const count = document.getElementById("active-filter-count");
+  if (count) count.textContent = t("filters.active", { n });
   if (badge) { badge.hidden = n === 0; badge.textContent = String(n); }
   fab.hidden = location.hash === "#inventory";
 }
@@ -119,6 +128,9 @@ export function init() {
   });
 
   document.getElementById("filters-fab")?.addEventListener("click", openFilters);
+  document.getElementById("view-reset-filters")?.addEventListener("click", () => {
+    document.getElementById("reset-filters")?.click();
+  });
   document.addEventListener("click", updateFab);
   document.addEventListener("change", updateFab);
 
@@ -130,6 +142,6 @@ export function init() {
   else mq.addListener(onChange);
 
   buildBottomNav();
-  onLangChange(buildBottomNav);
+  onLangChange(() => { buildBottomNav(); updateFab(); });
   updateFab();
 }

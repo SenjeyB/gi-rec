@@ -8,6 +8,7 @@ import { parseGood, looksLikeGood } from "./good.js";
 import * as mobile from "./mobile.js";
 import * as tour from "./tour.js";
 import { openSheet } from "./sheet.js";
+import { affordableTeams } from "./acquisitions.js";
 import { start as startApp } from "../app.js";
 
 const GITHUB_ISSUES = "https://github.com/SenjeyB/gi-rec/issues/new/choose";
@@ -18,7 +19,8 @@ let aliases = {};
 let refs = null;
 let app = null;
 
-const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine", showAssumed: true, showBossRuns: true };
+const DEFAULTS = { fiveStar: "none", kqmFull: false, kqmArt: false, consMode: "mine", showAssumed: true, showBossRuns: true,
+  suggestCharacters: true, suggestConstellations: false, suggestWeapons: false };
 const settings = { ...DEFAULTS };
 const FIVE_MODES = ["none", "r1", "any", "mine"];
 
@@ -52,6 +54,9 @@ function loadSettings() {
     settings.consMode = ["standard", "mine", "any"].includes(raw.consMode) ? raw.consMode : "mine";
     settings.showAssumed = raw.showAssumed !== false;
     settings.showBossRuns = raw.showBossRuns ?? (raw.source !== "kqm");
+    settings.suggestCharacters = raw.suggestCharacters !== false;
+    settings.suggestConstellations = !!raw.suggestConstellations;
+    settings.suggestWeapons = !!raw.suggestWeapons;
   } catch {}
 }
 
@@ -66,15 +71,20 @@ function ownedCons() {
 }
 
 function currentTeams() {
-  return db.query({
-    cons: ownedCons(),
-    weapons: store.weaponCopies(),
-    consMode: settings.consMode,
-    fiveStar: settings.fiveStar,
+  const pool = db.query({
+    allBuilds: true, consMode: "any", fiveStar: "any",
     kqmFull: settings.kqmFull,
     kqmArt: settings.kqmArt,
     showAssumed: settings.showAssumed, showBossRuns: settings.showBossRuns,
   });
+  return affordableTeams(pool, {
+    characters: Object.fromEntries(Object.entries(ownedCons()).map(([key, cons]) => [key, { cons }])),
+    weapons: store.weaponCopies(),
+  }, names, recommendationOptions(), Infinity);
+}
+
+function recommendationOptions() {
+  return { characters: settings.suggestCharacters, constellations: settings.suggestConstellations, weapons: settings.suggestWeapons };
 }
 
 function strictTeams(weapons) {
@@ -107,6 +117,51 @@ function refresh() {
 }
 
 function updateFilterHint() {
+  const view = location.hash || "#recommendations";
+  const inventory = view === "#inventory";
+  const best = view === "#best-teams";
+  const available = best && document.getElementById("best-teams-mode")?.value === "available";
+  const fromInventory = view === "#team-builder" || available;
+  const recommendations = view === "#recommendations" || view === "#tierlist";
+  const showField = (id, show) => {
+    const input = document.getElementById(id);
+    const label = document.querySelector(`label[for="${id}"]`);
+    if (input) input.hidden = !show;
+    if (label) label.hidden = !show;
+  };
+  showField("mode", recommendations);
+  showField("cons-mode", best && !available);
+  showField("five-mode", best && !available);
+  const proposals = document.getElementById("recommendation-options");
+  if (proposals) proposals.hidden = !recommendations;
+  for (const id of ["suggest-constellations", "suggest-weapons"]) {
+    const input = document.getElementById(id);
+    if (input) input.closest("label").hidden = settings.kqmFull;
+  }
+  const cons = document.getElementById("cons-mode");
+  if (cons) {
+    const mine = cons.querySelector('option[value="mine"]');
+    if (mine) mine.hidden = best;
+    cons.dataset.default = best ? "standard" : "mine";
+    cons.value = best && settings.consMode === "mine" ? "standard" : settings.consMode;
+  }
+  const card = document.getElementById("settings-card");
+  if (card) {
+    card.hidden = inventory;
+    card.classList.toggle("inventory-filters", fromInventory);
+    if (fromInventory) card.querySelector("details").open = true;
+  }
+  const artifact = document.getElementById("kqm-art");
+  if (artifact) artifact.closest("label").hidden = settings.kqmFull;
+  const bossRuns = document.getElementById("show-boss-runs");
+  if (bossRuns) bossRuns.closest("label").hidden = settings.kqmFull || settings.kqmArt;
+  const quickInventory = !inventory && !(best && !available);
+  const roster = document.getElementById("roster-card");
+  if (roster) roster.hidden = !quickInventory;
+  const drawer = document.getElementById("drawer-toggle");
+  if (drawer) drawer.hidden = !quickInventory;
+  document.body.dataset.quickInventory = String(quickInventory);
+  mobile.refreshFilters?.();
 }
 
 function wireSettings() {
@@ -119,12 +174,19 @@ function wireSettings() {
       refresh();
     });
   }
-  for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"], ["show-assumed", "showAssumed"], ["show-boss-runs", "showBossRuns"]]) {
+  for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"], ["show-assumed", "showAssumed"], ["show-boss-runs", "showBossRuns"],
+    ["suggest-characters", "suggestCharacters"], ["suggest-constellations", "suggestConstellations"], ["suggest-weapons", "suggestWeapons"]]) {
     const box = document.getElementById(id);
     if (!box) continue;
     box.checked = settings[key];
     box.addEventListener("change", () => {
       settings[key] = box.checked;
+      if (location.hash === "#tierlist" && ((["suggestConstellations", "suggestWeapons"].includes(key) && box.checked)
+          || (key === "suggestCharacters" && !box.checked))) {
+        try {
+          if (!localStorage.getItem("tierDisplayMode") || localStorage.getItem("tierDisplayMode") === "not-owned") localStorage.setItem("tierDisplayMode", "all");
+        } catch {}
+      }
       saveSettings();
       refresh();
     });
@@ -141,12 +203,17 @@ function wireSettings() {
   const reset = document.getElementById("reset-filters");
   if (reset) {
     reset.addEventListener("click", () => {
-      Object.assign(settings, DEFAULTS);
+      const keys = ["kqmFull", "kqmArt", "showAssumed", "showBossRuns"];
+      if (location.hash === "#best-teams") keys.push("consMode", "fiveStar");
+      if (["#recommendations", "#tierlist"].includes(location.hash)) keys.push("suggestCharacters", "suggestConstellations", "suggestWeapons");
+      for (const key of keys) settings[key] = DEFAULTS[key];
+      app?.resetFilters?.();
       const cm = document.getElementById("cons-mode");
       if (cm) cm.value = settings.consMode;
       const fm = document.getElementById("five-mode");
       if (fm) fm.value = settings.fiveStar;
-      for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"], ["show-assumed", "showAssumed"], ["show-boss-runs", "showBossRuns"]]) {
+      for (const [id, key] of [["kqm-full", "kqmFull"], ["kqm-art", "kqmArt"], ["show-assumed", "showAssumed"], ["show-boss-runs", "showBossRuns"],
+        ["suggest-characters", "suggestCharacters"], ["suggest-constellations", "suggestConstellations"], ["suggest-weapons", "suggestWeapons"]]) {
         const box = document.getElementById(id);
         if (box) box.checked = settings[key];
       }
@@ -226,6 +293,23 @@ function wireTeamSubmission() {
   });
 }
 
+function wireHeaderMenu() {
+  const menu = document.getElementById("header-more");
+  if (!menu) return;
+  menu.addEventListener("click", (event) => {
+    if (event.target.closest(".header-more-menu a, .header-more-menu button")) menu.open = false;
+  });
+  document.addEventListener("click", (event) => {
+    if (!menu.contains(event.target)) menu.open = false;
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && menu.open) {
+      menu.open = false;
+      menu.querySelector("summary").focus();
+    }
+  });
+}
+
 function wireInventoryView() {
   const section = document.getElementById("inventory-view");
   const container = document.getElementById("inventory-content");
@@ -236,6 +320,7 @@ function wireInventoryView() {
   const viewContainer = document.getElementById("view-container");
   const sync = () => {
     const isInventory = location.hash === "#inventory";
+    document.querySelector(".app-container")?.classList.toggle("is-inventory", isInventory);
     section.hidden = !isInventory;
     if (viewContainer) viewContainer.hidden = isInventory;
     for (const link of document.querySelectorAll(".side-nav .nav-link")) {
@@ -334,6 +419,7 @@ async function boot() {
     teams: currentTeams(), strictTeams: strictTeams(), baseTeams: baseTeams(),
     strictWith: (weapons) => strictTeams(weapons),
     detailOptions: () => ({ excludeAssumed: !settings.showAssumed, excludeBossRuns: !settings.showBossRuns }),
+    recommendationOptions,
     weaponCopies: () => store.weaponCopies(),
   });
 
@@ -341,11 +427,14 @@ async function boot() {
   wireSettings();
   wireFeedback();
   wireTeamSubmission();
+  wireHeaderMenu();
   wireImport();
   wireInventoryView();
   mobile.init();
   updateFilterHint();
   tour.init({ auto: firstVisit && !new URLSearchParams(location.search).has("char") });
+  window.addEventListener("hashchange", updateFilterHint);
+  document.addEventListener("girec:view-filters", updateFilterHint);
 
   i18n.onChange(() => {
     updateKeywords();
