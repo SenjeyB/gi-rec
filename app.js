@@ -6,6 +6,7 @@ import * as draft from './js/draft.js';
 import { groupKeys } from './js/store.js';
 import { openCharacterWindow } from './js/charwindow.js';
 import { openSheet } from './js/sheet.js';
+import { comparisonBaseline, buildDifferences } from './js/acquisitions.js';
 
 let WEAPON_NAMES = {};
 let SET_NAMES = {};
@@ -240,30 +241,60 @@ function renderBuildDifferences(changes,plan){
   return box;
 }
 
-function renderDpsComparison(team,owned){
-  if(!team.acquisition?.constellations.length && !team.acquisition?.weapons.length) return null;
-  const box = createEl('div','dps-comparison');
-  const base = team.comparison?.baseline;
-  if(!base){
-    box.appendChild(createEl('span','small muted',T('acquisitions.noBaseline','No comparable baseline in the database')));
-    return box;
-  }
-  const baseline = {...base,members:base.members || base.chars};
+function appendComparisonValues(box,team,baseline){
   const delta = (team.dps / baseline.dps - 1) * 100;
   box.appendChild(createEl('span','comparison-values',T('acquisitions.baselineDps','Baseline: {before} → {after} DPS',{
     before:fmtDps(baseline.dps),after:fmtDps(team.dps),
   })));
-  const difference = delta < 0.1 ? '+<0.1%' : `+${delta.toFixed(1)}%`;
-  box.appendChild(createEl('span','comparison-delta',T('acquisitions.buildDelta','Build difference: {value}',{value:difference})));
+  const magnitude = Math.abs(delta);
+  const difference = delta === 0 ? '0%' : `${delta > 0 ? '+' : '−'}${magnitude < 0.1 ? '<0.1' : magnitude.toFixed(1)}%`;
+  box.appendChild(createEl('span','comparison-delta'+(delta < 0 ? ' is-negative' : ''),T('acquisitions.buildDelta','Build difference: {value}',{value:difference})));
+}
+
+function renderDpsComparison(team,owned){
+  if(!team.acquisition?.constellations.length && !team.acquisition?.weapons.length) return null;
+  const box = createEl('div','dps-comparison');
+  const base = team.comparison?.baseline;
+  if(base) appendComparisonValues(box,team,base);
+  else box.appendChild(createEl('span','small muted',T('acquisitions.noBaseline','No comparison without other changes')));
+  if(!base && !team.comparison?.baselines?.length) return box;
   const button = createEl('button','small-btn',T('acquisitions.compare','Compare'));
   button.type = 'button';
   button.addEventListener('click',event=>{
     event.stopPropagation();
     const sheet = openSheet({title:T('acquisitions.compare','Compare'),className:'sheet-wide comparison-sheet'});
-    sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.baseline','Best available build')));
-    sheet.body.appendChild(buildTeamRow(baseline,owned,'',{comparison:false}));
-    sheet.body.appendChild(createEl('div','comparison-label',T('acquisitions.upgraded','With the suggested upgrades')));
-    sheet.body.appendChild(buildTeamRow(team,owned,'',{comparison:false,acquisitions:false,changes:team.comparison.changes}));
+    const controls = createEl('fieldset','comparison-options');
+    controls.appendChild(createEl('legend',null,T('acquisitions.allowOtherChanges','Allow other changes')));
+    const options = {otherConstellations:false,otherWeapons:false};
+    const available = team.comparison?.baselines || [];
+    const potential = available.filter(baseline=>comparisonBaseline(team,[baseline],{otherConstellations:true,otherWeapons:true}));
+    const content = createEl('div','comparison-content');
+    const render = ()=>{
+      content.replaceChildren();
+      const chosen = comparisonBaseline(team,available,options);
+      if(chosen){
+        const summary = createEl('div','comparison-summary');
+        appendComparisonValues(summary,team,chosen);
+        content.appendChild(summary);
+        const baseline = {...chosen,members:chosen.members || chosen.chars};
+        content.appendChild(createEl('div','comparison-label',T('acquisitions.baseline','Baseline build')));
+        content.appendChild(buildTeamRow(baseline,owned,'',{comparison:false}));
+      }else content.appendChild(createEl('div','small muted comparison-empty',T('acquisitions.noMatchingBaseline','No matching baseline build')));
+      content.appendChild(createEl('div','comparison-label',T('acquisitions.upgraded','With the suggested upgrades')));
+      content.appendChild(buildTeamRow(team,owned,'',{comparison:false,acquisitions:!chosen,changes:chosen ? buildDifferences(chosen,team) : null}));
+    };
+    for(const [key,label] of [['otherConstellations','acquisitions.otherConstellations'],['otherWeapons','acquisitions.otherWeapons']]){
+      const other = key === 'otherConstellations' ? 'otherWeapons' : 'otherConstellations';
+      if(!potential.some(baseline=>!comparisonBaseline(team,[baseline],{[other]:true}))) continue;
+      const field = createEl('label');
+      const input = createEl('input'); input.type = 'checkbox'; input.name = key;
+      input.addEventListener('change',()=>{options[key]=input.checked;render();});
+      field.append(input,createEl('span',null,T(label,key)));
+      controls.appendChild(field);
+    }
+    if(controls.children.length > 1) sheet.body.appendChild(controls);
+    sheet.body.appendChild(content);
+    render();
   });
   box.appendChild(button);
   return box;

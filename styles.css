@@ -753,6 +753,13 @@ body.sheet-open{overflow:hidden}
 .team-row>.dps-comparison{order:6;flex-basis:100%}
 .comparison-values{font-variant-numeric:tabular-nums}
 .comparison-delta{color:#86efac;font-weight:600;font-variant-numeric:tabular-nums}
+.comparison-delta.is-negative{color:#fca5a5}
+.comparison-summary{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;margin-bottom:14px}
+.comparison-options{display:flex;flex-wrap:wrap;gap:10px 20px;border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin:0 0 16px;min-width:0}
+.comparison-options legend{padding:0 4px;font-size:12px;color:var(--muted)}
+.comparison-options label{display:flex;align-items:center;gap:7px;font-size:13px;cursor:pointer}
+.comparison-options input{margin:0;accent-color:var(--accent)}
+.comparison-empty{margin:0 0 16px}
 .dps-comparison .small-btn{font-size:11px;padding:4px 7px}
 .comparison-label{font-size:13px;font-weight:600;margin:4px 0 10px}
 .comparison-sheet .team-row{margin-bottom:22px}

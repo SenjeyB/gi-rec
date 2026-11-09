@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { acquisitionPlan, weaponAcquisitions, affordableTeams, buildDifferences } from "../js/acquisitions.js";
+import { acquisitionPlan, weaponAcquisitions, affordableTeams, buildDifferences, comparisonBaseline } from "../js/acquisitions.js";
 
 const names = { mavuika: { stars: 4 }, furina: { stars: 4 }, bennett: { stars: 2 }, luminecryo: { stars: 1 } };
 const slot = (char, cons = 0, weapon = null, refine = 1) => ({ char, cons, weapon, refine, fiveStar: !!weapon });
@@ -98,6 +98,7 @@ test("upgrades refer to the best available baseline of the same composition rega
 test("comparisons do not use Boss Runs, different characters, or assumptions as verified baselines", () => {
   const cases = [
     { origin: "clear" },
+    { origin: "dummy" },
     { assumed: true },
     { chars: ["furina"], build: withSets([slot("furina")]) },
   ];
@@ -155,7 +156,7 @@ test("Hu Tao's C1 proposal also charges for Yelan C2 and both missing five-star 
   assert(affordableTeams([huTaoBaseline, huTaoUpgrade], inventory, huTaoNames, all, 5).some(team => team.dps === 106623));
 });
 
-test("build differences include owned Yelan C2 and Elegy even when only Hu Tao C1 needs acquiring", () => {
+test("owned Yelan C2 and weapons require explicit comparison allowances when only Hu Tao C1 is proposed", () => {
   const inventory = {
     characters: { hutao: { cons: 0 }, yelan: { cons: 2 }, kazuha: { cons: 0 }, bennett: { cons: 6 } },
     weapons: { staffofthescarletsands: [1], elegyfortheend: [1] },
@@ -164,11 +165,76 @@ test("build differences include owned Yelan C2 and Elegy even when only Hu Tao C
   const upgrade = result.find(team => team.dps === 106623);
   assert.equal(upgrade.acquisition.cost, 1);
   assert.equal(upgrade.acquisition.weapons.length, 0);
-  assert.deepEqual(upgrade.comparison.changes.map(change => [change.char, change.cons, change.weapon?.to.key]), [
+  assert.equal(upgrade.comparison.baseline, null);
+  assert.equal(comparisonBaseline(upgrade, upgrade.comparison.baselines, { otherConstellations: true }), null);
+  assert.equal(comparisonBaseline(upgrade, upgrade.comparison.baselines, { otherWeapons: true }), null);
+  const baseline = comparisonBaseline(upgrade, upgrade.comparison.baselines, { otherConstellations: true, otherWeapons: true });
+  assert.equal(baseline.dps, 76724);
+  assert.deepEqual(buildDifferences(baseline, upgrade).map(change => [change.char, change.cons, change.weapon?.to.key]), [
     ["hutao", { from: 0, to: 1 }, "staffofthescarletsands"],
     ["yelan", { from: 0, to: 2 }, "elegyfortheend"],
     ["kazuha", null, "xiphosmoonlight"],
   ]);
+});
+
+test("weapon comparisons keep already-owned support weapons and refinements unchanged by default", () => {
+  const characterNames = { ...huTaoNames, mona: { stars: 4 }, fischl: { stars: 2 } };
+  const fourStar = (char, cons, weapon, refine = 1) => ({ ...slot(char, cons, weapon, refine), fiveStar: false });
+  const target = { chars: ["hutao", "yelan", "mona", "fischl"], dps: 177579, build: [
+    slot("hutao", 1, "staffofhoma"), slot("yelan", 0, "elegyfortheend"),
+    fourStar("mona", 4, "favoniuscodex", 5), slot("fischl", 6, "skywardharp"),
+  ] };
+  const matching = { ...target, dps: 120000, build: [fourStar("hutao", 1, "balladofthefjords"), ...target.build.slice(1)] };
+  const unrelated = { ...target, dps: 129877, build: [
+    fourStar("hutao", 1, "balladofthefjords"), fourStar("yelan", 0, "favoniuswarbow", 4),
+    fourStar("mona", 4, "favoniuscodex", 3), fourStar("fischl", 6, "thestringless", 5),
+  ] };
+  const inventory = {
+    characters: { hutao: { cons: 1 }, yelan: { cons: 0 }, mona: { cons: 4 }, fischl: { cons: 6 } },
+    weapons: { elegyfortheend: [1], skywardharp: [1] },
+  };
+  const result = affordableTeams([target, unrelated, matching], inventory, characterNames, all, 1);
+  const upgrade = result.find(team => team.dps === target.dps);
+  assert.equal(upgrade.acquisition.cost, 1);
+  assert.equal(upgrade.comparison.baseline.dps, 120000);
+  assert.equal(comparisonBaseline(upgrade, upgrade.comparison.baselines, { otherWeapons: true }).dps, 129877);
+});
+
+test("purchased constellations and refinements compare from the actual owned level", () => {
+  const target = { chars: ["mavuika"], dps: 200000, build: [slot("mavuika", 2, "sword", 3)] };
+  const baselines = [
+    { chars: target.chars, dps: 150000, build: [slot("mavuika", 0, "sword", 2)] },
+    { chars: target.chars, dps: 160000, build: [slot("mavuika", 1, "sword", 1)] },
+    { chars: target.chars, dps: 140000, build: [slot("mavuika", 1, "sword", 2)] },
+  ];
+  const result = affordableTeams([target, ...baselines], { characters: { mavuika: { cons: 1 } }, weapons: { sword: [2] } }, names, all, 2);
+  const upgrade = result.find(team => team.dps === 200000);
+  assert.equal(upgrade.comparison.baseline.dps, 140000);
+  assert.equal(comparisonBaseline(upgrade, upgrade.comparison.baselines, { otherWeapons: true, otherConstellations: true }).dps, 140000);
+});
+
+test("Nefer's C1 Dummy test compares to C0 without artifact data and separately from simulations or boss runs", () => {
+  const characterNames = { nefer: { stars: 4 }, columbina: { stars: 4 }, lauma: { stars: 4 }, sucrose: { stars: 2 } };
+  const build = ["nefer", "columbina", "lauma", "sucrose"].map((char, i) => ({
+    ...slot(char, i === 3 ? 6 : 0, ["dawningfrost", "favoniuscodex", "etherlightspindlelute", "sacrificialfragments"][i], 5), fiveStar: false,
+  }));
+  const baseline = { chars: build.map(member => member.char), origin: "dummy", dps: 193385, build };
+  const target = { ...baseline, dps: 239580, build: [{ ...build[0], cons: 1 }, ...build.slice(1)] };
+  const pool = [target, { ...baseline, origin: null, dps: 260000 }, { ...baseline, origin: "clear", dps: 300000 }, baseline];
+  const inventory = { characters: Object.fromEntries(build.map(member => [member.char, { cons: member.cons }])) };
+  const upgrade = affordableTeams(pool, inventory, characterNames, all, 1).find(team => team.dps === 239580);
+  assert.equal(upgrade.comparison.baseline.origin, "dummy");
+  assert.equal(upgrade.comparison.baseline.dps, 193385);
+  assert.deepEqual(upgrade.comparison.changes, [{ char: "nefer", cons: { from: 0, to: 1 }, weapon: null }]);
+});
+
+test("a Dummy test has no baseline when only a simulation or boss run is available", () => {
+  for (const origin of [null, "clear"]) {
+    const target = { chars: ["mavuika"], origin: "dummy", dps: 200000, build: [slot("mavuika", 1)] };
+    const baseline = { ...target, origin, dps: 100000, build: [slot("mavuika")] };
+    const upgrade = affordableTeams([target, baseline], { characters: { mavuika: { cons: 0 } } }, names, all, 1).find(team => team.dps === 200000);
+    assert.equal(upgrade.comparison.baseline, null);
+  }
 });
 
 test("build differences match character keys, preserve refinement decreases, and ignore artifacts", () => {

@@ -65,8 +65,31 @@ export function acquisitionPlan(team, inventory, names, options = {}) {
 }
 
 function comparisonKey(team) {
-  if (team.origin || !team.build?.length) return null;
-  return JSON.stringify([!!team.assumed, team.build.map(slot => slot.char).sort()]);
+  if ((team.origin && team.origin !== "dummy") || !team.build?.length) return null;
+  return JSON.stringify([team.origin || "sim", !!team.assumed, team.build.map(slot => slot.char).sort()]);
+}
+
+export function comparisonBaseline(team, baselines, options = {}) {
+  const consChanges = new Map((team.acquisition?.constellations || []).map(change => [change.char, change]));
+  const weaponChanges = new Map((team.acquisition?.weapons || []).map(change => [change.char, change]));
+  const targetKey = comparisonKey(team);
+  if (!targetKey) return null;
+  let best = null;
+  for (const baseline of baselines) {
+    if (comparisonKey(baseline) !== targetKey) continue;
+    const previous = new Map(baseline.build.map(slot => [slot.char, slot]));
+    const matches = team.build.every(slot => {
+      const before = previous.get(slot.char);
+      if (!before) return false;
+      const cons = consChanges.get(slot.char);
+      if (cons ? before.cons !== cons.from : !options.otherConstellations && before.cons !== slot.cons) return false;
+      const weapon = weaponChanges.get(slot.char);
+      if (weapon) return !weapon.from || (before.weapon === slot.weapon && before.refine === weapon.from);
+      return options.otherWeapons || (before.weapon === slot.weapon && before.refine === slot.refine);
+    });
+    if (matches && (!best || baseline.dps > best.dps)) best = baseline;
+  }
+  return best;
 }
 
 export function buildDifferences(baseline, team) {
@@ -91,7 +114,10 @@ export function affordableTeams(teams, inventory, names, options, budget) {
     if (!acquisition || acquisition.cost > budget) continue;
     if (!acquisition.constellations.length && !acquisition.weapons.length) {
       const baseKey = comparisonKey(team);
-      if (baseKey && (!baselines.has(baseKey) || team.dps > baselines.get(baseKey).dps)) baselines.set(baseKey, { ...team, acquisition });
+      if (baseKey) {
+        if (!baselines.has(baseKey)) baselines.set(baseKey, []);
+        baselines.get(baseKey).push({ ...team, acquisition });
+      }
     }
     const composition = team.chars || team.members || [];
     const key = composition.slice().sort().join(",") + acquisition.signature;
@@ -102,8 +128,9 @@ export function affordableTeams(teams, inventory, names, options, budget) {
   return candidates.flatMap(team => {
     if (!team.acquisition.constellations.length && !team.acquisition.weapons.length) return [team];
     const key = comparisonKey(team);
-    const baseline = key ? baselines.get(key) : null;
+    const available = key ? baselines.get(key) || [] : [];
+    const baseline = comparisonBaseline(team, available);
     if (baseline && team.dps <= baseline.dps) return [];
-    return [{ ...team, comparison: { baseline: baseline || null, changes: baseline ? buildDifferences(baseline, team) : [] } }];
+    return [{ ...team, comparison: { baseline, baselines: available, changes: baseline ? buildDifferences(baseline, team) : [] } }];
   }).sort((a, b) => b.dps - a.dps);
 }
