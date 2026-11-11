@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-16T23:49:30Z",
+ "generated": "2026-11-11T19:00:52Z",
  "abyss": {
   "start": "2026-10-16",
   "end": "2026-11-15",
@@ -96,44 +96,44 @@
   ]
  },
  "onslaught": {
-  "start": "2026-09-30",
-  "end": "2026-11-03",
-  "source": "https://genshin-impact.fandom.com/wiki/Stygian_Onslaught/2026-09-30",
+  "start": "2026-11-11",
+  "end": "2026-12-15",
+  "source": "https://genshin-impact.fandom.com/wiki/Stygian_Onslaught/2026-11-11",
   "bosses": [
    {
-    "id": "battle-hardened-domovoy-sculptor",
-    "elements": [],
+    "id": "wavebinder",
+    "elements": [
+     "electro"
+    ],
     "tags": [
      {
-      "en": "Stellar Glimmer",
-      "ru": "Звёздный блеск"
+      "en": "Glimmer",
+      "ru": "Glimmer"
      }
     ]
    },
    {
-    "id": "secret-source-automaton-overseer-device",
+    "id": "emperor-of-fire-and-iron",
     "elements": [
-     "cryo"
+     "hydro"
     ],
     "tags": []
    },
    {
-    "id": "guardian-blade-of-drifting-snow",
+    "id": "radiant-moongecko",
     "elements": [
-     "electro",
-     "anemo",
-     "pyro"
+     "geo"
     ],
     "tags": [
      {
-      "en": "Stellar Glimmer",
-      "ru": "Звёздный блеск"
+      "en": "Healing",
+      "ru": "Healing"
      }
     ]
    }
   ],
   "details": {
-   "key": "2026-09-30 10:00:00|101201,101202,101203,101204,101205,101206",
+   "key": "2026-11-11 10:00:00|101301,101302,101303,101304,101305,101306",
    "difficulties": [
     {
      "id": 1,
@@ -152,76 +152,86 @@
      "bosses": [
       {
        "form": {
-        "en": "Battle-Hardened Domovoy Sculptor: Normal",
-        "ru": "Бывалый домовой-ваятель: Обычная форма"
+        "en": "Wavebinder: Normal",
+        "ru": "Удерживающий волны: Обычная форма"
        },
        "advantage": {
-        "en": "Stellar Glimmer Characters",
-        "ru": "Персонажи реакции Звёздного блеска"
+        "en": "Stellar Glimmer characters | {el:electro} characters",
+        "ru": "Персонажи реакции Звёздный блеск | Персонажи {el:electro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Big-Mouthed Jack Frost",
-          "ru": "Большеротый ледовик"
+          "en": "Courage Against the Cold",
+          "ru": "Морозная храбрость"
          },
          "text": {
-          "en": "During battle, the Nemesis will periodically harness Anemo energy to create Prime Ice sculptures. After a short delay, the sculptures will transform into Big-Mouthed Jack Frosts that continuously launch snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculptures to interrupt the process and turn the ice sculptures into a harmless animal statues instead.",
-          "ru": "Во время боя сильный противник через определённые промежутки времени использует силу Анемо, чтобы создать скульптуру из вечного льда. После завершения создания она превратится в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
-         }
-        }
-       ]
-      },
-      {
-       "form": {
-        "en": "Secret Source Automaton: Overseer Device - Normal",
-        "ru": "Автоматон таинственного источника: Обычная форма"
-       },
-       "advantage": {
-        "en": "{el:cryo} characters",
-        "ru": "Персонажи {el:cryo}"
-       },
-       "mechanics": [
-        {
-         "title": {
-          "en": "Sweeper Mode",
-          "ru": "Режим зачистки"
-         },
-         "text": {
-          "en": "Will enter Sweeper Mode while in combat: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
-          "ru": "В бою переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+          "en": "At intervals, this Nemesis will take out a flask and drink deeply to build up Courage. If it is affected by {hl}Radiance: Stellar Glimmer{/hl} while drinking, it will gain Courage at a reduced rate. Dealing {hl}Electro DMG{/hl} to it will also reduce its Courage. {hl}Electro DMG considered to be DMG from the corresponding Stellar Glimmer Reaction{/hl} will reduce Courage by a significantly greater amount.",
+          "ru": "Через определённые промежутки времени сильный противник достаёт термос и пьёт большими глотками, накапливая Храбрость. Если во время питья он находится под действием эффекта {hl}Сияние: Звёздный блеск{/hl}, скорость накопления Храбрости снижается. Кроме того, при получении {hl}урона Электро{/hl} его Храбрость уменьшается; если же полученный {hl}урон Электро считается уроном соответствующей реакции Звёздный блеск{/hl}, Храбрость уменьшается значительно сильнее."
          }
         },
         {
          "title": {
-          "en": "Counterstrike Mode",
-          "ru": "Режим контрудара"
+          "en": "Valiant State",
+          "ru": "Состояние Отваги"
          },
          "text": {
-          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
-          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+          "en": "Once the Nemesis's Courage is full, it will enter the Valiant state, causing its attacks to become more ferocious and {hl}greatly increasing all Elemental RES and Physical RES{/hl}. While in this state, its Courage will be continuously consumed, and it will exit the state once its Courage is depleted.",
+          "ru": "Когда Храбрость сильного противника накапливается до максимума, он переходит в состояние Отваги: его атаки становятся более яростными, а {hl}сопротивление всем элементам и физ. сопротивление значительно повышаются{/hl}. В этом состоянии Храбрость непрерывно расходуется. Когда она заканчивается, противник выходит из этого состояния."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Guardian Blade of Drifting Snow: Normal",
-        "ru": "Разящая вьюга: Обычная форма"
+        "en": "Emperor of Fire and Iron: Normal",
+        "ru": "Император огня и железа: Обычная форма"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+        "en": "{el:hydro} characters",
+        "ru": "{el:hydro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Ice Coffin",
-          "ru": "Ледяной гроб"
+          "en": "Molten Crown",
+          "ru": "Огненная корона-рога"
          },
          "text": {
-          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
-          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+          "en": "The twin molten horns located high up on the body of the Emperor of Fire and Iron are {hl}Pyro-aligned{/hl} organs that enable it to unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When unleashing certain attacks, its twin molten horns will {hl}stay close to the ground{/hl}, providing an opportunity to {hl}use Elemental Reactions to destroy them{/hl}. Once the Pyro element stored within the twin molten horns is exhausted, they will be destroyed and cannot be restored for a period of time.",
+          "ru": "Двойной рог, расположенный высоко на Императоре огня и железа, является органом {hl}Пиро{/hl}, который позволяет ему использовать более мощные элементальные атаки и наделяют его ещё более сильными оборонительными возможностями. Когда он использует определённые атаки, его Двойной рог находится {hl}близко к земле{/hl}, что даёт отличную возможность {hl}использовать элементальные реакции для уничтожения рогов{/hl}. Как только элемент Пиро внутри Двойного рога исчезнет, рога будут уничтожены и не смогут быть восстановлены в течение некоторого времени."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Radiant Moongecko: Normal",
+        "ru": "Лучезарный лунный геккон: Обычная форма"
+       },
+       "advantage": {
+        "en": "{el:geo} Characters | Healing Characters",
+        "ru": "Персонажи {el:geo} | Лечащие персонажи"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Radiant Cocoon",
+          "ru": "Сияющий кокон"
+         },
+         "text": {
+          "en": "After battle begins, the Nemesis harnesses Geo to apply Radiant Cocoon to characters and increase its own Geo RES. Characters afflicted by Radiant Cocoon {hl}deal less DMG and receive less healing{/hl}. {hl}When a character's HP is restored to full through healing{/hl}, they break free from the cocoon and gain the Disentangled effect, which boosts their abilities for a short time. Once any character in the party successfully breaks free, the Nemesis loses the Geo RES granted by Radiant Cocoon.",
+          "ru": "В начале боя сильный противник использует силу Гео, чтобы опутать персонажей сияющим коконом, и повышает своё Гео сопротивление. Персонажи в коконе {hl}наносят меньше урона и получают меньше лечения{/hl}. Когда {hl}лечение восполняет HP персонажа до максимума{/hl}, он разрывает кокон и получает эффект Освобождение, временно повышающий его характеристики. Как только любой персонаж в отряде освободится, противник потеряет Гео сопротивление от сияющего кокона."
+         }
+        },
+        {
+         "title": {
+          "en": "Voidstep Reverberation",
+          "ru": "Шаг в пустоту"
+         },
+         "text": {
+          "en": "During battle, the Nemesis leaves a Moonstone Anchor in its place before leaping to higher ground to prepare for Voidstep Reverberation. Some time later, it unleashes a large and powerful AoE strike. Use {hl}methods suited to dealing with Geo{/hl} to break through the multiple Geo ward layers on the Moonstone Anchor. Destroying the Moonstone Anchor interrupts the skill's charge-up and deals massive DMG to the Nemesis. The more DMG the Moonstone Anchor takes during the preparation phase, the greater the DMG dealt to the Nemesis when the Moonstone Anchor is destroyed.",
+          "ru": "В бою противник оставляет на своём изначальном месте якорный лунный камень и взмывает вверх, готовясь к приёму Шаг в пустоту: через некоторое время он совершит мощную атаку по большой площади. Можно использовать {hl}способы противодействия Гео{/hl}, чтобы разрушить многослойный Гео барьер якорного лунного камня и уничтожить его. Его уничтожение прерывает подготовку атаки и наносит противнику значительный урон. Чем больше урона получит камень во время подготовки, тем больше урона будет нанесено противнику при уничтожении камня."
          }
         }
        ]
@@ -245,76 +255,86 @@
      "bosses": [
       {
        "form": {
-        "en": "Battle-Hardened Domovoy Sculptor: Normal",
-        "ru": "Бывалый домовой-ваятель: Обычная форма"
+        "en": "Wavebinder: Normal",
+        "ru": "Удерживающий волны: Обычная форма"
        },
        "advantage": {
-        "en": "Stellar Glimmer Characters",
-        "ru": "Персонажи реакции Звёздного блеска"
+        "en": "Stellar Glimmer characters | {el:electro} characters",
+        "ru": "Персонажи реакции Звёздный блеск | Персонажи {el:electro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Big-Mouthed Jack Frost",
-          "ru": "Большеротый ледовик"
+          "en": "Courage Against the Cold",
+          "ru": "Морозная храбрость"
          },
          "text": {
-          "en": "During battle, the Nemesis will periodically harness Anemo energy to create Prime Ice sculptures. After a short delay, the sculptures will transform into Big-Mouthed Jack Frosts that continuously launch snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculptures to interrupt the process and turn the ice sculptures into a harmless animal statues instead.",
-          "ru": "Во время боя сильный противник через определённые промежутки времени использует силу Анемо, чтобы создать скульптуру из вечного льда. После завершения создания она превратится в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
-         }
-        }
-       ]
-      },
-      {
-       "form": {
-        "en": "Secret Source Automaton: Overseer Device - Normal",
-        "ru": "Автоматон таинственного источника: Обычная форма"
-       },
-       "advantage": {
-        "en": "{el:cryo} characters",
-        "ru": "Персонажи {el:cryo}"
-       },
-       "mechanics": [
-        {
-         "title": {
-          "en": "Sweeper Mode",
-          "ru": "Режим зачистки"
-         },
-         "text": {
-          "en": "Will enter Sweeper Mode while in combat: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
-          "ru": "В бою переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+          "en": "At intervals, this Nemesis will take out a flask and drink deeply to build up Courage. If it is affected by {hl}Radiance: Stellar Glimmer{/hl} while drinking, it will gain Courage at a reduced rate. Dealing {hl}Electro DMG{/hl} to it will also reduce its Courage. {hl}Electro DMG considered to be DMG from the corresponding Stellar Glimmer Reaction{/hl} will reduce Courage by a significantly greater amount.",
+          "ru": "Через определённые промежутки времени сильный противник достаёт термос и пьёт большими глотками, накапливая Храбрость. Если во время питья он находится под действием эффекта {hl}Сияние: Звёздный блеск{/hl}, скорость накопления Храбрости снижается. Кроме того, при получении {hl}урона Электро{/hl} его Храбрость уменьшается; если же полученный {hl}урон Электро считается уроном соответствующей реакции Звёздный блеск{/hl}, Храбрость уменьшается значительно сильнее."
          }
         },
         {
          "title": {
-          "en": "Counterstrike Mode",
-          "ru": "Режим контрудара"
+          "en": "Valiant State",
+          "ru": "Состояние Отваги"
          },
          "text": {
-          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
-          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+          "en": "Once the Nemesis's Courage is full, it will enter the Valiant state, causing its attacks to become more ferocious and {hl}greatly increasing all Elemental RES and Physical RES{/hl}. While in this state, its Courage will be continuously consumed, and it will exit the state once its Courage is depleted.",
+          "ru": "Когда Храбрость сильного противника накапливается до максимума, он переходит в состояние Отваги: его атаки становятся более яростными, а {hl}сопротивление всем элементам и физ. сопротивление значительно повышаются{/hl}. В этом состоянии Храбрость непрерывно расходуется. Когда она заканчивается, противник выходит из этого состояния."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Guardian Blade of Drifting Snow: Normal",
-        "ru": "Разящая вьюга: Обычная форма"
+        "en": "Emperor of Fire and Iron: Normal",
+        "ru": "Император огня и железа: Обычная форма"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+        "en": "{el:hydro} characters",
+        "ru": "{el:hydro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Ice Coffin",
-          "ru": "Ледяной гроб"
+          "en": "Molten Crown",
+          "ru": "Огненная корона-рога"
          },
          "text": {
-          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
-          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+          "en": "The twin molten horns located high up on the body of the Emperor of Fire and Iron are {hl}Pyro-aligned{/hl} organs that enable it to unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When unleashing certain attacks, its twin molten horns will {hl}stay close to the ground{/hl}, providing an opportunity to {hl}use Elemental Reactions to destroy them{/hl}. Once the Pyro element stored within the twin molten horns is exhausted, they will be destroyed and cannot be restored for a period of time.",
+          "ru": "Двойной рог, расположенный высоко на Императоре огня и железа, является органом {hl}Пиро{/hl}, который позволяет ему использовать более мощные элементальные атаки и наделяют его ещё более сильными оборонительными возможностями. Когда он использует определённые атаки, его Двойной рог находится {hl}близко к земле{/hl}, что даёт отличную возможность {hl}использовать элементальные реакции для уничтожения рогов{/hl}. Как только элемент Пиро внутри Двойного рога исчезнет, рога будут уничтожены и не смогут быть восстановлены в течение некоторого времени."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Radiant Moongecko: Normal",
+        "ru": "Лучезарный лунный геккон: Обычная форма"
+       },
+       "advantage": {
+        "en": "{el:geo} Characters | Healing Characters",
+        "ru": "Персонажи {el:geo} | Лечащие персонажи"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Radiant Cocoon",
+          "ru": "Сияющий кокон"
+         },
+         "text": {
+          "en": "After battle begins, the Nemesis harnesses Geo to apply Radiant Cocoon to characters and increase its own Geo RES. Characters afflicted by Radiant Cocoon {hl}deal less DMG and receive less healing{/hl}. {hl}When a character's HP is restored to full through healing{/hl}, they break free from the cocoon and gain the Disentangled effect, which boosts their abilities for a short time. Once any character in the party successfully breaks free, the Nemesis loses the Geo RES granted by Radiant Cocoon.",
+          "ru": "В начале боя сильный противник использует силу Гео, чтобы опутать персонажей сияющим коконом, и повышает своё Гео сопротивление. Персонажи в коконе {hl}наносят меньше урона и получают меньше лечения{/hl}. Когда {hl}лечение восполняет HP персонажа до максимума{/hl}, он разрывает кокон и получает эффект Освобождение, временно повышающий его характеристики. Как только любой персонаж в отряде освободится, противник потеряет Гео сопротивление от сияющего кокона."
+         }
+        },
+        {
+         "title": {
+          "en": "Voidstep Reverberation",
+          "ru": "Шаг в пустоту"
+         },
+         "text": {
+          "en": "During battle, the Nemesis leaves a Moonstone Anchor in its place before leaping to higher ground to prepare for Voidstep Reverberation. Some time later, it unleashes a large and powerful AoE strike. Use {hl}methods suited to dealing with Geo{/hl} to break through the multiple Geo ward layers on the Moonstone Anchor. Destroying the Moonstone Anchor interrupts the skill's charge-up and deals massive DMG to the Nemesis. The more DMG the Moonstone Anchor takes during the preparation phase, the greater the DMG dealt to the Nemesis when the Moonstone Anchor is destroyed.",
+          "ru": "В бою противник оставляет на своём изначальном месте якорный лунный камень и взмывает вверх, готовясь к приёму Шаг в пустоту: через некоторое время он совершит мощную атаку по большой площади. Можно использовать {hl}способы противодействия Гео{/hl}, чтобы разрушить многослойный Гео барьер якорного лунного камня и уничтожить его. Его уничтожение прерывает подготовку атаки и наносит противнику значительный урон. Чем больше урона получит камень во время подготовки, тем больше урона будет нанесено противнику при уничтожении камня."
          }
         }
        ]
@@ -338,76 +358,86 @@
      "bosses": [
       {
        "form": {
-        "en": "Battle-Hardened Domovoy Sculptor: Normal",
-        "ru": "Бывалый домовой-ваятель: Обычная форма"
+        "en": "Wavebinder: Normal",
+        "ru": "Удерживающий волны: Обычная форма"
        },
        "advantage": {
-        "en": "Stellar Glimmer Characters",
-        "ru": "Персонажи реакции Звёздного блеска"
+        "en": "Stellar Glimmer characters | {el:electro} characters",
+        "ru": "Персонажи реакции Звёздный блеск | Персонажи {el:electro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Big-Mouthed Jack Frost",
-          "ru": "Большеротый ледовик"
+          "en": "Courage Against the Cold",
+          "ru": "Морозная храбрость"
          },
          "text": {
-          "en": "During battle, the Nemesis will periodically harness Anemo energy to create Prime Ice sculptures. After a short delay, the sculptures will transform into Big-Mouthed Jack Frosts that continuously launch snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculptures to interrupt the process and turn the ice sculptures into a harmless animal statues instead.",
-          "ru": "Во время боя сильный противник через определённые промежутки времени использует силу Анемо, чтобы создать скульптуру из вечного льда. После завершения создания она превратится в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
-         }
-        }
-       ]
-      },
-      {
-       "form": {
-        "en": "Secret Source Automaton: Overseer Device - Normal",
-        "ru": "Автоматон таинственного источника: Обычная форма"
-       },
-       "advantage": {
-        "en": "{el:cryo} characters",
-        "ru": "Персонажи {el:cryo}"
-       },
-       "mechanics": [
-        {
-         "title": {
-          "en": "Sweeper Mode",
-          "ru": "Режим зачистки"
-         },
-         "text": {
-          "en": "Will enter Sweeper Mode while in combat: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
-          "ru": "В бою переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+          "en": "At intervals, this Nemesis will take out a flask and drink deeply to build up Courage. If it is affected by {hl}Radiance: Stellar Glimmer{/hl} while drinking, it will gain Courage at a reduced rate. Dealing {hl}Electro DMG{/hl} to it will also reduce its Courage. {hl}Electro DMG considered to be DMG from the corresponding Stellar Glimmer Reaction{/hl} will reduce Courage by a significantly greater amount.",
+          "ru": "Через определённые промежутки времени сильный противник достаёт термос и пьёт большими глотками, накапливая Храбрость. Если во время питья он находится под действием эффекта {hl}Сияние: Звёздный блеск{/hl}, скорость накопления Храбрости снижается. Кроме того, при получении {hl}урона Электро{/hl} его Храбрость уменьшается; если же полученный {hl}урон Электро считается уроном соответствующей реакции Звёздный блеск{/hl}, Храбрость уменьшается значительно сильнее."
          }
         },
         {
          "title": {
-          "en": "Counterstrike Mode",
-          "ru": "Режим контрудара"
+          "en": "Valiant State",
+          "ru": "Состояние Отваги"
          },
          "text": {
-          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
-          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+          "en": "Once the Nemesis's Courage is full, it will enter the Valiant state, causing its attacks to become more ferocious and {hl}greatly increasing all Elemental RES and Physical RES{/hl}. While in this state, its Courage will be continuously consumed, and it will exit the state once its Courage is depleted.",
+          "ru": "Когда Храбрость сильного противника накапливается до максимума, он переходит в состояние Отваги: его атаки становятся более яростными, а {hl}сопротивление всем элементам и физ. сопротивление значительно повышаются{/hl}. В этом состоянии Храбрость непрерывно расходуется. Когда она заканчивается, противник выходит из этого состояния."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Guardian Blade of Drifting Snow: Normal",
-        "ru": "Разящая вьюга: Обычная форма"
+        "en": "Emperor of Fire and Iron: Normal",
+        "ru": "Император огня и железа: Обычная форма"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+        "en": "{el:hydro} characters",
+        "ru": "{el:hydro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Ice Coffin",
-          "ru": "Ледяной гроб"
+          "en": "Molten Crown",
+          "ru": "Огненная корона-рога"
          },
          "text": {
-          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
-          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+          "en": "The twin molten horns located high up on the body of the Emperor of Fire and Iron are {hl}Pyro-aligned{/hl} organs that enable it to unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When unleashing certain attacks, its twin molten horns will {hl}stay close to the ground{/hl}, providing an opportunity to {hl}use Elemental Reactions to destroy them{/hl}. Once the Pyro element stored within the twin molten horns is exhausted, they will be destroyed and cannot be restored for a period of time.",
+          "ru": "Двойной рог, расположенный высоко на Императоре огня и железа, является органом {hl}Пиро{/hl}, который позволяет ему использовать более мощные элементальные атаки и наделяют его ещё более сильными оборонительными возможностями. Когда он использует определённые атаки, его Двойной рог находится {hl}близко к земле{/hl}, что даёт отличную возможность {hl}использовать элементальные реакции для уничтожения рогов{/hl}. Как только элемент Пиро внутри Двойного рога исчезнет, рога будут уничтожены и не смогут быть восстановлены в течение некоторого времени."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Radiant Moongecko: Normal",
+        "ru": "Лучезарный лунный геккон: Обычная форма"
+       },
+       "advantage": {
+        "en": "{el:geo} Characters | Healing Characters",
+        "ru": "Персонажи {el:geo} | Лечащие персонажи"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Radiant Cocoon",
+          "ru": "Сияющий кокон"
+         },
+         "text": {
+          "en": "After battle begins, the Nemesis harnesses Geo to apply Radiant Cocoon to characters and increase its own Geo RES. Characters afflicted by Radiant Cocoon {hl}deal less DMG and receive less healing{/hl}. {hl}When a character's HP is restored to full through healing{/hl}, they break free from the cocoon and gain the Disentangled effect, which boosts their abilities for a short time. Once any character in the party successfully breaks free, the Nemesis loses the Geo RES granted by Radiant Cocoon.",
+          "ru": "В начале боя сильный противник использует силу Гео, чтобы опутать персонажей сияющим коконом, и повышает своё Гео сопротивление. Персонажи в коконе {hl}наносят меньше урона и получают меньше лечения{/hl}. Когда {hl}лечение восполняет HP персонажа до максимума{/hl}, он разрывает кокон и получает эффект Освобождение, временно повышающий его характеристики. Как только любой персонаж в отряде освободится, противник потеряет Гео сопротивление от сияющего кокона."
+         }
+        },
+        {
+         "title": {
+          "en": "Voidstep Reverberation",
+          "ru": "Шаг в пустоту"
+         },
+         "text": {
+          "en": "During battle, the Nemesis leaves a Moonstone Anchor in its place before leaping to higher ground to prepare for Voidstep Reverberation. Some time later, it unleashes a large and powerful AoE strike. Use {hl}methods suited to dealing with Geo{/hl} to break through the multiple Geo ward layers on the Moonstone Anchor. Destroying the Moonstone Anchor interrupts the skill's charge-up and deals massive DMG to the Nemesis. The more DMG the Moonstone Anchor takes during the preparation phase, the greater the DMG dealt to the Nemesis when the Moonstone Anchor is destroyed.",
+          "ru": "В бою противник оставляет на своём изначальном месте якорный лунный камень и взмывает вверх, готовясь к приёму Шаг в пустоту: через некоторое время он совершит мощную атаку по большой площади. Можно использовать {hl}способы противодействия Гео{/hl}, чтобы разрушить многослойный Гео барьер якорного лунного камня и уничтожить его. Его уничтожение прерывает подготовку атаки и наносит противнику значительный урон. Чем больше урона получит камень во время подготовки, тем больше урона будет нанесено противнику при уничтожении камня."
          }
         }
        ]
@@ -435,76 +465,86 @@
      "bosses": [
       {
        "form": {
-        "en": "Battle-Hardened Domovoy Sculptor: Hammer-and-Chisel",
-        "ru": "Бывалый домовой-ваятель: Резчик"
+        "en": "Wavebinder: Valiant Charge",
+        "ru": "Удерживающий волны: Рвение"
        },
        "advantage": {
-        "en": "Stellar Glimmer Characters",
-        "ru": "Персонажи реакции Звёздного блеска"
+        "en": "Stellar Glimmer characters | {el:electro} characters",
+        "ru": "Персонажи реакции Звёздный блеск | Персонажи {el:electro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Big-Mouthed Jack Frost",
-          "ru": "Большеротый ледовик"
+          "en": "Courage Against the Cold",
+          "ru": "Морозная храбрость"
          },
          "text": {
-          "en": "When battle begins, the Nemesis will harness Anemo energy to create a Prime Ice sculpture. After a short delay, the sculpture will transform into a Big-Mouthed Jack Frost that continuously launches snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculpture to interrupt the process and turn the ice sculpture into a harmless animal statue instead.",
-          "ru": "В начале боя сильный противник силой Анемо создаёт скульптуру из вечного льда. Через некоторое время она превращается в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
-         }
-        }
-       ]
-      },
-      {
-       "form": {
-        "en": "Secret Source Automaton: Overseer Device - Swift Strike",
-        "ru": "Автоматон таинственного источника: Стремительный удар"
-       },
-       "advantage": {
-        "en": "{el:cryo} characters",
-        "ru": "Персонажи {el:cryo}"
-       },
-       "mechanics": [
-        {
-         "title": {
-          "en": "Preemptive Sweeper Mode",
-          "ru": "Упреждающий режим зачистки"
-         },
-         "text": {
-          "en": "Will immediately enter Sweeper Mode when combat starts: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.",
-          "ru": "В начале боя сразу переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление."
+          "en": "When the battle begins, this Nemesis will take out a flask and drink deeply to build up Courage. If it is affected by {hl}Radiance: Stellar Glimmer{/hl} while drinking, it will gain Courage at a reduced rate. Dealing {hl}Electro DMG{/hl} to it will also reduce its Courage. {hl}Electro DMG considered to be DMG from the corresponding Stellar Glimmer Reaction{/hl} will reduce Courage by a significantly greater amount.",
+          "ru": "В начале боя сильный противник достаёт термос и пьёт большими глотками, накапливая Храбрость. Если во время питья он находится под действием эффекта {hl}Сияние: Звёздный блеск{/hl}, скорость накопления Храбрости снижается. Кроме того, при получении {hl}урона Электро{/hl} его Храбрость уменьшается; если же полученный {hl}урон Электро считается уроном соответствующей реакции Звёздный блеск{/hl}, Храбрость уменьшается значительно сильнее."
          }
         },
         {
          "title": {
-          "en": "Counterstrike Mode",
-          "ru": "Режим контрудара"
+          "en": "Valiant State",
+          "ru": "Состояние Отваги"
          },
          "text": {
-          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Counterstrike Mode and switch to attacking with tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
-          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим контрудара и атакует с помощью наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+          "en": "Once the Nemesis's Courage is full, it will enter the Valiant state, causing its attacks to become more ferocious and {hl}greatly increasing all Elemental RES and Physical RES{/hl}. While in this state, its Courage will be continuously consumed, and it will exit the state once its Courage is depleted.",
+          "ru": "Когда Храбрость сильного противника накапливается до максимума, он переходит в состояние Отваги: его атаки становятся более яростными, а {hl}сопротивление всем элементам и физ. сопротивление значительно повышаются{/hl}. В этом состоянии Храбрость непрерывно расходуется. Когда она заканчивается, противник выходит из этого состояния."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Guardian Blade of Drifting Snow: Reprise",
-        "ru": "Разящая вьюга: На бис"
+        "en": "Emperor of Fire and Iron: Raid",
+        "ru": "Император огня и железа: Налёт"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:electro}{el:anemo}{el:pyro} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:electro}{el:anemo}{el:pyro}"
+        "en": "{el:hydro} characters",
+        "ru": "{el:hydro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Ice Coffin",
-          "ru": "Ледяной гроб"
+          "en": "Molten Crown",
+          "ru": "Огненная корона-рога"
          },
          "text": {
-          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself. This can only occur once per challenge. While the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. If the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}Electro and Anemo{/hl} attacks will destroy the Ice Coffin more effectively.",
-          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого значения, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты. Этот эффект срабатывает лишь один раз за испытание. Пока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Когда сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Электро и Анемо{/hl} атаки эффективнее разрушают этот ледяной гроб."
+          "en": "The twin molten horns located high up on the body of the Emperor of Fire and Iron are {hl}Pyro-aligned{/hl} organs that enable it to unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When unleashing certain attacks, its twin molten horns will {hl}stay close to the ground{/hl}, providing an opportunity to {hl}use Elemental Reactions to destroy them{/hl}. Once the Pyro element stored within the twin molten horns is exhausted, they will be destroyed and cannot be restored for a period of time.",
+          "ru": "Двойной рог, расположенный высоко на Императоре огня и железа, является органом {hl}Пиро{/hl}, который позволяет ему использовать более мощные элементальные атаки и наделяют его ещё более сильными оборонительными возможностями. Когда он использует определённые атаки, его Двойной рог находится {hl}близко к земле{/hl}, что даёт отличную возможность {hl}использовать элементальные реакции для уничтожения рогов{/hl}. Как только элемент Пиро внутри Двойного рога исчезнет, рога будут уничтожены и не смогут быть восстановлены в течение некоторого времени."
+         }
+        }
+       ]
+      },
+      {
+       "form": {
+        "en": "Radiant Moongecko: Immovable",
+        "ru": "Лучезарный лунный геккон: Усиленная форма"
+       },
+       "advantage": {
+        "en": "{el:geo} Characters | Healing Characters",
+        "ru": "Персонажи {el:geo} | Лечащие персонажи"
+       },
+       "mechanics": [
+        {
+         "title": {
+          "en": "Voidstep Reverberation",
+          "ru": "Шаг в пустоту"
+         },
+         "text": {
+          "en": "After the battle begins, the Nemesis leaves a Moonstone Anchor in its place before leaping to higher ground to prepare for Voidstep Reverberation. Some time later, it unleashes a large and powerful AoE strike. Use {hl}methods suited to dealing with Geo{/hl} to break through the multiple Geo ward layers on the Moonstone Anchor. Destroying the Moonstone Anchor interrupts the skill's charge-up and deals massive DMG to the Nemesis. The more DMG the Moonstone Anchor takes during the preparation phase, the greater the DMG dealt to the Nemesis when the Moonstone Anchor is destroyed.",
+          "ru": "После начала боя сильный противник оставляет на своём изначальном месте якорный лунный камень и взмывает вверх, готовясь к приёму Шаг в пустоту: через некоторое время он совершит мощную атаку по большой площади. Можно использовать {hl}способы противодействия Гео{/hl}, чтобы разрушить многослойный Гео барьер якорного лунного камня и уничтожить его. Его уничтожение прерывает подготовку атаки и наносит противнику значительный урон. Чем больше урона получит камень во время подготовки, тем больше урона будет нанесено противнику при уничтожении камня."
+         }
+        },
+        {
+         "title": {
+          "en": "Radiant Cocoon",
+          "ru": "Сияющий кокон"
+         },
+         "text": {
+          "en": "During battle, the Nemesis harnesses Geo to apply Radiant Cocoon to characters and increase its own Geo RES. Characters afflicted by Radiant Cocoon {hl}deal less DMG and receive less healing{/hl}. {hl}When a character's HP is restored to full through healing{/hl}, they break free from the cocoon and gain the Disentangled effect, which boosts their abilities for a short time. Once any character in the party successfully breaks free, the Nemesis loses the Geo RES granted by Radiant Cocoon.",
+          "ru": "В бою сильный противник использует силу Гео, чтобы опутать персонажей сияющим коконом, и повышает своё Гео сопротивление. Персонажи в коконе {hl}наносят меньше урона и получают меньше лечения{/hl}. Когда {hl}лечение восполняет HP персонажа до максимума{/hl}, он разрывает кокон и получает эффект Освобождение, временно повышающий его характеристики. Как только любой персонаж в отряде освободится, противник потеряет Гео сопротивление от сияющего кокона."
          }
         }
        ]
@@ -536,106 +576,116 @@
      "bosses": [
       {
        "form": {
-        "en": "Battle-Hardened Domovoy Sculptor: Gale Hewing",
-        "ru": "Бывалый домовой-ваятель: Топор ветра"
+        "en": "Wavebinder: Stormfang",
+        "ru": "Удерживающий волны: Яростный бросок"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:anemo} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:anemo}"
+        "en": "Stellar Glimmer characters | {el:electro} characters",
+        "ru": "Персонажи реакции Звёздный блеск | Персонажи {el:electro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Big-Mouthed Jack Frost",
-          "ru": "Большеротый ледовик"
+          "en": "Courage Against the Cold: Hearty Draught",
+          "ru": "Морозная храбрость: Лихой глоток"
          },
          "text": {
-          "en": "When battle begins, the Nemesis will harness Anemo energy to create a Prime Ice sculpture. After a short delay, the sculpture will transform into a Big-Mouthed Jack Frost that continuously launches snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculpture to interrupt the process and turn the ice sculpture into a harmless animal statue instead.",
-          "ru": "В начале боя сильный противник силой Анемо создаёт скульптуру из вечного льда. Через некоторое время она превращается в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+          "en": "Due to the effects of the Ley Line disturbance, this Nemesis will periodically take out a flask and drink deeply, gaining a large amount of Courage in the process. If it is affected by {hl}Radiance: Stellar Glimmer{/hl} while drinking, it will gain Courage at a reduced rate. Dealing {hl}Electro DMG{/hl} to it will also reduce its Courage. {hl}Electro DMG considered to be DMG from the corresponding Stellar Glimmer Reaction{/hl} will reduce Courage by a significantly greater amount.",
+          "ru": "Под влиянием флуктуации артерий земли сильный противник через определённые промежутки времени достаёт термос и пьёт большими глотками, накапливая большое количество Храбрости. Если во время питья он находится под действием эффекта {hl}Сияние: Звёздный блеск{/hl}, скорость накопления Храбрости снижается. Кроме того, при получении {hl}урона Электро{/hl} его Храбрость уменьшается; если же полученный {hl}урон Электро считается уроном соответствующей реакции Звёздный блеск{/hl}, Храбрость уменьшается значительно сильнее."
          }
         },
         {
          "title": {
-          "en": "Creative Frenzy",
-          "ru": "Неиссякаемое вдохновение"
+          "en": "Valiant Assault",
+          "ru": "Состояние Отваги: Налёт"
          },
          "text": {
-          "en": "Due to the effects of the Ley Line disturbance, the Nemesis will {hl}start the battle with greatly increased All Elemental RES and Physical RES{/hl} and will create Prime Ice sculptures more frequently.\nAfter an ice sculpture is transformed into a small animal statue, it will explode following a brief delay, dealing damage to the Nemesis and {hl}reducing its All Elemental RES and Physical RES, while further reducing its Anemo RES{/hl}. This effect can {hl}stack up to 3 times{/hl}.",
-          "ru": "Под воздействием флуктуации артерий земли сильный противник {hl}в начале битвы получит повышенное сопротивление всем элементам и физ. сопротивление{/hl}, а также будет чаще создавать скульптуры из вечного льда.\nКогда ледяная скульптура превратится в фигурку животного, она вскоре взорвётся, нанося сильному противнику определённый урон и {hl}понижая его сопротивление всем элементам и физ. сопротивление, а также дополнительно понижая его Анемо сопротивление{/hl}. Этот эффект {hl}складывается до 3 раз{/hl}."
+          "en": "Due to the effects of the Ley Line disturbance, once the Nemesis's Courage is full, they will enter the Valiant Assault state. While in this state, their attacks will become more ferocious. They will also {hl}generate a shield and greatly increase all Elemental and Physical RES other than Electro RES, which will receive a small increase.{/hl}. While Valiant Assault is active, the Nemesis's Courage will be continuously consumed. {hl}Electro DMG will also drain more Courage than usual{/hl}. It will exit this state and suffer massive backlash DMG once its Courage is depleted. The more DMG its shield absorbs during Valiant Assault, the greater the backlash DMG it will suffer when the state ends. {hl}Stellar Glimmer reaction DMG{/hl} will increase the backlash DMG taken when the Shield is broken.",
+          "ru": "Под влиянием флуктуации артерий земли, когда Храбрость сильного противника накапливается до максимума, он переходит в Состояние Отваги: Налёт. Его атаки становятся более яростными, а {hl}сам он создаёт щит, значительно повышает сопротивление всем элементам, кроме Электро, и физ. сопротивление, а также немного повышает сопротивление Электро{/hl}. В этом состоянии Храбрость непрерывно расходуется, причём {hl}при получении Электро урона противник теряет больше Храбрости{/hl}. Когда Храбрость заканчивается, противник выходит из этого состояния и получает большой урон от отдачи. Чем больше урона поглотил щит в этом состоянии, тем выше урон от отдачи. {hl}Электро урон реакции Звёздный блеск{/hl} дополнительно повышает урон от отдачи при разрушении щита."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Secret Source Automaton: Overseer Device - Obliterator Panoply",
-        "ru": "Автоматон таинственного источника: Опустошающее оружие"
+        "en": "Emperor of Fire and Iron: Ordained Conquest",
+        "ru": "Император огня и железа: Поход"
        },
        "advantage": {
-        "en": "{el:cryo} characters",
-        "ru": "Персонажи {el:cryo}"
+        "en": "{el:hydro} characters",
+        "ru": "{el:hydro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Preemptive Sweeper Mode",
-          "ru": "Упреждающий режим зачистки"
+          "en": "Molten Crown",
+          "ru": "Огненная корона-рога"
          },
          "text": {
-          "en": "Will immediately enter Sweeper Mode when combat starts: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.\nEach time it enters Sweeper Mode, it will produce additional Elemental Orbs the first time its rotating attacks are stopped.",
-          "ru": "В начале боя сразу переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление.\nКаждый раз, когда он впервые прекращает вращаться и атаковать в режиме зачистки, будут выпадать дополнительные элементальные сферы."
+          "en": "The twin molten horns located high up on the body of the Emperor of Fire and Iron are {hl}Pyro-aligned{/hl} organs that enable it to unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When unleashing certain attacks, its twin molten horns will {hl}stay close to the ground{/hl}, providing an opportunity to {hl}use Elemental Reactions to destroy them{/hl}. Once the Pyro element stored within the twin molten horns is exhausted, they will be destroyed, causing the powerful foe to take a single instance of immense DMG. Once destroyed, the horns cannot be restored for a period of time.",
+          "ru": "Двойной рог, расположенный высоко на Императоре огня и железа, является органом {hl}Пиро{/hl}, который позволяет ему использовать более мощные элементальные атаки и наделяют его ещё более сильными оборонительными возможностями. Когда он использует определённые атаки, его Двойной рог находится {hl}близко к земле{/hl}, что даёт отличную возможность {hl}использовать элементальные реакции для уничтожения рогов{/hl}. Как только элемент Пиро внутри Двойного рога исчезнет, рога будут уничтожены и не смогут быть восстановлены в течение некоторого времени."
          }
         },
         {
          "title": {
-          "en": "Forced Counterstrike Mode",
-          "ru": "Режим форсированного контрудара"
+          "en": "Shield Bearers",
+          "ru": "Щитоносный вассал"
          },
          "text": {
-          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Forced Counterstrike Mode and switch to attacking with powerful tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
-          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим форсированного контрудара и атакует с помощью мощных наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+          "en": "Affected by the Ley Line disturbance, the Emperor of Fire and Iron will summon Sternshield Crabs to assist during battle. Sternshield Crabs continuously channel Pyro to the twin molten horns. Once their Pyro is exhausted, the Sternshield Crabs will be defeated. Once a Sternshield Crab is defeated, it will lose control and collide with the Emperor of Fire and Iron, overloading the Pyro element within its twin molten horns and damaging them, causing the Emperor of Fire and Iron to take DMG proportional to the DMG the Sternshield Crab itself has received. A maximum of three Sternshield Crabs can be on the field at once.",
+          "ru": "Под влиянием флуктуации артерий земли, Император огня и железа во время боя призывает себе на помощь бронекрабов-щитовиков. Они постоянно пополняют Пиро в Двойном роге, но когда их собственная энергия Пиро истощается, они терпят поражение. Побеждённые бронекрабы-щитовики теряют контроль и врезаются в Императора огня и железа, что приводит к перегрузке Пиро в его Двойном роге и наносит определённый процент урона Императору огня и железа, основанный на общем уроне, полученном бронекрабами-щитовиками. На поле боя одновременно может находиться не более трёх бронекрабов-щитовиков."
          }
         },
         {
          "title": {
-          "en": "Damage-Resistant Structure",
-          "ru": "Устойчивая к повреждению конструкция"
+          "en": "Radiant Coronation",
+          "ru": "Блистательная коронация"
          },
          "text": {
-          "en": "Affected by the Ley Line disturbance, this great foe has its All RES further increased, and it loses less Flow Momentum when struck by Cryo DMG. It will also lose less RES when in Forced Counterstrike Mode.",
-          "ru": "Под воздействием флуктуации артерий земли сопротивление всем элементам этого могучего врага повышается ещё больше, а при получении Крио урона он теряет меньше импульса потока. В режиме форсированного контрудара его снижение сопротивления уменьшается."
+          "en": "Affected by the Ley Line disturbance, the Emperor of Fire and Iron will perform Radiant Coronation in battle, charging briefly before dealing DMG over a large AoE. Destroy the twin molten horns to interrupt its charging.",
+          "ru": "Под влиянием флуктуации артерий земли Император огня и железа во время боя выполняет Блистательную коронацию: накапливает энергию в течение некоторого времени, после чего наносит урон по большой площади. Разрушение Двойного рога прервёт накопление энергии Императором огня и железа."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Guardian Blade of Drifting Snow: Endless Reverberation",
-        "ru": "Разящая вьюга: Благозвучие струн"
+        "en": "Radiant Moongecko: Entangled Fangs",
+        "ru": "Лучезарный лунный геккон: Переплетённые клыки"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:pyro} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:pyro}"
+        "en": "{el:geo} Characters | Healing Characters",
+        "ru": "Персонажи {el:geo} | Лечащие персонажи"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Ice Coffin: Twinned Crystal Lattice",
-          "ru": "Ледяной гроб: Двойная кристаллическая решётка"
+          "en": "Vagrant Reverberation",
+          "ru": "Несдерживаемый размах"
          },
          "text": {
-          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself.\nWhile the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. Due to the Ley Line disturbance, {hl}the Ice Coffin will be more durable{/hl}. A short time after it is destroyed for the first time, the Nemesis will {hl}encase itself in another Ice Coffin{/hl}.",
-          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого порога, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты.\nПока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Под воздействием флуктуации артерий земли {hl}ледяной гроб становится прочнее{/hl}. Кроме того, спустя некоторое время после первого разрушения ледяного гроба сильный противник {hl}снова запечатывает себя в ледяном гробу{/hl}."
+          "en": "After the battle begins, the Nemesis leaves a Moonstone Anchor in its place before leaping to higher ground to prepare for Vagrant Reverberation. Some time later, it unleashes a large and powerful AoE strike. Use {hl} methods suited to dealing with Geo{/hl} to break through the multiple Geo ward layers on the Moonstone Anchor. Destroying it interrupts the skill's charge-up and deals massive DMG to the Nemesis. The more DMG the Moonstone Anchor takes during the preparation phase, the greater the DMG dealt to the Nemesis when the Moonstone Anchor is destroyed. Due to the effects of the Ley Line disturbance, using {hl}Geo{/hl} attacks against the Moonstone Anchor further increases the DMG dealt to the Nemesis.",
+          "ru": "После начала боя сильный противник оставляет на своём изначальном месте якорный лунный камень и взмывает вверх, готовясь к приёму Несдерживаемый размах: через некоторое время он совершит мощную атаку по большой площади. Можно использовать {hl}способы противодействия Гео{/hl}, чтобы разрушить многослойный Гео барьер якорного лунного камня и уничтожить его. Его уничтожение прерывает подготовку атаки и наносит противнику значительный урон. Чем больше урона получит камень во время подготовки, тем больше урона будет нанесено противник при уничтожении камня. Под влиянием флуктуаций артерий земли {hl}Гео{/hl} атаки по якорному лунному камню дополнительно повышают урон, получаемый сильным противником."
          }
         },
         {
          "title": {
-          "en": "Ice Coffin: Warped Crystal Lattice",
-          "ru": "Ледяной гроб: Искажённая кристаллическая решётка"
+          "en": "Unshakable Rock",
+          "ru": "Незыблемый камень"
          },
          "text": {
-          "en": "While the {hl}Ice Coffin is active{/hl}, if the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}the Ice Coffin's Cryo Ward will transform into a shield that absorbs DMG{/hl}. Once the shield is destroyed, the Nemesis will take a large amount of backlash DMG.",
-          "ru": "Пока {hl}ледяной гроб существует{/hl}, если сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Крио барьер ледяного гроба превращается в щит{/hl}, поглощающий урон. После разрушения щита сильный противник получит высокий урон от отдачи."
+          "en": "Due to the effects of the Ley Line disturbance, the Moonstone Anchor's multi-layered Geo Ward becomes more resilient.",
+          "ru": "Из-за флуктуации артерий земли многослойный Гео барьер якорного лунного камня становится более прочным."
+         }
+        },
+        {
+         "title": {
+          "en": "Radiant Cocoon",
+          "ru": "Сияющий кокон"
+         },
+         "text": {
+          "en": "During battle, the Nemesis harnesses Geo to apply Radiant Cocoon to characters and increase its own Geo RES. Characters afflicted by Radiant Cocoon {hl}deal less DMG and receive less healing{/hl}. {hl}When a character's HP is restored to full through healing{/hl}, they break free from the cocoon and gain the Disentangled effect, which boosts their abilities for a short time. Once any character in the party successfully breaks free, the Nemesis loses the Geo RES granted by Radiant Cocoon.",
+          "ru": "В бою сильный противник использует силу Гео, чтобы опутать персонажей сияющим коконом, и повышает своё Гео сопротивление. Персонажи в коконе {hl}наносят меньше урона и получают меньше лечения{/hl}. Когда {hl}лечение восполняет HP персонажа до максимума{/hl}, он разрывает кокон и получает эффект Освобождение, временно повышающий его характеристики. Как только любой персонаж в отряде освободится, противник потеряет Гео сопротивление от сияющего кокона."
          }
         }
        ]
@@ -667,106 +717,116 @@
      "bosses": [
       {
        "form": {
-        "en": "Battle-Hardened Domovoy Sculptor: Gale Hewing",
-        "ru": "Бывалый домовой-ваятель: Топор ветра"
+        "en": "Wavebinder: Stormfang",
+        "ru": "Удерживающий волны: Яростный бросок"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:anemo} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:anemo}"
+        "en": "Stellar Glimmer characters | {el:electro} characters",
+        "ru": "Персонажи реакции Звёздный блеск | Персонажи {el:electro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Big-Mouthed Jack Frost",
-          "ru": "Большеротый ледовик"
+          "en": "Courage Against the Cold: Hearty Draught",
+          "ru": "Морозная храбрость: Лихой глоток"
          },
          "text": {
-          "en": "When battle begins, the Nemesis will harness Anemo energy to create a Prime Ice sculpture. After a short delay, the sculpture will transform into a Big-Mouthed Jack Frost that continuously launches snowballs.\nInflict {hl}Radiance: Stellar Glimmer{/hl} on the Nemesis while it is creating the sculpture to interrupt the process and turn the ice sculpture into a harmless animal statue instead.",
-          "ru": "В начале боя сильный противник силой Анемо создаёт скульптуру из вечного льда. Через некоторое время она превращается в Большеротого ледовика, который непрерывно выпускает снежки.\nЕсли во время создания скульптуры сильный противник окажется под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, этот процесс будет прерван, а ледяная скульптура превратится в безобидную фигурку животного."
+          "en": "Due to the effects of the Ley Line disturbance, this Nemesis will periodically take out a flask and drink deeply, gaining a large amount of Courage in the process. If it is affected by {hl}Radiance: Stellar Glimmer{/hl} while drinking, it will gain Courage at a reduced rate. Dealing {hl}Electro DMG{/hl} to it will also reduce its Courage. {hl}Electro DMG considered to be DMG from the corresponding Stellar Glimmer Reaction{/hl} will reduce Courage by a significantly greater amount.",
+          "ru": "Под влиянием флуктуации артерий земли сильный противник через определённые промежутки времени достаёт термос и пьёт большими глотками, накапливая большое количество Храбрости. Если во время питья он находится под действием эффекта {hl}Сияние: Звёздный блеск{/hl}, скорость накопления Храбрости снижается. Кроме того, при получении {hl}урона Электро{/hl} его Храбрость уменьшается; если же полученный {hl}урон Электро считается уроном соответствующей реакции Звёздный блеск{/hl}, Храбрость уменьшается значительно сильнее."
          }
         },
         {
          "title": {
-          "en": "Creative Frenzy",
-          "ru": "Неиссякаемое вдохновение"
+          "en": "Valiant Assault",
+          "ru": "Состояние Отваги: Налёт"
          },
          "text": {
-          "en": "Due to the effects of the Ley Line disturbance, the Nemesis will {hl}start the battle with greatly increased All Elemental RES and Physical RES{/hl} and will create Prime Ice sculptures more frequently.\nAfter an ice sculpture is transformed into a small animal statue, it will explode following a brief delay, dealing damage to the Nemesis and {hl}reducing its All Elemental RES and Physical RES, while further reducing its Anemo RES{/hl}. This effect can {hl}stack up to 3 times{/hl}.",
-          "ru": "Под воздействием флуктуации артерий земли сильный противник {hl}в начале битвы получит повышенное сопротивление всем элементам и физ. сопротивление{/hl}, а также будет чаще создавать скульптуры из вечного льда.\nКогда ледяная скульптура превратится в фигурку животного, она вскоре взорвётся, нанося сильному противнику определённый урон и {hl}понижая его сопротивление всем элементам и физ. сопротивление, а также дополнительно понижая его Анемо сопротивление{/hl}. Этот эффект {hl}складывается до 3 раз{/hl}."
+          "en": "Due to the effects of the Ley Line disturbance, once the Nemesis's Courage is full, they will enter the Valiant Assault state. While in this state, their attacks will become more ferocious. They will also {hl}generate a shield and greatly increase all Elemental and Physical RES other than Electro RES, which will receive a small increase.{/hl}. While Valiant Assault is active, the Nemesis's Courage will be continuously consumed. {hl}Electro DMG will also drain more Courage than usual{/hl}. It will exit this state and suffer massive backlash DMG once its Courage is depleted. The more DMG its shield absorbs during Valiant Assault, the greater the backlash DMG it will suffer when the state ends. {hl}Stellar Glimmer reaction DMG{/hl} will increase the backlash DMG taken when the Shield is broken.",
+          "ru": "Под влиянием флуктуации артерий земли, когда Храбрость сильного противника накапливается до максимума, он переходит в Состояние Отваги: Налёт. Его атаки становятся более яростными, а {hl}сам он создаёт щит, значительно повышает сопротивление всем элементам, кроме Электро, и физ. сопротивление, а также немного повышает сопротивление Электро{/hl}. В этом состоянии Храбрость непрерывно расходуется, причём {hl}при получении Электро урона противник теряет больше Храбрости{/hl}. Когда Храбрость заканчивается, противник выходит из этого состояния и получает большой урон от отдачи. Чем больше урона поглотил щит в этом состоянии, тем выше урон от отдачи. {hl}Электро урон реакции Звёздный блеск{/hl} дополнительно повышает урон от отдачи при разрушении щита."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Secret Source Automaton: Overseer Device - Obliterator Panoply",
-        "ru": "Автоматон таинственного источника: Опустошающее оружие"
+        "en": "Emperor of Fire and Iron: Ordained Conquest",
+        "ru": "Император огня и железа: Поход"
        },
        "advantage": {
-        "en": "{el:cryo} characters",
-        "ru": "Персонажи {el:cryo}"
+        "en": "{el:hydro} characters",
+        "ru": "{el:hydro}"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Preemptive Sweeper Mode",
-          "ru": "Упреждающий режим зачистки"
+          "en": "Molten Crown",
+          "ru": "Огненная корона-рога"
          },
          "text": {
-          "en": "Will immediately enter Sweeper Mode when combat starts: {hl}All Elemental and Physical RES is greatly increased{/hl}, and it will generate Flow Momentum while performing attacks. The higher its Flow Momentum, the faster it will rotate and the more DMG it will deal.\nIt will lose Flow Momentum after taking Cryo DMG. Below a certain Flow Momentum value, it will stop rotating and attacking, and its {hl}All Elemental and Physical RES will be greatly decreased{/hl}, with its Cryo RES {hl}decreasing still more{/hl}.\nEach time it enters Sweeper Mode, it will produce additional Elemental Orbs the first time its rotating attacks are stopped.",
-          "ru": "В начале боя сразу переходит в режим зачистки: {hl}сопротивление всем элементам и физ. сопротивление значительно повышено{/hl}, а также он генерирует импульс потока и атакует. Чем выше импульс потока, тем быстрее он вращается и тем больше наносит урона.\nПолучив Крио урон, он теряет импульс потока. Когда импульс потока опустится ниже определённого значения, он прекратит вращаться и атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление существенно понизятся{/hl}. Кроме того, {hl}дополнительно снижается{/hl} его Крио сопротивление.\nКаждый раз, когда он впервые прекращает вращаться и атаковать в режиме зачистки, будут выпадать дополнительные элементальные сферы."
+          "en": "The twin molten horns located high up on the body of the Emperor of Fire and Iron are {hl}Pyro-aligned{/hl} organs that enable it to unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When unleashing certain attacks, its twin molten horns will {hl}stay close to the ground{/hl}, providing an opportunity to {hl}use Elemental Reactions to destroy them{/hl}. Once the Pyro element stored within the twin molten horns is exhausted, they will be destroyed, causing the powerful foe to take a single instance of immense DMG. Once destroyed, the horns cannot be restored for a period of time.",
+          "ru": "Двойной рог, расположенный высоко на Императоре огня и железа, является органом {hl}Пиро{/hl}, который позволяет ему использовать более мощные элементальные атаки и наделяют его ещё более сильными оборонительными возможностями. Когда он использует определённые атаки, его Двойной рог находится {hl}близко к земле{/hl}, что даёт отличную возможность {hl}использовать элементальные реакции для уничтожения рогов{/hl}. Как только элемент Пиро внутри Двойного рога исчезнет, рога будут уничтожены и не смогут быть восстановлены в течение некоторого времени."
          }
         },
         {
          "title": {
-          "en": "Forced Counterstrike Mode",
-          "ru": "Режим форсированного контрудара"
+          "en": "Shield Bearers",
+          "ru": "Щитоносный вассал"
          },
          "text": {
-          "en": "If an active character enters and maintains the {hl}Nightsoul's Blessing{/hl} state for a time, this opponent will enter Forced Counterstrike Mode and switch to attacking with powerful tracking rays. At this time, its {hl}All Elemental and Physical RES will be decreased{/hl}.\nIn this state, after it takes a certain number of Cryo DMG instances, it will cease attacking altogether and its {hl} All Elemental and Physical RES will be further decreased{/hl}.",
-          "ru": "Если активный персонаж на некоторое время входит в состояние {hl}Благословения Ночного духа{/hl} и поддерживает его, то этот враг переключается в режим форсированного контрудара и атакует с помощью мощных наводящихся лучей. В это время его {hl}сопротивление всем элементам и физ. сопротивление значительно снижаются{/hl}.\nПопав под определённое количество атак с Крио уроном в этом состоянии, он прекращает атаковать, а его {hl}сопротивление всем элементам и физ. сопротивление снижаются ещё больше{/hl}."
+          "en": "Affected by the Ley Line disturbance, the Emperor of Fire and Iron will summon Sternshield Crabs to assist during battle. Sternshield Crabs continuously channel Pyro to the twin molten horns. Once their Pyro is exhausted, the Sternshield Crabs will be defeated. Once a Sternshield Crab is defeated, it will lose control and collide with the Emperor of Fire and Iron, overloading the Pyro element within its twin molten horns and damaging them, causing the Emperor of Fire and Iron to take DMG proportional to the DMG the Sternshield Crab itself has received. A maximum of three Sternshield Crabs can be on the field at once.",
+          "ru": "Под влиянием флуктуации артерий земли, Император огня и железа во время боя призывает себе на помощь бронекрабов-щитовиков. Они постоянно пополняют Пиро в Двойном роге, но когда их собственная энергия Пиро истощается, они терпят поражение. Побеждённые бронекрабы-щитовики теряют контроль и врезаются в Императора огня и железа, что приводит к перегрузке Пиро в его Двойном роге и наносит определённый процент урона Императору огня и железа, основанный на общем уроне, полученном бронекрабами-щитовиками. На поле боя одновременно может находиться не более трёх бронекрабов-щитовиков."
          }
         },
         {
          "title": {
-          "en": "Damage-Resistant Structure",
-          "ru": "Устойчивая к повреждению конструкция"
+          "en": "Radiant Coronation",
+          "ru": "Блистательная коронация"
          },
          "text": {
-          "en": "Affected by the Ley Line disturbance, this great foe has its All RES further increased, and it loses less Flow Momentum when struck by Cryo DMG. It will also lose less RES when in Forced Counterstrike Mode.",
-          "ru": "Под воздействием флуктуации артерий земли сопротивление всем элементам этого могучего врага повышается ещё больше, а при получении Крио урона он теряет меньше импульса потока. В режиме форсированного контрудара его снижение сопротивления уменьшается."
+          "en": "Affected by the Ley Line disturbance, the Emperor of Fire and Iron will perform Radiant Coronation in battle, charging briefly before dealing DMG over a large AoE. Destroy the twin molten horns to interrupt its charging.",
+          "ru": "Под влиянием флуктуации артерий земли Император огня и железа во время боя выполняет Блистательную коронацию: накапливает энергию в течение некоторого времени, после чего наносит урон по большой площади. Разрушение Двойного рога прервёт накопление энергии Императором огня и железа."
          }
         }
        ]
       },
       {
        "form": {
-        "en": "Guardian Blade of Drifting Snow: Endless Reverberation",
-        "ru": "Разящая вьюга: Благозвучие струн"
+        "en": "Radiant Moongecko: Entangled Fangs",
+        "ru": "Лучезарный лунный геккон: Переплетённые клыки"
        },
        "advantage": {
-        "en": "Stellar Glimmer characters | {el:pyro} characters",
-        "ru": "Персонажи реакции Звёздного блеска | Персонажи {el:pyro}"
+        "en": "{el:geo} Characters | Healing Characters",
+        "ru": "Персонажи {el:geo} | Лечащие персонажи"
        },
        "mechanics": [
         {
          "title": {
-          "en": "Ice Coffin: Twinned Crystal Lattice",
-          "ru": "Ледяной гроб: Двойная кристаллическая решётка"
+          "en": "Vagrant Reverberation",
+          "ru": "Несдерживаемый размах"
          },
          "text": {
-          "en": "During battle, when the Nemesis's HP falls below a certain threshold, it will encase itself in an Ice Coffin and gain a {hl}Cryo Ward{/hl} to protect itself.\nWhile the Ice Coffin is active, the Nemesis will continuously unleash icy storms around itself. If the Ice Coffin is not destroyed, the Nemesis restores a portion of its HP and creates ice swords to launch a counterattack. However, if the Ice Coffin sustaining its life is destroyed, it enters a weakened state for a period of time and takes backlash DMG. Due to the Ley Line disturbance, {hl}the Ice Coffin will be more durable{/hl}. A short time after it is destroyed for the first time, the Nemesis will {hl}encase itself in another Ice Coffin{/hl}.",
-          "ru": "Во время боя, когда HP сильного противника опускается ниже определённого порога, он запечатывает себя в ледяном гробу, используя {hl}Крио барьер{/hl} ледяного гроба для защиты.\nПока ледяной гроб активен, сильный противник непрерывно вызывает вокруг себя ледяной шторм. Если ледяной гроб не разбить, то сильный противник восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб, поддерживающий его жизнь, удалось разбить, то он на некоторое время ослабнет и получит отражённый урон. Под воздействием флуктуации артерий земли {hl}ледяной гроб становится прочнее{/hl}. Кроме того, спустя некоторое время после первого разрушения ледяного гроба сильный противник {hl}снова запечатывает себя в ледяном гробу{/hl}."
+          "en": "After the battle begins, the Nemesis leaves a Moonstone Anchor in its place before leaping to higher ground to prepare for Vagrant Reverberation. Some time later, it unleashes a large and powerful AoE strike. Use {hl} methods suited to dealing with Geo{/hl} to break through the multiple Geo ward layers on the Moonstone Anchor. Destroying it interrupts the skill's charge-up and deals massive DMG to the Nemesis. The more DMG the Moonstone Anchor takes during the preparation phase, the greater the DMG dealt to the Nemesis when the Moonstone Anchor is destroyed. Due to the effects of the Ley Line disturbance, using {hl}Geo{/hl} attacks against the Moonstone Anchor further increases the DMG dealt to the Nemesis.",
+          "ru": "После начала боя сильный противник оставляет на своём изначальном месте якорный лунный камень и взмывает вверх, готовясь к приёму Несдерживаемый размах: через некоторое время он совершит мощную атаку по большой площади. Можно использовать {hl}способы противодействия Гео{/hl}, чтобы разрушить многослойный Гео барьер якорного лунного камня и уничтожить его. Его уничтожение прерывает подготовку атаки и наносит противнику значительный урон. Чем больше урона получит камень во время подготовки, тем больше урона будет нанесено противник при уничтожении камня. Под влиянием флуктуаций артерий земли {hl}Гео{/hl} атаки по якорному лунному камню дополнительно повышают урон, получаемый сильным противником."
          }
         },
         {
          "title": {
-          "en": "Ice Coffin: Warped Crystal Lattice",
-          "ru": "Ледяной гроб: Искажённая кристаллическая решётка"
+          "en": "Unshakable Rock",
+          "ru": "Незыблемый камень"
          },
          "text": {
-          "en": "While the {hl}Ice Coffin is active{/hl}, if the Nemesis is affected by {hl}Radiance: Stellar Glimmer{/hl}, {hl}the Ice Coffin's Cryo Ward will transform into a shield that absorbs DMG{/hl}. Once the shield is destroyed, the Nemesis will take a large amount of backlash DMG.",
-          "ru": "Пока {hl}ледяной гроб существует{/hl}, если сильный противник находится под воздействием эффекта {hl}Сияние: Звёздный блеск{/hl}, {hl}Крио барьер ледяного гроба превращается в щит{/hl}, поглощающий урон. После разрушения щита сильный противник получит высокий урон от отдачи."
+          "en": "Due to the effects of the Ley Line disturbance, the Moonstone Anchor's multi-layered Geo Ward becomes more resilient.",
+          "ru": "Из-за флуктуации артерий земли многослойный Гео барьер якорного лунного камня становится более прочным."
+         }
+        },
+        {
+         "title": {
+          "en": "Radiant Cocoon",
+          "ru": "Сияющий кокон"
+         },
+         "text": {
+          "en": "During battle, the Nemesis harnesses Geo to apply Radiant Cocoon to characters and increase its own Geo RES. Characters afflicted by Radiant Cocoon {hl}deal less DMG and receive less healing{/hl}. {hl}When a character's HP is restored to full through healing{/hl}, they break free from the cocoon and gain the Disentangled effect, which boosts their abilities for a short time. Once any character in the party successfully breaks free, the Nemesis loses the Geo RES granted by Radiant Cocoon.",
+          "ru": "В бою сильный противник использует силу Гео, чтобы опутать персонажей сияющим коконом, и повышает своё Гео сопротивление. Персонажи в коконе {hl}наносят меньше урона и получают меньше лечения{/hl}. Когда {hl}лечение восполняет HP персонажа до максимума{/hl}, он разрывает кокон и получает эффект Освобождение, временно повышающий его характеристики. Как только любой персонаж в отряде освободится, противник потеряет Гео сопротивление от сияющего кокона."
          }
         }
        ]
@@ -777,6 +837,87 @@
   }
  },
  "enemies": {
+  "wavebinder": {
+   "en": "Wavebinder",
+   "ru": "Удерживающий волны",
+   "legend": false,
+   "res": {
+    "hydro": 70,
+    "electro": -10
+   },
+   "resStates": [],
+   "tip": {
+    "en": "A monstrously strong beast.\nAt intervals, it drinks a hot beverage to build up its Courage. Once its Courage is full, it enters the Valiant state, causing its attacks to become more ferocious and {hl}greatly increasing all Elemental RES and Physical RES{/hl}. While in this state, its Courage will be continuously consumed, and it will exit the state once its Courage is depleted.\nTaking {hl}Electro DMG or Electro DMG considered as DMG from the corresponding Stellar Glimmer reaction{/hl} reduces its accumulated Courage, or causes it to exit the Valiant state more quickly.\nAdditionally, Stellar Glimmer reactions also seem to interfere with its attempts to drink hot beverages...",
+    "ru": "Чрезвычайно сильное чудовище.\nПериодически оно пьёт горячий напиток, чтобы пополнить свой показатель Храбрости. Когда показатель Храбрости достигает максимума, оно переходит в состояние Отваги: его атаки становятся ещё более яростными, а {hl}сопротивление всем элементам и физ. сопротивление значительно повышаются{/hl}. Когда чудовище пребывает в этом состоянии, Храбрость непрерывно расходуется. Когда её запас иссякнет, чудовище выйдет из этого состояния.\nПолучение {hl}Электро урона или Электро урона, который считается уроном соответствующей реакции Звёздного блеска{/hl} снижает накопленную им Храбрость или заставляет быстрее покинуть состояние Отваги.\nКроме того, похоже, воздействие реакции Звёздного блеска мешает ему пить горячие напитки..."
+   },
+   "icon": "enemies/wavebinder.png"
+  },
+  "emperor-of-fire-and-iron": {
+   "en": "Emperor of Fire and Iron",
+   "ru": "Император огня и железа",
+   "legend": false,
+   "res": {
+    "pyro": 60
+   },
+   "resStates": [
+    {
+     "label": {
+      "en": "Horns Intact",
+      "ru": "Horns Intact"
+     },
+     "res": {
+      "all": 70,
+      "diff": {
+       "pyro": 120
+      }
+     }
+    },
+    {
+     "label": {
+      "en": "Horns Intact (Spiral Abyss)",
+      "ru": "Horns Intact (Spiral Abyss)"
+     },
+     "res": {
+      "all": 90,
+      "diff": {
+       "pyro": 140
+      }
+     }
+    }
+   ],
+   "tip": {
+    "en": "An Armored Crablord that has survived for countless eons and surpassed almost all other Fontemer Aberrants. The {hl}twin molten horns{/hl} located high up on its body are {hl}Pyro-aligned{/hl} organs that can unleash more vicious elemental attacks and grant it even stronger defensive capabilities. When the Armored Crablord unleashes certain attacks, its twin molten horns are {hl}closer to the ground{/hl}. This provides for a great opportunity to use {hl}Elemental Reactions{/hl} to remove the Pyro element within.",
+    "ru": "За бесчисленные годы этот Король бронекрабов разросся до невероятных размеров, превзойдя всех инородов Фонтмера. {hl}Двойной рог{/hl} на вершине его панциря - орган {hl}Пиро{/hl}, позволяющий ему совершать свирепые элементальные атаки и предоставляющий надёжную защиту. Когда Король бронекрабов выполняет некоторые атаки, его Двойной рог оказывается {hl}ближе к земле{/hl}. Это отличная возможность, чтобы {hl}элементальными реакциями{/hl} лишить его Пиро."
+   },
+   "icon": "enemies/emperor-of-fire-and-iron.png"
+  },
+  "radiant-moongecko": {
+   "en": "Radiant Moongecko",
+   "ru": "Лучезарный лунный геккон",
+   "legend": false,
+   "res": {
+    "geo": 70
+   },
+   "resStates": [
+    {
+     "label": {
+      "en": "Dull Carapace",
+      "ru": "Dull Carapace"
+     },
+     "res": {
+      "all": 10,
+      "diff": {
+       "geo": 70
+      }
+     }
+    }
+   ],
+   "tip": {
+    "en": "A highly unique species among Radiant creatures, it can trap its enemies in a Radiant Cocoon during combat. Quickly {hl}heal your HP to its maximum{/hl} to escape from a Radiant Cocoon. Doing so will also reduce its Geo RES.\nWhen it prepares to unleash Voidstep Reverberation, {hl}destroy the Moonstone Anchor it leaves behind{/hl} to terminate the preparation of this Skill and deal massive DMG to it.",
+    "ru": "Особенный вид лучезарных зверей. В бою способен захватывать врагов в сияющий кокон. Быстро {hl}восстановите ваше HP лечением до максимума{/hl}, чтобы вырваться из сияющего кокона и тем самым понизить его Гео сопротивление.\nКогда он готовится применить Шаг в пустоту, {hl}уничтожьте оставленный им якорный лунный камень{/hl}, чтобы прервать подготовку навыка и нанести значительный урон."
+   },
+   "icon": "enemies/radiant-moongecko.png"
+  },
   "battle-hardened-chimeric-volkodlak-archer": {
    "en": "Battle-Hardened Chimeric Volkodlak Archer",
    "ru": "Ловчий воющих волков",
@@ -997,45 +1138,6 @@
     "ru": "Устройство, созданное величественной древней цивилизацией для управления множеством автоматонов таинственного источника. После перехода в режим зачистки он начинает атаковать, генерируя импульс потока. Чем выше импульс потока, тем больше урона он наносит. Накопление импульса потока можно остановить {hl}постоянными атаками Крио{/hl}...\nГоворят, если персонажи в бою с ним перейдут в состояние Благословения Ночного духа и будут некоторое время поддерживать его, то Надсмотрщик переключится в особый режим контрудара и изменит режим атаки..."
    },
    "icon": "enemies/secret-source-automaton-overseer-device.png"
-  },
-  "battle-hardened-domovoy-sculptor": {
-   "en": "Battle-Hardened Domovoy Sculptor",
-   "ru": "Чурин",
-   "legend": true,
-   "res": {
-    "anemo": 30,
-    "cryo": 30
-   },
-   "resStates": [],
-   "tip": null,
-   "icon": "enemies/battle-hardened-domovoy-sculptor.png"
-  },
-  "guardian-blade-of-drifting-snow": {
-   "en": "Guardian Blade of Drifting Snow",
-   "ru": "Разящая вьюга",
-   "legend": false,
-   "res": {
-    "cryo": 50
-   },
-   "resStates": [
-    {
-     "label": {
-      "en": "Stunned",
-      "ru": "Оглушён"
-     },
-     "res": {
-      "all": -40,
-      "diff": {
-       "cryo": 0
-      }
-     }
-    }
-   ],
-   "tip": {
-    "en": "When the Guardian Blade of Drifting Snow's HP falls below a certain level, it will ensconce itself in an ice coffin and periodically deal AoE Cryo DMG to nearby opponents.\nIce coffins can become fragile from {hl}Stellar Glimmer reactions{/hl}. When this happens, they are especially vulnerable to Electro and Anemo attacks.\nIf the ice coffin hasn't taken damage, she will recover some HP and forge an ice blade to counterattack. However, if the ice coffin has taken damage, she becomes weakened for some time...",
-    "ru": "Когда HP Разящей вьюги опускается ниже определённого значения, она заключает себя в ледяной гроб и периодически наносит Крио урон по площади врагам поблизости.\nЛедяной гроб можно ослабить {hl}реакциями Звёздного блеска{/hl}, после чего его будет легче разрушить Электро или Анемо атаками.\nЕсли ледяной гроб остался цел, она восстанавливает часть HP, создаёт ледяной клинок и наносит ответный удар. Но если ледяной гроб удалось разбить, Разящая вьюга на некоторое время ослабнет."
-   },
-   "icon": "enemies/guardian-blade-of-drifting-snow.png"
   }
  }
 }
