@@ -210,7 +210,7 @@
     "details": "Team details",
     "close": "Close",
     "kqmArt": "KQMS: artifacts",
-    "kqmArtHint": "40 substat rolls, at least 2 of each",
+    "kqmArtHint": "KQMS roll budget adjusted for artifact rarity",
     "notKqm": "Does not follow the standard",
     "level": "Level",
     "talents": "Talents",

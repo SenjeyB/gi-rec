@@ -258,13 +258,27 @@ def parse_config(cfg: str) -> Dict[str, dict]:
     return out
 
 
-def kqm_artifacts(subs: Dict[str, float]) -> bool:
-    """40 роллов ровной ценой KQM, присутствуют все десять статов, у каждого ≥ 2."""
+def kqm_artifacts(subs: Dict[str, float], sets=None, roll_counts=None) -> bool:
+    """Бюджет KQMS с допуском одного ролла и штрафом за 4* артефакты."""
     if not subs or set(subs) != SUB_KEYS:
         return False
-    if any(abs(n - round(n)) > 0.05 for n in subs.values()):
+    four_star_sets = {"instructor", "theexile", "berserker", "scholar", "gambler", "martialartist",
+                      "braveheart", "resolutionofsojourner", "defenderswill", "tinymiracle"}
+    four_pieces = min(5, sum(pieces for key, pieces in (sets or {}).items() if key in four_star_sets))
+    budget = 40 - 2 * four_pieces
+    if four_pieces and not roll_counts:
+        for scale in (0.8, 1 - 0.04 * four_pieces):
+            counts = {key: value / scale for key, value in subs.items()}
+            if (all(abs(n - round(n)) <= 0.08 and round(n) >= 2 for n in counts.values())
+                    and abs(sum(round(n) for n in counts.values()) - budget) <= 1):
+                return True
         return False
-    return round(sum(subs.values())) == 40 and all(n >= 2 for n in subs.values())
+    counts = {**subs, **(roll_counts or {})}
+    if set(counts) != SUB_KEYS or any(abs(n - round(n)) > 0.05 or n < 2 for n in counts.values()):
+        return False
+    if four_pieces and any(not (0.8 * counts[key] - 0.1 <= value <= counts[key] + 0.1) for key, value in subs.items()):
+        return False
+    return abs(round(sum(counts.values())) - budget) <= 1
 
 
 def audit_community_sim(sim: dict) -> dict:
@@ -273,7 +287,7 @@ def audit_community_sim(sim: dict) -> dict:
         "06e2259a345b36837ce9f4cf1142e5216c503791",
         "fccc18bf19f80b8d3650f945a1c92f9a30d5c9fe",
     }
-    supported = legacy or sim.get("simVersion") == "0d2fce5ef2d2aa7a254ad023c85c6250544ec9ff"
+    supported = legacy or sim.get("simVersion") in {"0d2fce5ef2d2aa7a254ad023c85c6250544ec9ff", "498f60f0071dfb7c2efea9771a2c440cbcc797b1"}
     config = sim.get("config") or ""
     members = sim.get("team") or []
     remaining, sources = {}, {}
@@ -338,7 +352,7 @@ def audit_community_sim(sim: dict) -> dict:
                 member[key] = value
             else:
                 member.pop(key, None)
-        member["kqmArt"] = kqm_artifacts(member.get("subs") or {}) and not unknown and not member.get("total")
+        member["kqmArt"] = kqm_artifacts(member.get("subs") or {}, member.get("sets"), member.get("rollCounts")) and not unknown and not member.get("total")
     if sim.get("reconstructed"):
         sim["assumed"] = True
     elif any(m.get("weaponProxy") for m in members):
@@ -380,7 +394,7 @@ def slim(entry: dict, alias: Optional[Dict[str, str]] = None) -> dict:
             "main": list(slot.get("main") or []),
             "subs": subs,
             "total": slot.get("total"),
-            "kqmArt": kqm_artifacts(subs),
+            "kqmArt": kqm_artifacts(subs, m.get("sets")),
             "talents": slot.get("talents"),
             "lvl": slot.get("lvl"),
         })
@@ -411,6 +425,9 @@ def normalize_sim(s: dict) -> dict:
         m["refine"] = int(m.get("refine") or 1)
         m["sets"] = m.get("sets") or {}
         m["total"] = m.get("total") or None
+        if not s.get("origin") and "subs" in m:
+            m["kqmArt"] = (kqm_artifacts(m["subs"], m["sets"], m.get("rollCounts"))
+                           and not m["total"] and not m.get("unverifiedModifiers"))
     s["chars"] = s.get("chars") or []
     s["dps"] = s.get("dps") or 0
     return s

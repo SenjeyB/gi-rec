@@ -1,4 +1,5 @@
 import argparse
+import copy
 import json
 import math
 import posixpath
@@ -32,13 +33,12 @@ FOUR_STAR_MAIN = {"hp%": 0.348, "atk%": 0.348, "def%": 0.435, "em": 139.3,
                   "phys%": 0.435}
 
 
-def workbook_links(path, sheet_names=None, first_only=False):
+def workbook_cells(path, sheet_names=None, first_only=False):
     with zipfile.ZipFile(path) as book:
         wb = ET.fromstring(book.read("xl/workbook.xml"))
         rels = {r.get("Id"): r.get("Target") for r in ET.fromstring(book.read("xl/_rels/workbook.xml.rels"))}
         strings = (["".join(si.itertext()) for si in ET.fromstring(book.read("xl/sharedStrings.xml"))]
                    if "xl/sharedStrings.xml" in book.namelist() else [])
-        candidates = []
         sheets = wb.findall("s:sheets/s:sheet", NS)
         if first_only:
             sheets = sheets[:1]
@@ -54,28 +54,103 @@ def workbook_links(path, sheet_names=None, first_only=False):
             rel_path = posixpath.dirname(sheet_path) + "/_rels/" + posixpath.basename(sheet_path) + ".rels"
             sheet_rels = ({r.get("Id"): r.get("Target") for r in ET.fromstring(book.read(rel_path))}
                           if rel_path in book.namelist() else {})
-            candidates += [sheet_rels.get(h.get(RID), "") for h in sheet.findall("s:hyperlinks/s:hyperlink", NS)]
+            cells = {h.get("ref"): {"url": sheet_rels.get(h.get(RID), "")}
+                     for h in sheet.findall("s:hyperlinks/s:hyperlink", NS)}
             for c in sheet.findall("s:sheetData/s:row/s:c", NS):
                 value = c.findtext("s:v", "", NS)
                 if c.get("t") == "s":
                     value = strings[int(value)] if value else ""
                 elif c.get("t") == "inlineStr":
                     value = "".join(c.find("s:is", NS).itertext())
-                candidates += re.findall(r'https://[^\s"<>]+', value + " " + c.findtext("s:f", "", NS))
+                cells.setdefault(c.get("r"), {}).update(value=value, formula=c.findtext("s:f", "", NS))
+            yield selected.get("name"), cells
+
+
+def share_url(candidate):
+    url = urllib.parse.urlsplit(candidate)
+    if (url.scheme == "https" and url.hostname in SHARE_HOSTS and url.path.startswith("/sh/")):
+        clean_path = url.path.rstrip("/").rstrip(").,;]")
+        return urllib.parse.urlunsplit((url.scheme, url.netloc, clean_path, "", ""))
+    return None
+
+
+def cell_links(cell):
+    return [cell.get("url", ""), *re.findall(r'https://[^\s"<>]+', cell.get("value", "") + " " + cell.get("formula", ""))]
+
+
+def workbook_links(path, sheet_names=None, first_only=False):
     out = []
-    for candidate in candidates:
-        url = urllib.parse.urlsplit(candidate)
-        if (url.scheme == "https" and url.hostname in SHARE_HOSTS
-                and url.path.startswith("/sh/")):
-            clean_path = url.path.rstrip("/").rstrip(").,;]")
-            clean = urllib.parse.urlunsplit((url.scheme, url.netloc, clean_path, "", ""))
-            if clean not in out:
-                out.append(clean)
+    for _, cells in workbook_cells(path, sheet_names, first_only):
+        for cell in cells.values():
+            for candidate in cell_links(cell):
+                clean = share_url(candidate)
+                if clean and clean not in out:
+                    out.append(clean)
     return out
 
 
 def first_sheet_links(path):
     return workbook_links(path, first_only=True)
+
+
+def workbook_variants(path, simulations, names, sheet_names=None):
+    def label_key(value):
+        return re.sub(r"[^\w]", "", value.casefold().replace("ё", "е"))
+
+    localized_path = Path(__file__).resolve().parents[1] / "data" / "names.ru.json"
+    localized = json.loads(localized_path.read_text(encoding="utf-8"))["chars"] if localized_path.exists() else {}
+    aliases = {}
+    for key, entry in names.items():
+        for label in (key, entry.get("name"), entry.get("nameRu"), localized.get(key)):
+            if label:
+                aliases[label_key(label)] = key
+    aliases.update({"алеша": "alyosha", "криогг": "luminecryo"})
+    pattern = re.compile(r"(.+?)\s+[cс]\s*([0-6])\s+(\d+(?:[.,]\d+)?)\s*([кk]?)", re.I)
+    variants = []
+    for sheet, cells in workbook_cells(path, sheet_names):
+        rows = defaultdict(list)
+        for ref, cell in cells.items():
+            match = re.fullmatch(r"[A-Z]+(\d+)", ref)
+            if match:
+                rows[int(match[1])].append((ref, cell))
+        for row_index in sorted(rows):
+            row = rows[row_index]
+            parents = {url for _, cell in row for candidate in cell_links(cell)
+                       if (url := share_url(candidate)) in simulations}
+            for ref, cell in row:
+                for note in re.split(r"[;\n]", cell.get("value", "")):
+                    match = pattern.fullmatch(note.strip())
+                    if not match:
+                        continue
+                    if len(parents) != 1:
+                        raise ValueError(f"{sheet}!{ref}: variant needs one available base simulation")
+                    parent = simulations[next(iter(parents))]
+                    char = aliases.get(label_key(match[1]))
+                    if char not in parent["chars"]:
+                        raise ValueError(f"{sheet}!{ref}: variant character is not in the base team: {match[1]}")
+                    cons = int(match[2])
+                    dps = float(match[3].replace(",", ".")) * (1000 if match[4] else 1)
+                    if not math.isfinite(dps) or dps <= 0:
+                        raise ValueError(f"{sheet}!{ref}: variant needs positive DPS")
+                    variant = copy.deepcopy(parent)
+                    member = next(m for m in variant["team"] if m["name"] == char)
+                    if member["cons"] == cons:
+                        raise ValueError(f"{sheet}!{ref}: variant does not change the constellation")
+                    before = member["cons"]
+                    member["cons"] = cons
+                    variant["dps"] = dps
+                    variant.pop("iterations", None)
+                    variant["reportedVariant"] = {"base": parent["key"], "char": char, "from": before, "to": cons}
+                    config = variant.get("config") or ""
+                    declaration = re.compile(rf"(?m)^(\s*{re.escape(char)}\s+char\b[^;\n]*?\bcons\s*=\s*)\d+")
+                    config, changed = declaration.subn(lambda m: m[1] + str(cons), config)
+                    if config and changed != 1:
+                        raise ValueError(f"{sheet}!{ref}: cannot update the constellation in the base config")
+                    variant["config"] = config
+                    fingerprint = sha256(json.dumps([parent["key"], char, cons, dps]).encode()).hexdigest()[:20]
+                    variant["key"] = "community-" + fingerprint
+                    variants.append(variant)
+    return variants
 
 
 def read_result(url, cache):
@@ -207,7 +282,7 @@ def normalize_result(result, names):
                            if slot["main"] and abs(v - subs.get(s, 0)) > 0.05},
             "total": total,
             "mods": {s: round(v, 6) for s, v in sorted(slot["mods"].items())},
-            "kqmArt": kqm_artifacts(subs), "lvl": member.get("level"),
+            "kqmArt": kqm_artifacts(subs, member.get("sets")), "lvl": member.get("level"),
             "talents": [talents.get(k) for k in ("attack", "skill", "burst")],
         })
     fingerprint = sha256((config + "\n" + repr(dps)).encode("utf-8")).hexdigest()[:20]
@@ -224,6 +299,7 @@ def main():
     parser.add_argument("--sheet", action="append", help="only read the selected worksheet (repeatable)")
     parser.add_argument("--cache", type=Path)
     parser.add_argument("--skip-unavailable", action="store_true", help="skip shares that return HTTP 404 or 410")
+    parser.add_argument("--reviewed", action="store_true", help="equipment is reviewed; keep artifact checks independent")
     parser.add_argument("--supplement", type=Path, action="append", default=[], help="additional normalized reconstructed builds")
     parser.add_argument("--output", type=Path, default=Path(__file__).with_name("community_sims.json"))
     args = parser.parse_args()
@@ -241,8 +317,11 @@ def main():
             raise
     with ThreadPoolExecutor(max_workers=4) as pool:
         results = list(pool.map(download, links))
-    eligible = [r for r in results if r and len(r.get("character_details") or []) == 4]
-    sims = [normalize_result(result, names) for result in eligible]
+    by_url = {url: normalize_result(result, names) for url, result in zip(links, results)
+              if result and len(result.get("character_details") or []) == 4}
+    sims = list(by_url.values())
+    variants = [sim for path in args.workbook for sim in workbook_variants(path, by_url, names, args.sheet)]
+    sims.extend(variants)
     for path in args.supplement:
         for extra in json.loads(path.read_text(encoding="utf-8")):
             if (not extra.get("reconstructed") or len(extra.get("chars") or []) != 4
@@ -252,7 +331,7 @@ def main():
             for member in extra["team"]:
                 if member["name"] not in names or not 0 <= member["cons"] <= 6 or not 1 <= member["refine"] <= 5:
                     raise ValueError("Invalid reconstructed equipment or constellation")
-                member["kqmArt"] = kqm_artifacts(member.get("subs") or {})
+                member["kqmArt"] = kqm_artifacts(member.get("subs") or {}, member.get("sets"), member.get("rollCounts"))
             extra["id"], extra["simulator"] = None, "sim"
             sims.append(extra)
     previous = json.loads(args.output.read_text(encoding="utf-8")) if args.output.exists() else {"version": 1, "simulations": []}
@@ -261,6 +340,8 @@ def main():
     merged = {s["key"]: {**s, "simulator": "sim"} for s in previous["simulations"]}
     added = sum(s["key"] not in merged for s in {s["key"]: s for s in sims}.values())
     for sim in sims:
+        if args.reviewed and not sim.get("reconstructed"):
+            sim["assumed"] = False
         if merged.get(sim["key"], {}).get("assumed") is False:
             sim["assumed"] = False
         merged[sim["key"]] = sim
@@ -272,7 +353,7 @@ def main():
         args.output.write_text(text, encoding="utf-8", newline="\n")
     compliant = sum(all(m["kqmArt"] for m in s["team"]) for s in sims)
     small = sum(r is not None and len(r.get("character_details") or []) != 4 for r in results)
-    print(f"Read {len(sims)} builds; added {added}; total {len(merged)}; ignored non-four-character teams: {small}; KQMS artifacts: {compliant}/{len(sims)}")
+    print(f"Read {len(sims)} builds ({len(variants)} constellation variants); added {added}; total {len(merged)}; ignored non-four-character teams: {small}; KQMS artifacts: {compliant}/{len(sims)}")
 
 
 if __name__ == "__main__":

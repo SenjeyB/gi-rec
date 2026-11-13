@@ -67,7 +67,7 @@ class CommunityAssumptionsTest(unittest.TestCase):
     def test_over_budget_fails_even_with_verified_weapon(self):
         sim = self.simulation()
         sim["team"][0]["mods"] = {"atk%": 0.32, "em": 135}
-        sim["team"][0]["subs"]["em"] += 1
+        sim["team"][0]["subs"]["em"] += 2
         audit_community_sim(sim)
         self.assertFalse(sim["team"][0]["kqmArt"])
 
@@ -92,7 +92,7 @@ class CommunityAssumptionsTest(unittest.TestCase):
         self.assertFalse(member["kqmArt"])
 
     def test_event_assumptions_in_older_imported_models(self):
-        for version in ["06e2259a345b36837ce9f4cf1142e5216c503791", "fccc18bf19f80b8d3650f945a1c92f9a30d5c9fe"]:
+        for version in ["06e2259a345b36837ce9f4cf1142e5216c503791", "fccc18bf19f80b8d3650f945a1c92f9a30d5c9fe", "498f60f0071dfb7c2efea9771a2c440cbcc797b1"]:
             with self.subTest(version=version):
                 sim = self.simulation()
                 sim["simVersion"] = version
